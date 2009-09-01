@@ -47,14 +47,14 @@ How data to be sent to the switchbox is encoded.
 
 - data :: actionId:data
 - actionId :: byte
+- groupID :: target
 
 - Action -- "Define Group":
 
   - actionId = 0
-  - groupID :: target
   - data :: groupID:[target]
   
 - Action -- "Undefine Group":
 
   - actionId = 1
-  - data = actionId:target:[]
+  - data = groupID
