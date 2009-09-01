@@ -2,5 +2,14 @@
 
 # Generates the autotools stuff.  E.g. ./configure
 
-ln -s doc/readme.rst README
-ln -s doc/design.rst DESIGN
+if [ ! -e README ]
+then
+    ln -s doc/readme.rst README
+fi
+
+if [ ! -e DESIGN ] 
+then
+    ln -s doc/design.rst DESIGN
+fi
+
+autoreconf -i 
