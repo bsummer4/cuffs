@@ -1,2 +1,6 @@
 #!/bin/sh
+
+# Generates the autotools stuff.  E.g. ./configure
+
 ln -s doc/readme.rst README
+ln -s doc/design.rst DESIGN
