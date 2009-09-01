@@ -2,14 +2,31 @@
 
 # Generates the autotools stuff.  E.g. ./configure
 
-if [ ! -e README ]
-then
-    ln -s doc/readme.rst README
-fi
 
-if [ ! -e DESIGN ] 
-then
-    ln -s doc/design.rst DESIGN
-fi
+PROMPT="  [$0]$"
+autotools_stuff="aclocal.m4 config.h.in autom4te.cache configure missing
+                 install-sh Makefile.in src/Makefile.in
+                 src/switchbox/Makefile.in build-aux"
 
-autoreconf -i 
+if [ $1 ] # If there are arguments
+then
+    if [ $1 != clean ]; then echo invalid command; exit; fi
+
+    echo "Cleaning up symbolic links:"
+    echo "$PROMPT" rm -f README DESIGN
+    rm -f README DESIGN
+    echo
+
+    echo "Cleaning up autotools temporary files:"
+    echo "$PROMPT" rm -rf $autotools_stuff
+    rm -rf $autotools_stuff
+
+else
+    echo "Generating autotools stuff:"
+    echo "$PROMPT" generating README and DESIGN
+    if [ ! -e README ]; then ln -s doc/readme.rst README; fi
+    if [ ! -e DESIGN ]; then ln -s doc/design.rst DESIGN; fi
+
+    echo "$PROMPT" autoreconf --install
+    autoreconf --install
+fi
