@@ -27,10 +27,10 @@ AC_TYPE_SIZE_T
 AC_SUBST([AM_CXXFLAGS])
 AC_SUBST([AM_LDFLAGS])
 
-######################################################################
+########################################################################
 # DOXYGEN SUPPORT
 # ######################################################################
-#
+
 DX_HTML_FEATURE(ON)
 DX_CHM_FEATURE(OFF)
 DX_CHI_FEATURE(OFF)
@@ -40,10 +40,9 @@ DX_XML_FEATURE(OFF)
 DX_PDF_FEATURE(OFF)
 DX_PS_FEATURE(OFF)
 
-DX_INIT_DOXYGEN([$PACKAGE_NAME],[doxygen.cfg])
+DX_INIT_DOXYGEN([$PACKAGE_NAME],[doc/doxygen.cfg])
 
 # ######################################################################
-
 
 # files to generate via autotools (prepare .am or .in source files)
 AC_CONFIG_FILES([Makefile 
