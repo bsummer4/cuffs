@@ -7,7 +7,7 @@ PROMPT="  [$0]$"
 autotools_stuff="aclocal.m4 config.h.in autom4te.cache configure missing
                  install-sh Makefile.in src/Makefile.in
                  src/switchbox/Makefile.in build-aux README DESIGN COPYING
-                 NEWS AUTHORS INSTALL ChangeLog"
+                 NEWS AUTHORS INSTALL ChangeLog depcomp doc/Makefile.in"
 
 if [ $1 ] # If there are arguments
 then

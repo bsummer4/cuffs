@@ -4,6 +4,9 @@ AC_INIT([Fistacuffs],[0.1],[])
 # check if the source folder is available
 #AC_CONFIG_SRCDIR([src/MYSOURCEFILE.cpp])
 
+# check for a c compiler
+AC_PROG_CC
+
 # check for C++ preprocessor and compiler
 AC_PROG_CXXCPP
 AC_PROG_CXX
@@ -40,14 +43,15 @@ DX_XML_FEATURE(OFF)
 DX_PDF_FEATURE(OFF)
 DX_PS_FEATURE(OFF)
 
-DX_INIT_DOXYGEN([$PACKAGE_NAME],[doc/doxygen.cfg])
+DX_INIT_DOXYGEN([$PACKAGE_NAME],[doc/doxygen.cfg],[doc/doxygen])
 
 # ######################################################################
 
 # files to generate via autotools (prepare .am or .in source files)
 AC_CONFIG_FILES([Makefile 
                  src/Makefile
-                 src/switchbox/Makefile])
+                 src/switchbox/Makefile
+                 doc/Makefile])
 
 # finally this generates the Makefiles etc. for the build
 AC_OUTPUT
