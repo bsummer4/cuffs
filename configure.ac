@@ -5,7 +5,7 @@ AC_INIT([Fistacuffs],[0.1],[])
 #AC_CONFIG_SRCDIR([src/MYSOURCEFILE.cpp])
 
 # check for a c compiler
-AC_PROG_CC
+AC_PROG_CC_C99
 
 # check for C++ preprocessor and compiler
 AC_PROG_CXXCPP
