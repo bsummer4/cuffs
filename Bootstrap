@@ -6,16 +6,17 @@
 PROMPT="  [$0]$"
 autotools_stuff="aclocal.m4 config.h.in autom4te.cache configure missing
                  install-sh Makefile.in src/Makefile.in
-                 src/switchbox/Makefile.in build-aux README DESIGN COPYING
-                 NEWS AUTHORS INSTALL ChangeLog depcomp doc/Makefile.in"
+                 src/switchbox/Makefile.in build-aux depcomp doc/Makefile.in"
+
+symbolic_links="README DESIGN COPYING NEWS AUTHORS INSTALL ChangeLog"
 
 if [ $1 ] # If there are arguments
 then
     if [ $1 != clean ]; then echo invalid command; exit; fi
 
     echo "Cleaning up symbolic links:"
-    echo "$PROMPT" rm -f README DESIGN
-    rm -f README DESIGN
+    echo "$PROMPT" rm -f $symbolic_links
+    rm -f $symbolic_links
     echo
 
     echo "Cleaning up autotools temporary files:"
