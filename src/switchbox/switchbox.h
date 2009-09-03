@@ -1,14 +1,15 @@
 #include "message.h"
 
-enum { BROADCAST_TARGET, SWITCHBOX_TARGET};
+// values for Message.type
+enum { UNICAST, BROADCAST};
 
-typedef struct message{
+typedef struct message {
   int length;
   int type;
-  int from_addr; //from address
-  int to_addr;   //to address
+  int from_address;
+  int to_address;
+  char message[];
 } Message;
 
-
-bool switchbox_send(Message*, int num_bytes, byte* array);
-bool switchbox_receive(Message*); 
+bool switchbox_send(Socket, Message*);
+Message *switchbox_receive(Socket);
