@@ -31,13 +31,16 @@ First we define a simple message that is sent between two programs.
 
 Then, inside the message content, we define a routing protocol.
 
-- target :: short    ;; (or whatever; we need to decide on *something*)
-- data :: [byte]
-- switchboxMessage :: target:data
-- magic numbers for target:
+- TransmissionType :: Int
+- Target :: int
+- switchboxMessage :: TransmissionType:target:content
+- magic numbers for TransmissionType:
 
   - broadcast = 0
-  - switchbox = 1
+  - unicast = 1
+  - multicast = 2
+  - invalid-type = 4
+  - invalid-target = 3
 
 
 Switchbox Control Protocol
