@@ -11,7 +11,7 @@ AC_PROG_CC_C99
 AC_PROG_CXXCPP
 AC_PROG_CXX
 
-# automake initialization (mandatory) including a check for automake API version >= 1.9
+# automake initialization including a check for automake API version >= 1.9
 AM_INIT_AUTOMAKE([1.9])
 
 # use the C++ compiler for the following checks
@@ -26,7 +26,7 @@ AC_CHECK_HEADERS([iostream])
 AC_TYPE_SIZE_T
 
 # distribute additional compiler and linker flags among Makefiles
-# --> set and change these variables instead of CXXFLAGS or LDFLAGS (for user only)
+# --> set these variables instead of CXXFLAGS or LDFLAGS (for user only)
 AC_SUBST([AM_CXXFLAGS])
 AC_SUBST([AM_LDFLAGS])
 
@@ -48,7 +48,7 @@ DX_INIT_DOXYGEN([$PACKAGE_NAME],[doc/doxygen.cfg],[doc/doxygen])
 # ######################################################################
 
 # files to generate via autotools (prepare .am or .in source files)
-AC_CONFIG_FILES([Makefile 
+AC_CONFIG_FILES([Makefile
                  src/Makefile
                  src/switchbox/Makefile
                  doc/Makefile])

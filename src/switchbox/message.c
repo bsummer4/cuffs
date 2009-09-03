@@ -8,108 +8,96 @@
 #include <pthread.h>
 
 #define TEST_STRING "hi"
-#define TEST_PORT 80000
-
-// # Testing
+#define TEST_PORT 80009
+// =======
+// Testing
+// =======
+//
 // The testing in this file basically just tests that the code
 // actually does something and supplies a incredibly simple example of
 // usage.  They do not attempt to make sure the code completly works.
 
 void test_send_string(Socket socket);
 void test_connections();
-
-// The test routine for everything in this file
-void test_message_c() {
-
-  // * TODO "__test_message_c_.tmp" is bad form.
-  //   I beleve the "correct" way to do this is something like:
-  //   "/temp/$(process_id)_001/"
-
-  // First we test the socket routines on a normal files
-  Socket f = fopen("__test_message_c_.tmp", "w+");
-  assert(f);
-  test_send_string(f);
-  fseek(f, 0, SEEK_SET);
-
-  int length;
-  char *result;
-  read_array(f, &length, &result);
-
-  // TODO this is unsafe: result may not be terminated.
-  assert(streq(result, TEST_STRING));
-
-  // Junk at the end.
-  assert(!fread(result, 1, 1, f));
-
-  // cleanup
-  system("rm __test_message_c_.tmp");
-  free(result);
-
-  test_connections();
-}
-
-
-void *listen_send_then_die(void* arg) {
-  Listener l = *(Listener*) arg;
-  Socket s = accept_connection(l);
-
-  int length;
-  byte *result;
-  read_array(s, &length, &result);
-  iter(ii, 0, length - 4) assert(result[ii] == TEST_STRING[ii]); 
-
-  free(result);
-  test_send_string(s);
-
-  pthread_exit(NULL);
-}
+void *listen_send_then_die(void* arg);
+void test_send(Socket s);
+void test_recieve(Socket s);
+void test_(Socket s);
 
 // tests open_connection, make_listener, accept_connection like so:
 // - Setup two threads: client and server
 // - Send data one way... read it
 // - Send data the other way... read it
 // - yay
-void test_connections() {
+void test_message_c() {
   Listener l = make_listener(TEST_PORT);
   assert(l != -1);
   pthread_t thread;
   pthread_create(&thread, NULL, listen_send_then_die, &l);
   Socket s = open_connection("localhost", TEST_PORT);
   assert(s);
-  test_send_string(s);
-  int length;
-  byte *result;
-  read_array(s, &length, &result);
-  iter(ii, 0, length - 4) assert(result[ii] == TEST_STRING[ii]);
-  
+  test_send(s); test_recieve(s);
   void *ignore; pthread_join(thread, &ignore);
 }
 
-void test_send_string(Socket socket) {
-  assert(send_string(socket, TEST_STRING)); }
-
-
-
-// # Code
-bool streq(char *s1, char *s2) { return !strcmp(s1, s2); }
-
-// Sets results to length and array.
-bool read_array(Socket socket, int *length, byte **array) {
-  if (1 != fread(length, sizeof(int), 1, socket)) goto read_array_error;
-  int array_size = *length - sizeof(int);
-  *array = malloc(array_size);
-  if (array_size != fread(*array, sizeof(byte), array_size, socket))
-    goto read_array_error;
-  return true;
- read_array_error: return false;
+void test_send(Socket s) { assert(send_string(s, TEST_STRING)); }
+void test_recieve(Socket s) {
+  Message* m = receive_message(s);
+  char *string = m->data;
+  iter(ii, 0, m->size - sizeof(int)) assert(string[ii] == TEST_STRING[ii]);
+  free(m);
 }
 
+void *listen_send_then_die(void* arg) {
+  Listener l = *(Listener*) arg;
+  Socket s = accept_connection(l);
+  test_recieve(s); test_send(s);
+  pthread_exit(NULL);
+}
+
+
+
+// ==============
+// Implementation
+// ==============
+
+bool streq(char *s1, char *s2) { return !strcmp(s1, s2); }
+
+// --------
+// Messages
+// --------
+
+
+bool send_message(Socket s, Message *m) {
+  int bytes_written = fwrite(m, sizeof(byte), m->size, s);
+  if (bytes_written != m->size) { perror("fwrite"); return false; }
+  fflush(s);
+  return true;
+}
+
+
+Message *receive_message(Socket socket) {
+  int size;
+  if (1 != fread(&size, sizeof(int), 1, socket)) goto receive_message_error;
+  Message* result = NULL; result = malloc(size);
+  result->size = size;
+  int size_remaining = size - sizeof(int);
+  if (fread(&(result->data), 1, size_remaining, socket) != size_remaining)
+    goto receive_message_error;
+  fflush(socket);
+  return result;
+ receive_message_error: if(result) free(result); return NULL;
+}
 
 bool send_string(Socket socket, char* string) {
   return send_array(socket, sizeof(int) + strlen(string), string); }
 
-/** Length is 4 + len(array).  I.E.  length is the size of the array
-    plus the size of length itself.  */
+
+/** This is basically the same as send_message().  However, the data
+    you want to send wont always be laid out that way.
+
+    'length' should be the size of 'length' + the size of 'array' (4 +
+    len(array)).  */
 bool send_array(Socket socket, int length, byte* array) {
   int array_length = length - 4;
   if ((fwrite(&length, sizeof(int), 1, socket) != 1) ||
@@ -119,26 +107,33 @@ bool send_array(Socket socket, int length, byte* array) {
   return true;
 }
 
+
+
+// -----------
+// Connections
+// -----------
+
 /** Returns a NULL on error.  */
 Socket open_connection(const char* hostname, const int port) {
   struct hostent *host = gethostbyname(hostname);
   if (!host) { perror("gethostbyname"); goto open_connection_error; }
 
-  struct sockaddr_in host_connection;
-  bzero(&host_connection, sizeof(host_connection));
+  struct sockaddr_in connection;
+  bzero(&connection, sizeof(connection));
 
-  host_connection.sin_family = AF_INET;
-  host_connection.sin_addr.s_addr = ((struct in_addr *)(host->h_addr))->s_addr;
-  host_connection.sin_port = htons(port);
+  connection.sin_family = AF_INET;
+  connection.sin_addr.s_addr = ((struct in_addr *) (host->h_addr))->s_addr;
+  connection.sin_port = htons(port);
 
-  int sd = socket(AF_INET, SOCK_STREAM, 0);
-  if (sd == -1) { perror("socket"); goto open_connection_error; }
+  int descriptor = socket(AF_INET, SOCK_STREAM, 0);
+  if (descriptor == -1) { perror("socket"); goto open_connection_error; }
 
-  if (connect(sd, (struct sockaddr *)  &host_connection,
-              sizeof(host_connection)) == -1) {
+  if (connect(descriptor,
+              (struct sockaddr *)  &connection,
+              sizeof(connection)) == -1) {
     perror("connect"); goto open_connection_error; }
 
-  FILE *result = fdopen(sd, "r+");
+  FILE *result = fdopen(descriptor, "r+");
   return result;
 
  open_connection_error: return NULL;
@@ -175,9 +170,9 @@ Listener make_listener(int port) {
 Socket accept_connection(Listener l) {
   struct sockaddr_in address;
   int descriptor, addrlen = sizeof(address);
-  
-  if ((descriptor = accept(l, (struct sockaddr *) &address, &addrlen)) == -1) {
-    perror("accept"); goto accept_connection_error; }
+
+  if ((descriptor = accept(l, (struct sockaddr *) &address, &addrlen)) == -1)
+    { perror("accept"); goto accept_connection_error; }
 
   FILE* result = fdopen(descriptor, "r+");
   if (!result) { perror("fdopen"); goto accept_connection_error; }
