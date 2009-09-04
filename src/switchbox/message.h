@@ -22,6 +22,8 @@ bool streq(char *s1, char *s2);
 Socket open_connection(const char* hostname, const int port);
 Listener make_listener(int port);
 Socket accept_connection(Listener);
+void close_connection(Socket s);
+
 
 bool send_message(Socket, Message*);
 Message* receive_message(Socket);

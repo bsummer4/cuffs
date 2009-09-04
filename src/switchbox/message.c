@@ -9,6 +9,7 @@
 
 #define TEST_STRING "hi"
 #define TEST_PORT 80009
+
 // =======
 // Testing
 // =======
@@ -180,3 +181,4 @@ Socket accept_connection(Listener l) {
 
  accept_connection_error: return NULL;
 }
+void close_connection(Socket s) { assert(false); }
