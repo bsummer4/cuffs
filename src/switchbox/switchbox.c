@@ -14,9 +14,6 @@ bool run_switchbox();
 // ==============
 
 int main (int argc, char **argv) {
-  // test_message_c();
-  // fputs("All tests passed.  ", stdout);
-
   return (int) run_switchbox(SWITCHBOX_PORT);
 }
 
@@ -80,27 +77,34 @@ void *handle_connection(void *client_) {
   pthread_exit(NULL); }
 
 void *spammer(void *id_p) {
-  int id = *(int*)id_p;
+  int *ids = (int*)id_p;
   Socket s = open_connection("localhost", SWITCHBOX_PORT);
+
   int size = sizeof(SBMessage) + 3; // header + 'h' 'i' '\0'
   SBMessage *m = malloc(size);
   m->size = size;
   m->routing_type = UNICAST;
-  m->from = id;
-  m->to = id;
+  m->from = ids[0];
+  m->to = ids[1];
+  int sending = ids[2];
+
   strcpy(m->data, "hi");
-  while (true) {
-    printf("spammer #%d: Sending 'hi' to myself.  \n", id);
-    switchbox_send(s, m);
-    printf("spammer: Waiting for response.  \n");
-    SBMessage *result = switchbox_receive(s);
-    assert(result->size == m->size);
-    iter(ii, 0, m->size) assert(((byte*)result)[ii] == ((byte*)m)[ii]);
-    printf("spammer: got it!  sleeping...  \n");
-    sleep(5);
+  iter(iteration, 0, 5) { 
+    if (m->to != -1) {
+      printf("spammer #%d: Sending 'hi' to #%d.  \n", m->from, m->to);
+      switchbox_send(s, m);
+    }
+    if (sending) {
+      printf("spammer: Waiting for response.  \n");
+      SBMessage *result = switchbox_receive(s);
+      assert(result->size == m->size);
+      iter(ii, 0, m->size) assert(((byte*)result)[ii] == ((byte*)m)[ii]);
+    }
+    printf("spammer: yay!  sleeping...  \n");
+    sleep(3);
   }
 
-  return NULL;
+  pthread_exit(NULL);
 }
 
 void setup_connection(Socket s) {
@@ -109,14 +113,20 @@ void setup_connection(Socket s) {
   pthread_create(&(c->thread), NULL, handle_connection, c); }
 
 bool run_switchbox(int port) {
-    Socket s;
-    Listener l = make_listener(port);
-    pthread_t spam;
-    int a=0, b=1, c=2;
-    pthread_create(&spam, NULL, spammer, &a);
-    pthread_create(&spam, NULL, spammer, &b);
-    pthread_create(&spam, NULL, spammer, &c);
-    while (s = accept_connection(l)) setup_connection(s); }
+  Socket s;
+  Listener l = make_listener(port);
+  pthread_t p1, p2, p3;
+  int a[3]={0, 0, 1}, b[3]={1, 1, 1}, c[3]={2, 2, 1};
+  pthread_create(&spam, NULL, spammer, &a);
+  pthread_create(&spam, NULL, spammer, &b);
+  pthread_create(&spam, NULL, spammer, &c);
+  iter(ii, 0, 3) setup_connection(accept_connection(l));
+  void *v = NULL;
+  pthread_join(p1, &v);
+  pthread_join(p2, &v);
+  pthread_join(p3, &v);
+  return true;
+}
 
 bool switchbox_send(Socket s, SBMessage* m) {
   return send_message(s, (Message*) m); }
