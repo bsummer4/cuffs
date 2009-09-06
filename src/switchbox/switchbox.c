@@ -42,8 +42,16 @@ int last_used_client = -1;
 void update_free_client() {
   while (clients[first_free_client].connection) first_free_client++; }
 
+// Index is the of a new client.  If it's after 'last_used_client',
+// then change it.
+// 
+// use index = -1 if a client was removed.  This moves
+// last_used_client back until it points to a real client.
 void update_last_used_client(int index) {
-  if (last_used_client < index) last_used_client = index; }
+  if (last_used_client == -1)
+    while (!(clients[last_used_client].connection) || last_used_client < 0)
+      last_used_client--;
+  else if (last_used_client < index) last_used_client = index; }
 
 // Returns NULL if there isn't room for another client.
 Client *get_new_client(Socket s) {
@@ -63,8 +71,7 @@ bool remove_client(Client *client) {
   close_connection(client->connection);
   bzero(client, sizeof(Client));
   int index = client - clients;
-  if (index == last_used_client)
-    while (!(clients[--last_used_client].connection) || last_used_client < 0);
+  if (index == last_used_client) update_last_used_client(-1);
   if (first_free_client > index) first_free_client = index;
   return true;
 }
