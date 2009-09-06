@@ -6,7 +6,7 @@
 #define SWITCHBOX_PORT 80009
 #define MAX_CLIENTS 1024
 
-bool run_switchbox();
+bool run_switchbox(int port);
 
 
 // ==============
@@ -16,8 +16,7 @@ bool run_switchbox();
 bool debug = true;
 
 int main (int argc, char **argv) {
-  return (int) run_switchbox(SWITCHBOX_PORT);
-}
+  return (int) !run_switchbox(SWITCHBOX_PORT); }
 
 
 // -----------------------------
@@ -37,32 +36,39 @@ Client clients[MAX_CLIENTS];
 
 // The index of the first unused slot in the 'clients' array.
 int first_free_client= 0;
+int last_used_client = -1;
 
 // Moves 'first_free_client forward until it points to a free slot
 void update_free_client() {
   while (clients[first_free_client].connection) first_free_client++; }
 
+void update_last_used_client(int index) {
+  if (last_used_client < index) last_used_client = index; }
+
 // Returns NULL if there isn't room for another client.
 Client *get_new_client(Socket s) {
   if (first_free_client >= MAX_CLIENTS) return NULL;
-  Client *result = clients + first_free_client;
+  int index = first_free_client;
+  Client *result = clients + index;
   result->connection = s;
   update_free_client();
+  update_last_used_client(index);
   return result;
 }
-
 
 bool remove_client(Client *client) {
   // TODO if the socket or thread are bad or the client is null, then
   //      return false.
+  if (!client->connection) return false;
   close_connection(client->connection);
   bzero(client, sizeof(Client));
   int index = client - clients;
-
-  // If were the new first client.  Move first_free_client
+  if (index == last_used_client)
+    while (!(clients[--last_used_client].connection) || last_used_client < 0);
   if (first_free_client > index) first_free_client = index;
   return true;
 }
+
 
 // -----------
 // Connections
@@ -78,8 +84,17 @@ void *handle_connection(void *client_) {
     if (debug)
       printf ("handle_connection: new message [%d bytes] #%d -> #%d.  \n",
               m->size, client_id, m->to);
-    switchbox_send(clients[m->to].connection, m);
-    free(m); }
+  
+    switch (m->routing_type) {
+    case UNICAST:
+      switchbox_send(clients[m->to].connection, m);
+      break;
+    case BROADCAST:
+      iter(ii, 0, last_used_client)
+        if (clients[ii].connection) {
+          m->to = ii;
+          switchbox_send(clients[m->to].connection, m); }}
+  free(m); }
 
   // The connection has been closed.
   remove_client(client);
@@ -93,12 +108,14 @@ void setup_connection(Socket s) {
 bool run_switchbox(int port) {
   Socket s;
   Listener l = make_listener(port);
-  while (m = accept_connection(l)) setup_connection(m);
-  return true;
-}
+  while (s = accept_connection(l)) setup_connection(s);
+  return true; }
 
 bool switchbox_send(Socket s, SBMessage* m) {
+  if (m->size < (sizeof(int) * 4)) return false;
   return send_message(s, (Message*) m); }
 
 SBMessage *switchbox_receive(Socket s) {
-  return (SBMessage*) receive_message(s); }
+  SBMessage *result = (SBMessage*) receive_message(s);
+  if (result->size < (sizeof(int) * 4)) { free(result); return NULL; }
+  return result; }
