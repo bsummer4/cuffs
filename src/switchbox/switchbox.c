@@ -26,7 +26,7 @@ typedef struct client {
   pthread_t thread;
 } Client;
 
-Client clients[MAX_CLIENTS];
+Client clients[MAX_CLIENTS]; //this is the global datatype that will store the clients
 int first_free_client= 0;
 
 void update_free_client() {
@@ -54,8 +54,6 @@ bool remove_client(Client *client) {
   return true;
 }
 
-
-
 // -----------
 // Connections
 // -----------
@@ -65,8 +63,8 @@ void *handle_connection(void *client_) {
   Client* client = client_;
   SBMessage *m;
   int client_id = client - clients;
-  while (m = switchbox_receive(client->connection)) {
-    assert(m->from == client_id);
+  while (m = switchbox_receive(client->connection)) { //receive connection
+    assert(m->from == client_id);  //abort if they are not equal
     printf
       ("handle_connection: new message [%d bytes] #%d -> #%d.  \n",
        m->size, client_id, m->to);
@@ -98,7 +96,7 @@ void *spammer(void *id_p) {
       printf("spammer: Waiting for response.  \n");
       SBMessage *result = switchbox_receive(s);
       assert(result->size == m->size);
-      iter(ii, 0, m->size) assert(((byte*)result)[ii] == ((byte*)m)[ii]);
+      iter(ii, 0, m->siize){ assert(((byte*)result)[ii] == ((byte*)m)[ii]);}
     }
     printf("spammer: yay!  sleeping...  \n");
     sleep(3);
@@ -120,9 +118,9 @@ bool run_switchbox(int port) {
   pthread_create(&spam, NULL, spammer, &a);
   pthread_create(&spam, NULL, spammer, &b);
   pthread_create(&spam, NULL, spammer, &c);
-  iter(ii, 0, 3) setup_connection(accept_connection(l));
+  iter(ii, 0, 3) setup_connection(accept_connection(l)); //accepting after you send
   void *v = NULL;
-  pthread_join(p1, &v);
+  pthread_join(p1, &v); //why join the active threads with null threads?
   pthread_join(p2, &v);
   pthread_join(p3, &v);
   return true;
