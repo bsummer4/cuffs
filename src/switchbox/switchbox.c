@@ -34,13 +34,16 @@ typedef struct client {
 // 'id' corresponds to their index in this array.
 Client clients[MAX_CLIENTS];
 
-// The index of the first unused slot in the 'clients' array.
+// The index of the first unused and last used slot in the 'clients' array.
 int first_free_client= 0;
-int last_used_client = -1;
+int last_used_client = -1; 
+
+//Obviously...
+bool is_client_used(Client *client){ return client->connection;}
 
 // Moves 'first_free_client forward until it points to a free slot
 void update_free_client() {
-  while (clients[first_free_client].connection) first_free_client++; }
+  while (is_client_used(clients + first_free_client)) first_free_client++;}
 
 // Index is the of a new client.  If it's after 'last_used_client',
 // then change it.
@@ -48,8 +51,9 @@ void update_free_client() {
 // use index = -1 if a client was removed.  This moves
 // last_used_client back until it points to a real client.
 void update_last_used_client(int index) {
-  if (last_used_client == -1)
-    while (!(clients[last_used_client].connection) || last_used_client < 0)
+  if (index == -1)
+    while ((last_used_client >= 0) &&
+            !is_client_used(clients + last_used_client))
       last_used_client--;
   else if (last_used_client < index) last_used_client = index; }
 
@@ -67,7 +71,7 @@ Client *get_new_client(Socket s) {
 bool remove_client(Client *client) {
   // TODO if the socket or thread are bad or the client is null, then
   //      return false.
-  if (!client->connection) return false;
+  if (!is_client_used(client)) return false;
   close_connection(client->connection);
   bzero(client, sizeof(Client));
   int index = client - clients;
@@ -98,7 +102,7 @@ void *handle_connection(void *client_) {
       break;
     case BROADCAST:
       iter(ii, 0, last_used_client)
-        if (clients[ii].connection) {
+        if (is_client_used(clients + ii)) {
           m->to = ii;
           switchbox_send(clients[m->to].connection, m); }}
   free(m); }
@@ -108,9 +112,9 @@ void *handle_connection(void *client_) {
   pthread_exit(NULL); }
 
 void setup_connection(Socket s) {
-  Client *c = get_new_client(s);
-  if (debug) printf("setup_connection: assigning client #%d.  \n", c-clients);
-  pthread_create(&(c->thread), NULL, handle_connection, c); }
+  Client *client = get_new_client(s);
+  if (debug) printf("setup_connection: assigning client #%d.  \n", client-clients);
+  pthread_create(&(client->thread), NULL, handle_connection, client); }
 
 bool run_switchbox(int port) {
   Socket s;
