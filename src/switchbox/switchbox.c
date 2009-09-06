@@ -13,6 +13,8 @@ bool run_switchbox();
 // Implementation
 // ==============
 
+bool debug = true;
+
 int main (int argc, char **argv) {
   return (int) run_switchbox(SWITCHBOX_PORT);
 }
@@ -22,11 +24,15 @@ int main (int argc, char **argv) {
 // Clients and the clients array
 // -----------------------------
 typedef struct client {
-  Socket connection; // this slot should never be NULL
+  // The 'connection' slot should never be NULL.  If is NULL it will
+  // be treated as if the whole struct is unused.
+  Socket connection;
   pthread_t thread;
 } Client;
 
-Client clients[MAX_CLIENTS]; //this is the global datatype that will store the clients
+// the 'clients' array stores all clients in the system.  The clients
+// 'id' corresponds to their index in this array.
+Client clients[MAX_CLIENTS];
 int first_free_client= 0;
 
 void update_free_client() {
@@ -42,7 +48,6 @@ Client *get_new_client(Socket s) {
 
 
 bool remove_client(Client *client) {
-
   // TODO if the socket or thread are bad or the client is null, then
   //      return false.
   close_connection(client->connection);
@@ -63,66 +68,27 @@ void *handle_connection(void *client_) {
   Client* client = client_;
   SBMessage *m;
   int client_id = client - clients;
-  while (m = switchbox_receive(client->connection)) { //receive connection
-    assert(m->from == client_id);  //abort if they are not equal
-    printf
-      ("handle_connection: new message [%d bytes] #%d -> #%d.  \n",
-       m->size, client_id, m->to);
+  while (m = switchbox_receive(client->connection)) {
+    m->from = client_id; // Client can't lie about its identity.
+    if (debug)
+      printf ("handle_connection: new message [%d bytes] #%d -> #%d.  \n",
+              m->size, client_id, m->to);
     switchbox_send(clients[m->to].connection, m);
     free(m); }
 
+  // The connection has been closed.
   remove_client(client);
   pthread_exit(NULL); }
 
-void *spammer(void *id_p) {
-  int *ids = (int*)id_p;
-  Socket s = open_connection("localhost", SWITCHBOX_PORT);
-
-  int size = sizeof(SBMessage) + 3; // header + 'h' 'i' '\0'
-  SBMessage *m = malloc(size);
-  m->size = size;
-  m->routing_type = UNICAST;
-  m->from = ids[0];
-  m->to = ids[1];
-  int sending = ids[2];
-
-  strcpy(m->data, "hi");
-  iter(iteration, 0, 5) { 
-    if (m->to != -1) {
-      printf("spammer #%d: Sending 'hi' to #%d.  \n", m->from, m->to);
-      switchbox_send(s, m);
-    }
-    if (sending) {
-      printf("spammer: Waiting for response.  \n");
-      SBMessage *result = switchbox_receive(s);
-      assert(result->size == m->size);
-      iter(ii, 0, m->siize){ assert(((byte*)result)[ii] == ((byte*)m)[ii]);}
-    }
-    printf("spammer: yay!  sleeping...  \n");
-    sleep(3);
-  }
-
-  pthread_exit(NULL);
-}
-
 void setup_connection(Socket s) {
   Client *c = get_new_client(s);
-  printf("setup_connection: assigning client #%d.  \n", c-clients);
+  if (debug) printf("setup_connection: assigning client #%d.  \n", c-clients);
   pthread_create(&(c->thread), NULL, handle_connection, c); }
 
 bool run_switchbox(int port) {
   Socket s;
   Listener l = make_listener(port);
-  pthread_t p1, p2, p3;
-  int a[3]={0, 0, 1}, b[3]={1, 1, 1}, c[3]={2, 2, 1};
-  pthread_create(&spam, NULL, spammer, &a);
-  pthread_create(&spam, NULL, spammer, &b);
-  pthread_create(&spam, NULL, spammer, &c);
-  iter(ii, 0, 3) setup_connection(accept_connection(l)); //accepting after you send
-  void *v = NULL;
-  pthread_join(p1, &v); //why join the active threads with null threads?
-  pthread_join(p2, &v);
-  pthread_join(p3, &v);
+  while (m = accept_connection(l)) setup_connection(m);
   return true;
 }
 
