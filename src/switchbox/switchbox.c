@@ -23,6 +23,7 @@ int main (int argc, char **argv) {
 // -----------------------------
 // Clients and the clients array
 // -----------------------------
+
 typedef struct client {
   // The 'connection' slot should never be NULL.  If is NULL it will
   // be treated as if the whole struct is unused.
@@ -33,14 +34,18 @@ typedef struct client {
 // the 'clients' array stores all clients in the system.  The clients
 // 'id' corresponds to their index in this array.
 Client clients[MAX_CLIENTS];
+
+// The index of the first unused slot in the 'clients' array.
 int first_free_client= 0;
 
+// Moves 'first_free_client forward until it points to a free slot
 void update_free_client() {
   while (clients[first_free_client].connection) first_free_client++; }
 
+// Returns NULL if there isn't room for another client.
 Client *get_new_client(Socket s) {
   if (first_free_client >= MAX_CLIENTS) return NULL;
-  Client *result = &clients[first_free_client++];
+  Client *result = clients + first_free_client;
   result->connection = s;
   update_free_client();
   return result;
