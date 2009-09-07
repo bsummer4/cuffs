@@ -3,7 +3,7 @@
 #include <assert.h>
 #include <unistd.h>
 
-#define SWITCHBOX_PORT 80009
+#define SWITCHBOX_PORT 80010
 #define MAX_CLIENTS 1024
 
 bool run_switchbox(int port);
@@ -28,7 +28,7 @@ typedef struct client {
   // be treated as if the whole struct is unused.
   Socket connection;
   pthread_t thread;
-  pthread_mutex_t* lock;
+  pthread_mutex_t lock;
 } Client;
 
 // the 'clients' array stores all clients in the system.  The clients
@@ -37,7 +37,7 @@ Client clients[MAX_CLIENTS];
 
 // The index of the first unused and last used slot in the 'clients' array.
 int first_free_client= 0;
-int last_used_client = -1; 
+int last_used_client = -1;
 
 //Obviously...
 bool is_client_used(Client *client){ return client->connection;}
@@ -48,13 +48,13 @@ void update_free_client() {
 
 // Index is the of a new client.  If it's after 'last_used_client',
 // then change it.
-// 
+//
 // use index = -1 if a client was removed.  This moves
 // last_used_client back until it points to a real client.
 void update_last_used_client(int index) {
   if (index == -1)
     while ((last_used_client >= 0) &&
-            !is_client_used(clients + last_used_client))
+           !is_client_used(clients + last_used_client))
       last_used_client--;
   else if (last_used_client < index) last_used_client = index; }
 
@@ -64,7 +64,7 @@ Client *get_new_client(Socket s) {
   int index = first_free_client;
   Client *result = clients + index;
   result->connection = s;
-  pthread_mutex_init(result->lock, NULL);
+  pthread_mutex_init(&(result->lock), NULL);
   update_free_client();
   update_last_used_client(index);
   return result;
@@ -87,11 +87,12 @@ bool remove_client(Client *client) {
 // Connections
 // -----------
 
-//locks the client's mutex while it sends a message, then unlocks when finished
+// locks the client's mutex while it sends a message, then unlocks
+// when finished.
 bool switchbox_send_client(Client* client, SBMessage* m){
-  pthread_mutex_lock(client->lock);
+  pthread_mutex_lock(&client->lock);
   switchbox_send(clients[m->to].connection, m);
-  pthread_mutex_unlock(client->lock);
+  pthread_mutex_unlock(&client->lock);
 }
 
 void *handle_connection(void *client_) {
@@ -103,17 +104,17 @@ void *handle_connection(void *client_) {
     if (debug)
       printf ("handle_connection: new message [%d bytes] #%d -> #%d.  \n",
               m->size, client_id, m->to);
-  
+
     switch (m->routing_type) {
-      case UNICAST:
-        switchbox_send_client(&clients[m->to], m);
-        break;
-      case BROADCAST:
-        iter(ii, 0, last_used_client)
+    case UNICAST:
+      switchbox_send_client(&clients[m->to], m);
+      break;
+    case BROADCAST:
+      iter(ii, 0, last_used_client)
         if (is_client_used(clients + ii)) {
           m->to = ii;
           switchbox_send_client(&clients[m->to], m);}}
-  free(m); }
+    free(m); }
 
   // The connection has been closed.
   remove_client(client);
@@ -121,7 +122,8 @@ void *handle_connection(void *client_) {
 
 void setup_connection(Socket s) {
   Client *client = get_new_client(s);
-  if (debug) printf("setup_connection: assigning client #%d.  \n", client-clients);
+  if (debug)
+    printf("setup_connection: assigning client #%d.  \n", client-clients);
   pthread_create(&(client->thread), NULL, handle_connection, client); }
 
 bool run_switchbox(int port) {
