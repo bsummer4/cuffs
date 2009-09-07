@@ -6,6 +6,7 @@
 #include <netdb.h>
 #include <assert.h>
 #include <pthread.h>
+#include <unistd.h>
 
 #define TEST_STRING "hi"
 #define TEST_PORT 80009
@@ -36,7 +37,7 @@ void test_message_c() {
   pthread_t thread;
   pthread_create(&thread, NULL, listen_send_then_die, &l);
   Socket s = open_connection("localhost", TEST_PORT);
-  assert(s);
+  assert(valid_socket(s));
   test_send(s); test_recieve(s);
   void *ignore; pthread_join(thread, &ignore);
 }
@@ -64,28 +65,31 @@ void *listen_send_then_die(void* arg) {
 
 bool streq(char *s1, char *s2) { return !strcmp(s1, s2); }
 
+
 // --------
 // Messages
 // --------
 
-
-bool send_message(Socket s, Message *m) {
-  int bytes_written = fwrite(m, sizeof(byte), m->size, s);
-  if (bytes_written != m->size) { perror("fwrite"); return false; }
-  fflush(s);
-  return true;
+bool send_message(Socket socket, Message *m) {
+  printf("send_message:  It's going out\n");
+  bool success = write_bytes((byte*)m, m->size, socket);
+  printf("send_message:  %s.\n", (success ? "Success!" : "FAILURE!!!"));
+  return success;
 }
 
-
+// Returns NULL if the socket is id or closed.
 Message *receive_message(Socket socket) {
+  Message* result = NULL;
   int size;
-  if (1 != fread(&size, sizeof(int), 1, socket)) goto receive_message_error;
-  Message* result = NULL; result = malloc(size);
+  if (!valid_socket(socket)) goto receive_message_error;
+  bool success = read_bytes((byte*) &size, sizeof(int), socket);
+  if (!success) goto receive_message_error;
+  result = malloc(size);
+  if (!result) goto receive_message_error;
   result->size = size;
-  int size_remaining = size - sizeof(int);
-  if (fread(&(result->data), 1, size_remaining, socket) != size_remaining)
-    goto receive_message_error;
-  fflush(socket);
+  size_t size_remaining = size - sizeof(int);
+  success = read_bytes(result->data, size_remaining, socket);
+  if (!success) goto receive_message_error;
   return result;
  receive_message_error: if(result) free(result); return NULL;
 }
@@ -100,12 +104,9 @@ bool send_string(Socket socket, char* string) {
     'length' should be the size of 'length' + the size of 'array' (4 +
     len(array)).  */
 bool send_array(Socket socket, int length, byte* array) {
-  int array_length = length - 4;
-  if ((fwrite(&length, sizeof(int), 1, socket) != 1) ||
-      (fwrite(array, sizeof(byte), array_length, socket) != array_length))
-    { perror("fwrite"); return false; }
-  fflush(socket);
-  return true;
+  size_t array_length = length - sizeof(int);
+  return (write_bytes((byte*) &length, sizeof(int), socket) &&
+          write_bytes(array, array_length, socket));
 }
 
 
@@ -114,7 +115,28 @@ bool send_array(Socket socket, int length, byte* array) {
 // Connections
 // -----------
 
-/** Returns a NULL on error.  */
+bool write_bytes(byte* output, size_t length, Socket s) {
+  char *pointer = output;
+  while (pointer < output + length) {
+    int written = write(s, pointer, output - pointer + length);
+    if (written < 0) return false;
+    pointer += written; }
+  return true; }
+
+bool read_bytes(byte *input, size_t length, Socket s) {
+  if (!valid_socket(s)) return false;
+  char *pointer = input;
+  while (pointer < input + length) {
+    int bytes_read = read(s, pointer, input - pointer + length);
+    if (bytes_read == 0) return false;
+    if (bytes_read < 0) { perror("read"); return false; }
+    pointer += bytes_read; }
+  return true; }
+
+bool valid_socket(Socket socket) { return socket != -1; }
+bool valid_listener(Listener listener) { return listener != -1; }
+
+/** Returns an invalid socket on error.  */
 Socket open_connection(const char* hostname, const int port) {
   struct hostent *host = gethostbyname(hostname);
   if (!host) { perror("gethostbyname"); goto open_connection_error; }
@@ -133,15 +155,13 @@ Socket open_connection(const char* hostname, const int port) {
               (struct sockaddr *)  &connection,
               sizeof(connection)) == -1) {
     perror("connect"); goto open_connection_error; }
+  return descriptor;
 
-  FILE *result = fdopen(descriptor, "r+");
-  return result;
-
- open_connection_error: return NULL;
+ open_connection_error: return -1;
 }
 
 
-// Returns -1 on error
+// Returns an invalid listener on error
 Listener make_listener(int port) {
   Listener result;
   if ((result = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
@@ -167,7 +187,7 @@ Listener make_listener(int port) {
 }
 
 
-// Returns NULL on error
+// Returns an invalid Socket on error
 Socket accept_connection(Listener l) {
   struct sockaddr_in address;
   int descriptor, addrlen = sizeof(address);
@@ -175,10 +195,10 @@ Socket accept_connection(Listener l) {
   if ((descriptor = accept(l, (struct sockaddr *) &address, &addrlen)) == -1)
     { perror("accept"); goto accept_connection_error; }
 
-  FILE* result = fdopen(descriptor, "r+");
-  if (!result) { perror("fdopen"); goto accept_connection_error; }
-  return result;
+  return descriptor;
 
- accept_connection_error: return NULL;
+ accept_connection_error: return -1;
 }
-void close_connection(Socket s) { assert(false); }
+
+void close_connection(Socket s) { close(s); }
+
