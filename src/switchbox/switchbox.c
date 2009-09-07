@@ -28,6 +28,7 @@ typedef struct client {
   // be treated as if the whole struct is unused.
   Socket connection;
   pthread_t thread;
+  pthread_mutex_t* lock;
 } Client;
 
 // the 'clients' array stores all clients in the system.  The clients
@@ -63,6 +64,7 @@ Client *get_new_client(Socket s) {
   int index = first_free_client;
   Client *result = clients + index;
   result->connection = s;
+  pthread_mutex_init(result->lock, NULL);
   update_free_client();
   update_last_used_client(index);
   return result;
@@ -85,7 +87,13 @@ bool remove_client(Client *client) {
 // Connections
 // -----------
 
-// TODO add locking for the clients
+//locks the client's mutex while it sends a message, then unlocks when finished
+bool switchbox_send_client(Client* client, SBMessage* m){
+  pthread_mutex_lock(client->lock);
+  switchbox_send(clients[m->to].connection, m);
+  pthread_mutex_unlock(client->lock);
+}
+
 void *handle_connection(void *client_) {
   Client* client = client_;
   SBMessage *m;
@@ -97,14 +105,14 @@ void *handle_connection(void *client_) {
               m->size, client_id, m->to);
   
     switch (m->routing_type) {
-    case UNICAST:
-      switchbox_send(clients[m->to].connection, m);
-      break;
-    case BROADCAST:
-      iter(ii, 0, last_used_client)
+      case UNICAST:
+        switchbox_send_client(&clients[m->to], m);
+        break;
+      case BROADCAST:
+        iter(ii, 0, last_used_client)
         if (is_client_used(clients + ii)) {
           m->to = ii;
-          switchbox_send(clients[m->to].connection, m); }}
+          switchbox_send_client(&clients[m->to], m);}}
   free(m); }
 
   // The connection has been closed.
