@@ -28,8 +28,6 @@ int main (int argc, char **argv) {
 // -----------------------------
 
 typedef struct client {
-  // The 'thread' slot should never be NULL.  If is NULL it will
-  // be treated as if the whole struct is unused.
   Socket connection;
   pthread_t thread;
   pthread_mutex_t lock;
