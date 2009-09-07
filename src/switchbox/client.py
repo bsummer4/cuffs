@@ -19,8 +19,9 @@ class Connection:
         if not success: raise Exception("Failed to send.  ")
     def receive(self):
         sizep, typep, fromp, top = [intp() for x in range(4)]
-        result = switchbox_receive_string(self.connection,
-                                          sizep, typep, fromp, top)
+        result = switchbox_receive_string_safe (
+            self.connection,
+            sizep, typep, fromp, top)
         source, target = [p.value() for p in (fromp, top)]
         if (source == target): self.id = source
         return result

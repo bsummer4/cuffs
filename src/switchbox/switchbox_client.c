@@ -1,6 +1,5 @@
 #include "switchbox_client.h"
 
-
 bool switchbox_send_string(Socket s,
                            int size, int type, int from, int to,
                            char *string) {
@@ -33,16 +32,16 @@ char *switchbox_receive_string(Socket s,
 bool switchbox_send(Socket s, SBMessage* m) {
   if (!m) return false;
   if ((unsigned) m->size < (sizeof(int) * 4)) return false;
-  printf("switchbox_send:  %d bytes to [socket 0x%x]\n",
-         m->size, (unsigned) s);
+  if (debug) printf("switchbox_send:  %d bytes to [socket 0x%x]\n",
+                    m->size, (unsigned) s);
   return send_message(s, (Message*) m); }
 
 // Return NULL if the socket is invalid, fails, or is closed.
 SBMessage *switchbox_receive(Socket s) {
   SBMessage *result = (SBMessage*) receive_message(s);
   if (!result) return NULL;
-  printf("switchbox_receive:  %d bytes from [socket 0x%x]\n",
-         result->size, (unsigned) s);
+  if (debug) printf("switchbox_receive:  %d bytes from [socket 0x%x]\n",
+                    result->size, (unsigned) s);
   if ((unsigned) result->size < (sizeof(int) * 4)) {
     free(result); return NULL; }
   return result; }

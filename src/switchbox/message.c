@@ -11,6 +11,8 @@
 #define TEST_STRING "hi"
 #define TEST_PORT 80009
 
+bool debug = false;
+
 // =======
 // Testing
 // =======
@@ -71,9 +73,10 @@ bool streq(char *s1, char *s2) { return !strcmp(s1, s2); }
 // --------
 
 bool send_message(Socket socket, Message *m) {
-  printf("send_message:  It's going out\n");
+  if (debug) printf("send_message:  It's going out\n");
   bool success = write_bytes((byte*)m, m->size, socket);
-  printf("send_message:  %s.\n", (success ? "Success!" : "FAILURE!!!"));
+  if (debug)
+    printf("send_message:  %s.\n", (success ? "Success!" : "FAILURE!!!"));
   return success;
 }
 
@@ -201,4 +204,3 @@ Socket accept_connection(Listener l) {
 }
 
 void close_connection(Socket s) { close(s); }
-

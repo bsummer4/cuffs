@@ -18,6 +18,7 @@ typedef struct message {
 // TODO move to a different file
 bool streq(char *s1, char *s2);
 #define iter(var, from, to) for (int var = from; var < to; var++)
+extern bool debug;
 
 Socket open_connection(const char* hostname, const int port);
 Listener make_listener(int port);

@@ -14,8 +14,6 @@ void run_switchbox(int port);
 // Implementation
 // ==============
 
-bool debug = true;
-
 int main (int argc, char **argv) {
   // A broken pipe should just cause read() and write() to fail.
   signal(SIGPIPE, SIG_IGN);
@@ -96,12 +94,13 @@ bool remove_client(Client *client) {
 bool switchbox_locking_send(SBMessage* m) {
   Client *target = clients + m->to;
   Socket socket = target->connection;
-  printf("switchbox_locking_send: Locking before sending message to %d.  \n",
-         m->to);
+  if (debug)
+    printf("switchbox_locking_send: Locking before sending message to %d.  \n",
+           m->to);
   pthread_mutex_lock(&target->lock);
   bool success = switchbox_send(socket, m);
-  printf("switchbox_locking_send: [%d] Sent, unlocking... \n",
-         m->to);
+  if (debug) printf("switchbox_locking_send: [%d] Sent, unlocking... \n",
+                    m->to);
   pthread_mutex_unlock(&target->lock);
   return success; }
 
