@@ -21,6 +21,8 @@ def send_data():
             output = "%s: %s"%(name, line)
             c.broadcast(output)
         except:
+            c.close() # TODO why doesn't this cause the blocking
+                      # read() in get_data() to fail?
             os._exit(0)
 
 def get_data():
