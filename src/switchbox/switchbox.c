@@ -74,9 +74,12 @@ Client *get_new_client(Socket s) {
 bool remove_client(Client *client) {
   // TODO if the socket or thread are bad or the client is null, then
   //      return false.
-  int index = client - clients;
+  //There's a more elegant way to handle this, i'm sure.
+  int index;
+  if ((client == NULL) || !is_client_used(client)) return false; 
+  index = client-clients; 
   if (debug) printf("Lost connection from client %d\n", index);
-  if (!is_client_used(client)) return false;
+  if(!valid_socket(client->connection)) return false; 
   close_connection(client->connection);
   pthread_mutex_destroy(&client->lock);
   bzero(client, sizeof(Client));

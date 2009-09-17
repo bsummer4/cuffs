@@ -14,7 +14,7 @@ typedef struct message {
   char data[];
 } Message;
 
-// General shit
+//General Info
 // TODO move to a different file
 bool streq(char *s1, char *s2);
 #define iter(var, from, to) for (int var = from; var < to; var++)
