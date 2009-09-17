@@ -72,8 +72,6 @@ Client *get_new_client(Socket s) {
 }
 
 bool remove_client(Client *client) {
-  // TODO if the socket or thread are bad or the client is null, then
-  //      return false.
   //There's a more elegant way to handle this, i'm sure.
   int index;
   if ((client == NULL) || !is_client_used(client)) return false; 
