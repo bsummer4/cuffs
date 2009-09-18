@@ -72,7 +72,7 @@ def render_header(header):
     result = ""
     if "from" in header: result += "from: " + header['from'] + "\n\n"
     if "subject" in header: result += "# %s\n"%header['subject']
-    else result += "# %s\n"%"(no subject)"
+    else: result += "# %s\n"%"(no subject)"
     return result
 
 def niceify(header, body):
