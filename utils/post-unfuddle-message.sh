@@ -5,7 +5,10 @@
 # connent is taken from standard input
 
 project=$1; id=$2; username=$3; password=$4; messageid=$5
-body=`cat`
+
+# Get input from stdin cleaning up any characters xml hates
+sanitize="import xml.sax.saxutils, sys; sys.stdout.write(xml.sax.saxutils.escape(sys.stdin.read()))"
+body=`cat | python -c "$sanitize"`
 
 curl -i -u $username:$password -X POST \
   -H 'Accept: application/xml' \
