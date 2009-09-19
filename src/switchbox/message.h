@@ -1,5 +1,9 @@
 #pragma once
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -33,3 +37,8 @@ bool write_bytes(byte* output, size_t length, Socket s);
 bool read_bytes(byte *input, size_t length, Socket s);
 
 void test_message_c();
+
+
+#ifdef __cplusplus
+}
+#endif

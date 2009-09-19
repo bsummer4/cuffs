@@ -4,7 +4,6 @@
 #include <unistd.h>
 #include <signal.h>
 
-#define SWITCHBOX_PORT 80021
 #define MAX_CLIENTS 1024
 
 void run_switchbox(int port);

@@ -11,6 +11,9 @@ AC_PROG_CC_C99
 AC_PROG_CXXCPP
 AC_PROG_CXX
 
+# Libtool for building libraries
+AC_PROG_LIBTOOL
+
 # automake initialization including a check for automake API version >= 1.9
 AM_INIT_AUTOMAKE([1.9])
 
@@ -51,6 +54,8 @@ DX_INIT_DOXYGEN([$PACKAGE_NAME],[doc/doxygen.cfg],[doc/doxygen])
 AC_CONFIG_FILES([Makefile
                  src/Makefile
                  src/switchbox/Makefile
+                 tests/Makefile
+                 tests/switchbox/Makefile
                  doc/Makefile])
 
 # finally this generates the Makefiles etc. for the build
