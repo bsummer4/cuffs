@@ -17,7 +17,13 @@ typedef struct switchbox_message {
 } SBMessage;
 
 // values for Message.type
-enum { UNICAST, BROADCAST, TYPE_ERROR, FROM_ADDRESS_ERROR, TO_ADDRESS_ERROR, SWITCHBOX_ANNOUNCE};
+typedef enum { UNICAST, 
+       BROADCAST, 
+       TYPE_ERROR, 
+       FROM_ADDRESS_ERROR, 
+       TO_ADDRESS_ERROR, 
+       SWITCHBOX_ANNOUNCE
+} message_type;
 
 bool switchbox_send(Socket, SBMessage*);
 SBMessage *switchbox_receive(Socket);

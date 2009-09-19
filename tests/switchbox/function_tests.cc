@@ -100,7 +100,7 @@ bool f2(Connection * send, Connection* receive, Connection* none, const char* te
     cout << "[" << testName << "] ";
     bool passed = false;
     int size = 1+strlen(test_message)+4*sizeof(int);
-    int type = UNICAST;
+    message_type type = UNICAST;
     int from = send->getAddress();
     int to   = receive->getAddress();
     send->sendMessage(size, type, to, test_message);
@@ -129,7 +129,7 @@ bool f3(Connection * send, Connection* r1, Connection* r2, const char* testName)
     cout << "[" << testName << "] ";
     bool passed = false;
     int size = 1+strlen(test_message)+4*sizeof(int);
-    int type = BROADCAST;
+    message_type type = BROADCAST;
     int from = send->getAddress();
     int to   = -1;
     Connection * clist[3];

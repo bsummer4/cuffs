@@ -3,6 +3,12 @@
 // Prototype for thread.
 extern "C" void * messaging_thread(void* arg);
 
+/**
+ * The constructor for the object. 
+ *
+ * @param hostname The hostname of the switchbox.
+ * @param port The port that the switchbox is running on.
+ */
 Connection::Connection(const char* hostname, const int port){
     this->s = -1;
     this->hostname = hostname;
@@ -29,7 +35,16 @@ void Connection::stop(){
     pthread_join(tid, NULL);
 }
 
-bool Connection::sendMessage(int size, int type, int to, char *string){
+/**
+ * Function to send a message. This function will actually appened the message to a queue
+ * and the messaging thread will send the message. 
+ *
+ * @param size The size of the message, including the header, which is 4 ints. 
+ * @param type The type of message. 
+ * @param to The address of the user this message is for. 
+ * @param string The message. 
+ */
+void Connection::sendMessage(int size, message_type type, int to, char *string){
     SBMessage *result = (SBMessage*)malloc(size);
     if ( !size ) {
         perror("malloc");
@@ -45,14 +60,23 @@ bool Connection::sendMessage(int size, int type, int to, char *string){
     pthread_mutex_unlock(&slock);
 }
 
+/**
+ * @return The number of messages in the receive queue.
+ */
 int Connection::getMessageCount(){
     return receive_queue.size();
 }
 
+/**
+ * @return The address of this client
+ */
 int Connection::getAddress(){
     return this->from;
 }
 
+/** 
+ * @return The first message in the messaging queue.
+ */
 SBMessage * Connection::getMessage(){
     if ( receive_queue.empty() ){
         return NULL;
@@ -75,6 +99,11 @@ void Connection::handleAnnounceMessage(SBMessage * msg){
     }
 }
 
+/** 
+ * The message updating thread. Started with start()
+ * and stopped with stop(). Handles all of the actual
+ * sending/receiving of the messages.
+ */ 
 void Connection::messageUpdate(){
     static const int timeout_msecs = 10;
     
@@ -106,6 +135,10 @@ void Connection::messageUpdate(){
 }
 
 
+/**
+ * This function will return when there
+ * is a message on the receive queue.
+ */
 void Connection::blockForMessage(){
     if ( receive_queue.empty() ){
         pthread_mutex_lock(&rlock);
@@ -114,6 +147,10 @@ void Connection::blockForMessage(){
     }
 }
 
+/**
+ * @returns True if the messaging thread is running, otherwise
+ * returns false.
+ */
 bool Connection::isRunning(){
     return running;
 }
