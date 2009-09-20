@@ -112,7 +112,7 @@ void Connection::messageUpdate(){
     if ( numbytes > 0 ){
         SBMessage * result = switchbox_receive(this->s);
 
-        if ( result->routing_type == SWITCHBOX_ANNOUNCE ){
+        if ( result->routing_type == ADMIN ){
             handleAnnounceMessage(result);
         }
         else{ 

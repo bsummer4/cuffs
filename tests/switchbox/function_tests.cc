@@ -20,6 +20,8 @@ bool f3_2(Connection * send, Connection* r1, Connection* r2, Connection* r3, con
 
 int main(int argc, char* argv[]){
 
+    SwitchboxAdmin * swa = new SwitchboxAdmin(HOST, SWITCHBOX_PORT);
+    swa->start();
     Connection * clientA = new Connection(HOST, SWITCHBOX_PORT);
     Connection * clientB = new Connection(HOST, SWITCHBOX_PORT);
     Connection * clientC = new Connection(HOST, SWITCHBOX_PORT);
@@ -85,16 +87,20 @@ int main(int argc, char* argv[]){
     ////////////////////////////////////////////////////////////////////////////////
     // Test 4 - F4: Collective communication: Group-based multicast
     ////////////////////////////////////////////////////////////////////////////////
-    /*
     cout << "[F4: Collective communication: Group-based multicast]" << endl;
-    if ( !f4(clientA, clientB, clientC, "F4a:") )
+    swa->createGroup(1);
+    swa->addToGroup(1, &addressA, 1);
+    if ( !f4(clientA, 1, clientB, clientC, "F4a:") )
         exit(4);
+    swa->addToGroup(1, &addressB, 1);
     if ( !f4(clientB, clientC, clientA, "F4b:") )
         exit(4);
+    
+    swa->removeFromGroup(1, &addressA, 1);
     if ( !f4(clientC, clientA, clientB, "F4c:") )
         exit(4);
-    */
 
+    swa->stop();
     return 0;
 }
 

@@ -14,6 +14,8 @@ Layout
 - /Bootstrap -- Shell script for generating the build.
 - /src -- source code
 - /src/switchbox -- source code for the networking code and the switchbox.
+- /tests -- Testing programs to test code in source.
+- /tests/switchbox -- testing programs for the switchbox
 
 
 Prerequisites

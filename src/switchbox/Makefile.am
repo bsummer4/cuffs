@@ -17,7 +17,7 @@ noinst_LTLIBRARIES = libmessaging.la
 libmessaging_la_SOURCES = message.c switchbox_client.c
 
 lib_LTLIBRARIES = libconnection.la 
-libconnection_la_SOURCES = Connection.cc
+libconnection_la_SOURCES = Connection.cc SwitchboxAdmin.cc
 libconnection_la_LIBADD = libmessaging.la \
                         -lpthread
 
