@@ -3,6 +3,7 @@
 #include <iostream>
 #include "Connection.h"
 #include "SwitchboxAdmin.h"
+#include "SBTestCommon.h"
 
 #include <unistd.h>
 

@@ -46,11 +46,12 @@ void Connection::stop(){
  */
 void Connection::sendMessage(int size, message_type type, int to, char *string){
     SBMessage *result = (SBMessage*)malloc(size);
-    if ( !size ) {
+    if ( !result ) {
         perror("malloc");
         exit(1);
     }
-    result->size = size + sizeof(int)*4;
+    //result->size = size + sizeof(int)*4;
+    result->size = size;
     result->routing_type = type;
     result->from = this->from;
     result->to = to;

@@ -24,6 +24,10 @@ class switchbox_manager():
             
 
 
+def cleanup_sys(sm, fval):
+    print "Failed previous test, can not continue..."
+    sm.stop_switchbox()
+    return fval;
 
 
 def main():
@@ -31,10 +35,12 @@ def main():
     sm = switchbox_manager()
     sm.start_switchbox()
 
-    #print "Do Stuff here"
     fval = os.system("./function_tests")
     if ( fval != 0 ):
-        return fval
+        return cleanup_sys(sm,fval);
+    fval = os.system("./edgecase_tests")
+    if ( fval != 0 ):
+        return cleanup_sys(sm,fval);
 
 
     print "Killing"
