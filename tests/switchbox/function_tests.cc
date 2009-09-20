@@ -9,9 +9,6 @@
 
 using namespace std;
 
-const char* HOST="localhost";
-char* test_message = "hello";
-
 // Prototypes for functions for tests below See doc for more details.
 // F1
 int f1(Connection* c, const char* testName);
@@ -60,7 +57,7 @@ int main(int argc, char* argv[]){
     }
     // Start up clientD: 
     clientD->start();
-    usleep(5000);
+    usleep(USLEEP_TIME);
     if ( !f2_2(clientA, clientD, clientB, clientC, "F3d:") ){
         //exit(2);
     }
@@ -81,7 +78,7 @@ int main(int argc, char* argv[]){
         //exit(3);
     }
     clientD->start();
-    usleep(5000);
+    usleep(USLEEP_TIME);
     if ( !f3_2(clientA, clientB, clientC, clientD, "F3d:") ){
         //exit(3);
     }
@@ -111,10 +108,10 @@ int f1(Connection* c, const char* testName){
     int retval;
     cout << "[" << testName << "] ";
     c->start();
-    usleep(5000);
+    usleep(USLEEP_TIME);
     retval = c->getAddress();
     if (retval > -1){
-        cout << "passed" << endl;
+        cout << "passed: address is " << retval << endl;
     } else {
         cout << "failed" << endl;
         //exit(1);
@@ -133,7 +130,7 @@ bool f2(Connection * send, Connection* receive, Connection* none, const char* te
     int from = send->getAddress();
     int to   = receive->getAddress();
     send->sendMessage(size, type, to, test_message);
-    usleep(5000);
+    usleep(10000);
     if ( receive->getMessageCount() == 1 && none->getMessageCount() == 0 ){
         SBMessage* msg = receive->getMessage();
         if ( msg->size == size &&
@@ -142,6 +139,9 @@ bool f2(Connection * send, Connection* receive, Connection* none, const char* te
              msg->routing_type == type && 
              strcmp(msg->data, test_message) == 0){
             passed = true;
+        }
+        else {
+            cout << "here" << endl;
         }
         free(msg);
     }
@@ -167,7 +167,7 @@ bool f2_2(Connection * send, Connection* receive, Connection* n1, Connection* n2
     int from = send->getAddress();
     int to   = receive->getAddress();
     send->sendMessage(size, type, to, test_message);
-    usleep(5000);
+    usleep(USLEEP_TIME);
     if ( receive->getMessageCount() == 1 && n1->getMessageCount() == 0 && n2->getMessageCount() == 0){
         SBMessage* msg = receive->getMessage();
         if ( msg->size == size &&
@@ -207,7 +207,7 @@ bool f3(Connection * send, Connection* r1, Connection* r2, const char* testName)
     clist[1] = r1;
     clist[2] = r2;
     send->sendMessage(size, type, to, test_message);
-    usleep(5000);
+    usleep(USLEEP_TIME);
     //cout << send->getMessageCount() << endl;
     //cout << r1->getMessageCount() << endl;
     //cout << r2->getMessageCount() << endl;
@@ -216,15 +216,7 @@ bool f3(Connection * send, Connection* r1, Connection* r2, const char* testName)
            r2->getMessageCount() == 1){
         for (int i = 0; i < 3; i++){
             SBMessage* msg = clist[i]->getMessage();
-            /*
-            cout << msg->size << " " << size << " " <<
-                    msg->to   << " " << to   << " " << 
-                    msg->from << " " << from << " " << 
-                    msg->routing_type <<" " <<  type << " " <<  
-                    strcmp(msg->data, test_message) << endl;
-                    */
             if ( msg->size == size &&
-                 msg->to   == to   &&
                  msg->from == from &&
                  msg->routing_type == type && 
                  strcmp(msg->data, test_message) == 0){
@@ -254,7 +246,7 @@ bool f3_2(Connection * send, Connection* r1, Connection* r2, Connection* r3, con
     clist[2] = r2;
     clist[3] = r3;
     send->sendMessage(size, type, to, test_message);
-    usleep(5000);
+    usleep(USLEEP_TIME);
     if ( send->getMessageCount() == 1 &&
            r1->getMessageCount() == 1 &&
            r2->getMessageCount() == 1 &&
@@ -262,7 +254,6 @@ bool f3_2(Connection * send, Connection* r1, Connection* r2, Connection* r3, con
         for (int i = 0; i < 4; i++){
             SBMessage* msg = clist[i]->getMessage();
             if ( msg->size == size &&
-                 msg->to   == to   &&
                  msg->from == from &&
                  msg->routing_type == type && 
                  strcmp(msg->data, test_message) == 0){
@@ -282,4 +273,5 @@ bool f3_2(Connection * send, Connection* r1, Connection* r2, Connection* r3, con
 bool f4(Connection* c1, Connection* c2, Connection* c3, bool r1, bool r2, bool r3, int groupNum){
 
 
+    return true;
 }

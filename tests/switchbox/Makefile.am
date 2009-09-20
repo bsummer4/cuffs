@@ -10,7 +10,7 @@ noinst_LTLIBRARIES = libsbcommon.la
 
 libsbcommon_la_SOURCES = SBTestCommon.cc
 
-bin_PROGRAMS = function_tests edgecase_tests
+bin_PROGRAMS = function_tests edgecase_tests latency_test
 
 function_tests_SOURCES = function_tests.cc
 #function_tests_LDADD = $(LIBCONNECTION) \
@@ -19,3 +19,5 @@ function_tests_SOURCES = function_tests.cc
 edgecase_tests_SOURCES = edgecase_tests.cc
 #edgecase_tests_LDADD = $(LIBCONNECTION) \
 #                       libsbcommon.la
+
+latency_test_SOURCES = latency_test.cc

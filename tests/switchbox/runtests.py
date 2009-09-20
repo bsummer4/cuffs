@@ -38,6 +38,7 @@ def main():
     fval = os.system("./function_tests")
     if ( fval != 0 ):
         return cleanup_sys(sm,fval);
+    print ""
     fval = os.system("./edgecase_tests")
     if ( fval != 0 ):
         return cleanup_sys(sm,fval);
