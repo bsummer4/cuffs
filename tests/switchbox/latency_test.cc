@@ -5,6 +5,7 @@
 #include <pthread.h>
 #include <sys/time.h>
 #include <iostream>
+#include <sched.h>
 
 using namespace std;
 
@@ -41,14 +42,15 @@ class ConPair{
         ConPair(Connection* sender, Connection* receiver){
             s = sender;
             r = receiver;
-            pthread_mutex_init(&lock, NULL);
+            pthread_mutex_init(&runlock, NULL);
         }
         ConPair(){
             s = new Connection(HOST, SWITCHBOX_PORT);
             r = new Connection(HOST, SWITCHBOX_PORT);
             s->start();
             r->start();
-            pthread_mutex_init(&lock, NULL);
+            usleep(USLEEP_TIME);
+            pthread_mutex_init(&runlock, NULL);
         }
         void start(){
             running = true;
@@ -58,41 +60,57 @@ class ConPair{
             running = false;
             pthread_join(tid, NULL);
         }
+        void pause(){
+            pthread_mutex_lock(&runlock);
+        }
+        void resume(){
+            pthread_mutex_unlock(&runlock);
+        }
         void update(){
             struct timeval sent;
             struct timeval rec;
-            gettimeofday(&sent, NULL);
-            int size = 4*sizeof(int) + sizeof(struct timeval);
-            message_type type = UNICAST;
-            int to = r->getAddress();
-            s->sendMessage(size, type, to, (char*)&sent);
-            r->blockForMessage();
-            SBMessage * msg = (SBMessage*)malloc(size);
-            msg = r->getMessage();
-            gettimeofday(&rec, NULL);
-            struct timeval diff_val;
-            timeval_subtract(&diff_val, &sent, &rec);
-            pthread_mutex_lock(&lock);
-            latencies.push_back(diff_val);
-            pthread_mutex_unlock(&lock);
-
+            pthread_mutex_lock(&runlock);
+            {
+                gettimeofday(&sent, NULL);
+                int size = 4*sizeof(int) + sizeof(struct timeval);
+                message_type type = UNICAST;
+                int to = r->getAddress();
+                //cout << this << " sending message" << endl;
+                s->sendMessage(size, type, to, (char*)&sent);
+                r->blockForMessage();
+                SBMessage * msg = (SBMessage*)malloc(size);
+                msg = r->getMessage();
+                //cout << this << " got message" << endl;
+                gettimeofday(&rec, NULL);
+                struct timeval diff_val;
+                timeval_subtract(&diff_val, &rec, &sent);
+                //cout << "diff_val = " << diff_val.tv_usec;
+                latencies.push_back(diff_val);
+            }
+            pthread_mutex_unlock(&runlock);
         }
         double getAverageLatency(){
             struct timeval sum = {0,0};
-            pthread_mutex_lock(&lock);
+            struct timeval old = {0,0};
+            double msec;
+            //cout << "latencies.size() == " << latencies.size() << endl;
             for (int i = 0; i < latencies.size(); i++){
+                old = sum;
                 sum.tv_sec += latencies[i].tv_sec;
                 sum.tv_usec += latencies[i].tv_usec;
+                // Carry on overflow
+                if ( sum.tv_usec < old.tv_usec ){
+                    sum.tv_sec += 1;
+                }
             }
-            double msec = sum.tv_sec * 1000 + sum.tv_usec * 0.001;
+            msec = sum.tv_sec * 1000 + sum.tv_usec * 0.001;
             if ( latencies.size() > 0 ){
                 msec /= latencies.size();
             }
             else { 
-                msec = 1000000;
+                msec = -1;
             }
             latencies.clear();
-            pthread_mutex_unlock(&lock);
             return msec;
         }
         bool isRunning() { return running; }
@@ -100,7 +118,7 @@ class ConPair{
         Connection * s;
         Connection * r;
         vector<struct timeval> latencies;
-        pthread_mutex_t lock;
+        pthread_mutex_t runlock;
         pthread_t tid;
         bool running;
 };
@@ -110,7 +128,9 @@ vector<ConPair*> clients;
 void * update_thread(void* arg){
     ConPair * cp = (ConPair*)arg;
     while(cp->isRunning()){
+        //cout << "Update thread" << endl;
         cp->update();
+        sched_yield();
     }
     pthread_exit(NULL);
 }
@@ -124,18 +144,25 @@ int main(){
     while ( clients.size() < MAXPAIRS ){
         spawn_pair();
         // Let the clients run
-        sleep(5);
+        sleep(1);
+        for (int i = 0; i < clients.size(); i++){
+            clients[i]->pause();   
+        }
         sum = 0;
         for (int i = 0; i < clients.size(); i++){
-            sum = clients[i]->getAverageLatency();
+            sum += clients[i]->getAverageLatency();
         }
         avgLatency = sum/clients.size();
         cout << "[Pairs: " << clients.size() << "] Latency: " << avgLatency << endl;
+        for (int i = 0; i < clients.size(); i++){
+            clients[i]->resume();   
+        }
     }
 }
 
 void spawn_pair(){
     ConPair* c = new ConPair();
+    c->start();
     clients.push_back(c);
 }
 

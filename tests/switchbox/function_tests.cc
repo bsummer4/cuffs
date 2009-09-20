@@ -16,7 +16,7 @@ bool f2(Connection * send, Connection* receive, Connection* none, const char* te
 bool f2_2(Connection * send, Connection* receive, Connection* n1, Connection* n2, const char* testName);
 bool f3(Connection * send, Connection* r1, Connection* r2, const char* testName);
 bool f3_2(Connection * send, Connection* r1, Connection* r2, Connection* r3, const char* testName);
-bool f4(Connection* c1, Connection* c2, Connection* c3, bool r1, bool r2, bool r3, int groupNum);
+bool f4(Connection* c1, Connection* c2, Connection* c3, bool r1, bool r2, bool r3, int groupNum, const char* testName);
 
 int main(int argc, char* argv[]){
 
@@ -90,14 +90,14 @@ int main(int argc, char* argv[]){
     cout << "[F4: Collective communication: Group-based multicast]" << endl;
     swa->createGroup(1);
     swa->addToGroup(1, &addressB, 1);
-    if ( !f4(clientA, clientB, clientC, false, true, false, 1) )
+    if ( !f4(clientA, clientB, clientC, false, true, false, 1, "F4a:") )
         exit(4);
     swa->addToGroup(1, &addressC, 1);
-    if ( !f4(clientA, clientB, clientC, false, true, true, 1) )
+    if ( !f4(clientA, clientB, clientC, false, true, true, 1, "F4b:") )
         exit(4);
     
     swa->removeFromGroup(1, &addressC, 1);
-    if ( !f4(clientA, clientB, clientC, false, true, false, 1) )
+    if ( !f4(clientA, clientB, clientC, false, true, false, 1, "F4c:") )
         exit(4);
 
     swa->stop();
@@ -270,8 +270,43 @@ bool f3_2(Connection * send, Connection* r1, Connection* r2, Connection* r3, con
     return passed;
 }
 
-bool f4(Connection* c1, Connection* c2, Connection* c3, bool r1, bool r2, bool r3, int groupNum){
+bool f4(Connection* c1, Connection* c2, Connection* c3, bool r1, bool r2, bool r3, int groupNum, const char* testName){
+    cout << "[" << testName << "] ";
+    int size = 1+strlen(test_message)+4*sizeof(int);
+    message_type type = MULTICAST;
+    int from = c1->getAddress();
+    int to   = groupNum;
+    Connection * clist[4];
+    clist[0] = c1;
+    clist[1] = c2;
+    clist[2] = c3;
+    bool blist[3];
+    blist[0] = r1;
+    blist[1] = r2;
+    blist[2] = r3;
 
+    c1->sendMessage(size, type, to, test_message);
+    usleep(USLEEP_TIME);
 
+    for (int i = 0; i < 3; i++){
+        if ( blist[i] && clist[i]->getMessageCount() == 1 ){
+            string errormsg;
+            SBMessage * msg = clist[i]->getMessage();
+            if ( !SBTestCommon::TestMessage(msg, size, MULTICAST, from, to, test_message, errormsg) ){
+                cout << "failed: " << errormsg << endl;
+                return false;
+            }
+        }
+        else if ( !blist[i] && clist[i]->getMessageCount() != 0){
+            cout << "failed: Got message and wasn't supposed to" << endl;
+            return false;
+        }
+        else { 
+            cout << "failed: Got no message, but I was supposed to" << endl;
+            return false;
+        }
+    }
+
+    cout << "passed" << endl;
     return true;
 }

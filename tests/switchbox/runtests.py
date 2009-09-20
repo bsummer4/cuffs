@@ -42,7 +42,10 @@ def main():
     fval = os.system("./edgecase_tests")
     if ( fval != 0 ):
         return cleanup_sys(sm,fval);
-
+    print ""
+    fval = os.system("./latency_test")
+    if ( fval != 0):
+        return cleanup_sys(sm,fval);
 
     print "Killing"
     sm.stop_switchbox()
