@@ -32,7 +32,9 @@ def main():
     sm.start_switchbox()
 
     #print "Do Stuff here"
-    os.system("./function_tests")
+    fval = os.system("./function_tests")
+    if ( fval != 0 ):
+        return fval
 
 
     print "Killing"

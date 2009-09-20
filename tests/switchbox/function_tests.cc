@@ -2,6 +2,7 @@
 #include <cstring>
 #include <iostream>
 #include "Connection.h"
+#include "SwitchboxAdmin.h"
 
 #include <unistd.h>
 
@@ -17,6 +18,7 @@ bool f2(Connection * send, Connection* receive, Connection* none, const char* te
 bool f2_2(Connection * send, Connection* receive, Connection* n1, Connection* n2, const char* testName);
 bool f3(Connection * send, Connection* r1, Connection* r2, const char* testName);
 bool f3_2(Connection * send, Connection* r1, Connection* r2, Connection* r3, const char* testName);
+bool f4(Connection* c1, Connection* c2, Connection* c3, bool r1, bool r2, bool r3, int groupNum);
 
 int main(int argc, char* argv[]){
 
@@ -89,15 +91,15 @@ int main(int argc, char* argv[]){
     ////////////////////////////////////////////////////////////////////////////////
     cout << "[F4: Collective communication: Group-based multicast]" << endl;
     swa->createGroup(1);
-    swa->addToGroup(1, &addressA, 1);
-    if ( !f4(clientA, 1, clientB, clientC, "F4a:") )
-        exit(4);
     swa->addToGroup(1, &addressB, 1);
-    if ( !f4(clientB, clientC, clientA, "F4b:") )
+    if ( !f4(clientA, clientB, clientC, false, true, false, 1) )
+        exit(4);
+    swa->addToGroup(1, &addressC, 1);
+    if ( !f4(clientA, clientB, clientC, false, true, true, 1) )
         exit(4);
     
-    swa->removeFromGroup(1, &addressA, 1);
-    if ( !f4(clientC, clientA, clientB, "F4c:") )
+    swa->removeFromGroup(1, &addressC, 1);
+    if ( !f4(clientA, clientB, clientC, false, true, false, 1) )
         exit(4);
 
     swa->stop();
@@ -274,4 +276,9 @@ bool f3_2(Connection * send, Connection* r1, Connection* r2, Connection* r3, con
         cout << "failed" << endl;
 
     return passed;
+}
+
+bool f4(Connection* c1, Connection* c2, Connection* c3, bool r1, bool r2, bool r3, int groupNum){
+
+
 }

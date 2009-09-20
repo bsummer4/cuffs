@@ -33,6 +33,16 @@ bool SwitchboxAdmin::removeFromGroup(int group, int *address, int addl){
 
 }
 
+/** 
+ * Create a new group
+ * 
+ * @param group The number to assign this group
+ * @return True if group was added sucessfully, False otherwise
+ */
+bool SwitchboxAdmin::createGroup(int group){
+
+}
+
 /**
  * Get a list of all the group members in a requested group.
  * 
