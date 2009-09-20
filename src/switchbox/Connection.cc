@@ -30,7 +30,7 @@ void Connection::start(){
 }
 
 void Connection::stop(){
-    this->s = open_connection(hostname.c_str(), port);
+    //this->s = open_connection(hostname.c_str(), port);
     this->running = false;
     pthread_join(tid, NULL);
 }

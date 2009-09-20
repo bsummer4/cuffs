@@ -7,6 +7,7 @@
 #define MAX_CLIENTS 1024
 
 void run_switchbox(int port);
+void send_hello_message(Socket, int);
 
 
 // ==============
@@ -108,6 +109,7 @@ void *handle_connection(void *client_) {
   Client* client = client_;
   SBMessage *m;
   int client_id = client - clients;
+  send_hello_message(client->connection, client_id);
   while ((m = switchbox_receive(client->connection))) {
     m->from = client_id; // Client can't lie about its identity.
     if (debug)
@@ -144,3 +146,13 @@ void run_switchbox(int port) {
   Listener l = make_listener(port);
   Socket s;
   while (valid_socket(s = accept_connection(l))) setup_connection(s); }
+
+
+void send_hello_message(Socket s, int addr){
+    SBMessage * msg = malloc(sizeof(int)*4);
+    msg->size = sizeof(int)*4;
+    msg->routing_type = ADMIN;
+    msg->from = addr;
+    msg->to   = addr;
+    switchbox_locking_send(msg);
+}
