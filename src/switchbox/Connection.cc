@@ -147,6 +147,13 @@ void Connection::blockForMessage(){
     }
 }
 
+void Connection::clearMessageQueue(){
+    pthread_mutex_lock(&rlock);
+    while ( !receive_queue.empty() )
+        receive_queue.pop();
+    pthread_mutex_unlock(&rlock);
+}
+
 /**
  * @returns True if the messaging thread is running, otherwise
  * returns false.

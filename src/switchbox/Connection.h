@@ -48,6 +48,8 @@ class Connection{
         bool isRunning();
         /// A convienence function that will block until there is a message on the messaging queue.
         void blockForMessage();
+        /// Clear out the receive message queue
+        void clearMessageQueue();
     private:
         /// Internal function to handle special messages.
         void handleAnnounceMessage(SBMessage * msg);

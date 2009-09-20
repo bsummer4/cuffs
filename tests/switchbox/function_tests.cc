@@ -14,13 +14,16 @@ char* test_message = "hello";
 // F1
 int f1(Connection* c, const char* testName);
 bool f2(Connection * send, Connection* receive, Connection* none, const char* testName);
+bool f2_2(Connection * send, Connection* receive, Connection* n1, Connection* n2, const char* testName);
 bool f3(Connection * send, Connection* r1, Connection* r2, const char* testName);
+bool f3_2(Connection * send, Connection* r1, Connection* r2, Connection* r3, const char* testName);
 
 int main(int argc, char* argv[]){
 
     Connection * clientA = new Connection(HOST, SWITCHBOX_PORT);
     Connection * clientB = new Connection(HOST, SWITCHBOX_PORT);
     Connection * clientC = new Connection(HOST, SWITCHBOX_PORT);
+    Connection * clientD = new Connection(HOST, SWITCHBOX_PORT);
 
     ////////////////////////////////////////////////////////////////////////////////
     // Test 1 - F1:  Logon – join
@@ -50,6 +53,14 @@ int main(int argc, char* argv[]){
     if ( !f2(clientC, clientA, clientB, "F2c:") ){
         //exit(2);
     }
+    // Start up clientD: 
+    clientD->start();
+    usleep(5000);
+    if ( !f2_2(clientA, clientD, clientB, clientC, "F3d:") ){
+        //exit(2);
+    }
+    // Disconnect clientD
+    clientD->stop();
 
     ////////////////////////////////////////////////////////////////////////////////
     // Test 3 - Collective Communication: Broadcast
@@ -64,6 +75,12 @@ int main(int argc, char* argv[]){
     if ( !f3(clientC, clientA, clientB, "F3c:") ){
         //exit(3);
     }
+    clientD->start();
+    usleep(5000);
+    if ( !f3_2(clientA, clientB, clientC, clientD, "F3d:") ){
+        //exit(3);
+    }
+    clientD->stop();
 
     ////////////////////////////////////////////////////////////////////////////////
     // Test 4 - F4: Collective communication: Group-based multicast
@@ -93,6 +110,9 @@ int f1(Connection* c, const char* testName){
         cout << "failed" << endl;
         //exit(1);
     }
+
+    c->clearMessageQueue();
+
     return retval;
 }
 
@@ -117,6 +137,11 @@ bool f2(Connection * send, Connection* receive, Connection* none, const char* te
         free(msg);
     }
 
+    // Now clear all message queues for next test
+    send->clearMessageQueue();
+    receive->clearMessageQueue();
+    none->clearMessageQueue();
+
     if (passed)
         cout << "passed" << endl;
     else
@@ -124,6 +149,42 @@ bool f2(Connection * send, Connection* receive, Connection* none, const char* te
 
     return passed;
 }
+
+bool f2_2(Connection * send, Connection* receive, Connection* n1, Connection* n2, const char* testName){
+    cout << "[" << testName << "] ";
+    bool passed = false;
+    int size = 1+strlen(test_message)+4*sizeof(int);
+    message_type type = UNICAST;
+    int from = send->getAddress();
+    int to   = receive->getAddress();
+    send->sendMessage(size, type, to, test_message);
+    usleep(5000);
+    if ( receive->getMessageCount() == 1 && n1->getMessageCount() == 0 && n2->getMessageCount() == 0){
+        SBMessage* msg = receive->getMessage();
+        if ( msg->size == size &&
+             msg->to   == to   &&
+             msg->from == from &&
+             msg->routing_type == type && 
+             strcmp(msg->data, test_message) == 0){
+            passed = true;
+        }
+        free(msg);
+    }
+
+    // Now clear all message queues for next test
+    send->clearMessageQueue();
+    receive->clearMessageQueue();
+    n1->clearMessageQueue();
+    n2->clearMessageQueue();
+
+    if (passed)
+        cout << "passed" << endl;
+    else
+        cout << "failed" << endl;
+
+    return passed;
+}
+
 
 bool f3(Connection * send, Connection* r1, Connection* r2, const char* testName){
     cout << "[" << testName << "] ";
@@ -153,6 +214,44 @@ bool f3(Connection * send, Connection* r1, Connection* r2, const char* testName)
                     msg->routing_type <<" " <<  type << " " <<  
                     strcmp(msg->data, test_message) << endl;
                     */
+            if ( msg->size == size &&
+                 msg->to   == to   &&
+                 msg->from == from &&
+                 msg->routing_type == type && 
+                 strcmp(msg->data, test_message) == 0){
+                passed = true;
+            }
+        }
+    }
+
+    if (passed)
+        cout << "passed" << endl;
+    else
+        cout << "failed" << endl;
+
+    return passed;
+}
+
+bool f3_2(Connection * send, Connection* r1, Connection* r2, Connection* r3, const char* testName){
+    cout << "[" << testName << "] ";
+    bool passed = false;
+    int size = 1+strlen(test_message)+4*sizeof(int);
+    message_type type = BROADCAST;
+    int from = send->getAddress();
+    int to   = -1;
+    Connection * clist[4];
+    clist[0] = send;
+    clist[1] = r1;
+    clist[2] = r2;
+    clist[3] = r3;
+    send->sendMessage(size, type, to, test_message);
+    usleep(5000);
+    if ( send->getMessageCount() == 1 &&
+           r1->getMessageCount() == 1 &&
+           r2->getMessageCount() == 1 &&
+           r3->getMessageCount() == 1){
+        for (int i = 0; i < 4; i++){
+            SBMessage* msg = clist[i]->getMessage();
             if ( msg->size == size &&
                  msg->to   == to   &&
                  msg->from == from &&

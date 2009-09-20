@@ -19,10 +19,10 @@ typedef struct switchbox_message {
 // values for Message.type
 typedef enum { UNICAST, 
        BROADCAST, 
+       MULTICAST,
+       ADMIN,
        TYPE_ERROR, 
-       FROM_ADDRESS_ERROR, 
-       TO_ADDRESS_ERROR, 
-       SWITCHBOX_ANNOUNCE
+       INVALID_TARGET
 } message_type;
 
 bool switchbox_send(Socket, SBMessage*);

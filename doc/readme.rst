@@ -32,5 +32,13 @@ Building
  $ make install
 
 
+Building Documentation
+----------------------
+:: 
+
+ $ make doxygen-doc
+
+Builds into ./doc/doxygen
+
 .. _ReStructured Text: http://en.wikipedia.org/wiki/ReStructuredText
 
