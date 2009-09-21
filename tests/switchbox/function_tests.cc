@@ -97,16 +97,21 @@ int main(int argc, char* argv[]){
     ////////////////////////////////////////////////////////////////////////////////
     cout << "[F4: Collective communication: Group-based multicast]" << endl;
     //swa->createGroup(1);
-    swa->def_group(1, &addressB, 1);
+    swa->clearMessageQueue();
+    if (!swa->def_group(1, &addressB, 1))
+        cout << " Defining Group Failed" << endl;
     if ( !f4(clientA, clientB, clientC, false, true, false, 1, "F4a:") )
         exit(4);
     int address[2];
     address[0] = addressB;
     address[1] = addressC;
-    swa->def_group(2, address, 2);
+    swa->clearMessageQueue();
+    if(swa->def_group(2, address, 2))
+        cout << " Defining Group Failed" << endl;
     if ( !f4(clientA, clientB, clientC, false, true, true, 2, "F4b:") )
         exit(4);
     
+    swa->clearMessageQueue();
     swa->def_group(1, &addressB, 1);
     if ( !f4(clientA, clientB, clientC, false, true, false, 1, "F4c:") )
         exit(4);
