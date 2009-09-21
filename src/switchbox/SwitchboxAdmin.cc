@@ -15,12 +15,13 @@ SwitchboxAdmin::SwitchboxAdmin(const char* hostname, const int port) : Connectio
 bool SwitchboxAdmin::def_group(int group, int *address, int addl){
     int thissize = sizeof(admin_task_t)+sizeof(int)+sizeof(int)*addl;
     admin_message* m = (admin_message*)malloc(thissize);
-    memcpy(m->clients, address, addl);
     m->task = DEFINE_GROUP;
+    m->group_number = group;
+    memcpy(m->clients, address, addl);
     sendMessage(sizeof(int)*4+thissize, ADMIN, 0, (char*)m);
     blockForMessage();
     SBMessage* msg = getMessage();
-    // TODO: Make it go through the message queue.
+    /// TODO: Make it go through the message queue.
     if (msg->routing_type == ADMIN_SUCCESS){
         free(msg);
         return true;
@@ -45,11 +46,12 @@ bool SwitchboxAdmin::undef_group(int group, int *address, int addl){
     admin_message* m = (admin_message*)malloc(thissize);
     memcpy(m->clients, address, addl);
     m->task = DELETE_GROUP;
+    m->group_number = group;
     sendMessage(sizeof(int)*4+thissize, ADMIN, 0, (char*)m);
 
     blockForMessage();
     SBMessage* msg = getMessage();
-    // TODO: Make it go through the message queue.
+    /// TODO: Make it go through the message queue.
     if (msg->routing_type == ADMIN_SUCCESS){
         free(msg);
         return true;
@@ -75,7 +77,7 @@ bool SwitchboxAdmin::createGroup(int group){
 
   blockForMessage();
   SBMessage* msg = getMessage();
-  // TODO: Make it go through the message queue.
+  /// TODO: Make it go through the message queue.
   if (msg->routing_type == ADMIN_SUCCESS){
     free(msg);
     return true;
@@ -97,7 +99,7 @@ bool SwitchboxAdmin::createGroup(int group){
  * an error occurs.
  */
 int* SwitchboxAdmin::getGroupMembers(int group, int *size){
-
+    /// TODO: Do this
 }
 
 /**
@@ -107,5 +109,5 @@ int* SwitchboxAdmin::getGroupMembers(int group, int *size){
  * @returns A pointer to an array of ints, that are group numbers.
  */
 int* SwitchboxAdmin::getGroups(int* size){
-
+    /// TODO: Do this
 }
