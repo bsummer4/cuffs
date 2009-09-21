@@ -179,7 +179,7 @@ void *handle_connection(void *client_) {
       if (!switchbox_locking_send(m) && debug)
         printf ("handle_connection: ERROR bad client %d (disconnected?).  \n", m->to);
       break;
-    case BROADCAST: assert(broadcast(m)); break; }
+    case BROADCAST: assert(broadcast(m)); break;
       break;
     case MULTICAST:
       break;
