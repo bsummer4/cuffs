@@ -11,7 +11,7 @@
 #define TEST_STRING "hi"
 #define TEST_PORT 80009
 
-bool debug = false;
+bool debug = true;
 
 // =======
 // Testing

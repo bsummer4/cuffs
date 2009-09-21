@@ -104,12 +104,13 @@ bool remove_client(Client *client) {
 
 
 void send_error(int to, int type){
-    SBMessage * msg = malloc(sizeof(int)*4);
-    msg->size = sizeof(int)*4;
-    msg->routing_type = type;
-    msg->from = 0;
-    msg->to   = to;
-    switchbox_locking_send(msg);
+  if (debug) printf("sending error %d to %d\n", type, to);
+  SBMessage * msg = malloc(sizeof(int)*4);
+  msg->size = sizeof(int)*4;
+  msg->routing_type = type;
+  msg->from = 0;
+  msg->to   = to;
+  switchbox_locking_send(msg);
 }
 
 // -----------
@@ -118,6 +119,7 @@ void send_error(int to, int type){
 
 // Free the members array, and set group.used to false
 bool delete_group(int group_id) {
+  if (debug) printf("deleting group %d\n", group_id);
   if (group_id >= MAX_GROUPS) return false;
   Group *group = multicast_groups + group_id;
   if (!group->used) return false;
@@ -128,7 +130,7 @@ bool delete_group(int group_id) {
 
 // As long as group_id is valid, shit will work.
 bool define_group(int group_id, int num_clients, int *users) {
-  printf("defining group %d", group_id);
+  if (debug) printf("defining group %d\n", group_id);
   if (group_id >= MAX_GROUPS) return false;
   Group *group = multicast_groups + group_id;
   if (group->used) delete_group(group_id);
@@ -140,6 +142,10 @@ bool define_group(int group_id, int num_clients, int *users) {
 
 
 bool switchbox_handle_admin(SBMessage * m){
+  if (debug) printf("admin message: [");
+  if (debug) iter(ii, 0, m->size) printf("%x ", (unsigned)((char*)m)[ii]);
+  if (debug) printf("]\n");
+
   admin_message *adm = (admin_message*) m->data;
 
   size_t admin_message_size = m->size - sizeof(int)*4;
@@ -194,7 +200,7 @@ bool multicast(SBMessage *m) {
 bool broadcast(SBMessage *m) {
   iter(ii, 0, last_used_client+1) {
     if (debug && is_client_used(clients + ii))
-      printf("broadcasting to %d\n", ii);
+      if (debug) printf("broadcasting to %d\n", ii);
     m->to = ii;
     if (!switchbox_locking_send(m)) return false; }
   return true; }

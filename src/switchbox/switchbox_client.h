@@ -6,7 +6,7 @@ extern "C"{
 
 #include "message.h"
 
-#define SWITCHBOX_PORT 80022
+#define SWITCHBOX_PORT 80024
 
 typedef struct switchbox_message {
   int size;
