@@ -21,6 +21,7 @@ typedef enum {
     UNICAST, 
     BROADCAST, 
     MULTICAST,
+    ANNOUNCE,
     ADMIN,
     TYPE_ERROR, 
     INVALID_TARGET, 

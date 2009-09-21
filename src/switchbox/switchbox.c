@@ -8,6 +8,7 @@
 
 void run_switchbox(int port);
 void send_hello_message(Socket, int);
+void announce(int code, int client_id);
 
 
 // ==============
@@ -95,6 +96,7 @@ bool remove_client(Client *client) {
 bool switchbox_locking_send(SBMessage* m) {
   Client *target = clients + m->to;
   Socket socket = target->connection;
+  if (!is_client_used(target)) return false;
   if (debug)
     printf("switchbox_locking_send: Locking before sending message to %d.  \n",
            m->to);
@@ -105,30 +107,43 @@ bool switchbox_locking_send(SBMessage* m) {
   pthread_mutex_unlock(&target->lock);
   return success; }
 
+bool broadcast(SBMessage *m) {
+  iter(ii, 0, last_used_client+1) {
+    if (debug && is_client_used(clients + ii))
+      printf("broadcasting to %d\n", ii);
+    m->to = ii;
+    assert(switchbox_locking_send(m)); }}
+
+void announce(int code, int client_id) {
+  int size = sizeof(int) * 5;
+  SBMessage *m = malloc(size);
+  m->size = size;
+  m->from = client_id;
+  m->to = -1;
+  m->routing_type = ANNOUNCE;
+  memcpy(m->data, &code, sizeof(code));
+  broadcast(m);
+  free(m);
+}
+
 void *handle_connection(void *client_) {
   Client* client = client_;
   SBMessage *m;
   int client_id = client - clients;
   send_hello_message(client->connection, client_id);
+  // announce(CONNECTION, client_id);
   while ((m = switchbox_receive(client->connection))) {
     m->from = client_id; // Client can't lie about its identity.
     if (debug)
       printf ("handle_connection: new message [%s][%d bytes] #%d -> #%d.  \n",
               (m->routing_type ? "broadcast" : "unicast"),
               m->size, m->from, m->to);
-
     switch (m->routing_type) {
-    case UNICAST:
-      if (is_client_used(clients + m->to)) switchbox_locking_send(m);
-      else if (debug)
-        printf ("handle_connection: ERROR %d is not connected.  \n", m->to);
+    case UNICAST: 
+      if (!switchbox_locking_send(m) && debug)
+        printf ("handle_connection: ERROR bad client %d (disconnected?).  \n", m->to);
       break;
-    case BROADCAST:
-      iter(ii, 0, last_used_client+1) {
-          if (debug) printf("broadcasting to %d\n", ii);
-        if (is_client_used(clients + ii)) {
-          m->to = ii;
-          switchbox_locking_send(m); }}}
+    case BROADCAST: broadcast(m); break; }
     free(m); }
 
   // The connection has been closed.
