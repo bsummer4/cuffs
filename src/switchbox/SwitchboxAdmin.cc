@@ -1,4 +1,6 @@
 #include "SwitchboxAdmin.h"
+#include <iostream>
+using namespace std;
 
 SwitchboxAdmin::SwitchboxAdmin(const char* hostname, const int port) : Connection(hostname,port){
 }
@@ -17,10 +19,15 @@ bool SwitchboxAdmin::def_group(int group, int *address, int addl){
     admin_message* m = (admin_message*)malloc(thissize);
     m->task = DEFINE_GROUP;
     m->group_number = group;
-    memcpy(m->clients, address, addl);
+    memcpy(m->clients, address, addl*sizeof(int));
     sendMessage(sizeof(int)*4+thissize, ADMIN, 0, (char*)m);
     blockForMessage();
     SBMessage* msg = getMessage();
+    cout << "def_group() " << endl;
+    for (int i = 0; i < addl; i++){
+        cout << "i = " << i << " addr = " << address[i] << endl;
+    }
+    cout << " ROUTING TYPE = " << msg->routing_type << endl;
     /// TODO: Make it go through the message queue.
     if (msg->routing_type == ADMIN_SUCCESS){
         free(msg);
@@ -44,7 +51,7 @@ bool SwitchboxAdmin::def_group(int group, int *address, int addl){
 bool SwitchboxAdmin::undef_group(int group, int *address, int addl){
     int thissize = sizeof(admin_task_t)+sizeof(int)+sizeof(int)*addl;
     admin_message* m = (admin_message*)malloc(thissize);
-    memcpy(m->clients, address, addl);
+    memcpy(m->clients, address, addl*sizeof(int));
     m->task = DELETE_GROUP;
     m->group_number = group;
     sendMessage(sizeof(int)*4+thissize, ADMIN, 0, (char*)m);
