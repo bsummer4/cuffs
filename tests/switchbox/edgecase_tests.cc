@@ -29,7 +29,7 @@ int main(){
     testPassed = e2_2(swa);
     if ( passed  && !testPassed) passed = false;
     
-    return passed;
+    return passed ? 0 : 1;
 }
 
 bool e1(Connection* c){

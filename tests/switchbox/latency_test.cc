@@ -92,7 +92,7 @@ class ConPair{
                 //cout << "leaving runlock" << endl;
             }
             pthread_mutex_unlock(&runlock);
-            usleep(500);
+            usleep(USLEEP_TIME);
         }
         double getAverageLatency(){
             struct timeval sum = {0,0};
