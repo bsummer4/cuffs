@@ -208,13 +208,17 @@ bool switchbox_locking_send(SBMessage* m) {
 bool multicast(SBMessage *m) {
   if (debug) printf("multicasting to %d\n", m->to);
   int group_id = m->to;
+  if (debug && group_id >= MAX_GROUPS) printf("MULTICAST ERROR: group number isn't even resonable\n");
   if (group_id >= MAX_GROUPS) return false;
   Group *g = multicast_groups + group_id;
+  if (debug && !g->used) printf("MULTICAST ERROR: dude, group %d isn't defined\n", group_id);
   if (!g->used) return false;
   iter(ii, 0, g->num_members) {
     m->to = g->members[ii];
-    if (!switchbox_locking_send(m))
+    if (!switchbox_locking_send(m)) {
+      if (debug) printf("MULTICAST ERROR: couldn't send to %d\n", m->to);
       return false;
+    }
   }
   return true;
 }
