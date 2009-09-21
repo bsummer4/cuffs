@@ -8,7 +8,7 @@ autotools_stuff="aclocal.m4 config.h.in autom4te.cache configure missing
                  install-sh Makefile.in src/Makefile.in
                  src/switchbox/Makefile.in build-aux depcomp doc/Makefile.in
                  doc/Makefile tests/Makefile.in tests/switchbox/Makefile.in
-                 ltmain.sh config.sub config.guess"
+                 ltmain.sh config.sub config.guess src/common/Makefile.in"
 
 symbolic_links="README DESIGN COPYING NEWS AUTHORS INSTALL ChangeLog"
 

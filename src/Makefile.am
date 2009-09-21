@@ -1,1 +1,1 @@
-SUBDIRS = switchbox common
+SUBDIRS = common switchbox
