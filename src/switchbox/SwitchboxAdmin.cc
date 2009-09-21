@@ -15,7 +15,23 @@ SwitchboxAdmin::SwitchboxAdmin(const char* hostname, const int port) : Connectio
  * @return True if succeeds, False if there is an error.
  */
 bool SwitchboxAdmin::addToGroup(int group, int *address, int addl){
+    int thissize = sizeof(admin_task_t)+sizeof(int)+sizeof(int)*addl;
+    admin_message* m = (admin_message*)malloc(thissize);
+    memcpy(m->clients, address, addl);
+    m->task = ADD_TO_GROUP;
+    sendMessage(sizeof(int)*4+thissize, ADMIN, 0, (char*)m);
 
+    blockForMessage();
+    SBMessage* msg = getMessage();
+    // TODO: Make it go through the message queue.
+    if (msg->routing_type == ADMIN_SUCCESS){
+        free(msg);
+        return true;
+    }
+    else{
+        free(msg);
+        return false;
+    }
 }
 
 
@@ -28,7 +44,23 @@ bool SwitchboxAdmin::addToGroup(int group, int *address, int addl){
  * @return True if succeeds, False if there is an error.
  */
 bool SwitchboxAdmin::removeFromGroup(int group, int *address, int addl){
+    int thissize = sizeof(admin_task_t)+sizeof(int)+sizeof(int)*addl;
+    admin_message* m = (admin_message*)malloc(thissize);
+    memcpy(m->clients, address, addl);
+    m->task = RM_FROM_GROUP;
+    sendMessage(sizeof(int)*4+thissize, ADMIN, 0, (char*)m);
 
+    blockForMessage();
+    SBMessage* msg = getMessage();
+    // TODO: Make it go through the message queue.
+    if (msg->routing_type == ADMIN_SUCCESS){
+        free(msg);
+        return true;
+    }
+    else{
+        free(msg);
+        return false;
+    }
 }
 
 /** 
