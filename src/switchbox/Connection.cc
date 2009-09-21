@@ -35,6 +35,8 @@ void Connection::start(){
 void Connection::stop(){
     //this->s = open_connection(hostname.c_str(), port);
     this->running = false;
+    pthread_cancel(r_tid);
+    pthread_cancel(s_tid);
     pthread_join(r_tid, NULL);
     pthread_join(s_tid, NULL);
 }

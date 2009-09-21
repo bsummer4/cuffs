@@ -54,6 +54,7 @@ DX_INIT_DOXYGEN([$PACKAGE_NAME],[doxygen.cfg],[doc/doxygen])
 AC_CONFIG_FILES([Makefile
                  src/Makefile
                  src/switchbox/Makefile
+                 src/common/Makefile
                  tests/Makefile
                  tests/switchbox/Makefile
                  doc/Makefile])

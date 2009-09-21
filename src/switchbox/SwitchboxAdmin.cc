@@ -2,7 +2,6 @@
 
 
 SwitchboxAdmin::SwitchboxAdmin(const char* hostname, const int port) : Connection(hostname,port){
-
 }
 
 
@@ -16,7 +15,6 @@ SwitchboxAdmin::SwitchboxAdmin(const char* hostname, const int port) : Connectio
  * @return True if succeeds, False if there is an error.
  */
 bool SwitchboxAdmin::addToGroup(int group, int *address, int addl){
-
 
 }
 

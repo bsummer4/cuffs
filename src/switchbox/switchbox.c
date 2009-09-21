@@ -3,8 +3,10 @@
 #include <assert.h>
 #include <unistd.h>
 #include <signal.h>
+#include "dllist.h"
 
 #define MAX_CLIENTS 1024
+#define MAX_GROUPS 64
 
 void run_switchbox(int port);
 void send_hello_message(Socket, int);
@@ -33,9 +35,16 @@ typedef struct client {
   bool used;
 } Client;
 
+typedef struct group{
+  Dllist members;
+  bool active;
+} Group;
+
 // The 'clients' array stores all clients in the system.  The clients
 // 'id' corresponds to their index in this array.
 Client clients[MAX_CLIENTS];
+
+Group multicast_groups[MAX_GROUPS];
 
 // The index of the first unused and last used slot in the 'clients' array.
 int first_free_client= 0;
@@ -95,6 +104,29 @@ bool remove_client(Client *client) {
 // Connections
 // -----------
 
+bool switchbox_handle_admin(SBMessage * m){
+    admin_message * adm = (admin_message*)m->data;
+    int cl_length = m->size - sizeof(int)*4 - sizeof(admin_task_t) - sizeof(int);
+    int gn = adm->group_number;
+    int* list = adm->clients;
+    switch (adm->task){
+    case ADD_TO_GROUP:
+        for (int i = 0; i < cl_length; i++){
+            dll_append(multicast_groups[gn].members, new_jval_i(list[i]));
+        }
+        multicast_groups[gn].active == true;
+        break;
+    case RM_FROM_GROUP:
+        break;
+    case CREATE_GROUP:
+        break;
+    case DELETE_GROUP:
+        break;
+    default:
+        break;
+    }
+}
+
 // Locks the target client until it finishes sending the message.
 bool switchbox_locking_send(SBMessage* m) {
   Client *target = clients + m->to;
@@ -148,6 +180,13 @@ void *handle_connection(void *client_) {
         printf ("handle_connection: ERROR bad client %d (disconnected?).  \n", m->to);
       break;
     case BROADCAST: assert(broadcast(m)); break; }
+      break;
+    case MULTICAST:
+      break;
+    case ADMIN:
+      switchbox_handle_admin(m); 
+      break;
+    }
     free(m); }
 
   // The connection has been closed.
@@ -164,6 +203,10 @@ void setup_connection(Socket s) {
 void run_switchbox(int port) {
   Listener l = make_listener(port);
   Socket s;
+  for (int i = 0; i < MAX_GROUPS; i++){
+     multicast_groups[i].members = new_dllist();
+     multicast_groups[i].active  = false;
+  }
   while (valid_socket(s = accept_connection(l))) setup_connection(s); }
 
 

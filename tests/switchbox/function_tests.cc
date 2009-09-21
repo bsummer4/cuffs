@@ -58,11 +58,17 @@ int main(int argc, char* argv[]){
     // Start up clientD: 
     clientD->start();
     usleep(USLEEP_TIME);
-    if ( !f2_2(clientA, clientD, clientB, clientC, "F3d:") ){
+    if ( !f2_2(clientA, clientD, clientB, clientC, "F2d:") ){
         //exit(2);
     }
     // Disconnect clientD
+    cout << "clientd stop" << endl;
     clientD->stop();
+    cout << "after clientd stop" << endl;
+
+    // TODO: Fix this, you should be able to stop and restart
+    delete clientD;
+    clientD = new Connection(HOST, SWITCHBOX_PORT);
 
     ////////////////////////////////////////////////////////////////////////////////
     // Test 3 - Collective Communication: Broadcast
@@ -82,7 +88,9 @@ int main(int argc, char* argv[]){
     if ( !f3_2(clientA, clientB, clientC, clientD, "F3d:") ){
         //exit(3);
     }
+    cout << "clientd stop" << endl;
     clientD->stop();
+    cout << "after clientd stop" << endl;
 
     ////////////////////////////////////////////////////////////////////////////////
     // Test 4 - F4: Collective communication: Group-based multicast
@@ -168,7 +176,7 @@ bool f2_2(Connection * send, Connection* receive, Connection* n1, Connection* n2
     int to   = receive->getAddress();
     send->sendMessage(size, type, to, test_message);
     usleep(USLEEP_TIME);
-    if ( receive->getMessageCount() == 1 && n1->getMessageCount() == 0 && n2->getMessageCount() == 0){
+    if ( receive->getMessageCount() == 1 && n1->getMessageCount() == 0 && n2->getMessageCount() == 0 && send->getMessageCount() == 0){
         SBMessage* msg = receive->getMessage();
         if ( msg->size == size &&
              msg->to   == to   &&
