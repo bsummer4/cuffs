@@ -141,7 +141,7 @@ void * update_thread(void* arg){
 }
 
 int main(){
-    int MAXPAIRS = 100;
+    int MAXPAIRS = 50;
 
     double sum;
     double avgLatency;

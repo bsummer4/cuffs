@@ -52,8 +52,10 @@ bool e1(Connection* c){
        bool testResults = SBTestCommon::TestMessage(msg, sizeof(int)*4, INVALID_TARGET, -1, myaddr, NULL, errormsg);
        if ( testResults ) {
            cout << "passed" << endl;
+           return true;
        } else {
            cout << "failed: " << errormsg << endl;
+           return false;
        }
     } else {
         cout << "failed: bad number of message, got " << c->getMessageCount() << " expected 1" << endl;
