@@ -1,6 +1,4 @@
 AM_LDFLAGS = -lpthread
-#TESTS = switchbox_test
-#check_PROAGRAMS = switchbox_test
 
 bin_PROGRAMS = switchbox switchbox_test chat_test
 
@@ -18,19 +16,18 @@ libmessaging_la_SOURCES = message.c switchbox_client.c
 
 lib_LTLIBRARIES = libconnection.la 
 libconnection_la_SOURCES = Connection.cc SwitchboxAdmin.cc
-libconnection_la_LIBADD = libmessaging.la \
-                        -lpthread
+libconnection_la_LIBADD = libmessaging.la
 
-python_junk =  *.pyc switchbox_client.py
+#####################
+# Manual make rules #
+#####################
 
 SOURCES = $(switchbox_SOURCES)
+python_junk =  *.pyc switchbox_client.py
 extra_clean: clean; rm -f *wrap.o *wrap.c *.so *.cflow $(python_junk)
-ide: call_graph.cflow reverse_call_graph.cflow
-TAGS: etags $(SOURCES)
-bindings: _switchbox_client.so
-check-syntax:; $(CC) -Wall -Wextra -pedantic -fsyntax-only $(CHK_SOURCES)
 
-#switchbox_test: message.o test.o; $(CC) $(AM_LDFLAGS) $^ -o $@
+# Python Bindings
+bindings: _switchbox_client.so
 
 switchbox_client_wrap.c: switchbox_client.i
 	swig -python -lcpointer.i switchbox_client.i
@@ -39,5 +36,8 @@ _switchbox_client.so: message.c switchbox_client.c switchbox_client_wrap.c
 	gcc --std=gnu99 -c $^ -I/usr/include/python2.6
 	ld $(^:.c=.o) -shared -o _switchbox_client.so
 
+# Tools
+ide: call_graph.cflow reverse_call_graph.cflow
 call_graph.cflow: $(SOURCES);cflow $^ > $@
 reverse_call_graph.cflow: $(SOURCES);cflow  --reverse $^ > $@
+check-syntax:; $(CC) -Wall -Wextra -pedantic -fsyntax-only $(CHK_SOURCES)

@@ -2,8 +2,8 @@
 #include <iostream>
 using namespace std;
 
-SwitchboxAdmin::SwitchboxAdmin(const char* hostname, const int port) : Connection(hostname,port){
-}
+SwitchboxAdmin::SwitchboxAdmin(const char* hostname,
+                               const int port) : Connection(hostname,port) {}
 
 /** 
  * Add a list of users to a group. 
@@ -14,29 +14,33 @@ SwitchboxAdmin::SwitchboxAdmin(const char* hostname, const int port) : Connectio
  * 
  * @return True if succeeds, False if there is an error.
  */
-bool SwitchboxAdmin::def_group(int group, int *address, int addl){
-    int thissize = sizeof(admin_task_t)+sizeof(int)+sizeof(int)*addl;
-    admin_message* m = (admin_message*)malloc(thissize);
-    m->task = DEFINE_GROUP;
-    m->group_number = group;
-    memcpy(m->clients, address, addl*sizeof(int));
-    sendMessage(sizeof(int)*4+thissize, ADMIN, 0, (char*)m);
-    blockForMessage();
-    SBMessage* msg = getMessage();
+bool SwitchboxAdmin::def_group(int group, int *address, int addl) {
+
+  // Add the clients to our known groups
+  set <int> clients;
+  for (int ii = 0; ii < addl; ii++) clients.insert(address[ii]);
+  groups.insert(make_pair <int, set < int > > (group, clients));
+                  
+  // Tell the switchbox about the new group
+  int thissize = sizeof(admin_task_t)+sizeof(int)+sizeof(int)*addl;
+  admin_message* m = (admin_message*)malloc(thissize);
+  m->task = DEFINE_GROUP;
+  m->group_number = group;
+  memcpy(m->clients, address, addl*sizeof(int));
+  sendMessage(sizeof(int)*4+thissize, ADMIN, 0, (char*)m);
+  blockForMessage();
+  SBMessage* msg = getMessage();
+  if (debug) {
     cout << "def_group() " << endl;
-    for (int i = 0; i < addl; i++){
-        cout << "i = " << i << " addr = " << address[i] << endl;
-    }
+    for (int ii = 0; ii < addl; ii++)
+      cout << "ii = " << ii << " addr = " << address[ii] << endl;
     cout << " ROUTING TYPE = " << msg->routing_type << endl;
-    /// TODO: Make it go through the message queue.
-    if (msg->routing_type == ADMIN_SUCCESS){
-        free(msg);
-        return true;
-    }
-    else{
-        free(msg);
-        return false;
-    }
+  }
+
+  /// TODO: Make it go through the message queue.
+  int routing_type = msg->routing_type;
+  free(msg);
+  return (routing_type == ADMIN_SUCCESS);
 }
 
 
@@ -55,15 +59,10 @@ bool SwitchboxAdmin::undef_group(int group){
 
     blockForMessage();
     SBMessage* msg = getMessage();
-    /// TODO: Make it go through the message queue.
-    if (msg->routing_type == ADMIN_SUCCESS){
-        free(msg);
-        return true;
-    }
-    else{
-        free(msg);
-        return false;
-    }
+
+    int routing_type = msg->routing_type;
+    free(msg);
+    return (routing_type == ADMIN_SUCCESS);
 }
 
 /** 
@@ -103,7 +102,7 @@ bool SwitchboxAdmin::createGroup(int group){
  * an error occurs.
  */
 int* SwitchboxAdmin::getGroupMembers(int group, int *size){
-    /// TODO: Do this
+  /// TODO: Do this
 }
 
 /**

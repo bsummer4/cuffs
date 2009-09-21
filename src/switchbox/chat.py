@@ -2,13 +2,11 @@
 
 from client import Connection
 from threading import Thread
-import sys, os, linecache
+import sys, os
 
-# TODO I'm using os._exit to exit
-# This is because one thread is blocking in an external library, and I
-# don't know of any other way to get python to kill it.
-#fd = open("logger.txt", 0666)
-#line = linecache.getline("logger.txt")
+# * TODO I'm using os._exit to exit
+#   This is because one thread is blocking in an external library, and I
+#   don't know of any other way to get python to kill it.
 
 name = raw_input("What's your name? ")
 hostname = raw_input("Which server to connect to? ")
