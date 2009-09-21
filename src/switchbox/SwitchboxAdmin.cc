@@ -78,7 +78,7 @@ bool SwitchboxAdmin::createGroup(int group){
   blockForMessage();
   SBMessage* msg = getMessage();
   // TODO: Make it go through the message queue.
-  if (msg->routing_type == ADMIN_FAIL){
+  if (msg->routing_type == ADMIN_SUCCESS){
     free(msg);
     return true;
   }
