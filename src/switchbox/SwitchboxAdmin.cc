@@ -3,7 +3,6 @@
 SwitchboxAdmin::SwitchboxAdmin(const char* hostname, const int port) : Connection(hostname,port){
 }
 
-
 /** 
  * Add a list of users to a group. 
  *
@@ -17,9 +16,8 @@ bool SwitchboxAdmin::def_group(int group, int *address, int addl){
     int thissize = sizeof(admin_task_t)+sizeof(int)+sizeof(int)*addl;
     admin_message* m = (admin_message*)malloc(thissize);
     memcpy(m->clients, address, addl);
-    m->task = ADD_TO_GROUP;
+    m->task = DEFINE_GROUP;
     sendMessage(sizeof(int)*4+thissize, ADMIN, 0, (char*)m);
-
     blockForMessage();
     SBMessage* msg = getMessage();
     // TODO: Make it go through the message queue.
@@ -46,7 +44,7 @@ bool SwitchboxAdmin::undef_group(int group, int *address, int addl){
     int thissize = sizeof(admin_task_t)+sizeof(int)+sizeof(int)*addl;
     admin_message* m = (admin_message*)malloc(thissize);
     memcpy(m->clients, address, addl);
-    m->task = RM_FROM_GROUP;
+    m->task = DELETE_GROUP;
     sendMessage(sizeof(int)*4+thissize, ADMIN, 0, (char*)m);
 
     blockForMessage();
@@ -68,6 +66,7 @@ bool SwitchboxAdmin::undef_group(int group, int *address, int addl){
  * @param group The number to assign this group
  * @return True if group was added sucessfully, False otherwise
  */
+/*
 bool SwitchboxAdmin::createGroup(int group){
   int thissize = sizeof(admin_task_t)+sizeof(int)+sizeof(int**);
   admin_message* m = (admin_message*)malloc(thissize);
@@ -86,7 +85,7 @@ bool SwitchboxAdmin::createGroup(int group){
     return false;
   }
 }
-
+*/
 /**
  * Get a list of all the group members in a requested group.
  * 

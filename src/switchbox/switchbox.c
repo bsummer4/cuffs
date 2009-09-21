@@ -239,7 +239,6 @@ void run_switchbox(int port) {
   iter (ii, 0, MAX_GROUPS) multicast_groups[ii].used = false;
   while (valid_socket(s = accept_connection(l))) setup_connection(s); }
 
-
 void send_hello_message(Socket s, int addr){
     SBMessage * msg = malloc(sizeof(int)*4);
     msg->size = sizeof(int)*4;
