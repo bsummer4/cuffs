@@ -96,15 +96,18 @@ int main(int argc, char* argv[]){
     // Test 4 - F4: Collective communication: Group-based multicast
     ////////////////////////////////////////////////////////////////////////////////
     cout << "[F4: Collective communication: Group-based multicast]" << endl;
-    swa->createGroup(1);
-    swa->addToGroup(1, &addressB, 1);
+    //swa->createGroup(1);
+    swa->def_group(1, &addressB, 1);
     if ( !f4(clientA, clientB, clientC, false, true, false, 1, "F4a:") )
         exit(4);
-    swa->addToGroup(1, &addressC, 1);
+    int address[2];
+    address[0] = addressB;
+    address[1] = addressC;
+    swa->def_group(1, &address, 2);
     if ( !f4(clientA, clientB, clientC, false, true, true, 1, "F4b:") )
         exit(4);
     
-    swa->removeFromGroup(1, &addressC, 1);
+    swa->def_group(1, &addressB, 1);
     if ( !f4(clientA, clientB, clientC, false, true, false, 1, "F4c:") )
         exit(4);
 
