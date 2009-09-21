@@ -41,17 +41,14 @@ bool SwitchboxAdmin::def_group(int group, int *address, int addl){
 
 
 /**
- * Remove a list of users from a group.
+ * Delete the group, or undefine it.
  *
  * @param group The group that you wish to remove the users from.
- * @param address A pointer to an array of addresses to remove 
- * @param addl  The length of the array that *address points to.
  * @return True if succeeds, False if there is an error.
  */
-bool SwitchboxAdmin::undef_group(int group, int *address, int addl){
-    int thissize = sizeof(admin_task_t)+sizeof(int)+sizeof(int)*addl;
+bool SwitchboxAdmin::undef_group(int group){
+    int thissize = sizeof(admin_task_t)+sizeof(int);
     admin_message* m = (admin_message*)malloc(thissize);
-    memcpy(m->clients, address, addl*sizeof(int));
     m->task = DELETE_GROUP;
     m->group_number = group;
     sendMessage(sizeof(int)*4+thissize, ADMIN, 0, (char*)m);
