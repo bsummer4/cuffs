@@ -14,7 +14,7 @@ int main(){
     swa->start();
     usleep(USLEEP_TIME);
 
-    cout << "swa address: " << swa->getAddress() << endl;
+    //cout << "swa address: " << swa->getAddress() << endl;
 
     bool passed = true;
     bool testPassed = false;
