@@ -1,6 +1,5 @@
 #include "SwitchboxAdmin.h"
 
-
 SwitchboxAdmin::SwitchboxAdmin(const char* hostname, const int port) : Connection(hostname,port){
 }
 
@@ -14,7 +13,7 @@ SwitchboxAdmin::SwitchboxAdmin(const char* hostname, const int port) : Connectio
  * 
  * @return True if succeeds, False if there is an error.
  */
-bool SwitchboxAdmin::addToGroup(int group, int *address, int addl){
+bool SwitchboxAdmin::def_group(int group, int *address, int addl){
     int thissize = sizeof(admin_task_t)+sizeof(int)+sizeof(int)*addl;
     admin_message* m = (admin_message*)malloc(thissize);
     memcpy(m->clients, address, addl);
@@ -43,7 +42,7 @@ bool SwitchboxAdmin::addToGroup(int group, int *address, int addl){
  * @param addl  The length of the array that *address points to.
  * @return True if succeeds, False if there is an error.
  */
-bool SwitchboxAdmin::removeFromGroup(int group, int *address, int addl){
+bool SwitchboxAdmin::undef_group(int group, int *address, int addl){
     int thissize = sizeof(admin_task_t)+sizeof(int)+sizeof(int)*addl;
     admin_message* m = (admin_message*)malloc(thissize);
     memcpy(m->clients, address, addl);
