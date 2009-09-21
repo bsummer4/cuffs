@@ -11,6 +11,7 @@
 void run_switchbox(int port);
 void send_hello_message(Socket, int);
 void announce(int code, int client_id);
+bool switchbox_locking_send(SBMessage* m);
 
 
 // ==============
@@ -100,10 +101,20 @@ bool remove_client(Client *client) {
 }
 
 
+void send_admin_response(bool success, int addr){
+    SBMessage * msg = malloc(sizeof(int)*4);
+    msg->size = sizeof(int)*4;
+    msg->routing_type = success ? ADMIN_SUCESS : ADMIN_FAIL;
+    msg->from = 0;
+    msg->to   = addr;
+    switchbox_locking_send(msg);
+}
+
 // -----------
 // Connections
 // -----------
 
+// TODO: Make this much better and less nieve
 bool switchbox_handle_admin(SBMessage * m){
     admin_message * adm = (admin_message*)m->data;
     int cl_length = m->size - sizeof(int)*4 - sizeof(admin_task_t) - sizeof(int);
@@ -115,16 +126,44 @@ bool switchbox_handle_admin(SBMessage * m){
             dll_append(multicast_groups[gn].members, new_jval_i(list[i]));
         }
         multicast_groups[gn].active == true;
+        send_admin_response(true, m->from);
         break;
     case RM_FROM_GROUP:
+        for (int i = 0; i < cl_length; i++){
+            Dllist ptr;
+            dll_traverse(ptr, multicast_groups[gn].members){
+                if (ptr->val.i == list[i])
+                    break;
+            }
+            if ( ptr != list ){ 
+                dll_delete_node(ptr);
+                send_admin_response(false, m->from);
+            }
+        }
+        send_admin_response(true, m->from);
         break;
     case CREATE_GROUP:
+        if ( multicast_groups[gn].active == false ){
+            multicast_groups[gn].active = true;
+            send_admin_response(true, m->from);
+        }
+        else{
+            send_admin_response(false, m->from);
+        }
         break;
     case DELETE_GROUP:
+        if ( multicast_groups[gn].active == true && dll_empty(multicast_groups[gn].members)){
+            multicast_groups[gn].active = false;
+            send_admin_response(true, m->from);
+        } else { 
+            send_admin_response(false, m->from);
+        }
         break;
     default:
+        send_admin_response(false, m->from);
         break;
     }
+    free(m);
 }
 
 // Locks the target client until it finishes sending the message.
