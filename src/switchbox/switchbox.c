@@ -228,6 +228,7 @@ void *handle_connection(void *client_) {
     case BROADCAST: assert(broadcast(m)); break;
     case MULTICAST: assert(multicast(m)); break;
     case ADMIN: switchbox_handle_admin(m); break;
+    default: send_error(client_id, TYPE_ERROR);
     }
     free(m); }
 
@@ -247,7 +248,6 @@ void run_switchbox(int port) {
   Socket s;
   iter (ii, 0, MAX_GROUPS) multicast_groups[ii].used = false;
   while (valid_socket(s = accept_connection(l))) setup_connection(s); }
-
 
 void send_hello_message(Socket s, int addr){
     SBMessage * msg = malloc(sizeof(int)*4);
