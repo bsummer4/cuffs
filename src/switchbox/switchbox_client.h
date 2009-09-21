@@ -17,13 +17,29 @@ typedef struct switchbox_message {
 } SBMessage;
 
 // values for Message.type
-typedef enum { UNICAST, 
-       BROADCAST, 
-       MULTICAST,
-       ADMIN,
-       TYPE_ERROR, 
-       INVALID_TARGET
+typedef enum { 
+    UNICAST, 
+    BROADCAST, 
+    MULTICAST,
+    ADMIN,
+    TYPE_ERROR, 
+    INVALID_TARGET, 
+    ADMIN_SUCESS,
+    ADMIN_FAIL
 } message_type;
+
+typedef enum { 
+    ADD_TO_GROUP,
+    RM_FROM_GROUP,
+    CREATE_GROUP,
+    DELETE_GROUP
+} admin_task_t;
+
+typedef struct admin_message{
+    admin_task_t task;
+    int group_number;
+    int clients[];
+}
 
 bool switchbox_send(Socket, SBMessage*);
 SBMessage *switchbox_receive(Socket);
