@@ -87,24 +87,7 @@ bool SwitchboxAdmin::createGroup(int group){
     return false;
   }
 }
-nt thissize = sizeof(admin_task_t)+sizeof(int)+sizeof(int)*addl;
-    admin_message* m = (admin_message*)malloc(thissize);
-        memcpy(m->clients, address, addl);
-            m->task = RM_FROM_GROUP;
-                sendMessage(sizeof(int)*4+thissize, ADMIN, 0, (char*)m);
-                
-                    blockForMessage();
-                        SBMessage* msg = getMessage();
-                            // TODO: Make it go through the message queue.
-                            if (msg->routing_type == ADMIN_SUCCESS){
-                                      free(msg);
-                                              return true;
-                                                  }
-    else{
-              free(msg);
-                      return false;
-                          }
-}
+
 /**
  * Get a list of all the group members in a requested group.
  * 
