@@ -106,13 +106,14 @@ int main(int argc, char* argv[]){
     address[0] = addressB;
     address[1] = addressC;
     swa->clearMessageQueue();
-    if(swa->def_group(2, address, 2))
+    if(!swa->def_group(2, address, 2))
         cout << " Defining Group Failed" << endl;
     if ( !f4(clientA, clientB, clientC, false, true, true, 2, "F4b:") )
         exit(4);
     
     swa->clearMessageQueue();
-    swa->def_group(1, &addressB, 1);
+    if( !swa->def_group(1, &addressB, 1) )
+        cout << " Defining Group Failed" << endl;
     if ( !f4(clientA, clientB, clientC, false, true, false, 1, "F4c:") )
         exit(4);
 
