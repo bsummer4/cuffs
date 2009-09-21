@@ -14,9 +14,9 @@ class SwitchboxAdmin : public Connection{
     public:
         SwitchboxAdmin(const char* hostname, const int port);
         /// Add the addresses to a group
-        bool addToGroup(int group, int *address, int addl);
+        bool def_group(int group, int *address, int addl);
         /// Remove the addresses to a group
-        bool removeFromGroup(int group, int *address, int addl);
+        bool undef_group(int group, int *address, int addl);
         /// Create a new group
         bool createGroup(int group);
         /// Remove a group
