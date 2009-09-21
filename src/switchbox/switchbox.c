@@ -101,12 +101,12 @@ bool remove_client(Client *client) {
 }
 
 
-void send_admin_response(bool success, int addr){
+void send_error(int to, int type){
     SBMessage * msg = malloc(sizeof(int)*4);
     msg->size = sizeof(int)*4;
-    msg->routing_type = success ? ADMIN_SUCESS : ADMIN_FAIL;
+    msg->routing_type = type;
     msg->from = 0;
-    msg->to   = addr;
+    msg->to   = to;
     switchbox_locking_send(msg);
 }
 
@@ -126,7 +126,7 @@ bool switchbox_handle_admin(SBMessage * m){
             dll_append(multicast_groups[gn].members, new_jval_i(list[i]));
         }
         multicast_groups[gn].active == true;
-        send_admin_response(true, m->from);
+        send_error(m->from, ADMIN_SUCCESS);
         break;
     case RM_FROM_GROUP:
         for (int i = 0; i < cl_length; i++){
@@ -137,30 +137,30 @@ bool switchbox_handle_admin(SBMessage * m){
             }
             if ( ptr != list ){ 
                 dll_delete_node(ptr);
-                send_admin_response(false, m->from);
+                send_error(m->from, ADMIN_FAIL);
             }
         }
-        send_admin_response(true, m->from);
+        send_error(m->from, ADMIN_SUCCESS);
         break;
     case CREATE_GROUP:
         if ( multicast_groups[gn].active == false ){
             multicast_groups[gn].active = true;
-            send_admin_response(true, m->from);
+            send_error(m->from, ADMIN_SUCCESS);
         }
         else{
-            send_admin_response(false, m->from);
+            send_error(m->from, ADMIN_FAIL);
         }
         break;
     case DELETE_GROUP:
         if ( multicast_groups[gn].active == true && dll_empty(multicast_groups[gn].members)){
             multicast_groups[gn].active = false;
-            send_admin_response(true, m->from);
+            send_error(m->from, ADMIN_SUCCESS);
         } else { 
-            send_admin_response(false, m->from);
+            send_error(m->from, ADMIN_FAIL);
         }
         break;
     default:
-        send_admin_response(false, m->from);
+        send_error(m->from, ADMIN_FAIL);
         break;
     }
     free(m);

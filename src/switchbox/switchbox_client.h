@@ -25,7 +25,7 @@ typedef enum {
     ADMIN,
     TYPE_ERROR, 
     INVALID_TARGET, 
-    ADMIN_SUCESS,
+    ADMIN_SUCCESS,
     ADMIN_FAIL
 } message_type;
 
