@@ -27,7 +27,7 @@ class switchbox_manager():
 def cleanup_sys(sm, fval):
     print "Failed previous test, can not continue..."
     sm.stop_switchbox()
-    return fval;
+    exit(1);
 
 
 def main():
@@ -50,6 +50,8 @@ def main():
     print "Killing"
     sm.stop_switchbox()
     print "Done"
+
+    return 1
 
 
 if __name__ == "__main__": main()
