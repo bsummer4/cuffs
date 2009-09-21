@@ -35,11 +35,11 @@ typedef enum {
     DELETE_GROUP
 } admin_task_t;
 
-typedef struct admin_message{
+typedef struct {
     admin_task_t task;
     int group_number;
     int clients[];
-}
+}admin_message;
 
 bool switchbox_send(Socket, SBMessage*);
 SBMessage *switchbox_receive(Socket);
