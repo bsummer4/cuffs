@@ -23,12 +23,12 @@ class SwitchboxAdmin : public Connection{
         int* getGroupMembers(int group, int *size);
         /// Get a list of the groups
         int* getGroups(int* size);
-   private:
-        std::map <int, std::set <int> > groups;
         /// Add the addresses to a group
         bool def_group(int group, int *address, int addl);
         /// Undefine group
         bool undef_group(int group);
+   private:
+        std::map <int, std::set <int> > groups;
 };
 
 
