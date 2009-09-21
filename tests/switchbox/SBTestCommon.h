@@ -1,6 +1,6 @@
 #pragma once
 
-static const int USLEEP_TIME = 20000;
+static const int USLEEP_TIME = 50000;
 
 const char* HOST="localhost";
 char* test_message = "hello";

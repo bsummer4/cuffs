@@ -103,8 +103,8 @@ int main(int argc, char* argv[]){
     int address[2];
     address[0] = addressB;
     address[1] = addressC;
-    swa->def_group(1, address, 2);
-    if ( !f4(clientA, clientB, clientC, false, true, true, 1, "F4b:") )
+    swa->def_group(2, address, 2);
+    if ( !f4(clientA, clientB, clientC, false, true, true, 2, "F4b:") )
         exit(4);
     
     swa->def_group(1, &addressB, 1);
@@ -296,9 +296,9 @@ bool f4(Connection* c1, Connection* c2, Connection* c3, bool r1, bool r2, bool r
     blist[1] = r2;
     blist[2] = r3;
 
+    bool passed = true;
+
     c1->sendMessage(size, type, to, test_message);
-    usleep(USLEEP_TIME);
-    usleep(USLEEP_TIME);
     usleep(USLEEP_TIME);
 
     for (int i = 0; i < 3; i++){
@@ -309,16 +309,16 @@ bool f4(Connection* c1, Connection* c2, Connection* c3, bool r1, bool r2, bool r
                 SBMessage * msg = clist[i]->getMessage();
                 if ( !SBTestCommon::TestMessage(msg, size, MULTICAST, from, clist[i]->getAddress(), test_message, errormsg) ){
                     cout << "failed: " << errormsg << endl;
-                    return false;
+                    passed = false;
                 }
             } else { 
                 cout << "failed: ID:" << i << " Got " << clist[i]->getMessageCount() << " messages, but I was supposed to get 1" << endl;
-                return false;
+                passed = false;
             }
         }
-        else if ( !blist[i] && clist[i]->getMessageCount() != 0){
-            cout << "failed: Got message and wasn't supposed to" << endl;
-            return false;
+        else if ( clist[i]->getMessageCount() != 0){
+            cout << "failed: id: " << i << " Got message and wasn't supposed to" << endl;
+            passed = false;
         }
         //else { 
         //    cout << "failed: ID:" << i << " Got " << clist[i]->getMessageCount() << " messages, but I was supposed to get 1" << endl;
@@ -326,6 +326,7 @@ bool f4(Connection* c1, Connection* c2, Connection* c3, bool r1, bool r2, bool r
         //}
     }
 
-    cout << "passed" << endl;
-    return true;
+    if ( passed )
+        cout << "passed" << endl;
+    return passed;
 }
