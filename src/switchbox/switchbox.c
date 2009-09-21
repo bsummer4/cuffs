@@ -186,6 +186,7 @@ bool multicast(SBMessage *m) {
     m->to = g->members[ii];
     switchbox_locking_send(m);
   }
+  return true;
 }
 
 bool broadcast(SBMessage *m) {
