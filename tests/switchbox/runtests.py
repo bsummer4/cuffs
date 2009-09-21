@@ -38,11 +38,11 @@ def main():
     fval = os.system("./function_tests")
     if ( fval != 0 ):
         return cleanup_sys(sm,fval);
-    print ""
+    print "Function Tests sucessfully completed\n"
     fval = os.system("./edgecase_tests")
     if ( fval != 0 ):
         return cleanup_sys(sm,fval);
-    print ""
+    print "Edge Case Tests sucessfully completed\n"
     fval = os.system("./latency_test")
     if ( fval != 0):
         return cleanup_sys(sm,fval);

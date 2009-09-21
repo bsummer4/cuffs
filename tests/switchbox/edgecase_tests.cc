@@ -12,8 +12,9 @@ bool e2_2(SwitchboxAdmin* swa);
 int main(){
     SwitchboxAdmin * swa = new SwitchboxAdmin(HOST, SWITCHBOX_PORT);
     swa->start();
-
     usleep(USLEEP_TIME);
+
+    cout << "swa address: " << swa->getAddress() << endl;
 
     bool passed = true;
     bool testPassed = false;
@@ -48,7 +49,7 @@ bool e1(Connection* c){
     if ( c->getMessageCount() == 1 ){
        SBMessage* msg = c->getMessage(); 
        // Check that this is indeed the correct error message.
-       bool testResults = SBTestCommon::TestMessage(msg, 4, INVALID_TARGET, 0, myaddr, NULL, errormsg);
+       bool testResults = SBTestCommon::TestMessage(msg, sizeof(int)*4, INVALID_TARGET, -1, myaddr, NULL, errormsg);
        if ( testResults ) {
            cout << "passed" << endl;
        } else {
@@ -104,7 +105,7 @@ bool e2_2(SwitchboxAdmin* swa){
     if ( swa->getMessageCount() == 1 ){
         SBMessage* msg = swa->getMessage();
         std::string errormsg;
-        bool testResults = SBTestCommon::TestMessage(msg, 4, INVALID_TARGET, 0, myaddr, NULL, errormsg);
+        bool testResults = SBTestCommon::TestMessage(msg, sizeof(int)*4, INVALID_TARGET, -1, myaddr, NULL, errormsg);
         free(msg);
         if ( testResults ) {
             cout << "passed" << endl;
