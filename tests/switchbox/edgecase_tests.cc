@@ -24,9 +24,9 @@ int main(){
     if ( passed  && !testPassed) passed = false;
     
 
-    e2_1(swa);
+    testPassed = e2_1(swa);
     if ( passed  && !testPassed) passed = false;
-    e2_2(swa);
+    testPassed = e2_2(swa);
     if ( passed  && !testPassed) passed = false;
     
     return passed;
