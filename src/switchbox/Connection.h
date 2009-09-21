@@ -40,8 +40,10 @@ class Connection{
         void start();
         /// Stop the messaging thread.
         void stop();
-        /// Function for the messaing thread to call, you shouldn't need to call this. 
-        void messageUpdate();
+        /// Function for the receive messaing thread to call, you shouldn't need to call this. 
+        void receiveUpdate();
+        /// Function for the send messaing thread to call, you shouldn't need to call this. 
+        void sendUpdate();
         /// Get the count of messages on the recieve queue.
         int getMessageCount();
         /// Get the address of this client. 
@@ -64,6 +66,8 @@ class Connection{
         std::queue<SBMessage*> receive_queue;
         /// A lock to access the send queue.
         pthread_mutex_t slock;
+        /// Condition Variable to notify that there's a message to send.
+        pthread_cond_t scond;
         /// The send queue.
         std::queue<SBMessage*> send_queue;
         /// A conditiona variable used by the blockForMessage() function.
@@ -76,8 +80,10 @@ class Connection{
         bool running;
         /// The hostname of  the switchbox.
         std::string hostname;
-        /// A thread ID for the messaging thread.
-        pthread_t tid;
+        /// A thread ID for the receive messaging thread.
+        pthread_t r_tid;
+        /// A thread ID for the send messaging thread.
+        pthread_t s_tid;
         /// File descriptors for the poll command.
         struct pollfd fds_[1];
 };

@@ -1,7 +1,8 @@
 #include "Connection.h"
 
 // Prototype for thread.
-extern "C" void * messaging_thread(void* arg);
+extern "C" void * receive_messaging_thread(void* arg);
+extern "C" void * send_messaging_thread(void* arg);
 
 /**
  * The constructor for the object. 
@@ -19,6 +20,7 @@ Connection::Connection(const char* hostname, const int port){
     pthread_mutex_init(&rlock, NULL);
     pthread_mutex_init(&slock, NULL);
     pthread_cond_init(&blocker, NULL);
+    pthread_cond_init(&scond, NULL);
 }
 
 void Connection::start(){
@@ -26,13 +28,15 @@ void Connection::start(){
     fds_[0].fd = this->s;
     fds_[0].events = POLLIN;
     this->running = true;
-    pthread_create(&tid, NULL, messaging_thread, reinterpret_cast<void*>(this));
+    pthread_create(&r_tid, NULL, receive_messaging_thread, reinterpret_cast<void*>(this));
+    pthread_create(&s_tid, NULL, send_messaging_thread, reinterpret_cast<void*>(this));
 }
 
 void Connection::stop(){
     //this->s = open_connection(hostname.c_str(), port);
     this->running = false;
-    pthread_join(tid, NULL);
+    pthread_join(r_tid, NULL);
+    pthread_join(s_tid, NULL);
 }
 
 /**
@@ -59,6 +63,8 @@ void Connection::sendMessage(int size, message_type type, int to, char *string){
     pthread_mutex_lock(&slock);
     send_queue.push(result);
     pthread_mutex_unlock(&slock);
+    //cout << "cond_signal(&scond)" << endl;
+    pthread_cond_signal(&scond);
 }
 
 /**
@@ -101,12 +107,12 @@ void Connection::handleAnnounceMessage(SBMessage * msg){
 }
 
 /** 
- * The message updating thread. Started with start()
+ * The receive message updating thread. Started with start()
  * and stopped with stop(). Handles all of the actual
  * sending/receiving of the messages.
  */ 
-void Connection::messageUpdate(){
-    static const int timeout_msecs = 10;
+void Connection::receiveUpdate(){
+    static const int timeout_msecs = -1;
     
     int numbytes = poll(fds_, 1, timeout_msecs);
 
@@ -124,15 +130,29 @@ void Connection::messageUpdate(){
             pthread_cond_signal(&blocker);
         }
     }
+    else { 
+        pthread_exit(NULL);
+    }
+}
 
+/** 
+ * The receive message updating thread. Started with start()
+ * and stopped with stop(). Handles all of the actual
+ * sending/receiving of the messages.
+ */ 
+void Connection::sendUpdate(){
+    pthread_mutex_lock(&slock);
+    //cout << "before cond wait" << endl;
+    pthread_cond_wait(&scond, &slock);
+    //cout << "after cond wait" << endl;
     // Check if there's any messages to send
     while ( !send_queue.empty() ){
-        pthread_mutex_lock(&slock);
         SBMessage* msg = send_queue.front();
+        //cout << "sending message" << endl;
         send_queue.pop();
-        pthread_mutex_unlock(&slock);
         switchbox_send(this->s, msg);
     }
+    pthread_mutex_unlock(&slock);
 }
 
 
@@ -164,10 +184,21 @@ bool Connection::isRunning(){
 }
 
 
-extern "C" void * messaging_thread(void* arg){
+extern "C" void * receive_messaging_thread(void* arg){
     Connection * c = reinterpret_cast<Connection*>(arg);
     while(c->isRunning()){
-        c->messageUpdate();
+        //cout << "rloop" << endl;
+        c->receiveUpdate();
+        //pthread_yield();
+    }
+    pthread_exit(NULL);
+}
+
+extern "C" void * send_messaging_thread(void* arg){
+    Connection * c = reinterpret_cast<Connection*>(arg);
+    while(c->isRunning()){
+        //cout << "sloop" << endl;
+        c->sendUpdate();
         //pthread_yield();
     }
     pthread_exit(NULL);
