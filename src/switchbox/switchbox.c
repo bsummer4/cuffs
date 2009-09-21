@@ -125,7 +125,7 @@ bool switchbox_handle_admin(SBMessage * m){
         for (int i = 0; i < cl_length; i++){
             dll_append(multicast_groups[gn].members, new_jval_i(list[i]));
         }
-        multicast_groups[gn].active == true;
+        multicast_groups[gn].active = true;
         send_error(m->from, ADMIN_SUCCESS);
         break;
     case RM_FROM_GROUP:
