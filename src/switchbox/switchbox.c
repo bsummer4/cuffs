@@ -12,7 +12,6 @@ void send_hello_message(Socket, int);
 void announce(int code, int client_id);
 bool switchbox_locking_send(SBMessage* m);
 
-
 // ==============
 // Implementation
 // ==============
@@ -245,6 +244,8 @@ void announce(int code, int client_id) {
   free(m);
 }
 
+void print_message(SBMessage *m);
+
 void *handle_connection(void *client_) {
   Client* client = client_;
   SBMessage *m;
@@ -253,17 +254,20 @@ void *handle_connection(void *client_) {
   // announce(CONNECTION, client_id);
   while ((m = switchbox_receive(client->connection))) {
     m->from = client_id; // Client can't lie about its identity.
-    if (debug)
+    if (debug) {
       printf ("handle_connection: new message [%s][%d bytes] #%d -> #%d.  \n",
               routing_type_to_string(m->routing_type),
               m->size, m->from, m->to);
+      print_message(m);
+    }
     switch (m->routing_type) {
     case UNICAST:
       if (!switchbox_locking_send(m) && debug)
         printf ("handle_connection: ERROR bad client %d (disconnected?).  \n", m->to);
       break;
     case BROADCAST: assert(broadcast(m)); break;
-    case MULTICAST: assert(multicast(m)); break;
+    case MULTICAST:
+      if (!multicast(m)) send_error(client_id, INVALID_TARGET); break;
     case ADMIN: switchbox_handle_admin(m); break;
     default: send_error(client_id, TYPE_ERROR);
     }
@@ -293,4 +297,11 @@ void send_hello_message(Socket s, int addr){
     msg->from = addr;
     msg->to   = addr;
     switchbox_locking_send(msg);
+}
+
+void print_message(SBMessage *m) {
+  printf("  Message: {type: %s, size: %d, from: %d, to: %d, data: [", routing_type_to_string(m->routing_type),
+         m->size, m->from, m->to);
+  iter(ii, 0, m->size) printf("%x ", (unsigned)(m->data[ii]));
+  printf("]}\n");
 }
