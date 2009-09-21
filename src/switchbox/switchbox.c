@@ -263,9 +263,9 @@ void *handle_connection(void *client_) {
     switch (m->routing_type) {
     case UNICAST:
       if (!switchbox_locking_send(m)) {
-        send_error(client_id, INVALID_TARGET);
         if (debug)
           printf ("handle_connection: ERROR bad client %d (disconnected?).  \n", m->to);
+        send_error(client_id, INVALID_TARGET);
       }
       break;
     case BROADCAST: assert(broadcast(m)); break;
