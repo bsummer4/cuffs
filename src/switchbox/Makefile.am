@@ -5,8 +5,7 @@ AM_LDFLAGS = -lpthread
 bin_PROGRAMS = switchbox switchbox_test chat_test
 
 switchbox_SOURCES = switchbox.c 
-switchbox_CFLAGS = -I../common
-switchbox_LDADD = libmessaging.la ../common/libfdr.la
+switchbox_LDADD = libmessaging.la
 
 switchbox_test_SOURCES = test.c
 switchbox_test_LDADD = libmessaging.la
