@@ -62,9 +62,9 @@ int main(int argc, char* argv[]){
         //exit(2);
     }
     // Disconnect clientD
-    cout << "clientd stop" << endl;
+    //cout << "clientd stop" << endl;
     clientD->stop();
-    cout << "after clientd stop" << endl;
+    //cout << "after clientd stop" << endl;
 
     // TODO: Fix this, you should be able to stop and restart
     delete clientD;
@@ -88,9 +88,9 @@ int main(int argc, char* argv[]){
     if ( !f3_2(clientA, clientB, clientC, clientD, "F3d:") ){
         //exit(3);
     }
-    cout << "clientd stop" << endl;
+    //cout << "clientd stop" << endl;
     clientD->stop();
-    cout << "after clientd stop" << endl;
+    //cout << "after clientd stop" << endl;
 
     ////////////////////////////////////////////////////////////////////////////////
     // Test 4 - F4: Collective communication: Group-based multicast
@@ -103,7 +103,7 @@ int main(int argc, char* argv[]){
     int address[2];
     address[0] = addressB;
     address[1] = addressC;
-    swa->def_group(1, &address, 2);
+    swa->def_group(1, address, 2);
     if ( !f4(clientA, clientB, clientC, false, true, true, 1, "F4b:") )
         exit(4);
     

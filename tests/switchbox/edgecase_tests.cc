@@ -63,7 +63,7 @@ bool e1(Connection* c){
 
 bool e2_1(SwitchboxAdmin* swa){
     cout << "[E21: Sending message to empty group] " << endl;
-    swa->createGroup(1);
+    swa->def_group(1, NULL, 0);
     bool passed;
     int myaddr = swa->getAddress();
     int badaddr = myaddr+1;
