@@ -29,8 +29,9 @@ char *routing_type_to_string(int routing_type) {
    case UNICAST: return "unicast";
    case BROADCAST: return "broadcast";
    case MULTICAST: return "multicast";
+   case ADMIN: return "admin";
    }
- return "(invalid)";
+ return "(other or invalid)";
 }
 
 
@@ -118,7 +119,7 @@ void send_error(int to, int type){
   SBMessage * msg = malloc(sizeof(int)*4);
   msg->size = sizeof(int)*4;
   msg->routing_type = type;
-  msg->from = 0;
+  msg->from = -1;
   msg->to   = to;
   switchbox_locking_send(msg);
 }
