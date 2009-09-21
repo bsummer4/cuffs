@@ -24,6 +24,16 @@ int main (int argc, char **argv) {
   return 0; }
 
 
+char *routing_type_to_string(int routing_type) {
+  switch (routing_type) {
+   case UNICAST: return "unicast";
+   case BROADCAST: return "broadcast";
+   case MULTICAST: return "multicast";
+   }
+ return "(invalid)";
+}
+
+
 // -----------------------------
 // Clients and the clients array
 // -----------------------------
@@ -130,7 +140,12 @@ bool delete_group(int group_id) {
 
 // As long as group_id is valid, shit will work.
 bool define_group(int group_id, int num_clients, int *users) {
-  if (debug) printf("defining group %d\n", group_id);
+  if (debug) {
+    printf("defining group %d with users [", group_id);
+    iter(ii, 0, num_clients) printf("%d ", users[ii]);
+    printf("]\n");
+  }
+      
   if (group_id >= MAX_GROUPS) return false;
   Group *group = multicast_groups + group_id;
   if (group->used) delete_group(group_id);
@@ -235,7 +250,7 @@ void *handle_connection(void *client_) {
     m->from = client_id; // Client can't lie about its identity.
     if (debug)
       printf ("handle_connection: new message [%s][%d bytes] #%d -> #%d.  \n",
-              (m->routing_type ? "broadcast" : "unicast"),
+              routing_type_to_string(m->routing_type),
               m->size, m->from, m->to);
     switch (m->routing_type) {
     case UNICAST:
