@@ -298,13 +298,21 @@ bool f4(Connection* c1, Connection* c2, Connection* c3, bool r1, bool r2, bool r
 
     c1->sendMessage(size, type, to, test_message);
     usleep(USLEEP_TIME);
+    usleep(USLEEP_TIME);
+    usleep(USLEEP_TIME);
 
     for (int i = 0; i < 3; i++){
-        if ( blist[i] && clist[i]->getMessageCount() == 1 ){
-            string errormsg;
-            SBMessage * msg = clist[i]->getMessage();
-            if ( !SBTestCommon::TestMessage(msg, size, MULTICAST, from, to, test_message, errormsg) ){
-                cout << "failed: " << errormsg << endl;
+        //cout << i << " : " << clist[i]->getMessageCount() << endl;
+        if ( blist[i] ){
+            if( clist[i]->getMessageCount() == 1 ){
+                string errormsg;
+                SBMessage * msg = clist[i]->getMessage();
+                if ( !SBTestCommon::TestMessage(msg, size, MULTICAST, from, clist[i]->getAddress(), test_message, errormsg) ){
+                    cout << "failed: " << errormsg << endl;
+                    return false;
+                }
+            } else { 
+                cout << "failed: ID:" << i << " Got " << clist[i]->getMessageCount() << " messages, but I was supposed to get 1" << endl;
                 return false;
             }
         }
@@ -312,10 +320,10 @@ bool f4(Connection* c1, Connection* c2, Connection* c3, bool r1, bool r2, bool r
             cout << "failed: Got message and wasn't supposed to" << endl;
             return false;
         }
-        else { 
-            cout << "failed: Got no message, but I was supposed to" << endl;
-            return false;
-        }
+        //else { 
+        //    cout << "failed: ID:" << i << " Got " << clist[i]->getMessageCount() << " messages, but I was supposed to get 1" << endl;
+        //    return false;
+        //}
     }
 
     cout << "passed" << endl;
