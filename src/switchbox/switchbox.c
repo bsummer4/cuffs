@@ -118,7 +118,7 @@ void send_error(int to, int type){
 
 // Free the members array, and set group.used to false
 bool delete_group(int group_id) {
-  if (group_id > MAX_GROUPS) return false;
+  if (group_id >= MAX_GROUPS) return false;
   Group *group = multicast_groups + group_id;
   if (!group->used) return false;
   if (group->num_members != 0) free(group->members);
@@ -128,7 +128,7 @@ bool delete_group(int group_id) {
 
 // As long as group_id is valid, shit will work.
 bool add_to_group(int group_id, int num_clients, int *users) {
-  if (group_id > MAX_GROUPS) return false;
+  if (group_id >= MAX_GROUPS) return false;
   Group *group = multicast_groups + group_id;
   if (group->used) delete_group(group_id);
   group->used = true;
@@ -140,9 +140,11 @@ bool add_to_group(int group_id, int num_clients, int *users) {
 
 bool switchbox_handle_admin(SBMessage * m){
     admin_message *adm = (admin_message*) m->data;
+
     size_t admin_message_size = m->size - sizeof(int)*4;
     size_t clients_size = admin_message_size - (sizeof(admin_task_t) + sizeof(int));
     assert(clients_size % 4 == 0);
+
     int num_clients = clients_size / 4;
     int gn = adm->group_number;
     int* clients = malloc(sizeof(int) * num_clients);
@@ -154,7 +156,7 @@ bool switchbox_handle_admin(SBMessage * m){
                  add_to_group(gn, num_clients, clients) ? ADMIN_SUCCESS : ADMIN_FAIL);
       break;
 
-    // we don't care if delete_group fails
+    // We don't care if delete_group fails.  It doesn't hurt anything.  
     case DELETE_GROUP: delete_group(gn); break;
     default: send_error(m->from, ADMIN_FAIL);
     }
@@ -174,6 +176,17 @@ bool switchbox_locking_send(SBMessage* m) {
                     m->to);
   pthread_mutex_unlock(&target->lock);
   return success; }
+
+bool multicast(SBMessage *m) {
+  int group_id = m->to;
+  if (group_id >= MAX_GROUPS) return false;
+  Group *g = multicast_groups + group_id;
+  if (!g->used) return false;
+  iter(ii, 0, g->num_members) {
+    m->to = g->members[ii];
+    switchbox_locking_send(m);
+  }
+}
 
 bool broadcast(SBMessage *m) {
   iter(ii, 0, last_used_client+1) {
@@ -208,17 +221,13 @@ void *handle_connection(void *client_) {
               (m->routing_type ? "broadcast" : "unicast"),
               m->size, m->from, m->to);
     switch (m->routing_type) {
-    case UNICAST: 
+    case UNICAST:
       if (!switchbox_locking_send(m) && debug)
         printf ("handle_connection: ERROR bad client %d (disconnected?).  \n", m->to);
       break;
     case BROADCAST: assert(broadcast(m)); break;
-      break;
-    case MULTICAST:
-      break;
-    case ADMIN:
-      switchbox_handle_admin(m); 
-      break;
+    case MULTICAST: assert(multicast(m)); break;
+    case ADMIN: switchbox_handle_admin(m); break;
     }
     free(m); }
 
@@ -238,6 +247,7 @@ void run_switchbox(int port) {
   Socket s;
   iter (ii, 0, MAX_GROUPS) multicast_groups[ii].used = false;
   while (valid_socket(s = accept_connection(l))) setup_connection(s); }
+
 
 void send_hello_message(Socket s, int addr){
     SBMessage * msg = malloc(sizeof(int)*4);
