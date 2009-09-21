@@ -3,7 +3,6 @@
 #include <assert.h>
 #include <unistd.h>
 #include <signal.h>
-#include "dllist.h"
 
 #define MAX_CLIENTS 1024
 #define MAX_GROUPS 64
@@ -36,9 +35,12 @@ typedef struct client {
   bool used;
 } Client;
 
+// TODO used might not be initialized to false.  Either initialize the
+// entire array or keep track of what's been touched.
 typedef struct group{
-  Dllist members;
-  bool active;
+  int num_members;
+  int *members;
+  bool used;
 } Group;
 
 // The 'clients' array stores all clients in the system.  The clients
@@ -114,56 +116,48 @@ void send_error(int to, int type){
 // Connections
 // -----------
 
-// TODO: Make this much better and less nieve
+// Free the members array, and set group.used to false
+bool delete_group(int group_id) {
+  if (group_id > MAX_GROUPS) return false;
+  Group *group = multicast_groups + group_id;
+  if (!group->used) return false;
+  if (group->num_members != 0) free(group->members);
+  group->used = false;
+  return true;
+}
+
+// As long as group_id is valid, shit will work.
+bool add_to_group(int group_id, int num_clients, int *users) {
+  if (group_id > MAX_GROUPS) return false;
+  Group *group = multicast_groups + group_id;
+  if (group->used) delete_group(group_id);
+  group->used = true;
+  group->num_members = num_clients;
+  group->members = users;
+  return true;
+}
+
+
 bool switchbox_handle_admin(SBMessage * m){
-    admin_message * adm = (admin_message*)m->data;
-    int cl_length = m->size - sizeof(int)*4 - sizeof(admin_task_t) - sizeof(int);
+    admin_message *adm = (admin_message*) m->data;
+    size_t admin_message_size = m->size - sizeof(int)*4;
+    size_t clients_size = admin_message_size - (sizeof(admin_task_t) + sizeof(int));
+    assert(clients_size % 4 == 0);
+    int num_clients = clients_size / 4;
     int gn = adm->group_number;
-    int* list = adm->clients;
-    switch (adm->task){
-    case ADD_TO_GROUP:
-        for (int i = 0; i < cl_length; i++){
-            dll_append(multicast_groups[gn].members, new_jval_i(list[i]));
-        }
-        multicast_groups[gn].active = true;
-        send_error(m->from, ADMIN_SUCCESS);
-        break;
-    case RM_FROM_GROUP:
-        for (int i = 0; i < cl_length; i++){
-            Dllist ptr;
-            dll_traverse(ptr, multicast_groups[gn].members){
-                if (ptr->val.i == list[i])
-                    break;
-            }
-            if ( ptr != list ){ 
-                dll_delete_node(ptr);
-                send_error(m->from, ADMIN_FAIL);
-            }
-        }
-        send_error(m->from, ADMIN_SUCCESS);
-        break;
-    case CREATE_GROUP:
-        if ( multicast_groups[gn].active == false ){
-            multicast_groups[gn].active = true;
-            send_error(m->from, ADMIN_SUCCESS);
-        }
-        else{
-            send_error(m->from, ADMIN_FAIL);
-        }
-        break;
-    case DELETE_GROUP:
-        if ( multicast_groups[gn].active == true && dll_empty(multicast_groups[gn].members)){
-            multicast_groups[gn].active = false;
-            send_error(m->from, ADMIN_SUCCESS);
-        } else { 
-            send_error(m->from, ADMIN_FAIL);
-        }
-        break;
-    default:
-        send_error(m->from, ADMIN_FAIL);
-        break;
+    int* clients = malloc(sizeof(int) * num_clients);
+    memcpy(clients, adm->clients, sizeof(int) * num_clients);
+
+    switch (adm->task) {
+    case DEFINE_GROUP:
+      send_error(m->from,
+                 add_to_group(gn, num_clients, clients) ? ADMIN_SUCCESS : ADMIN_FAIL);
+      break;
+
+    // we don't care if delete_group fails
+    case DELETE_GROUP: delete_group(gn); break;
+    default: send_error(m->from, ADMIN_FAIL);
     }
-    free(m);
 }
 
 // Locks the target client until it finishes sending the message.
@@ -186,8 +180,8 @@ bool broadcast(SBMessage *m) {
     if (debug && is_client_used(clients + ii))
       printf("broadcasting to %d\n", ii);
     m->to = ii;
-    if (!switchbox_locking_send(m))
-      return false; }}
+    if (!switchbox_locking_send(m)) return false; }
+  return true; }
 
 void announce(int code, int client_id) {
   int size = sizeof(int) * 5;
@@ -242,10 +236,7 @@ void setup_connection(Socket s) {
 void run_switchbox(int port) {
   Listener l = make_listener(port);
   Socket s;
-  for (int i = 0; i < MAX_GROUPS; i++){
-     multicast_groups[i].members = new_dllist();
-     multicast_groups[i].active  = false;
-  }
+  iter (ii, 0, MAX_GROUPS) multicast_groups[ii].used = false;
   while (valid_socket(s = accept_connection(l))) setup_connection(s); }
 
 
