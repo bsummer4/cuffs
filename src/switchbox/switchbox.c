@@ -127,7 +127,8 @@ bool delete_group(int group_id) {
 }
 
 // As long as group_id is valid, shit will work.
-bool add_to_group(int group_id, int num_clients, int *users) {
+bool define_group(int group_id, int num_clients, int *users) {
+  printf("defining group %d", group_id);
   if (group_id >= MAX_GROUPS) return false;
   Group *group = multicast_groups + group_id;
   if (group->used) delete_group(group_id);
@@ -139,27 +140,27 @@ bool add_to_group(int group_id, int num_clients, int *users) {
 
 
 bool switchbox_handle_admin(SBMessage * m){
-    admin_message *adm = (admin_message*) m->data;
+  admin_message *adm = (admin_message*) m->data;
 
-    size_t admin_message_size = m->size - sizeof(int)*4;
-    size_t clients_size = admin_message_size - (sizeof(admin_task_t) + sizeof(int));
-    assert(clients_size % 4 == 0);
+  size_t admin_message_size = m->size - sizeof(int)*4;
+  size_t clients_size = admin_message_size - (sizeof(admin_task_t) + sizeof(int));
+  assert(clients_size % sizeof(int) == 0);
 
-    int num_clients = clients_size / 4;
-    int gn = adm->group_number;
-    int* clients = malloc(sizeof(int) * num_clients);
-    memcpy(clients, adm->clients, sizeof(int) * num_clients);
+  int num_clients = clients_size / sizeof(int);
+  int gn = adm->group_number;
+  int* clients = malloc(sizeof(int) * num_clients);
+  memcpy(clients, adm->clients, sizeof(int) * num_clients);
 
-    switch (adm->task) {
-    case DEFINE_GROUP:
-      send_error(m->from,
-                 add_to_group(gn, num_clients, clients) ? ADMIN_SUCCESS : ADMIN_FAIL);
-      break;
+  switch (adm->task) {
+  case DEFINE_GROUP:
+    send_error(m->from,
+               define_group(gn, num_clients, clients) ? ADMIN_SUCCESS : ADMIN_FAIL);
+    break;
 
-    // We don't care if delete_group fails.  It doesn't hurt anything.  
-    case DELETE_GROUP: delete_group(gn); break;
-    default: send_error(m->from, ADMIN_FAIL);
-    }
+  // We don't care if delete_group fails.  It doesn't hurt anything.  
+  case DELETE_GROUP: delete_group(gn); break;
+  default: send_error(m->from, ADMIN_FAIL);
+  }
 }
 
 // Locks the target client until it finishes sending the message.
@@ -184,7 +185,8 @@ bool multicast(SBMessage *m) {
   if (!g->used) return false;
   iter(ii, 0, g->num_members) {
     m->to = g->members[ii];
-    switchbox_locking_send(m);
+    if (!switchbox_locking_send(m))
+      return false;
   }
   return true;
 }
