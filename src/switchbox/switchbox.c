@@ -73,17 +73,20 @@ Client *get_new_client(Socket s) {
 }
 
 bool remove_client(Client *client) {
-  //There's a more elegant way to handle this, i'm sure.
-  int index;
-  if ((client == NULL) || !is_client_used(client)) return false; 
-  index = client-clients; 
+  int index = client-clients;
+  if ((!client) || !is_client_used(client)) return false; 
   if (debug) printf("Lost connection from client %d\n", index);
-  if(!valid_socket(client->connection)) return false; 
+
+  // TODO this check should be in close_connection()
+  if (!valid_socket(client->connection)) return false; 
   close_connection(client->connection);
+
   pthread_mutex_destroy(&client->lock);
   bzero(client, sizeof(Client));
+  
   if (index == last_used_client) update_last_used_client(-1);
   if (first_free_client > index) first_free_client = index;
+  
   return true;
 }
 
@@ -112,7 +115,8 @@ bool broadcast(SBMessage *m) {
     if (debug && is_client_used(clients + ii))
       printf("broadcasting to %d\n", ii);
     m->to = ii;
-    assert(switchbox_locking_send(m)); }}
+    if (!switchbox_locking_send(m))
+      return false; }}
 
 void announce(int code, int client_id) {
   int size = sizeof(int) * 5;
@@ -143,7 +147,7 @@ void *handle_connection(void *client_) {
       if (!switchbox_locking_send(m) && debug)
         printf ("handle_connection: ERROR bad client %d (disconnected?).  \n", m->to);
       break;
-    case BROADCAST: broadcast(m); break; }
+    case BROADCAST: assert(broadcast(m)); break; }
     free(m); }
 
   // The connection has been closed.
