@@ -157,6 +157,12 @@ bool switchbox_handle_admin(SBMessage * m){
   int* clients = malloc(sizeof(int) * num_clients);
   memcpy(clients, adm->clients, sizeof(int) * num_clients);
 
+  if (debug) {
+    printf("  task: %d\n", adm->task);
+    printf("  group_id: %d\n", gn);
+    printf("  num_clients: %d\n", num_clients);
+  }
+
   switch (adm->task) {
   case DEFINE_GROUP:
     send_error(m->from,
@@ -185,6 +191,7 @@ bool switchbox_locking_send(SBMessage* m) {
   return success; }
 
 bool multicast(SBMessage *m) {
+  if (debug) printf("multicasting to %d\n", m->to);
   int group_id = m->to;
   if (group_id >= MAX_GROUPS) return false;
   Group *g = multicast_groups + group_id;
@@ -198,6 +205,7 @@ bool multicast(SBMessage *m) {
 }
 
 bool broadcast(SBMessage *m) {
+  if (debug) printf("broadcast from %d\n", m->from);
   iter(ii, 0, last_used_client+1) {
     if (debug && is_client_used(clients + ii))
       if (debug) printf("broadcasting to %d\n", ii);
