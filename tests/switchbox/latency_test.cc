@@ -71,13 +71,16 @@ class ConPair{
             struct timeval rec;
             pthread_mutex_lock(&runlock);
             {
+                //cout << "in runlock" << endl;
                 gettimeofday(&sent, NULL);
                 int size = 4*sizeof(int) + sizeof(struct timeval);
                 message_type type = UNICAST;
                 int to = r->getAddress();
                 //cout << this << " sending message" << endl;
                 s->sendMessage(size, type, to, (char*)&sent);
+                //cout << "blocking for message" << endl;
                 r->blockForMessage();
+                //cout << "im back" << endl;
                 SBMessage * msg = (SBMessage*)malloc(size);
                 msg = r->getMessage();
                 //cout << this << " got message" << endl;
@@ -86,8 +89,10 @@ class ConPair{
                 timeval_subtract(&diff_val, &rec, &sent);
                 //cout << "diff_val = " << diff_val.tv_usec;
                 latencies.push_back(diff_val);
+                //cout << "leaving runlock" << endl;
             }
             pthread_mutex_unlock(&runlock);
+            usleep(USLEEP_TIME);
         }
         double getAverageLatency(){
             struct timeval sum = {0,0};
@@ -130,7 +135,7 @@ void * update_thread(void* arg){
     while(cp->isRunning()){
         //cout << "Update thread" << endl;
         cp->update();
-        sched_yield();
+        //sched_yield();
     }
     pthread_exit(NULL);
 }
