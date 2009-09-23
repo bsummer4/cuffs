@@ -44,3 +44,19 @@ Builds into ./doc/doxygen
 
 .. _ReStructured Text: http://en.wikipedia.org/wiki/ReStructuredText
 
+
+Contributing
+============
+
+Coding Style
+============
+
+- C source files are .c and .h, c++ source files are .cpp and .hpp
+
+- Run Code beautifiers on code before you commit.
+
+  - For c++::
+    astyle -Udbs2 < *.cpp *.hpp
+
+  - for c::
+    indent -bli0 *.c *.h

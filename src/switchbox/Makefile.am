@@ -8,14 +8,14 @@ switchbox_LDADD = libmessaging.la
 switchbox_test_SOURCES = test.c
 switchbox_test_LDADD = libmessaging.la
 
-chat_test_SOURCES = chat_test.cc
+chat_test_SOURCES = chat_test.cpp
 chat_test_LDADD = libconnection.la
 
 noinst_LTLIBRARIES = libmessaging.la 
 libmessaging_la_SOURCES = message.c switchbox_client.c
 
 lib_LTLIBRARIES = libconnection.la 
-libconnection_la_SOURCES = Connection.cc SwitchboxAdmin.cc
+libconnection_la_SOURCES = Connection.cpp SwitchboxAdmin.cpp
 libconnection_la_LIBADD = libmessaging.la
 
 #####################
