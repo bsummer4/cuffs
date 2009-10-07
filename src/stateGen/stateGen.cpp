@@ -60,7 +60,7 @@ string genName()
 
 void genStateMsg()
 {
-  switch ( (int) (rand() % 8))
+  switch ( (int) (rand() % 9))
   {
   case 0:
     printf (" /MAP %s\n", genName().c_str());
