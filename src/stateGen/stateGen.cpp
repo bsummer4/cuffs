@@ -6,27 +6,22 @@ protocol and prints to standard out.
 Version 2
 */
 /*
-#include <time.h>
-#include <stdio.h>
-#include <string>
-#include <iostream>
-using namespace std;
+ * All Messages prepended by Timestamp
+ * No slash = message display on console/screen
 
-    * All Messages prepended by Timestamp
-    * No slash = message display on console/screen
-
-    * /MAP [name]
-    * /ZONE ID OWNER CONTESTABLE BATTLE_ID
-    * /USER ID NAME ADDRESS [-1 if not logged in]
-    * /GROUP ADD ID USERID
-    * /GROUP DEL ID USERID
-    * /PARTY INVITE ID USERID
-    * /PARTY JOIN ID USERID
-    * /FIGHT PARTYID ZONE ID
-    * /START TURN PLAYERID
-    * /SHOOT ANGLE POWER WEAPONID
-*/
+ * /MAP [name]
+ * /ZONE ID OWNER CONTESTABLE BATTLE_ID
+ * /USER ID NAME ADDRESS [-1 if not logged in]
+ * /GROUP ADD ID USERID
+ * /GROUP DEL ID USERID
+ * /PARTY INVITE ID USERID
+ * /PARTY JOIN ID USERID
+ * /FIGHT PARTYID ZONE ID
+ * /START TURN PLAYERID
+ * /SHOOT ANGLE POWER WEAPONID
+ */
 #include "stateGen.hpp"
+#include <unistd.h>
 /*
 //Useless really
 int time_diff(long end, long now){
@@ -101,14 +96,15 @@ void genStateMsg()
 int main (int argc, char **argv)
 {
   time_t rawtime;
-  time (&rawtime);
   srand (time (NULL));
 
-  for (int ii=0; ii<9; ii++)
+  for (;;)
   {
+    time (&rawtime);
     printf ("%d ", (int) rawtime);
     genStateMsg();
     fflush (stdin);
+    sleep(1);
   }
 
   return 0;
