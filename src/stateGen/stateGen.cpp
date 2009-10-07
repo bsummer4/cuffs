@@ -29,6 +29,7 @@ int time_diff(long end, long now){
 }
 */
 
+//
 //Code ripped straight from "C++:Reference"
 void wait (int seconds)
 {
@@ -59,7 +60,7 @@ string genName()
 
 void genStateMsg()
 {
-  switch ( (int) (rand() % 10))
+  switch ( (int) (rand() % 8))
   {
   case 0:
     printf (" /MAP %s\n", genName().c_str());
@@ -106,6 +107,5 @@ int main (int argc, char **argv)
     fflush (stdin);
     sleep(1);
   }
-
   return 0;
 }
