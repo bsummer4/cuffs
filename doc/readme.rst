@@ -37,7 +37,7 @@ Building
 
 Building Documentation
 ----------------------
-:: 
+::
 
  $ make doxygen-doc
 
@@ -57,7 +57,7 @@ Coding Style
 - Run Code beautifiers on code before you commit.
 
   - For c++::
-    astyle -Udbs2 < *.cpp *.hpp
+    astyle -Udbs2 *.cpp *.hpp
 
   - for c::
     indent -bli0 *.c *.h
