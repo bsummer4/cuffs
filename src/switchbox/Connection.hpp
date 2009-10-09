@@ -25,7 +25,8 @@ public:
   Connection(const char* switchbox_hostname, const int switchbox_port);
 
   // Put a message on the send queue
-  // This will the free the message when it's finished with it
+  // This will free the message when it's finished.  So make a copy if
+  // you want to keep it around.
   void sendMessage(SBMessage *message);
 
   /// Create a message to put on the send queue.
