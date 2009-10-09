@@ -6,7 +6,9 @@
 #include <vector>
 #include <unistd.h>
 #include "message.h"
+extern "C" {
 #include "switchbox_client.h"
+}
 #include "Connection.hpp"
 using namespace std;
 
@@ -139,5 +141,3 @@ void genStateMsg(char* buffer, int length){
     snprintf(buffer,  length, "\n");
   }
 }
-
-
