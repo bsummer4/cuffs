@@ -103,6 +103,7 @@ public:
       }
     }
     pthread_mutex_unlock(&runlock);
+    usleep(1);
     //usleep(USLEEP_TIME);
   }
   double getAverageLatency() {
@@ -187,7 +188,7 @@ int main(int argc, char* argv[]) {
     }
     avgLatency = sum/clients.size();
     packetLoss = (float)totalDropped/(float)totalSent;
-    cout << "[Pairs: " << clients.size() << "] Latency: " << avgLatency << "ms Sent: " << totalSent << " Received: " << totalSent-totalDropped << " PacketLoss: " << packetLoss << endl;
+    cerr << "[Pairs: " << clients.size() << "] Latency: " << avgLatency << "ms Sent: " << totalSent << " Received: " << totalSent-totalDropped << " PacketLoss: " << packetLoss << endl;
     for (int i = 0; i < clients.size(); i++) {
       clients[i]->resume();
     }
