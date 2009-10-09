@@ -54,7 +54,13 @@ DX_INIT_DOXYGEN([$PACKAGE_NAME],[doxygen.cfg],[doc/doxygen])
 AC_CONFIG_FILES([Makefile
                  src/Makefile
                  src/switchbox/Makefile
-                 src/stateGen/Makefile
+                 src/game/Makefile
+                 src/game/overworld/Makefile
+                 src/game/common/Makefile
+                 src/game/battle/Makefile
+                 src/game/battle/generator/Makefile
+                 src/game/battle/interpreter/Makefile
+                 src/game/battle/synchronizer/Makefile
                  tests/Makefile
                  tests/switchbox/Makefile
                  doc/Makefile])

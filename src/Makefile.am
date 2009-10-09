@@ -1,1 +1,1 @@
-SUBDIRS = switchbox stateGen
+SUBDIRS = switchbox game
