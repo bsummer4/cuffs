@@ -3,93 +3,89 @@
 #include <string>
 #include <queue>
 
-extern "C"
-{
+extern "C" {
 #include "switchbox_client.h"
 #include <poll.h>
 #include <pthread.h>
 }
 
-/** @defgroup Switchbox Switchbox
- * The switchbox and everything related.
- */
-/** @defgroup ClientLib ClientLib
- * @ingroup Switchbox
- * C++ Client library for communication via switchbox.
- */
-
-/** @addtogroup ClientLib
- * @{
- */
-
 /**
  * The connection class.
  *
- * The connection class allows a client to connect to a switchbox and communicate through it. It
- * provides methods, as well as sending/receiving queues to abstract away communication from the
+ * The connection class allows a client to connect to a switchbox and
+ * communicate through it. It provides methods, as well as
+ * sending/receiving queues to abstract away communication from the
  * client.
+ *
+ * - TODO The message queue should be a separate class with it's own
+ *   locking mechanism.
  */
-class Connection
-{
+class Connection {
 public:
-  /// Constructor
-  Connection (const char* hostname, const int port);
+  Connection(const char* switchbox_hostname, const int switchbox_port);
+
+  // Put a message on the send queue
+  // This will the free the message when it's finished with it
+  void sendMessage(SBMessage *message);
+
   /// Create a message to put on the send queue.
-  void sendMessage (int size, message_type type, int to, char *string);
+  void sendMessage(int size, message_type_t type, int to, char *string);
+
   /// Get a message off the receive queue.
   SBMessage * getMessage();
+
   /// Start the messaging thread.
   void start();
+
   /// Stop the messaging thread.
   void stop();
-  /// Function for the receive messaing thread to call, you shouldn't need to call this.
-  void receiveUpdate();
-  /// Function for the send messaing thread to call, you shouldn't need to call this.
-  void sendUpdate();
+
   /// Get the count of messages on the recieve queue.
   int getMessageCount();
+
   /// Get the address of this client.
   int getAddress();
+
   /// Check to see if the messaging thread is running
   bool isRunning();
-  /// A convienence function that will block until there is a message on the messaging queue.
+
+  /// A convienence function that will block until there is a message
+  /// on the messaging queue.
   void blockForMessage();
+
+  /// A convienence function that will block until there is a message
+  /// on the messaging queue or the given timeout expires.
+  bool blockForMessage(int msec_timeout);
+
   /// Clear out the receive message queue
   void clearMessageQueue();
-private:
-  /// Internal function to handle special messages.
-  void handleAnnounceMessage (SBMessage * msg);
-private:
-  /// The socket.
-  Socket s;
-  /// A lock to access the receive queue.
-  pthread_mutex_t rlock;
-  /// The receive queue.
-  std::queue<SBMessage*> receive_queue;
-  /// A lock to access the send queue.
-  pthread_mutex_t slock;
-  /// Condition Variable to notify that there's a message to send.
-  pthread_cond_t scond;
-  /// The send queue.
-  std::queue<SBMessage*> send_queue;
-  /// A conditiona variable used by the blockForMessage() function.
-  pthread_cond_t blocker;
-  /// The address of this client
-  int from;
-  /// The port of the switchbox that I'm connected to.
-  int port;
-  /// Flag for if the messaing thread is running.
-  bool running;
-  /// The hostname of  the switchbox.
-  std::string hostname;
-  /// A thread ID for the receive messaging thread.
-  pthread_t r_tid;
-  /// A thread ID for the send messaging thread.
-  pthread_t s_tid;
-  /// File descriptors for the poll command.
-  struct pollfd fds_[1];
-};
 
-/**
- * @}
- */
+  /// * TODO Why aren't these private if you shouldn't need to call
+  ///   them?
+
+  /// Function for the receive messaing thread to call, you shouldn't
+  /// need to call this.
+  void receiveUpdate();
+
+  /// Function for the send messaing thread to call, you shouldn't
+  /// need to call this.
+  void sendUpdate();
+
+  virtual void handleAnnounceMessage(SBMessage * msg);
+
+private:
+  Socket connection;
+  pthread_mutex_t receive_queue_lock;
+  std::queue<SBMessage*> receive_queue;
+  pthread_mutex_t send_queue_lock;
+  pthread_cond_t message_ready_to_be_sent;
+  std::queue<SBMessage*> send_queue;
+  pthread_cond_t blocking_for_message;
+  int address;
+  int switchbox_port;
+  bool messaging_threads_running;
+  std::string switchbox_hostname;
+  pthread_t receive_thread;
+  pthread_t send_thread;
+  struct pollfd descriptors_for_poll[1];
+};

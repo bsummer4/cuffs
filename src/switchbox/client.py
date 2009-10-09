@@ -1,14 +1,18 @@
 from switchbox_client import *
+import sys
 
 class Connection:
     def __init__(self, hostname, port):
         "Opens the connection.  "
         self.hostname = hostname
-        self.id = -1 # we don't know
+        self.id = -1 # we don't know yet.  We'll set this when we get
+                     # our first message.
         self.port = port
         self.connection = self.open(hostname, port)
+    def working(self):
+        return self.connection and valid_socket(self.connection)
     def close(self):
-        if self.connection and valid_socket(self.connection):
+        if self.working():
             close_connection(self.connection)
         self.connection = None
     def open(self, hostname, port):
@@ -19,18 +23,19 @@ class Connection:
         return connection
     def broadcast(self, string): return self.send(-1, string, 1)
     def send(self, target_id, string, routing_type=0):
-        assert(valid_socket(self.connection))
-        success = switchbox_send_string(
-            self.connection,
-            len(string)+16, routing_type, self.id, target_id,
-            string)
-        if not success: raise Exception("Failed to send.  ")
+        if not self.working(): raise Exception("Connection is closed.  ")
+        message = string_to_message(routing_type, self.id, target_id, string)
+        success = switchbox_send_safe (self.connection, message)
+        if not success:
+            self.close()
+            raise Exception("Couldn't send.  Lost connection to server.  ")
     def receive(self):
-        assert(valid_socket(self.connection))
-        sizep, typep, fromp, top = [intp() for x in range(4)]
-        result = switchbox_receive_string_safe (
-            self.connection,
-            sizep, typep, fromp, top)
-        source, target = [p.value() for p in (fromp, top)]
-        if (source == target): self.id = source
-        return result
+        if not self.working(): raise Exception("Connection is closed.  ")
+        message = switchbox_receive_safe(self.connection)
+        if message == None:
+            self.close()
+            raise Exception("Couldn't receive.  Lost connection to server.  ")
+        if (message_to(message) == message_from(message)):
+            self.id = message_to(message)
+        if message_type(message) == 3: return self.receive()
+        return message

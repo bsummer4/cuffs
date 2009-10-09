@@ -54,10 +54,7 @@ Coding Style
 
 - C source files are .c and .h, c++ source files are .cpp and .hpp
 
-- Run Code beautifiers on code before you commit.
+- Run Code beautifiers on code before you commit::
 
-  - For c++::
-    astyle -Udbs2 *.cpp *.hpp
-
-  - for c::
-    indent -bli0 *.c *.h
+    astyle -Uas2 *.cpp *.hpp # for c++ code
+    indent -npsl -npcs -bli0 -brs -brf -br -nut *.c *.h # for pure c code
