@@ -5,10 +5,13 @@
 #include <iostream>
 #include <vector>
 #include <unistd.h>
+#include "message.h"
+#include "switchbox_client.h"
+#include "Connection.hpp"
 using namespace std;
-#define iter(var, from, to) for (int var=from; var<to; var++)
 
 //Redefine this using inheritance
+/*
 class STATE
 {
   string name;
@@ -57,10 +60,11 @@ class SHOOT
   int ANGLE;
   int WEAPON_ID;
 };
-
+*/
 
 //Functions
 //TODO
+/*
 void initState(){
   state.append(vector<string> a(2));
   state[0].append("\\MAP");
@@ -75,7 +79,7 @@ void initState(){
   }
   exit(1);
 }
-
+*/
 //Generates a random number
 int genID()
 {
@@ -101,38 +105,38 @@ string genName()
 
 //Prints state messages
 //buffer for the state message, length = length of buffer
-char* genStateMsg(char* buffer, int length){
+void genStateMsg(char* buffer, int length){
   switch ( (int) (rand() % 9))
   {
   case 0:
-    snprintf(buffer, size_t length, "/MAP %s\n", genName().c_str());
+    snprintf(buffer, length, "/MAP %s\n", genName().c_str());
     break;
   case 1:
-    snprintf(buffer, size_t length, "/MAP %s\n", genName().c_str());
-    snprintf(buffer, size_t length, " /ZONE %d %s %s %s %d\n",genID(), genName().c_str(),
+    snprintf(buffer, length, "/MAP %s\n", genName().c_str());
+    snprintf(buffer, length, " /ZONE %d %s %s %s %d\n",genID(), genName().c_str(),
             genName().c_str(), genName().c_str(), genID());
     break;
   case 2:
-    snprintf(buffer, size_t length, " /USER %d %s %d\n", genID(), genName().c_str(), genID());
+    snprintf(buffer,  length, " /USER %d %s %d\n", genID(), genName().c_str(), genID());
     break;
   case 3:
     //cout << "/GROUP " << ( (genBool()) ? "ADD" : "DEL") << " " << genID() << endl;
-    snprintf(buffer, size_t length, "/GROUP %s %s \n", (genBool()) ? "ADD" : "DEL", genID());
+    snprintf(buffer,  length, "/GROUP %s %d \n", (genBool()) ? "ADD" : "DEL", genID());
     break;
   case 4:
-    snprintf(buffer, size_t length, "/PARTY %s %d\n", (genBool()) ? "INVITE":"JOIN", genID());
+    snprintf(buffer,  length, "/PARTY %s %d\n", (genBool()) ? "INVITE":"JOIN", genID());
     break;
   case 5:
-    snprintf(buffer, size_t length, " /FIGHT %d %d\n", genID(), genID());
+    snprintf(buffer,  length, " /FIGHT %d %d\n", genID(), genID());
     break;
   case 6:
-    snprintf(buffer, size_t length, " /START %d %d\n", genID(), genID());
+    snprintf(buffer,  length, " /START %d %d\n", genID(), genID());
     break;
   case 7:
-    snprintf(buffer, size_t length, " /SHOOT %d %d %d\n", genID(), genID(), genID());
+    snprintf(buffer,  length, " /SHOOT %d %d %d\n", genID(), genID(), genID());
     break;
   default:
-    snprintf(buffer, size_t length, "\n");
+    snprintf(buffer,  length, "\n");
   }
 }
 

@@ -20,27 +20,29 @@ Version 2
  * /START TURN PLAYERID
  * /SHOOT ANGLE POWER WEAPONID
  */
+
 #include "stateGen.hpp"
-#include "switchbox_client.h"
-#pragma once MAXLEN=512
+#define MAXLEN 512 
+
 //vector< vector<string> > state(8); //the global variable for states
 
-//TODO What defines a "Timestamp"
+//TODO Read timestamps from Sync
 //ANSWER: for now, its just rawtime
-int startGen()
+int main()
 {
   time_t rawtime;
   srand (time (NULL));
   SBMessage* message = NULL;
+  string hostname("localhost");
+  Connection c = Connection(hostname.c_str(), 80044);
   char buffer[MAXLEN];
   for (;;)
   {
-    //TODO generate a connection object and go
     time (&rawtime);
-    printf ("%d ", (int) rawtime);
+    printf ("%d ", (int)rawtime);
     genStateMsg(buffer, MAXLEN);
-    message = string_to_message(BROADCAST, 0, 0, buffer);
-    fflush (stdin);
+    c.sendMessage(string_to_message(BROADCAST, 0, 0, buffer));
+//fflush (stdin);
     sleep(1);
   }
   return 0;
