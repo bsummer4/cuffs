@@ -34,6 +34,22 @@ AC_SUBST([AM_CXXFLAGS])
 AC_SUBST([AM_LDFLAGS])
 
 ########################################################################
+# Check for pthread headers.
+########################################################################
+AC_CHECK_HEADER(pthread.h, FOUND_PTHREAD=1, FOUND_PTHREAD=0)
+if test $FOUND_PTHREAD != 1; then
+    AC_MSG_ERROR([pthread.h Not found but is needed.])
+fi
+
+########################################################################
+# Check for required boost libraries.
+########################################################################
+AC_CHECK_HEADER(boost/thread.hpp, FOUND_BOOSTTHREAD=1, FOUND_BOOSTTHREAD=0)
+if test $FOUND_BOOSTTHREAD != 1; then
+    AC_MSG_ERROR([boost/thread.hpp Not found. Please make sure you have it installed.])
+fi
+
+########################################################################
 # DOXYGEN SUPPORT
 # ######################################################################
 
