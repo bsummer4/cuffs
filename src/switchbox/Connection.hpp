@@ -9,6 +9,18 @@ extern "C" {
 #include <pthread.h>
 }
 
+/** @defgroup Switchbox Switchbox
+ * The switchbox and everything related.
+ */
+/** @defgroup ClientLib ClientLib
+ * @ingroup Switchbox
+ * C++ Client library for communication via switchbox.
+ */
+ 
+/** @addtogroup ClientLib
+ * @{
+ */
+
 /**
  * The connection class.
  *
@@ -90,3 +102,8 @@ private:
   pthread_t send_thread;
   struct pollfd descriptors_for_poll[1];
 };
+
+
+/**
+ * @}
+ */
