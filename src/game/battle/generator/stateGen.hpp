@@ -5,12 +5,14 @@
 #include <iostream>
 #include <vector>
 #include <unistd.h>
-#include "message.h"
 extern "C" {
+#include "message.h"
 #include "switchbox_client.h"
 }
 #include "Connection.hpp"
 using namespace std;
+//Global flag debug
+bool debug;
 
 //Redefine this using inheritance
 /*
@@ -64,24 +66,9 @@ class SHOOT
 };
 */
 
-//Functions
-//TODO
 /*
-void initState(){
-  state.append(vector<string> a(2));
-  state[0].append("\\MAP");
-  state[0].append(genName());
-  state.append(vector<string> a(6));
-  state[1].append("\\ZONE");
-  state[1].append(genID());
-  state[1].append(genName());
-  state[1].append(genBool());
-  state[1].append(genID());
-  state.append(vector<string> a(6));
-  }
-  exit(1);
-}
-*/
+ *Functions: For your viewing pleasure
+ */
 //Generates a random number
 int genID()
 {
@@ -112,32 +99,41 @@ void genStateMsg(char* buffer, int length){
   {
   case 0:
     snprintf(buffer, length, "/MAP %s\n", genName().c_str());
+    if(debug) cout << buffer;
     break;
   case 1:
     snprintf(buffer, length, "/MAP %s\n", genName().c_str());
     snprintf(buffer, length, " /ZONE %d %s %s %s %d\n",genID(), genName().c_str(),
             genName().c_str(), genName().c_str(), genID());
+    if(debug)cout << buffer;
     break;
   case 2:
     snprintf(buffer,  length, " /USER %d %s %d\n", genID(), genName().c_str(), genID());
+    if(debug)cout << buffer;
     break;
   case 3:
     //cout << "/GROUP " << ( (genBool()) ? "ADD" : "DEL") << " " << genID() << endl;
     snprintf(buffer,  length, "/GROUP %s %d \n", (genBool()) ? "ADD" : "DEL", genID());
+    if(debug)cout << buffer;
     break;
   case 4:
     snprintf(buffer,  length, "/PARTY %s %d\n", (genBool()) ? "INVITE":"JOIN", genID());
+    if(debug)cout << buffer;
     break;
   case 5:
     snprintf(buffer,  length, " /FIGHT %d %d\n", genID(), genID());
+    if(debug)cout << buffer;
     break;
   case 6:
     snprintf(buffer,  length, " /START %d %d\n", genID(), genID());
+    if(debug)cout << buffer;
     break;
   case 7:
     snprintf(buffer,  length, " /SHOOT %d %d %d\n", genID(), genID(), genID());
+    if(debug)cout << buffer;
     break;
   default:
     snprintf(buffer,  length, "\n");
+    if(debug)cout << buffer;
   }
 }

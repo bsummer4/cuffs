@@ -28,9 +28,11 @@ Version 2
 
 //TODO Read timestamps from Sync
 //ANSWER: for now, its just rawtime
-int main()
+int main(int argc, char** argv)
 {
+  if(argc >1){
   time_t rawtime;
+//  debug = (argv[1] == "-D");//Please dont spit errors
   srand (time (NULL));
   SBMessage* message = NULL;
   string hostname("localhost");
