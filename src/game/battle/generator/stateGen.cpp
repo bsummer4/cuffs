@@ -30,9 +30,10 @@ Version 2
 //ANSWER: for now, its just rawtime
 int main(int argc, char** argv)
 {
-  if(argc >1){
+  if(argc == 2){
+    debug = (argv[1] == "-D");//Please dont spit errors
+  }
   time_t rawtime;
-//  debug = (argv[1] == "-D");//Please dont spit errors
   srand (time (NULL));
   SBMessage* message = NULL;
   string hostname("localhost");
@@ -41,10 +42,10 @@ int main(int argc, char** argv)
   for (;;)
   {
     time (&rawtime);
-    printf ("%d ", (int)rawtime);
-    genStateMsg(buffer, MAXLEN);
+    printf ("%d \n", (int)rawtime); //testing...
+    genStateMsg(buffer, MAXLEN, (int)rawtime);
     c.sendMessage(string_to_message(BROADCAST, 0, 0, buffer));
-//fflush (stdin);
+    //fflush (stdin);
     sleep(1);
   }
   return 0;

@@ -66,20 +66,27 @@ class SHOOT
 };
 */
 
-/*
- *Functions: For your viewing pleasure
+/** 
+ * @genid 
+ * Generates a random number
  */
-//Generates a random number
 int genID()
 {
   return rand() %1000;
 }
-//generates a random boolean
+/**
+ * @genBool
+ * Generates a random boolean
+ */
 bool genBool()
 {
   return (rand() %2);
 }
-//generates a random name
+
+/**
+ * @genName
+ * Generates a random string
+ */
 string genName()
 {
   string s = "";
@@ -92,48 +99,52 @@ string genName()
   return s;
 }
 
-//Prints state messages
+/**
+ * @genStateMsg buffer length time
+ * Prints state messages
+ */
 //buffer for the state message, length = length of buffer
-void genStateMsg(char* buffer, int length){
+void genStateMsg(char* buffer, int length, int time){
   switch ( (int) (rand() % 9))
   {
   case 0:
-    snprintf(buffer, length, "/MAP %s\n", genName().c_str());
-    if(debug) cout << buffer;
+    snprintf(buffer, length, "%d /MAP %s\n",time, genName().c_str());
+    cout << buffer << endl;
+    if(debug) cout << buffer << endl;
     break;
   case 1:
-    snprintf(buffer, length, "/MAP %s\n", genName().c_str());
-    snprintf(buffer, length, " /ZONE %d %s %s %s %d\n",genID(), genName().c_str(),
+    snprintf(buffer, length, "%d /MAP %s\n",time, genName().c_str());
+    snprintf(buffer, length, "%d /ZONE %d %s %s %s %d\n",time, genID(), genName().c_str(),
             genName().c_str(), genName().c_str(), genID());
-    if(debug)cout << buffer;
+   if(debug)cout << buffer << endl;
     break;
   case 2:
-    snprintf(buffer,  length, " /USER %d %s %d\n", genID(), genName().c_str(), genID());
-    if(debug)cout << buffer;
+    snprintf(buffer,  length, " %d /USER %d %s %d\n",time,  genID(), genName().c_str(), genID());
+    if(debug)cout << buffer << endl;
     break;
   case 3:
     //cout << "/GROUP " << ( (genBool()) ? "ADD" : "DEL") << " " << genID() << endl;
-    snprintf(buffer,  length, "/GROUP %s %d \n", (genBool()) ? "ADD" : "DEL", genID());
-    if(debug)cout << buffer;
+    snprintf(buffer,  length, "%d /GROUP %s %d \n",time, (genBool()) ? "ADD" : "DEL", genID());
+    if(debug)cout << buffer<<endl;
     break;
   case 4:
-    snprintf(buffer,  length, "/PARTY %s %d\n", (genBool()) ? "INVITE":"JOIN", genID());
-    if(debug)cout << buffer;
+    snprintf(buffer,  length, "%d /PARTY %s %d\n",time, (genBool()) ? "INVITE":"JOIN", genID());
+    if(debug)cout << buffer<<endl;
     break;
   case 5:
-    snprintf(buffer,  length, " /FIGHT %d %d\n", genID(), genID());
-    if(debug)cout << buffer;
+    snprintf(buffer,  length, "%d /FIGHT %d %d\n",time, genID(), genID());
+    if(debug)cout << buffer<<endl;
     break;
   case 6:
-    snprintf(buffer,  length, " /START %d %d\n", genID(), genID());
-    if(debug)cout << buffer;
+    snprintf(buffer,  length, "%d /START %d %d\n",time, genID(), genID());
+    if(debug)cout << buffer<<endl;
     break;
   case 7:
-    snprintf(buffer,  length, " /SHOOT %d %d %d\n", genID(), genID(), genID());
-    if(debug)cout << buffer;
+    snprintf(buffer,  length, "%d /SHOOT %d %d %d\n",time, genID(), genID(), genID());
+    if(debug)cout << buffer<<endl;
     break;
   default:
-    snprintf(buffer,  length, "\n");
-    if(debug)cout << buffer;
+    snprintf(buffer,  length, "%d\n",time);
+    if(debug)cout << buffer << endl;
   }
 }
