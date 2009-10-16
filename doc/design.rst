@@ -1,106 +1,44 @@
-.. contents::
-
+======
 Design
 ======
 
 Designed to be awesome.
 
-
-Notations
----------
-
-To describe data, we loosely use a syntax similar to the one used by
-the Haskell language's type system.  Here is a brief overview:
-
-  - *x :: t* -- x has type t
-  - *x := 3* -- x is a constant with value 3
-  - *[Foo]* -- A sequence of type Foo
-  - *Foo:[Bar]* -- A sequence where the first element has type Foo and
-     the rest of the elements have type Bar.
-  - *Foo:Bar:[Zaz]* -- A sequence where the first element has type Foo
-     and the remaining elements have type *Bar:[Foo]*.
+.. contents::
 
 Switchbox
----------
+=========
 
-A program/library for handling routing between programs.
+A program for handling routing between programs.  There is a client
+library for connecting to and creating messages to be sent through the
+switchbox.  This library is available in python, c, and c++.
 
-Summary
-^^^^^^^
+Basically, when you want to do things with the switchbox, you:
 
-We do stuff with this C structure::
+- Open a socket with 'open_connection' (from message.h)
+- Create a message with one of the functions: (maybe 'string_to_message')
+- Send the message with 'switchbox_send'
+- Receive with 'switchbox_receive'
 
-  typedef struct switchbox_message {
-    int size;
-    int routing_type;
-    int from;
-    int to;
-    char data[];
-  } SBMessage;
+Messages have a binary header, and then a payload.  The switchbox does
+different routing based on the information in the header.  There are
+special "routing types" for actually controlling the switchbox.  These
+let you create, and remove groups.
 
+See 'src/switchbox/switchbox_client.h' for details.
 
-Not A Summary
-^^^^^^^^^^^^^
-
-First we define a simple message that is sent between two clients.
-
-- Size :: Int
-- Content :: [Byte]
-- Message :: Size:Content (where the size of Content + Size := 'size)
-
-Then, inside the message content, we define a routing protocol.
-
-- TransmissionType :: Int
-- Target :: Int
-- switchboxMessage :: TransmissionType:Target:Content
-- magic numbers for TransmissionType:
-
-  - broadcast := 0
-  - unicast := 1
-  - multicast := 2
-  - admin := 3
-  - invalid-type := 4
-  - invalid-target := 5
-
-
-Switchbox Control Protocol
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-How data for admining the switchbox is encoded/sent.
-
-Messages with *TransmissionType t = admin* are handled by the
-switchbox itself.
-
-- groupID :: Int
-- ActionType :: Int
-- Message :: ActionId:Content
-- Where the meaning of Content depends on ActionType
-
-- Action -- "Define Group":
-
-  - actionType := 0
-  - Content :: actionType:groupID:[target]
-
-  Defines a multicast group target to be a set of unicast targets.
-
-
-- Action -- "Undefine Group":
-
-  - actionType := 1
-  - Content := actionType:GroupId:[]
-  
-  Removes a multicast Group.
 
 General Game Design
--------------------
+===================
 
-Game Messaging Language (GML)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Game Messaging Language
+-----------------------
 
-The definition of the messages sent in the game. 
+The definition of the messages sent in the game.
 
-All Messages prepended by Timestamp
-No slash = message display on console/screen
+All Messages prepended by Timestamp.  A slash before the first word
+indicates that it is a command, otherwise it is a text message (sorta
+like IRC).
 
 - /MAP [name]
 - /ZONE ID OWNER CONTESTABLE BATTLE_ID
@@ -115,27 +53,29 @@ No slash = message display on console/screen
 - /FORK GAMETYPE ZONEID SWITCHBOX_IP SWITCHBOX_PORT
 
 
-Event Generator (interfaces): Chris
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Event Generator (interfaces)
+----------------------------
+
 - Random Event Generator
-- Assume: All generators can run on the same system – That way they can use system time to use same game time. 
+- Assume: All generators can run on the same system – That way they
+  can use system time to use same game time.
 - Game Client
 - Random event generator w/ the protocol
 - Implementation
-- Writes client messages to stdout. 
+- Writes client messages to stdout.
 - Versions
 
-  - “cat” - Reads from a file
-  - Generate Time stamps with blank messages, (maybe not in order?) 
+  - "cat" - Reads from a file
+  - Generate Time stamps with blank messages, (maybe not in order?)
   - Generate valid gameplay messages with timestamps
   - Follows State update messages above with no particular ordering
 
-    - Print out a valid gameplay message sequence. 
+    - Print out a valid gameplay message sequence.
     - What we expect to see in actual gameplay
-    - “Simulator”
+    - "Simulator"
 
-Event Synchronizer: 
-^^^^^^^^^^^^^^^^^^^
+Event Synchronizer
+------------------
 
 - Orders messages correctly
 - Hands messages in order to Event Interpreter
@@ -150,22 +90,24 @@ Event Synchronizer:
   - One that just sends message to Interpreter Immediately
   - One that implements the CMB algorithm.
 
-Event Interpreter (interfaces): 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- Print method → prints whatever it sees.
+
+Event Interpreter (interfaces)
+------------------------------
+
+- Print method: prints whatever it sees.
 - Games will use it.
 - Design
 
-  - handleMessage() function called from the Synchronizer. 
+  - handleMessage() function called from the Synchronizer.
 
 - Versions
 
-  - Simple Interpreter that just print to stdout in order received 
-  - Validator 
+  - Simple Interpreter that just print to stdout in order received
+  - Validator
 
     - Makes sure messages are well formed. (Syntactically correct)
     - Pretty prints to screen.
-  - Real version – Calls proper API call for the given message. 
 
-State Object – Mutators and accessors for specific state of game. 
+  - Real version – Calls proper API call for the given message.
 
+State Object – Mutators and accessors for specific state of game.
