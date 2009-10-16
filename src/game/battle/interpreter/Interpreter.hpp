@@ -1,6 +1,7 @@
 #pragma once 
-
-#include<string>
+#include <string>
+#include <iostream>
+using namespace std;
 
 /** 
  * @defgroup Game Game
@@ -29,7 +30,7 @@
  *
  */
 class Listener {
-    virtual void HandleEvent(std::string event) = 0;
+    virtual void HandleEvent(string &event) = 0;
 };
 
 /**
@@ -40,7 +41,7 @@ class Listener {
 class SimpleInterpreter : public Listener{
     public: 
         SimpleInterpreter();
-        virtual void HandleEvent(std::string event);
+        virtual void HandleEvent(string &event);
 };
 
 /**
@@ -51,7 +52,7 @@ class SimpleInterpreter : public Listener{
 class GameInterpreter : public Listener{
     public: 
         GameInterpreter();
-        virtual void HandleEvent(std::string event);
+        virtual void HandleEvent(string &event);
 };
 
 /**
