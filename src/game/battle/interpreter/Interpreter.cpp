@@ -1,16 +1,16 @@
 #include "Interpreter.hpp"
 
-
+/*
 string stringParser(string &event){
   char* tmp = strtok(event.c_str(), ' ');
   sscanf(tmp, "%d");
-  char* tmp = strtok(event.c_str(), ' ');
+  char* tmp = strtok(NULL,' ');
     while( tmp != NULL ) {
       printf( "result is \"%s\"\n", result );
       result = strtok( NULL, delims );
     }
 }
-
+*/
 
 void SimpleInterpreter::HandleEvent(string &event){
   stringParser(event)
