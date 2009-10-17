@@ -31,7 +31,7 @@ else
     if [ ! -e README ]; then ln -s doc/readme.rst README; fi
     if [ ! -e DESIGN ]; then ln -s doc/design.rst DESIGN; fi
     if [ ! -e COPYING ]; then ln -s doc/copyright.rst COPYING; fi
-    if [ ! -e AUTHORS ]; then ln -s doc/authors.rst AUTHORS; fi
+    if [ ! -e AUTHORS ]; then ln -s doc/authors AUTHORS; fi
     if [ ! -e NEWS ]; then ln -s doc/news.rst NEWS; fi
     if [ ! -e ChangeLog ]; then ln -s doc/changes.rst ChangeLog; fi
 
