@@ -20,5 +20,6 @@ class Threaded{
 
     private:
         boost::shared_ptr<boost::thread> runThread;
+    protected:
         volatile bool stopRequested;
 };
