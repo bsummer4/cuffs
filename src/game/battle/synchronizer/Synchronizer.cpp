@@ -1,4 +1,4 @@
-#include "Syncronizer.hpp"
+#include "Synchronizer.hpp"
 
 Synchronizer::Synchronizer(Connection * _con, Interpreter * _interpreter){
     con = _con;

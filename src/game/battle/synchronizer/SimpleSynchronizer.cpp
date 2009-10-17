@@ -1,4 +1,4 @@
-#include "Syncronizer.hpp"
+#include "Synchronizer.hpp"
 
 SimpleSynchronizer::SimpleSynchronizer(Connection * con, Interpreter * interpreter) 
     : Synchronizer(con, interpreter)
