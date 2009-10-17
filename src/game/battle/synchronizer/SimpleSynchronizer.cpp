@@ -6,7 +6,7 @@ SimpleSynchronizer::SimpleSynchronizer(Connection * con, Interpreter * interpret
 }
 
 void SimpleSynchronizer::Run(){
-    while(1)
+    while(!stopRequested)
     {
         con->blockForMessage();
         SBMessage* msg = con->getMessage();

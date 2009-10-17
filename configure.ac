@@ -79,6 +79,13 @@ AC_CONFIG_FILES([Makefile
                  src/game/battle/synchronizer/Makefile
                  tests/Makefile
                  tests/switchbox/Makefile
+                 tests/game/Makefile
+                 tests/game/overworld/Makefile
+                 tests/game/common/Makefile
+                 tests/game/battle/Makefile
+                 tests/game/battle/generator/Makefile
+                 tests/game/battle/interpreter/Makefile
+                 tests/game/battle/synchronizer/Makefile
                  doc/Makefile])
 
 # finally this generates the Makefiles etc. for the build

@@ -1,1 +1,1 @@
-SUBDIRS = battle common overworld
+SUBDIRS = common battle overworld
