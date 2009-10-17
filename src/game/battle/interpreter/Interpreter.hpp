@@ -2,7 +2,9 @@
 #include <string>
 #include <vector>
 #include <string.h>
+#include <stdlib.h>
 #include <iostream>
+#include <sstream>
 using namespace std;
 
 /** 
