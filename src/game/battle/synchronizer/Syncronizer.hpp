@@ -1,7 +1,8 @@
 #pragma once 
 
 #include "Connection.hpp"
-#include "Listener.hpp"
+#include "Interpreter.hpp"
+#include "Threaded.hpp"
 
 /** 
  * @defgroup Synchronizer Synchronizer
@@ -17,14 +18,16 @@
 /**
  * The base class for the synchronizer that defines the interface.
  */
-class Synchronizer {
+class Synchronizer : public Threaded {
     public: 
-        Synchronizer(Connection &con, Listener &listener);
-        virtual void Start();
+        Synchronizer(Connection * con, Interpreter * interpreter);
         virtual unsigned int currentTime();
-    private: 
-        Connection &con; 
-        listener &listener;
+    protected: 
+        Connection * con; 
+        Interpreter * interpreter;
+        boost::mutex timeLock;
+        unsigned int cTime;
+
 };
 
 
@@ -33,9 +36,8 @@ class Synchronizer {
  */
 class SimpleSynchronizer : public Synchronizer {
     public: 
-        SimpleSynchronizer(Connection &con, Listener &listener);
-        virtual void Start();
-        virtual unsigned int currentTime();
+        SimpleSynchronizer(Connection * con, Interpreter * interpreter);
+        virtual void Run();
 };
 
 
@@ -44,9 +46,8 @@ class SimpleSynchronizer : public Synchronizer {
  */
 class CMBSynchronizer : public Synchronizer {
     public:
-        CMBSynchronizer(Connection &con, Listener &listener);
-        virtual void Start();
-        virtual unsigned int currentTime();
+        CMBSynchronizer(Connection * con, Interpreter * interpreter);
+        virtual void Run();
 };
 
 /**

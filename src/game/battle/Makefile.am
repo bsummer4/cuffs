@@ -1,1 +1,2 @@
-SUBDIRS = generator interpreter synchronizer
+#SUBDIRS = generator interpreter synchronizer
+SUBDIRS = generator 

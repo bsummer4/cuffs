@@ -26,11 +26,12 @@ using namespace std;
 
 
 /**
- * Listener virtual class.
+ * Interpreter virtual class.
  *
  */
-class Listener {
-    virtual void HandleEvent(string &event) = 0;
+class Interpreter {
+    public:
+        virtual void handleEvent(string &event) = 0;
 };
 
 /**
@@ -38,10 +39,10 @@ class Listener {
  *
  * The simple interpreter just prints out the message
  */
-class SimpleInterpreter : public Listener{
+class SimpleInterpreter : public Interpreter{
     public: 
         SimpleInterpreter();
-        virtual void HandleEvent(string &event);
+        virtual void handleEvent(string &event);
 };
 
 /**
@@ -49,10 +50,10 @@ class SimpleInterpreter : public Listener{
  *
  * Parses through the event message and modifies the game state. 
  */
-class GameInterpreter : public Listener{
+class GameInterpreter : public Interpreter{
     public: 
         GameInterpreter();
-        virtual void HandleEvent(string &event);
+        virtual void handleEvent(string &event);
 };
 
 /**
