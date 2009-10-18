@@ -49,29 +49,14 @@ void SimpleInterpreter::handleEvent(string &event){
 GameInterpreter::GameInterpreter(){};
 void GameInterpreter::handleEvent(string &event){
   int timestamp;
+  int command;
   vector<string> result;
   eventParser(event, result);
   vector<string>::iterator v_it = result.begin();
   vector<string>state_change;
 
   timestamp = stringtoint(result[0]); 
-  if (result[1].compare("/MAP") == 0) {
-      //Change map here
-  } else if (result[1].compare("/USER") == 0) {
-  } else if (result[1].compare("/GROUP") == 0) {
-    if (result[2].compare("ADD") == 0) {
-    } else if (result[2].compare("DEL") == 0) {
-    }
-  } else if (result[1].compare("/PARTY") == 0) {
-    if (result[2].compare("INVITE") == 0) {
-    } else if (result[2].compare("JOIN") == 0) {
-    } else if (result[2].compare("LEAVE") == 0) {
-    }
-  } else if (result[1].compare("/FIGHT") == 0) {
-  } else if (result[1].compare("/START") == 0) {
-  } else if (result[1].compare("/SHOOT") == 0) {
-  } else if (result[1].compare("/FORK") == 0) {
-  }
+  //command = getCommand(result[1]); //to be implemented--getCommand is in common/
 }
 
 int main(){
