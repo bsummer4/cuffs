@@ -64,8 +64,9 @@ Battle Messages
 
 - /shoot user-id angle power weapon-id
 - /map map-id
-- /gamestart
-- /gamestop
+- /battlestart
+- /battlestop
+- /weapon weaponid
 
 
 Overworld Map File Format
