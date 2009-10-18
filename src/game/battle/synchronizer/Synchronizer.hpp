@@ -48,6 +48,7 @@ class SimpleSynchronizer : public Synchronizer {
 class CMBEvent{
     public:
         CMBEvent();
+        CMBEvent(std::string message);
         CMBEvent(cmb_timestamp time, std::string event);
         // Need to do this to use in priority queue. 
         // http://www.codeguru.com/cpp/tic/tic0229.shtml
@@ -71,8 +72,10 @@ typedef std::map< int, cmb_pqueue* > cmb_processes;
 class CMBQueue{
     public: 
         CMBQueue(){};
-        void queueMessage(int processId, std::string message);
-        int getLowestTime();
+        void queueMessage(int processId, CMBEvent cmbe);
+        void removeProcess(int processId);
+        cmb_timestamp getLowestTime();
+        cmb_pqueue getEvents(cmb_timestamp tillTime);
     private:
         cmb_processes cmbQueue;
 };
