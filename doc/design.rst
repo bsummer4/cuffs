@@ -40,9 +40,10 @@ All Messages prepended by Timestamp.  A slash before the first word
 indicates that it is a command, otherwise it is a text message (sorta
 like IRC).
 
+- /LOGIN NAME
 - /MAP [name]
 - /ZONE ID OWNER CONTESTABLE BATTLE_ID
-- /USER ID NAME ADDRESS [-1 if not logged in]
+- /USER NAME ADDRESS [-1 if not logged in]
 - /GROUP ADD ID USERID
 - /GROUP DEL ID USERID
 - /PARTY INVITE ID USERID
