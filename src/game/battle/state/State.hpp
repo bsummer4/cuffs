@@ -44,13 +44,20 @@ class State {
         virtual double getWind(); //RETURNS SPEED
         virtual void changePixel(int row, int column, MAPPIXEL newpixel);
         virtual MAPPIXEL getPixel(int row, int column);  //Gets the pixel defined at row, column
-        virtual bool setMap(string mapname);
-        virtual string getMapName();
+        virtual bool setMap(string mapname);//Not fully implemented yet
+        virtual string getMapName();//Not implemented yet
+        virtual void startBattle(); //Not implemented yet
+        virtual void stopBattle();  //Not implemented yet
+        virtual bool getBattleState();
+        virtual bool changeWeapon(int weapon);  //sets current weapon
+        virtual int getWeapon();    //returns current weapon
     protected:
         double wind;  //wind speed and direction--negative for left positive for right
         vector< vector< MAPPIXEL > > map;
-        ifstream map;
+        ifstream mapstream;
         string mapname;
+        int battlestarted;
+        int weaponid;
 };
 
 /**
