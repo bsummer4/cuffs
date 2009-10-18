@@ -6,6 +6,7 @@ Designed to be awesome.
 
 .. contents::
 
+
 Switchbox
 =========
 
@@ -16,7 +17,8 @@ switchbox.  This library is available in python, c, and c++.
 Basically, when you want to do things with the switchbox, you:
 
 - Open a socket with 'open_connection' (from message.h)
-- Create a message with one of the functions: (maybe 'string_to_message')
+- Create a message with one of the functions: (maybe
+  'string_to_message')
 - Send the message with 'switchbox_send'
 - Receive with 'switchbox_receive'
 
@@ -36,30 +38,48 @@ Game Messaging Language
 
 The definition of the messages sent in the game.
 
-All Messages prepended by Timestamp.  A slash before the first word
+All Messages prepended by a timestamp.  A slash before the first word
 indicates that it is a command, otherwise it is a text message (sorta
 like IRC).
 
+
 Overworld Messages
-^^^^^^^^^^^^^^^^^^^^^^^
-- /LOGIN NAME
-- /MAP [name]
-- /ZONE ID OWNER CONTESTABLE BATTLE_ID
-- /USER NAME ADDRESS [-1 if not logged in]
-- /GROUP ADD ID USERID
-- /GROUP DEL ID USERID
-- /PARTY INVITE ID USERID
-- /PARTY JOIN ID USERID
-- /PARTY LEAVE ID USERID
-- /FIGHT PARTYID ZONE ID
-- /LAUNCHGAME GAMETYPE ZONEID SWITCHBOX_IP SWITCHBOX_PORT
+^^^^^^^^^^^^^^^^^^
+
+- /login name
+- /map map-id
+- /zone zone-id owner contestable battle-id
+- /user user-id address (-1 if not logged in)
+- /group add zone-id user-id
+- /group del zone-id user-id
+- /party invite party-id user-id
+- /party join party-id user-id
+- /party leave party-id user-id
+- /fight partyid zone id
+- /launchgame gametype zone-id switchbox-ip switchbox-port
+
 
 Battle Messages
-^^^^^^^^^^^^^^^^^^^^^^^
-- /SHOOT USERID ANGLE POWER WEAPONID
-- /MAP [name]
-- /GAMESTART
-- /GAMESTOP
+^^^^^^^^^^^^^^^
+
+- /shoot user-id angle power weapon-id
+- /map map-id
+- /gamestart
+- /gamestop
+
+
+Overworld Map File Format
+-------------------------
+
+Maps use yet another line-based command-then-arguments format.  An
+'edge' is a attack route between two zones.  Edges are undirected
+('edge a b' is the same as 'edge b a').  The image can be any common
+file format.  The commands are:
+
+- name map-name
+- zone zone-name x-location y-location
+- edge zone-name zone-name
+- image file-name
 
 
 Event Generator (interfaces)
