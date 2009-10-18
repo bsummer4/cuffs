@@ -21,20 +21,19 @@ Version 2
  * /SHOOT ANGLE POWER WEAPONID
  */
 
-#include "stateGen.hpp"
+#include "Generator.hpp"
 #define MAXLEN 512 
-
-//vector< vector<string> > state(8); //the global variable for states
 
 //TODO Read timestamps from Sync
 //ANSWER: for now, its just rawtime
 int main(int argc, char** argv)
 {
   if(argc == 2){
-    debug = (argv[1] == "-D");//Please dont spit errors
+    string deb(argv[1]);
+    debug = (deb == "-D");//Please dont spit errors
   }
   time_t rawtime;
-  srand (time (NULL));
+  srand(time (NULL));
   SBMessage* message = NULL;
   string hostname("localhost");
   Connection c = Connection(hostname.c_str(), 80044);
@@ -42,7 +41,6 @@ int main(int argc, char** argv)
   for (;;)
   {
     time (&rawtime);
-    printf ("%d \n", (int)rawtime); //testing...
     genStateMsg(buffer, MAXLEN, (int)rawtime);
     c.sendMessage(string_to_message(BROADCAST, 0, 0, buffer));
     //fflush (stdin);

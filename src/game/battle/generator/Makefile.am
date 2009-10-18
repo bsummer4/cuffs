@@ -1,5 +1,5 @@
-bin_PROGRAMS = stateGen
-stateGen_SOURCES = stateGen.cpp
+bin_PROGRAMS = Generator
+Generator_SOURCES = Generator.cpp
 LIBCONNECTION = $(top_srcdir)/src/switchbox/libconnection.la
 
 AM_CPPFLAGS = -I$(top_srcdir)/src/switchbox
