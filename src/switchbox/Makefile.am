@@ -2,7 +2,7 @@ AM_LDFLAGS = -lpthread
 
 bin_PROGRAMS = switchbox switchbox_test chat_test
 
-switchbox_SOURCES = switchbox.c 
+switchbox_SOURCES = switchbox.c
 switchbox_LDADD = libmessaging.la
 
 switchbox_test_SOURCES = test.c
@@ -11,10 +11,10 @@ switchbox_test_LDADD = libmessaging.la
 chat_test_SOURCES = chat_test.cpp
 chat_test_LDADD = libconnection.la
 
-noinst_LTLIBRARIES = libmessaging.la 
+noinst_LTLIBRARIES = libmessaging.la
 libmessaging_la_SOURCES = message.c switchbox_client.c
 
-lib_LTLIBRARIES = libconnection.la 
+lib_LTLIBRARIES = libconnection.la
 libconnection_la_SOURCES = Connection.cpp SwitchboxAdmin.cpp
 libconnection_la_LIBADD = libmessaging.la
 
@@ -22,9 +22,11 @@ libconnection_la_LIBADD = libmessaging.la
 # Manual make rules #
 #####################
 
+all-local: bindings
+
 SOURCES = $(switchbox_SOURCES)
 python_junk =  *.pyc switchbox_client.py
-extra_clean: clean; rm -f *wrap.o *wrap.c *.so *.cflow $(python_junk)
+clean-local:; rm -f *wrap.o *wrap.c *.so *.cflow $(python_junk)
 
 # Python Bindings
 bindings: _switchbox_client.so
