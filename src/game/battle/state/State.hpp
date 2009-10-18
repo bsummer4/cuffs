@@ -45,11 +45,12 @@ class State {
         virtual void changePixel(int row, int column, MAPPIXEL newpixel);
         virtual MAPPIXEL getPixel(int row, int column);  //Gets the pixel defined at row, column
         virtual bool setMap(string mapname);
-        virtual bool getMap();
+        virtual string getMapName();
     protected:
         double wind;  //wind speed and direction--negative for left positive for right
         vector< vector< MAPPIXEL > > map;
         ifstream map;
+        string mapname;
 };
 
 /**
