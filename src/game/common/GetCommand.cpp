@@ -1,7 +1,7 @@
 #include "GetCommand.hpp"
 using namespace std;
 
-namespace GameUtil {
+namespace GameUtils{
   int GetCommand(string command) {
     if (command.compare("/MAP") == 0) {
       return MAP;

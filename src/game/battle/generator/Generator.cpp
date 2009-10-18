@@ -30,7 +30,7 @@ int main(int argc, char** argv)
 {
   if(argc == 2){
     string deb(argv[1]);
-    debug = (deb == "-D");//Please dont spit errors
+    debug = (deb == "-D" || deb == "-d");//Please dont spit errors
   }
   time_t rawtime;
   srand(time (NULL));
@@ -43,8 +43,7 @@ int main(int argc, char** argv)
     time (&rawtime);
     genStateMsg(buffer, MAXLEN, (int)rawtime);
     c.sendMessage(string_to_message(BROADCAST, 0, 0, buffer));
-    //fflush (stdin);
-    sleep(1);
+    sleep(1); //Assumed it will wait 1/2 a sec untill the next message
   }
   return 0;
 }

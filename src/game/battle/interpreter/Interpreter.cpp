@@ -1,6 +1,6 @@
 #include "Interpreter.hpp"
 #include "GetCommand.hpp"
-using namespace GameUtil;
+using namespace GameUtils;
 
 int eventParser(string &event, vector<string> &result){
   string::size_type start;
@@ -60,7 +60,7 @@ void GameInterpreter::handleEvent(string &event){
   if(result.size() < 2) {
   } else {
     timestamp = stringtoint(result[0]); 
-    command = GetCommand(result[1]); //to be implemented--getCommand is in common/
+//    command = GetCommand(result[1]); //to be implemented--getCommand is in common/
     switch(command) {
       case MAP:
         break;
@@ -72,10 +72,4 @@ void GameInterpreter::handleEvent(string &event){
         break;
     }
   }
-}
-
-int main(){
-  SimpleInterpreter si;
-  string event = "12341234 \\MSG these are parameters";
-  si.handleEvent(event);
 }

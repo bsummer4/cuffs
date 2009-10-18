@@ -88,11 +88,10 @@ void genStateMsg(char* buffer, int length, int time){
    if(debug)cout << buffer << endl;
     break;
   case 2:
-    snprintf(buffer,  length, " %d /USER %d %s %d",time,  genID(), genName().c_str(), genID());
+    snprintf(buffer,  length, "%d /USER %d %s %d",time,  genID(), genName().c_str(), genID());
     if(debug)cout << buffer << endl;
     break;
   case 3:
-    //cout << "/GROUP " << ( (genBool()) ? "ADD" : "DEL") << " " << genID() << endl;
     snprintf(buffer,  length, "%d /GROUP %s %d",time, (genBool()) ? "ADD" : "DEL", genID());
     if(debug)cout << buffer<<endl;
     break;
@@ -113,7 +112,7 @@ void genStateMsg(char* buffer, int length, int time){
     if(debug)cout << buffer<<endl;
     break;
   default:
-    snprintf(buffer,  length, "%d\n",time);
+    snprintf(buffer,  length, "%d",time);
     if(debug)cout << buffer << endl;
   }
 }
