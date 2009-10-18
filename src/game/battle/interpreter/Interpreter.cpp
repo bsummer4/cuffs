@@ -48,11 +48,33 @@ void SimpleInterpreter::handleEvent(string &event){
 
 GameInterpreter::GameInterpreter(){};
 void GameInterpreter::handleEvent(string &event){
-  cout << "That's all for now\n" <<endl;
+  int timestamp;
+  vector<string> result;
+  eventParser(event, result);
+  vector<string>::iterator v_it = result.begin();
+  vector<string>state_change;
+
+  timestamp = stringtoint(result[0]); 
+  if (result[1].compare("/MAP") == 0) {
+      //Change map here
+  } else if (result[1].compare("/USER") == 0) {
+  } else if (result[1].compare("/GROUP") == 0) {
+    if (result[2].compare("ADD") == 0) {
+    } else if (result[2].compare("DEL") == 0) {
+    }
+  } else if (result[1].compare("/PARTY") == 0) {
+    if (result[2].compare("INVITE") == 0) {
+    } else if (result[2].compare("JOIN") == 0) {
+    }
+  } else if (result[1].compare("/FIGHT") == 0) {
+  } else if (result[1].compare("/START") == 0) {
+  } else if (result[1].compare("/SHOOT") == 0) {
+  } else if (result[1].compare("/FORK") == 0) {
+  }
 }
 
 int main(){
   SimpleInterpreter si;
-  string event = "123412341234 \\MSG these are parameters";
+  string event = "12341234 \\MSG these are parameters";
   si.handleEvent(event);
 }
