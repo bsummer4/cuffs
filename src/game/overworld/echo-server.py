@@ -72,3 +72,4 @@ if __name__ == '__main__':
         if login_message_p(message_data(message)):
             sync_states(state, message_from(message))
         announce(state.update(message_data(message)))
+
