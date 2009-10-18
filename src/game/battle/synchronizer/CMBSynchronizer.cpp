@@ -1,7 +1,5 @@
 #include "Synchronizer.hpp"
 
-using namespace std;
-
 CMBSynchronizer::CMBSynchronizer(Connection * con, Interpreter * interpreter) 
     : Synchronizer(con, interpreter)
 {
@@ -14,23 +12,27 @@ void CMBSynchronizer::Run(){
         SBMessage* msg = con->getMessage();
         string message_contents = (char*)msg->data;
         int process = msg->from;
+        //cout << "process = " << process << endl;
         free(msg);
 
         // Place it into the data structure
         cmb.queueMessage(process, CMBEvent(message_contents));
 
-
         // Check to see if we can run any events
-        cmb_timestamp time = cmb.getLowestTime();
+        cmb_timestamp t= cmb.getLowestTime();
+
+        //cout << "Lowest time is " << t << endl;
 
         // If time is not -1 then we can advance time along.
-        if ( time != -1 ){
-            cmb_pqueue pq = cmb.getEvents(time);
+        if ( t != -1 ){
+            cmb_pqueue pq = cmb.getEvents(t);
             while ( !pq.empty() ){
                 CMBEvent e = pq.top();
                 pq.pop();
                 interpreter->handleEvent(e.eventString);
             }
+            boost::mutex::scoped_lock l(timeLock);
+            cTime = t;
         }
     }
 }
@@ -58,6 +60,7 @@ void CMBQueue::queueMessage(int processId, CMBEvent event){
 
     // Okay now "it" points to the queue for this process
     it->second->push(event);
+    //cout << "pushed message: process " << processId << endl;
 }
 
 

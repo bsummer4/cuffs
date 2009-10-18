@@ -1,8 +1,41 @@
 #include "Synchronizer.hpp"
-#include <iostream>
+#include "Connection.hpp"
+#include <cstdio>
 
 using namespace std;
 
-int main(){
+vector<Connection*> cons;
+char buf[512];
 
+int main(){
+    int connections;
+    scanf("%d", &connections);
+    //cout << connections << endl;
+    for (int i = 0; i < connections; i++){
+        cons.push_back(new Connection("localhost", SWITCHBOX_PORT));
+        cons.at(i)->start();
+    }
+    //Connection mycon("localhost", SWITCHBOX_PORT);
+    //mycon.start();
+    usleep(10000); 
+
+    CatInterpreter sint;
+    CMBSynchronizer sync(cons.at(0), &sint);
+    // Send a Null message.
+    for (int i = 0; i < connections; i++){
+        cons.at(i)->sendMessage(4*sizeof(int)+3, UNICAST, cons.at(0)->getAddress(), (char*)"0 ");
+    }
+    sync.Start();
+
+    while(1){
+        int clientnum;
+        if ( 1 != scanf("%d ", &clientnum) )
+            break;
+        fgets(buf, 511, stdin);
+        buf[strlen(buf)-1] = '\0';
+        //cout << " clientnum = " << clientnum << " message: " << buf << endl;
+        cons.at(clientnum)->sendMessage(4*sizeof(int)+strlen(buf)+1, UNICAST, cons.at(0)->getAddress(), buf);
+        usleep(1000);
+    }
+    sleep(2);
 }

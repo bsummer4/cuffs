@@ -1,1 +1,1 @@
-SUBDIRS = switchbox
+SUBDIRS = switchbox game

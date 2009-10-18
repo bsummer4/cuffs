@@ -23,6 +23,12 @@ int stringtoint(string str){
   return ret;
 }
 
+CatInterpreter::CatInterpreter(){};
+
+void CatInterpreter::handleEvent(string &event){
+    cout << event << endl;
+}
+
 SimpleInterpreter::SimpleInterpreter(){};
 
 void SimpleInterpreter::handleEvent(string &event){

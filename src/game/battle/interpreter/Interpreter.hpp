@@ -39,6 +39,17 @@ class Interpreter {
 };
 
 /**
+ * Cat Interpreter class. 
+ *
+ * The simple interpreter just prints out the message
+ */
+class CatInterpreter : public Interpreter{
+    public: 
+        CatInterpreter();
+        virtual void handleEvent(string &event);
+};
+
+/**
  * Simple Interpreter class. 
  *
  * The simple interpreter just prints out the message
