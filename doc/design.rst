@@ -73,13 +73,27 @@ Overworld Map File Format
 
 Maps use yet another line-based command-then-arguments format.  An
 'edge' is a attack route between two zones.  Edges are undirected
-('edge a b' is the same as 'edge b a').  The image can be any common
-file format.  The commands are:
+('edge a b' is the same as 'edge b a').  The maps image can be any
+common image file format (ppm, png, etc).  The commands are:
 
 - name map-name
 - zone zone-name x-location y-location
 - edge zone-name zone-name
 - image file-name
+
+Example
+^^^^^^^
+
+Here is an example map file.  The filename should be the same as the
+map name, so this could be 'example.map'::
+
+  name example
+  zone a 0 0
+  zone b 1 1
+  zone omg-wtf? 2 2
+  edge a omg-wtf?
+  edge b omg-wtf?
+  image example.ppm
 
 
 Event Generator (interfaces)
