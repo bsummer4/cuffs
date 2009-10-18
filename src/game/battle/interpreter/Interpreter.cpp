@@ -65,6 +65,7 @@ void GameInterpreter::handleEvent(string &event){
   } else if (result[1].compare("/PARTY") == 0) {
     if (result[2].compare("INVITE") == 0) {
     } else if (result[2].compare("JOIN") == 0) {
+    } else if (result[2].compare("LEAVE") == 0) {
     }
   } else if (result[1].compare("/FIGHT") == 0) {
   } else if (result[1].compare("/START") == 0) {
