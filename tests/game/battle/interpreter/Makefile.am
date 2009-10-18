@@ -1,0 +1,11 @@
+TESTS=Interpreter_test
+
+bin_PROGRAMS = Interpreter_test
+Interpreter_test_SOURCES = $(top_srcdir)/src/game/battle/interpreter/Interpreter_test.cpp
+Interpreter_test_LDADD = $(top_srcdir)/src/game/battle/interpreter/libint.la $(top_srcdir)/src/game/common/libgameutils.la 
+
+LIBCONNECTION = $(top_srcdir)/src/switchbox/libconnection.la
+
+AM_CPPFLAGS = -I$(top_srcdir)/src/switchbox -I$(top_srcdir)/src/game/common/ 
+LDADD = $(LIBCONNECTION) libsbcommon.la
+#function_tests_LDADD = $(LIBCONNECTION) libsbcommon.la
