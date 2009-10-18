@@ -1,4 +1,6 @@
 #include "Interpreter.hpp"
+#include "GetCommand.hpp"
+using namespace GameUtil;
 
 int eventParser(string &event, vector<string> &result){
   string::size_type start;
@@ -55,8 +57,21 @@ void GameInterpreter::handleEvent(string &event){
   vector<string>::iterator v_it = result.begin();
   vector<string>state_change;
 
-  timestamp = stringtoint(result[0]); 
-  //command = getCommand(result[1]); //to be implemented--getCommand is in common/
+  if(result.size() < 2) {
+  } else {
+    timestamp = stringtoint(result[0]); 
+    command = GetCommand(result[1]); //to be implemented--getCommand is in common/
+    switch(command) {
+      case MAP:
+        break;
+      case SHOOT:
+        break;
+      case GAMESTART:
+        break;
+      case GAMESTOP:
+        break;
+    }
+  }
 }
 
 int main(){

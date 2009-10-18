@@ -40,6 +40,8 @@ All Messages prepended by Timestamp.  A slash before the first word
 indicates that it is a command, otherwise it is a text message (sorta
 like IRC).
 
+Overworld Messages
+^^^^^^^^^^^^^^^^^^^^^^^
 - /LOGIN NAME
 - /MAP [name]
 - /ZONE ID OWNER CONTESTABLE BATTLE_ID
@@ -50,9 +52,14 @@ like IRC).
 - /PARTY JOIN ID USERID
 - /PARTY LEAVE ID USERID
 - /FIGHT PARTYID ZONE ID
-- /START TURN PLAYERID
+- /LAUNCHGAME GAMETYPE ZONEID SWITCHBOX_IP SWITCHBOX_PORT
+
+Battle Messages
+^^^^^^^^^^^^^^^^^^^^^^^
 - /SHOOT USERID ANGLE POWER WEAPONID
-- /FORK GAMETYPE ZONEID SWITCHBOX_IP SWITCHBOX_PORT
+- /MAP [name]
+- /GAMESTART
+- /GAMESTOP
 
 
 Event Generator (interfaces)
