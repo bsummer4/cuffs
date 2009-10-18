@@ -71,9 +71,11 @@ void GameInterpreter::handleEvent(string &event){
         break;
       case SHOOT:
         break;
-      case GAMESTART:
+      case BATTLESTART:
         break;
-      case GAMESTOP:
+      case BATTLESTOP:
+        break;
+      case WEAPON:
         break;
     }
   }
