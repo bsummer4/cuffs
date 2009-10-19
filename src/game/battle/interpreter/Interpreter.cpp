@@ -7,7 +7,6 @@ int eventParser(string &event, vector<string> &token){
   start = 0;
 
   while(end != string::npos){
-    cout << "test" << endl;
     token.push_back(event.substr(start,end-start));
     start = end;
     end = event.find_first_of(' ', start+1); 
