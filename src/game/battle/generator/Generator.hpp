@@ -37,7 +37,7 @@ bool debug;
  */
 
 /** 
- * @genid 
+ * 
  * Generates a random number
  */
 int genID()
@@ -45,7 +45,7 @@ int genID()
   return rand() %1000;
 }
 /**
- * @genBool
+ * 
  * Generates a random boolean
  */
 bool genBool()
@@ -54,7 +54,7 @@ bool genBool()
 }
 
 /**
- * @genName
+ * 
  * Generates a random string
  */
 string genName()
@@ -70,7 +70,7 @@ string genName()
 }
 
 /**
- * @genStateMsg buffer length time
+ * 
  * Prints state messages
  */
 //buffer for the state message, length = length of buffer
