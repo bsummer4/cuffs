@@ -1,7 +1,6 @@
-#pragma once 
-using namespace std;
+#include "State.hpp"
 
-State() {}
+State::State() {}
 
 double State::changeWind(double newwind) {
   wind = newwind;
@@ -18,17 +17,17 @@ void State::changePixel(int row, int column, MAPPIXEL newpixel) {
 MAPPIXEL State::getPixel(int row, int column) {
 }//Gets the pixel defined at row, column
 
-bool State::setMap(string name) {
-  map.open(mapname);
+string State::setMap(string name) {
+  mapname = name;
 }//Opens the map name
 
-bool State::getMapName() {
+string State::getMapName() {
   return mapname;
 }//returns map name
 
 void State::startBattle() {
+  setupMap();
   battlestarted = 1;
-  return true;
 }//Not implemented yet
 
 void State::stopBattle() {
@@ -42,7 +41,7 @@ bool State::getBattleState() {
     return true;
 }
 
-bool State::changeWeapon(int weapon); {
+bool State::changeWeapon(int weapon) {
   weaponid = weapon;
 }//sets current weapon
 
@@ -50,9 +49,10 @@ int State::getWeapon() {
   return weaponid;
 }//returns current weapon
 
-/*
-   double wind;  //wind speed and direction--negative for left positive for right
-   vector< vector< MAPPIXEL > > map;
-   ifstream map;
-   int weaponid;
-   */
+void State::setupMap() {
+  if(mapname.length() == 0)
+  {
+    cerr << "No map defined when trying to set up the map." << endl;
+    return;
+  }
+}

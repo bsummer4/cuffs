@@ -5,7 +5,10 @@
 #include <stdlib.h>
 #include <iostream>
 #include <sstream>
+#include "State.hpp"
+#include "GetCommand.hpp"
 using namespace std;
+using namespace GameUtils;
 
 /** 
  * @defgroup Game Game
@@ -67,8 +70,10 @@ class SimpleInterpreter : public Interpreter{
  */
 class GameInterpreter : public Interpreter{
     public: 
-        GameInterpreter();
+        GameInterpreter(State &gameState);
         virtual void handleEvent(string &event);
+    protected:
+        State &state;
 };
 
 /**

@@ -1,4 +1,4 @@
-AM_CFLAGS = -I$(top_srcdir)/src/game/common -I$(top_srcdir)/src/switchbox -I$(top_srcdir)/src/game/battle/interpreter
+AM_CFLAGS = -I$(top_srcdir)/src/game/common -I$(top_srcdir)/src/switchbox -I$(top_srcdir)/src/game/battle/interpreter -I$(top_srcdir)/src/game/battle/state
 AM_CPPFLAGS = $(AM_CFLAGS)
 
 noinst_LTLIBRARIES = libsync.la 

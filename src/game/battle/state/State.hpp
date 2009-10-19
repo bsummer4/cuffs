@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <iostream>
+#include <fstream>
 #include <sstream>
 using namespace std;
 
@@ -39,19 +40,21 @@ using namespace std;
 
 class State {
     public:
-        state();
+        State();
         virtual double changeWind(double newwind); //RETURNS NEW SPEED, IF CHANGED
         virtual double getWind(); //RETURNS SPEED
         virtual void changePixel(int row, int column, MAPPIXEL newpixel);
         virtual MAPPIXEL getPixel(int row, int column);  //Gets the pixel defined at row, column
-        virtual bool setMap(string mapname);//Not fully implemented yet
+        virtual string setMap(string mapname);//Not fully implemented yet
         virtual string getMapName();//Not implemented yet
         virtual void startBattle(); //Not implemented yet
         virtual void stopBattle();  //Not implemented yet
         virtual bool getBattleState();
         virtual bool changeWeapon(int weapon);  //sets current weapon
         virtual int getWeapon();    //returns current weapon
+
     protected:
+        virtual void setupMap();
         double wind;  //wind speed and direction--negative for left positive for right
         vector< vector< MAPPIXEL > > map;
         ifstream mapstream;

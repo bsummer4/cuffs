@@ -1,6 +1,4 @@
 #include "Interpreter.hpp"
-#include "GetCommand.hpp"
-using namespace GameUtils;
 
 int eventParser(string &event, vector<string> &result){
   string::size_type start;
@@ -22,8 +20,6 @@ int stringtoint(string str){
   SStream >> ret;
   return ret;
 }
-
-CatInterpreter::CatInterpreter(){};
 
 void CatInterpreter::handleEvent(string &event){
     cout << event << endl;
@@ -52,9 +48,9 @@ void SimpleInterpreter::handleEvent(string &event){
   }
 }
 
-GameInterpreter::GameInterpreter(){};
+GameInterpreter::GameInterpreter(State &gameState) : state(gameState) { };
 
-void GameInterpreter::handleEvent(string &event){
+void GameInterpreter::handleEvent(string &event) {
   int timestamp;
   int command;
   vector<string> result;
@@ -65,17 +61,25 @@ void GameInterpreter::handleEvent(string &event){
   if(result.size() < 2) {
   } else {
     timestamp = stringtoint(result[0]); 
-    //    command = GetCommand(result[1]); //to be implemented--getCommand is in common/
+    command = GetCommand(result[1]); 
     switch(command) {
       case MAP:
         break;
       case SHOOT:
+        //FIGURE OUT HOW TO SHOOT
         break;
       case BATTLESTART:
+        state.startBattle();
         break;
       case BATTLESTOP:
+        state.stopBattle();
         break;
       case WEAPON:
+        if(result.size() < 3) {
+          cerr << "Malformed command sent to interpreter.  /weapon must be followed by a valid integer weaponid" << endl;
+          return;
+        }
+        state.changeWeapon(stringtoint(result[2]));
         break;
     }
   }
