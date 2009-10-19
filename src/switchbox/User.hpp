@@ -12,7 +12,7 @@ class User {
     User(int id){
       this.u_id = id;
     }
-    //TODO write next_free_group;
+    ///@TODO write next_free_group;
 
 
 

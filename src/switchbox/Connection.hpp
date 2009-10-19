@@ -29,7 +29,7 @@ extern "C" {
  * sending/receiving queues to abstract away communication from the
  * client.
  *
- * - TODO The message queue should be a separate class with it's own
+ * - @TODO The message queue should be a separate class with it's own
  *   locking mechanism.
  */
 class Connection {
@@ -73,7 +73,7 @@ public:
   /// Clear out the receive message queue
   void clearMessageQueue();
 
-  /// * TODO Why aren't these private if you shouldn't need to call
+  /// @TODO Why aren't these private if you shouldn't need to call
   ///   them?
 
   /// Function for the receive messaing thread to call, you shouldn't

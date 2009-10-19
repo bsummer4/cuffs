@@ -67,7 +67,7 @@ int main(int argc, char* argv[]) {
   clientD->stop();
   //cout << "after clientd stop" << endl;
 
-  // TODO: Fix this, you should be able to stop and restart
+  /// @TODO: Fix this, you should be able to stop and restart
   delete clientD;
   clientD = new Connection(HOST, SWITCHBOX_PORT);
 

@@ -1,4 +1,8 @@
 #include "Synchronizer.hpp"
+/**
+ * @file CMBSynchronizer.cpp
+ * @author John R. Hoare
+ */
 
 CMBSynchronizer::CMBSynchronizer(Connection * con, Interpreter * interpreter) 
     : Synchronizer(con, interpreter)
@@ -43,6 +47,9 @@ void CMBSynchronizer::Run(){
 
 /** 
  * Place the given CMBEvent message onto the queue associated with the given ProcessId. 
+ * 
+ * @param processId The Id of the process that this message is associated with
+ * @param event The CMBEvent object representing the event.
  */
 void CMBQueue::queueMessage(int processId, CMBEvent event){
     // Try to see if this processId already has a queue created

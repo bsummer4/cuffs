@@ -2,6 +2,25 @@
 #include "Connection.hpp"
 #include <cstdio>
 
+/**
+ * @addtogroup SyncTest
+ * @{
+ * @addtogroup CMBSynchronizer_Test 
+ * @{
+ */
+/**
+ * @file 
+ * @author John R. Hoare
+ *
+ * Tests the CMBSynchronizer Class
+ */
+
+/**
+ * @class CMBSynchronizer
+ *
+ * @test That given known imput that the output is correct and in order.
+ */
+
 using namespace std;
 
 vector<Connection*> cons;
@@ -39,3 +58,7 @@ int main(){
     }
     sleep(2);
 }
+/**
+ * @}
+ * @}
+ */

@@ -1,8 +1,25 @@
 #include "Synchronizer.hpp"
 #include <iostream>
+/**
+ * @addtogroup SyncTest
+ * @{
+ * @addtogroup CMBEvent_tests
+ * @{
+ * @file 
+ * @author John R. Hoare
+ *
+ * Unit Tests for the CMBEvent class.
+ */
 
 using namespace std;
 
+/** 
+ * @class CMBEvent 
+ * @test
+ * Verifies that the events are ordered in the priority queue correctly.
+ * Correctly means that the Event with the lowest time is at the "top" of 
+ * the queue.
+ */
 void checkOrder(){
     cmb_timestamp one = 1;
     cmb_timestamp two = 2;
@@ -37,3 +54,8 @@ int main(){
     cout << "Done Testing CMBEvent Class" << endl;
     cout << "================================================" << endl;
 }
+
+/**
+ * @}
+ * @}
+ */

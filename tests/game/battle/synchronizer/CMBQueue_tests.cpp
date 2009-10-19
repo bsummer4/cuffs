@@ -1,8 +1,23 @@
 #include "Synchronizer.hpp"
 #include <iostream>
+/**
+ * @addtogroup SyncTest
+ * @{
+ * @addtogroup CMBQueue_tests
+ * @{
+ * @file 
+ * @author John R. Hoare
+ *
+ * Unit Tests for the CMBQueue class.
+ */
 
 using namespace std;
 
+/**
+ * @class CMBQueue
+ *
+ * @test Tests with one process that the queue orders the messages correctly.
+ */
 void testOne(){
     cout << "Testing with one process" << endl;
     CMBEvent cmbe1(1,"foo");
@@ -15,6 +30,11 @@ void testOne(){
     assert(time==1);
 }
 
+/**
+ * @class CMBQueue
+ *
+ * @test Tests with two processes that the queue orders the messages correctly.
+ */
 void testTwo(){
     cout << "Testing with two processes" << endl;
     CMBEvent cmbe1(1,"foo");
@@ -27,6 +47,12 @@ void testTwo(){
     assert(time==1);
 }
 
+/**
+ * @class CMBQueue
+ *
+ * @test Tests with two processes that the the lowest Time is correct, and the 
+ * correct runnable events are returned.
+ */
 void testThree(){
     cout << "Testing getEvents()" << endl;
     CMBEvent cmbe1(1,"foo");
@@ -51,3 +77,9 @@ int main(){
     cout << "Done Testing CMBQueue Class" << endl;
     cout << "================================================" << endl;
 }
+
+
+/**
+ * @}
+ * @}
+ */

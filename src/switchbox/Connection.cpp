@@ -70,7 +70,7 @@ void Connection::sendMessage(int size, message_type_t type, int to,
   SBMessage *result = message(size, this->address, to, type, string);
   if (!result) {
     perror("malloc");
-    exit(1); // TODO Use an exception?
+    exit(1); /// @TODO Use an exception?
   }
 
   sendMessage(result);
@@ -95,7 +95,7 @@ int Connection::getAddress() {
  */
 SBMessage * Connection::getMessage() {
 
-  // TODO optional blocking here?
+  /// @TODO optional blocking here?
   if (receive_queue.empty()) return NULL;
 
   pthread_mutex_lock(&receive_queue_lock);

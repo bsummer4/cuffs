@@ -133,7 +133,7 @@ bool remove_client(Client * client) {
   if (debug)
     printf("Lost connection from client %d\n", index);
 
-  // TODO this check should be in close_connection()
+  /// @TODO this check should be in close_connection()
   if (!valid_socket(client->connection))
     return false;
 

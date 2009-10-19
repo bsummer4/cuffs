@@ -1,4 +1,8 @@
 #pragma once 
+/** 
+ * @file Synchronizer.hpp
+ * @author John R. Hoare
+ */
 
 #include "Connection.hpp"
 #include "Interpreter.hpp"
@@ -16,6 +20,7 @@
 
 /** 
  * @addtogroup Synchronizer
+ * @author John R. Hoare
  * @{
  */
 
@@ -45,6 +50,21 @@ class SimpleSynchronizer : public Synchronizer {
         virtual void Run();
 };
 
+/**
+ * @addtogroup CMBSynchronizer
+ * @author John R. Hoare
+ * 
+ * All the classes associated with the CMB objects for the CMBSynchronizer 
+ * @{
+ */
+
+/** 
+ * A class that contains the timestamp as well as the string representing
+ * an event. 
+ *
+ * This function holds a "CMB" event, and can be compared with other CMBEvent
+ * objects in order to function correctly in the priority queue. 
+ */
 class CMBEvent{
     public:
         CMBEvent();
@@ -52,23 +72,35 @@ class CMBEvent{
         CMBEvent(cmb_timestamp time, std::string event);
         // Need to do this to use in priority queue. 
         // http://www.codeguru.com/cpp/tic/tic0229.shtml
+        /// This is actually backwards so that it gets ordered in the way 
+        /// we like for the priority queue.
         friend bool operator<( const CMBEvent& x, const CMBEvent& y){
             return ( x.eventOccurs > y.eventOccurs );
         }
 
+        /// So we can prettyprint this object
         friend ostream& operator<<(ostream& output, const CMBEvent& c) {
             output << "Time: " << c.eventOccurs << " String: " << c.eventString;
             return output;
         }
 
+        /// Timestamp of when the event occured
         cmb_timestamp eventOccurs;
+        /// The actual string (including the timestamp) of the event. 
         std::string eventString;
 };
 
+/// A priority queue for CMBEvent objects
 typedef std::priority_queue< CMBEvent > cmb_pqueue;
+/// A map of cmb_pqueue's that are to be indexed on the process's name.
 typedef std::map< int, cmb_pqueue* > cmb_processes; 
 
         
+/**
+ * A priority queue class that manages placing events into appropriate 
+ * queues as well as determining if the global time can be advanced.
+ * 
+ */
 class CMBQueue{
     public: 
         CMBQueue(){};
@@ -92,5 +124,6 @@ class CMBSynchronizer : public Synchronizer {
 };
 
 /**
+ * @}
  * @}
  */

@@ -24,8 +24,8 @@ Version 2
 #include "Generator.hpp"
 #define MAXLEN 512 
 
-//TODO Read timestamps from Sync
-//ANSWER: for now, its just rawtime
+///@TODO Read timestamps from Sync
+///ANSWER: for now, its just rawtime
 int main(int argc, char** argv)
 {
   if(argc == 2){

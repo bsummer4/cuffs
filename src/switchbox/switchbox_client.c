@@ -4,9 +4,9 @@
 // Constructing Messages
 // ---------------------
 
-// * TODO There is a lot of duplicate code here.  But at least it's
-//   all in one place. I don't really see an way around it without
-//   lots of data copying.
+///   @TODO There is a lot of duplicate code here.  But at least it's
+///   all in one place. I don't really see an way around it without
+///   lots of data copying.
 
 SBMessage *message_with_unset_data(int size, int from, int to, int type) {
   SBMessage *result = malloc(size);

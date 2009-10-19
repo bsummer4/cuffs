@@ -1,5 +1,10 @@
 #include "Synchronizer.hpp"
 
+/** 
+ * @file SimpleSynchronizer.cpp
+ * @author John R. Hoare
+ */
+
 SimpleSynchronizer::SimpleSynchronizer(Connection * con, Interpreter * interpreter) 
     : Synchronizer(con, interpreter)
 {
