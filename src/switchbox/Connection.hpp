@@ -31,6 +31,7 @@ extern "C" {
  *
  * - @TODO The message queue should be a separate class with it's own
  *   locking mechanism.
+ * @TODO Change this to use boost threads instead of pthreads
  */
 class Connection {
 public:
