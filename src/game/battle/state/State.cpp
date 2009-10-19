@@ -25,6 +25,7 @@ string State::setMap(string name) {
   if(DEBUG)
     cerr << "setMap called with " << name << endl;
   mapname = name;
+  return mapname;
 }//Opens the map name
 
 string State::getMapName() {
@@ -35,14 +36,14 @@ string State::getMapName() {
 
 void State::startBattle() {
   if(DEBUG)
-    cerr << "startBattle called" << mapname << endl;
+    cerr << "startBattle called" << endl;
   setupMap();
   battlestarted = 1;
 }//Not implemented yet
 
 void State::stopBattle() {
   if(DEBUG)
-    cerr << "stopBattle called" << mapname << endl;
+    cerr << "stopBattle called" << endl;
   battlestarted = 0;
 }//Not implemented yet
 

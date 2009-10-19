@@ -3,18 +3,18 @@
 
 int main(int argc, char **argv) {
   SimpleInterpreter si;
-  string event = "12341234 \\MSG these are parameters";
+  string event = "12341234 /MSG these are parameters";
   si.handleEvent(event);
 
   State *state = new State();
   GameInterpreter gi(*state);
-  event = "12341234 \\map mapname";
+  event = "12341234 /map mapname";
   gi.handleEvent(event);
-  event = "12341234 \\weapon 3";
+  event = "12341234 /weapon 3";
   gi.handleEvent(event);
-  event = "12341234 \\battlestart";
+  event = "12341234 /battlestart";
   gi.handleEvent(event);
-  event = "12341234 \\battlestop mapname";
+  event = "12341234 /battlestop mapname";
   gi.handleEvent(event);
-  event = "12341234 \\shoot mapname";
+  event = "12341234 /shoot mapname";
 }

@@ -7,10 +7,11 @@ int eventParser(string &event, vector<string> &token){
   start = 0;
 
   while(end != string::npos){
-    token.push_back(event.substr(start,end-start));
+    token.push_back(event.substr(start+1,end-start - 1));
     start = end;
     end = event.find_first_of(' ', start+1); 
   }
+  token.push_back(event.substr(start+1, event.length()-start-1));
   return token.size();
 }
 
@@ -58,6 +59,8 @@ void GameInterpreter::handleEvent(string &event) {
   vector<string>::iterator v_it = token.begin();
   vector<string>state_change;
 
+  cout << event << endl;
+  cout << token[1] << endl;
   if(token.size() < 2) {
   } else {
     timestamp = stringtoint(token[0]); 
@@ -92,4 +95,5 @@ void GameInterpreter::handleEvent(string &event) {
         break;
     }
   }
+  return;
 }

@@ -78,37 +78,37 @@ void genStateMsg(char* buffer, int length, int time){
   switch ( (int) (rand() % 9))
   {
   case 0:
-    snprintf(buffer, length, "%d /MAP %s",time, genName().c_str());
+    snprintf(buffer, length, "%d /map %s",time, genName().c_str());
     cout << buffer << endl;
     if(debug) cout << buffer << endl;
     break;
   case 1:
-    snprintf(buffer, length, "%d /ZONE %d %s %s %s %d",time, genID(), 
+    snprintf(buffer, length, "%d /zone %d %s %s %s %d",time, genID(), 
         genName().c_str(),genName().c_str(), genName().c_str(), genID());
    if(debug)cout << buffer << endl;
     break;
   case 2:
-    snprintf(buffer,  length, "%d /USER %d %s %d",time,  genID(), genName().c_str(), genID());
+    snprintf(buffer,  length, "%d /user %d %s %d",time,  genID(), genName().c_str(), genID());
     if(debug)cout << buffer << endl;
     break;
   case 3:
-    snprintf(buffer,  length, "%d /GROUP %s %d",time, (genBool()) ? "ADD" : "DEL", genID());
+    snprintf(buffer,  length, "%d /group %s %d",time, (genBool()) ? "ADD" : "DEL", genID());
     if(debug)cout << buffer<<endl;
     break;
   case 4:
-    snprintf(buffer,  length, "%d /PARTY %s %d",time, (genBool()) ? "INVITE":"JOIN", genID());
+    snprintf(buffer,  length, "%d /party %s %d",time, (genBool()) ? "INVITE":"JOIN", genID());
     if(debug)cout << buffer<<endl;
     break;
   case 5:
-    snprintf(buffer,  length, "%d /FIGHT %d %d",time, genID(), genID());
+    snprintf(buffer,  length, "%d /fight %d %d",time, genID(), genID());
     if(debug)cout << buffer<<endl;
     break;
   case 6:
-    snprintf(buffer,  length, "%d /START %d %d",time, genID(), genID());
+    snprintf(buffer,  length, "%d /start %d %d",time, genID(), genID());
     if(debug)cout << buffer<<endl;
     break;
   case 7:
-    snprintf(buffer,  length, "%d /SHOOT %d %d %d",time, genID(), genID(), genID());
+    snprintf(buffer,  length, "%d /shoot %d %d %d",time, genID(), genID(), genID());
     if(debug)cout << buffer<<endl;
     break;
   default:
