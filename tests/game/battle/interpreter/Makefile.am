@@ -1,8 +1,8 @@
 TESTS=Interpreter_test
 
-bin_PROGRAMS = Interpreter_test
-Interpreter_test_SOURCES = $(top_srcdir)/src/game/battle/interpreter/Interpreter_test.cpp
-Interpreter_test_LDADD = $(top_srcdir)/src/game/battle/interpreter/libint.la $(top_srcdir)/src/game/common/libgameutils.la $(top_srcdir)/src/game/battle/state/libstate.la
+#bin_PROGRAMS = Interpreter_test
+#Interpreter_test_SOURCES = Interpreter_test.cpp
+#Interpreter_test_LDADD = $(top_srcdir)/src/game/battle/interpreter/libint.la $(top_srcdir)/src/game/common/libgameutils.la $(top_srcdir)/src/game/battle/state/libstate.la
 
 LIBCONNECTION = $(top_srcdir)/src/switchbox/libconnection.la
 

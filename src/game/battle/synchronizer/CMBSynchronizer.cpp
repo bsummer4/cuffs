@@ -136,7 +136,7 @@ CMBEvent::CMBEvent(cmb_timestamp _time, std::string _event){
 /**
  * Constructor that parses the time out of the message. 
  */
-CMBEvent::CMBEvent(string message){
+CMBEvent::CMBEvent(std::string message){
     this->eventOccurs = atoi(message.c_str());
     this->eventString = message;
 }
