@@ -41,10 +41,10 @@ using namespace std;
 class State {
     public:
         State();
-        virtual double changeWind(double newwind); //RETURNS NEW SPEED, IF CHANGED
-        virtual double getWind(); //RETURNS SPEED
-        virtual void changePixel(int row, int column, MAPPIXEL newpixel);
-        virtual MAPPIXEL getPixel(int row, int column);  //Gets the pixel defined at row, column
+        //virtual double changeWind(double newwind); //RETURNS NEW SPEED, IF CHANGED
+        //virtual double getWind(); //RETURNS SPEED
+        //virtual void changePixel(int row, int column, MAPPIXEL newpixel);
+        //virtual MAPPIXEL getPixel(int row, int column);  //Gets the pixel defined at row, column
         virtual string setMap(string mapname);//Not fully implemented yet
         virtual string getMapName();//Not fully implemented yet
         virtual void startBattle(); //Not fully implemented yet
@@ -52,11 +52,11 @@ class State {
         virtual bool getBattleState();
         virtual bool changeWeapon(int weapon);  //sets current weapon
         virtual int getWeapon();    //returns current weapon
+        vector< vector< MAPPIXEL > > map; //READ ONLY
 
     protected:
         virtual void setupMap();
-        double wind;  //wind speed and direction--negative for left positive for right
-        vector< vector< MAPPIXEL > > map;
+        //double wind;  //wind speed and direction--negative for left positive for right
         ifstream mapstream;
         string mapname;
         int battlestarted;

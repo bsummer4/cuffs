@@ -2,6 +2,7 @@
 
 State::State() {}
 
+/*
 double State::changeWind(double newwind) {
   wind = newwind;
   return newwind;
@@ -16,21 +17,32 @@ void State::changePixel(int row, int column, MAPPIXEL newpixel) {
 
 MAPPIXEL State::getPixel(int row, int column) {
 }//Gets the pixel defined at row, column
+*/
+
+static const int DEBUG = 1;
 
 string State::setMap(string name) {
+  if(DEBUG)
+    cerr << "setMap called with " << name << endl;
   mapname = name;
 }//Opens the map name
 
 string State::getMapName() {
+  if(DEBUG)
+  cerr << "getMapName called:Mapname = " << mapname << endl;
   return mapname;
 }//returns map name
 
 void State::startBattle() {
+  if(DEBUG)
+    cerr << "startBattle called" << mapname << endl;
   setupMap();
   battlestarted = 1;
 }//Not implemented yet
 
 void State::stopBattle() {
+  if(DEBUG)
+    cerr << "stopBattle called" << mapname << endl;
   battlestarted = 0;
 }//Not implemented yet
 
@@ -42,14 +54,20 @@ bool State::getBattleState() {
 }
 
 bool State::changeWeapon(int weapon) {
+  if(DEBUG)
+    cerr << "changeWeapon called with " << weapon << endl;
   weaponid = weapon;
 }//sets current weapon
 
 int State::getWeapon() {
+  if(DEBUG)
+    cerr << "getWeapon called" << endl;
   return weaponid;
 }//returns current weapon
 
 void State::setupMap() {
+  if(DEBUG)
+    cerr << "setupMap called" << endl;
   if(mapname.length() == 0)
   {
     cerr << "No map defined when trying to set up the map." << endl;
