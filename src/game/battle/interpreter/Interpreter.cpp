@@ -1,6 +1,6 @@
 #include "Interpreter.hpp"
 
-int eventParser(string &event, vector<string> &result){
+int eventParser(string &event, vector<string> &token){
   string::size_type start;
   string::size_type end;
   end = event.find_first_of(' '); 
@@ -8,10 +8,11 @@ int eventParser(string &event, vector<string> &result){
 
   while(end != string::npos){
     cout << "test" << endl;
-    result.push_back(event.substr(start,end-start));
+    token.push_back(event.substr(start,end-start));
     start = end;
     end = event.find_first_of(' ', start+1); 
   }
+  return token.size();
 }
 
 int stringtoint(string str){
@@ -29,14 +30,14 @@ SimpleInterpreter::SimpleInterpreter(){};
 
 void SimpleInterpreter::handleEvent(string &event){
   int timestamp;
-  vector<string> result;
-  eventParser(event, result);
-  vector<string>::iterator v_it = result.begin();
+  vector<string> token;
+  eventParser(event, token);
+  vector<string>::iterator v_it = token.begin();
   vector<string>state_change;
 
-  timestamp = stringtoint(result[0]); //
+  timestamp = stringtoint(token[0]); //
 
-  for(v_it = result.begin()+1; v_it != result.end(); v_it++){
+  for(v_it = token.begin()+1; v_it != token.end(); v_it++){
     state_change.push_back(*v_it);
   }
   cout << "Message: " << event << endl; 
@@ -53,19 +54,28 @@ GameInterpreter::GameInterpreter(State &gameState) : state(gameState) { };
 void GameInterpreter::handleEvent(string &event) {
   int timestamp;
   int command;
-  vector<string> result;
-  eventParser(event, result);
-  vector<string>::iterator v_it = result.begin();
+  vector<string> token;
+  eventParser(event, token);
+  vector<string>::iterator v_it = token.begin();
   vector<string>state_change;
 
-  if(result.size() < 2) {
+  if(token.size() < 2) {
   } else {
-    timestamp = stringtoint(result[0]); 
-    command = GetCommand(result[1]); 
+    timestamp = stringtoint(token[0]); 
+    command = GetCommand(token[1]); 
     switch(command) {
       case MAP:
+        if(token.size() < 3) {
+          cerr << "Malformed command sent to interpreter.  /map must be followed by a valid map name string" << endl;
+          return;
+        }
+        state.setMap(token[2]);
         break;
       case SHOOT:
+        if(token.size() < 5) {
+          cerr << "Malformed command sent to interpreter.  /shoot must be followed by user_id, angle, power, and weaponid" << endl;
+          return;
+        }
         //FIGURE OUT HOW TO SHOOT
         break;
       case BATTLESTART:
@@ -75,11 +85,11 @@ void GameInterpreter::handleEvent(string &event) {
         state.stopBattle();
         break;
       case WEAPON:
-        if(result.size() < 3) {
+        if(token.size() < 3) {
           cerr << "Malformed command sent to interpreter.  /weapon must be followed by a valid integer weaponid" << endl;
           return;
         }
-        state.changeWeapon(stringtoint(result[2]));
+        state.changeWeapon(stringtoint(token[2]));
         break;
     }
   }

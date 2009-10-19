@@ -74,6 +74,7 @@ AC_CONFIG_FILES([Makefile
                  src/game/overworld/Makefile
                  src/game/common/Makefile
                  src/game/battle/Makefile
+                 src/game/battle/state/Makefile
                  src/game/battle/generator/Makefile
                  src/game/battle/interpreter/Makefile
                  src/game/battle/synchronizer/Makefile

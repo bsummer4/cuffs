@@ -46,9 +46,9 @@ class State {
         virtual void changePixel(int row, int column, MAPPIXEL newpixel);
         virtual MAPPIXEL getPixel(int row, int column);  //Gets the pixel defined at row, column
         virtual string setMap(string mapname);//Not fully implemented yet
-        virtual string getMapName();//Not implemented yet
-        virtual void startBattle(); //Not implemented yet
-        virtual void stopBattle();  //Not implemented yet
+        virtual string getMapName();//Not fully implemented yet
+        virtual void startBattle(); //Not fully implemented yet
+        virtual void stopBattle();  //Not fully implemented yet
         virtual bool getBattleState();
         virtual bool changeWeapon(int weapon);  //sets current weapon
         virtual int getWeapon();    //returns current weapon
