@@ -1,4 +1,9 @@
-AM_CPPFLAGS = -I$(top_srcdir)/src/game/battle/synchronizer -I$(top_srcdir)/src/game/battle/interpreter -I$(top_srcdir)/src/game/battle/generator -I$(top_srcdir)/src/switchbox -I$(top_srcdir)/src/game/common
+AM_CPPFLAGS = -I$(top_srcdir)/src/game/battle/synchronizer \
+              -I$(top_srcdir)/src/game/battle/interpreter \
+              -I$(top_srcdir)/src/game/battle/generator \
+              -I$(top_srcdir)/src/game/battle/state \
+              -I$(top_srcdir)/src/switchbox \
+              -I$(top_srcdir)/src/game/common
 
 TESTS=CMBEvent_tests CMBQueue_tests synctests.sh
 

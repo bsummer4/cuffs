@@ -48,7 +48,7 @@ class Interpreter {
  */
 class CatInterpreter : public Interpreter{
     public: 
-        CatInterpreter();
+        CatInterpreter() {};
         virtual void handleEvent(string &event);
 };
 
