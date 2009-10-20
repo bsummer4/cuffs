@@ -6,6 +6,7 @@ int main(int argc, char **argv) {
   string event = "12341234 /MSG these are parameters";
   si.handleEvent(event);
 
+  cout << "HardCoded events:" << endl;
   State *state = new State();
   GameInterpreter gi(*state);
   event = "12341234 /map mapname";
@@ -17,4 +18,5 @@ int main(int argc, char **argv) {
   event = "12341234 /battlestop mapname";
   gi.handleEvent(event);
   event = "12341234 /shoot mapname";
+  
 }
