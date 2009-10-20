@@ -43,6 +43,11 @@ Building Documentation
 
 Builds into ./doc/doxygen
 
+
+Built doxygen can be seen at:
+
+http://www.cs.utk.edu/~jhoare/cs594ng/doxygen
+
 .. _ReStructured Text: http://en.wikipedia.org/wiki/ReStructuredText
 
 
