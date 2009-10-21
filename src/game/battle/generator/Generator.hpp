@@ -12,8 +12,6 @@ extern "C" {
 #include "Connection.hpp"
 using namespace std;
 
-//Global flag debug
-bool debug;
 
 /** 
  * @defgroup Game Game
@@ -45,11 +43,14 @@ bool debug;
  */
 class Generator { 
   public:
-    int genID();
+    //Global flag debug
+    Generator() {};
+    bool debug;
     bool genBool();
+    int genID();
+    int genRun(); 
     string genName();
     void genStateMsg(char* buffer, int length, int time);
-    int genRun(); 
 }; 
 /**
  * @}

@@ -63,7 +63,6 @@ void Generator::genStateMsg(char* buffer, int length, int time){
   {
   case 0:
     snprintf(buffer, length, "%d /MAP %s",time, genName().c_str());
-    cout << buffer << endl;
     if(debug) cout << buffer << endl;
     break;
   case 1:
