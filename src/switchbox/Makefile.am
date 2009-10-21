@@ -35,8 +35,8 @@ switchbox_client_wrap.c: switchbox_client.i
 	swig -python -lcpointer.i switchbox_client.i
 
 _switchbox_client.so: message.c switchbox_client.c switchbox_client_wrap.c
-	gcc --std=gnu99 -c $^ -I/usr/include/python2.6
-	ld $(^:.c=.o) -shared -o _switchbox_client.so
+	$(CC) --std=gnu99 -c $^ -I/usr/include/python2.6
+	$(CC) $(^:.c=.o) -shared -o _switchbox_client.so
 
 # Tools
 ide: call_graph.cflow reverse_call_graph.cflow
