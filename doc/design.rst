@@ -57,7 +57,7 @@ Overworld Messages
 - /party leave party-id user-id
 - /fight partyid zone id
 - /launchgame gametype zone-id switchbox-ip switchbox-port
-
+- /query player user-id
 
 Battle Messages
 ^^^^^^^^^^^^^^^
@@ -67,6 +67,8 @@ Battle Messages
 - /battlestart
 - /battlestop
 - /weapon weaponid
+- /move obj-id x y
+- /hit obj-id x y
 
 
 Overworld Map File Format
