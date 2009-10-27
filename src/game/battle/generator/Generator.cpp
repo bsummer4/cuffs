@@ -20,6 +20,13 @@ Version 2
 #include "Generator.hpp"
 #define MAXLEN 512 
 
+/**
+  * @Generator Constructor
+  * Builds the Generator class
+  *
+**/
+/* Code goes here*/
+
 /** 
  * @genid 
  * Generates a random number
@@ -59,6 +66,7 @@ string Generator::genName()
  */
 //buffer for the state message, length = length of buffer
 void Generator::genStateMsg(char* buffer, int length, int time){
+  time++;
   switch ( (int) (rand() % 9))
   {
   case 0:
