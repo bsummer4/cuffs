@@ -45,14 +45,18 @@ void Map::loadMap(std::string fileName){
     cout << "Map input complete.\n";
 }
 
-/*
+/**
+ * @param x The x value 
+ * @param y The y value
  * @return The value of the pixel at the given point.
  */
 pixel_type_t Map::getPixel(int x, int y){
     return map[x*x_size+y];
 }
 
-/*
+/**
+ * @param c The coordinate object describing the point 
+ * that you want the pixel information of.
  * @return The value of the pixel at the given point.
  */
 pixel_type_t Map::getPixel(Coord c){
@@ -78,6 +82,10 @@ void Map::explosion(int x, int y, float radius){
     }
 }
 
+/**
+ * Wrapper for @ref explosion that uses a Coord 
+ * object instead of integer parameters.
+ */
 void Map::explosion(Coord c, float radius){
     return explosion(c.x, c.y, radius);
 }

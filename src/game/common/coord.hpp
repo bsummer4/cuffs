@@ -12,7 +12,7 @@
  */
 
 /** 
- * @addtogroup coord
+ * @addtogroup Coord
  * @{
  */
 

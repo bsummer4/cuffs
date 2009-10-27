@@ -7,9 +7,18 @@
 #include <string>
 #include "coord.hpp"
 
+/**
+ * @defgroup Map Map
+ * @ingroup State
+ * @{
+ */
+
+/// Value pixel_type_t takes when the map is empty.
 static const char MAP_EMPTY = 0;
 
+/// A typedef that is the container for one pixel for the map.
 typedef unsigned char pixel_type_t;
+
 
 /**
  * The Map class, this class holds a bitmap for the map.
@@ -30,3 +39,7 @@ class Map{
         int y_size;
         pixel_type_t * map;
 };
+
+/**
+ * @}
+ */
