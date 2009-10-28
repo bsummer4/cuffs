@@ -1,4 +1,5 @@
 AM_LDFLAGS = -lpthread
+AM_CFLAGS = -Wall
 
 bin_PROGRAMS = switchbox switchbox_test chat_test
 

@@ -1,12 +1,7 @@
 #include "switchbox_client.h"
 
-// ---------------------
-// Constructing Messages
-// ---------------------
-
-///   @TODO There is a lot of duplicate code here.  But at least it's
-///   all in one place. I don't really see an way around it without
-///   lots of data copying.
+// Constructing
+// ------------
 
 SBMessage *message_with_unset_data(int size, int from, int to, int type) {
   SBMessage *result = malloc(size);
@@ -22,7 +17,6 @@ SBMessage *message(int size, int from, int to, int type, char *data) {
   memcpy(&result->data, data, size - SBMESSAGE_HEADER_SIZE);
   return result;
 }
-
 
 SBMessage *make_group(int from, int group_id, int num_clients, int *clients) {
   size_t header_size = SBMESSAGE_HEADER_SIZE;
@@ -54,14 +48,14 @@ SBMessage *remove_group(int from, int group_id) {
 
 SBMessage *string_to_message(int type, int from, int to, char *string) {
   int size = strlen(string) + SBMESSAGE_HEADER_SIZE;
-  SBMessage *result = message(size, from, to, type, string);
-  return (SBMessage *) result;
+  return message(size, from, to, type, string);
 }
 
-// ---------
 // Accessors
 // ---------
 
+/// This returns a pointer to the inside of the message.  You should
+/// probably use copy_message_string() instead.
 char *message_data(SBMessage * m) {
   return m->data;
 }
@@ -90,9 +84,8 @@ int announcement_code(SBMessage * m) {
   return *((int *) m->data);
 }
 
-// --------------------
-// Transfering Messages
-// --------------------
+// Transfering
+// -----------
 
 bool switchbox_send(Socket s, SBMessage * m) {
   if (!m || (unsigned) m->size < (sizeof(int) * 4)) {
@@ -105,8 +98,8 @@ bool switchbox_send(Socket s, SBMessage * m) {
   return send_message(s, (Message *) m);
 }
 
-// Return NULL if the socket is invalid, fails, or is closed.  Data is
-// always null-terminated.
+/// Return NULL if the socket is invalid, fails, or is closed.  Data is
+/// always null-terminated.
 SBMessage *switchbox_receive(Socket s) {
   SBMessage *result = (SBMessage *) receive_message(s);
   if (!result)

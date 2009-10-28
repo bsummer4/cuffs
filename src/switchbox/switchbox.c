@@ -10,21 +10,23 @@
 enum { NEW_CLIENT, DELETED_CLIENT };
 
 void run_switchbox(int port);
+void init_switchbox();
 void announce(SBMessage *admin_message);
 bool switchbox_locking_send(SBMessage * m);
 void print_message(SBMessage * m);
 
-// ==============
 // Implementation
 // ==============
 
 int main(int argc, char **argv) {
-  // A broken pipe should just cause read() and write() to fail.
+  // A broken pipe should just cause read() and write() to fail insead
+  // of stopping the program
   signal(SIGPIPE, SIG_IGN);
+
+  init_switchbox();
   run_switchbox(SWITCHBOX_PORT);
   return 0;
 }
-
 
 char *routing_type_to_string(int routing_type) {
   switch (routing_type) {
@@ -43,8 +45,6 @@ char *routing_type_to_string(int routing_type) {
   return "(other or invalid)";
 }
 
-
-// -----------------------------
 // Clients and the clients array
 // -----------------------------
 
@@ -61,16 +61,16 @@ typedef struct group {
   bool used;
 } Group;
 
-// The 'clients' and 'groups' arrays store all clients and groups in
-// the switchbox.  The 'id' of a client or group corresponds to their
-// index in this array.
+/// The 'clients' and 'groups' arrays store all clients and groups in
+/// the switchbox.  The 'id' of a client or group corresponds to their
+/// index in this array.
 Client clients[MAX_CLIENTS];
 Group groups[MAX_GROUPS];
 
-// The index of the first unused and last used slot in the 'clients'
-// array.  We use this so we can efficiently find a empty slot when
-// someone joins while always assigning the lowest available address
-// number.
+/// The index of the first unused and last used slot in the 'clients'
+/// array.  We use this so we can efficiently find a empty slot when
+/// someone joins while always assigning the lowest available address
+/// number.
 int first_free_client = 0;
 int last_used_client = -1;
 
@@ -86,19 +86,17 @@ bool valid_group_address(int index) {
   return index >= 0 && index < MAX_GROUPS;
 }
 
-// Moves 'first_free_client forward until it points to a slot that is
-// unused.  This needs to be called whenever the first_free_client
-// gets used
+/// Moves 'first_free_client' forward until it points to an element
+/// that is unused.  This needs to be called whenever the
+/// 'first_free_client' gets used.
 void update_free_client() {
   while (is_client_used(clients + first_free_client))
     first_free_client++;
 }
 
-// Index is the of a new client.  If it's after 'last_used_client',
-// then change it.
-//
-// use index = -1 if a client was removed.  This moves
-// last_used_client back until it points to a real client.
+/// 'index' is the address of a new client.  Calling this whenever a
+/// client is created or removed keeps 'last_used_client' valid.
+/// 'what_changed' should be either NEW_CLIENT or DELETED_CLIENT.
 void update_last_used_client(int what_changed, int index) {
   switch (what_changed) {
   case NEW_CLIENT:
@@ -109,10 +107,12 @@ void update_last_used_client(int what_changed, int index) {
     while ((last_used_client >= 0) &&
            !is_client_used(clients + last_used_client))
       last_used_client--;
+  default:
+    assert(false);
   }
 }
 
-// Returns NULL if there isn't room for another client.
+/// Returns NULL if we already have MAX_CLIENTS
 Client *get_new_client(Socket s) {
   if (!valid_client_address(first_free_client))
     return NULL;
@@ -128,6 +128,7 @@ Client *get_new_client(Socket s) {
 
 bool remove_client(Client * client) {
   int index = client - clients;
+
   if ((!client) || !is_client_used(client))
     return false;
   if (debug)
@@ -150,7 +151,6 @@ bool remove_client(Client * client) {
   return true;
 }
 
-
 void send_error(int to, int type) {
   if (debug)
     printf("sending error %d to %d\n", type, to);
@@ -163,11 +163,10 @@ void send_error(int to, int type) {
   free(msg);
 }
 
-// -----------
 // Connections
 // -----------
 
-// Free the members array, and set group.used to false
+/// Free the 'members' array, and set group.used to false.
 bool delete_group(int group_id) {
   if (debug)
     printf("deleting group %d\n", group_id);
@@ -182,7 +181,9 @@ bool delete_group(int group_id) {
   return true;
 }
 
-// As long as group_id is valid, shit will work.
+/// Redefining an existing group is valid.  'users' must be on the
+/// heap (it will be freed when the group is deleted); we take
+/// responsibility for it.
 bool define_group(int group_id, int num_clients, int *users) {
   if (debug) {
     printf("Defining group %d with users [", group_id);
@@ -194,13 +195,12 @@ bool define_group(int group_id, int num_clients, int *users) {
     return false;
   Group *group = groups + group_id;
   if (group->used)
-    delete_group(group_id);     // We'll replace it
+    delete_group(group_id);
   group->used = true;
   group->num_members = num_clients;
   group->members = users;
   return true;
 }
-
 
 void switchbox_handle_admin(SBMessage * m) {
   admin_message *admin = (admin_message *) m->data;
@@ -242,7 +242,7 @@ void switchbox_handle_admin(SBMessage * m) {
   send_error(m->from, ADMIN_FAIL);
 }
 
-// Locks the target client until it finishes sending the message.
+/// Locks the m.target's client while sending.
 bool switchbox_locking_send(SBMessage * m) {
   Client *target = clients + m->to;
   Socket socket = target->connection;
@@ -370,6 +370,7 @@ void *handle_connection(void *client_) {
   return NULL;
 }
 
+/// Gets a new client and runs 'handle_connection()' on a new thread.
 void setup_connection(Socket s) {
   Client *client = get_new_client(s);
   if (debug)
@@ -378,16 +379,21 @@ void setup_connection(Socket s) {
   pthread_create(&(client->thread), NULL, handle_connection, client);
 }
 
+void init_switchbox() {
+  iter(ii, 0, MAX_GROUPS) groups[ii].used = false;
+}
+
 void run_switchbox(int port) {
   Listener l = make_listener(port);
   Socket s;
-  iter(ii, 0, MAX_GROUPS) groups[ii].used = false;
   while (valid_socket(s = accept_connection(l)))
     setup_connection(s);
 }
 
-// This prints everything about a message to standard output.  It is
-// for debugging.
+
+/// This prints everything about a message to standard output.  It is
+/// for debugging.
+/// @TODO Move this to switchbox_client.c
 void print_message(SBMessage * m) {
   printf("  Message: {type: %s, size: %d, from: %d, to: %d, data: [",
          routing_type_to_string(m->routing_type), m->size, m->from, m->to);
