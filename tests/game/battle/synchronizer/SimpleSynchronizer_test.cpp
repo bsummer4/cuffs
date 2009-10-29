@@ -37,6 +37,7 @@ int main(){
 
     CatInterpreter sint;
     SimpleSynchronizer sync(&mycon, &sint);
+  
     // Send a Null message.
     for (int i = 0; i < connections; i++){
         cons.at(i)->sendMessage(4*sizeof(int)+3, UNICAST, mycon.getAddress(), "0 ");
@@ -47,8 +48,10 @@ int main(){
         int clientnum;
         if ( 1 != scanf("%d ", &clientnum) )
             break;
+        /*
         fgets(buf, 511, stdin);
         buf[strlen(buf)-1] = '\0';
+        */
         cons.at(clientnum)->sendMessage(4*sizeof(int)+strlen(buf)+1, UNICAST, mycon.getAddress(), buf);
     }
 
