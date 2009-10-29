@@ -6,7 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include "Map.hpp"
+#include "BattleMap.hpp"
 #include "coord.hpp"
 #include "GameObject.hpp"
 #include "Projectile.hpp"
@@ -70,7 +70,7 @@ class State {
         bool battlestarted;
         int weaponid;
         vector<GameObject::GameObj> objs;
-        Map map;
+        BattleMap map;
 };
 /**
  * @}

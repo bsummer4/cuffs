@@ -1,4 +1,4 @@
-#include "Map.hpp"
+#include "BattleMap.hpp"
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -6,24 +6,58 @@
 
 using namespace std;
 
-Map::Map(){ }
+BattleMap::BattleMap(){ }
 
-Map::~Map(){
+BattleMap::~BattleMap(){
     delete map;
 }
 
 /**
  * Load in the map from the given file name.
  * 
- * @TODO implement bringing in spawn points as well.
+ * A map file specifies the spawn points first, and 
+ * then the map file (which is a ppm file). The map file 
+ * starts by listing the spawns with TeamId Xpos Ypos seperated
+ * with spaces, and continues until all spawn positions are
+ * enumerated. Once this occurs, a string that contains the name
+ * of the .ppm file to load up as a map is given. 
+ * 
+ * @filename fileName The name of the .map file to open. 
  */
-void Map::loadMap(std::string fileName){
+void BattleMap::loadMap(std::string fileName){
+  ifstream inFile(fileName.c_str());
+  int team, xpos, ypos;
+  char inputLine1[81];
+  int val = 0; 
+  std::map< int , std::vector<Coord> >::iterator it;
+  inFile.getline(inputLine1,80);
+
+  val = sscanf(inputLine1, "%d %d %d", &team, &xpos, &ypos);
+  if ( val == 3 ){
+    it = teamSpawnMap.find(team);
+    if( it == teamSpawnMap.end() ){
+      teamSpawnMap.insert( pair < int , std::vector<Coord> > (team, std::vector<Coord>() ) );
+      it = teamSpawnMap.find(team);
+    }
+    (*it).second.push_back(Coord(xpos,ypos));
+  } else {
+    // If sscanf fails, assume that we're done and this is the map file
+    readPPM(inputLine1);
+  }
+}
+
+/**
+ * A helper function for @ref loadMap that creates 
+ * the map data structure. 
+ * 
+ * @param fileName The name of the .ppm file. 
+ */
+void BattleMap::readPPM(std::string fileName){
     ifstream inFile(fileName.c_str());
 
     char inputLine1[81];
     char nextChar;
     int maxVal;
-
     /* Read past first line */
     inFile.getline(inputLine1,80);
 
@@ -50,7 +84,7 @@ void Map::loadMap(std::string fileName){
  * @param y The y value
  * @return The value of the pixel at the given point.
  */
-pixel_type_t Map::getPixel(int x, int y){
+pixel_type_t BattleMap::getPixel(int x, int y){
     return map[x*x_size+y];
 }
 
@@ -59,14 +93,14 @@ pixel_type_t Map::getPixel(int x, int y){
  * that you want the pixel information of.
  * @return The value of the pixel at the given point.
  */
-pixel_type_t Map::getPixel(Coord c){
+pixel_type_t BattleMap::getPixel(Coord c){
     return map[c.x*x_size+c.y];
 }
 
 /** 
  * Removes all terrain within radius of x,y
  */
-void Map::explosion(int x, int y, float radius){
+void BattleMap::explosion(int x, int y, float radius){
     int s_x, e_x, s_y, e_y;
     s_x = max(0,(int)(x-ceil(radius)));
     e_x = min(x_size,(int)(x+ceil(radius)));
@@ -86,6 +120,6 @@ void Map::explosion(int x, int y, float radius){
  * Wrapper for @ref explosion that uses a Coord 
  * object instead of integer parameters.
  */
-void Map::explosion(Coord c, float radius){
+void BattleMap::explosion(Coord c, float radius){
     return explosion(c.x, c.y, radius);
 }

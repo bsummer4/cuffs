@@ -5,10 +5,12 @@
  */
 
 #include <string>
+#include <map>
+#include <vector>
 #include "coord.hpp"
 
 /**
- * @defgroup Map Map
+ * @defgroup BattleMap BattleMap
  * @ingroup State
  * @{
  */
@@ -23,10 +25,10 @@ typedef unsigned char pixel_type_t;
 /**
  * The Map class, this class holds a bitmap for the map.
  */
-class Map{
+class BattleMap{
     public:
-        Map();
-        ~Map();
+        BattleMap();
+        ~BattleMap();
         void loadMap(std::string fileName);
         pixel_type_t getPixel(Coord c);
         pixel_type_t getPixel(int x, int y);
@@ -34,10 +36,15 @@ class Map{
         void explosion(int x, int y, float radius);
         int getXSize();
         int getYSize();
+        std::vector<Coord> getTeamSpawns(int team);
+
+    private:
+        void readPPM(std::string fileName);
     private:
         int x_size;
         int y_size;
         pixel_type_t * map;
+        std::map< int , std::vector<Coord> > teamSpawnMap;
 };
 
 /**
