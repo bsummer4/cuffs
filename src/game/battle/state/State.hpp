@@ -8,6 +8,8 @@
 #include <sstream>
 #include "Map.hpp"
 #include "coord.hpp"
+#include "GameObject.hpp"
+#include "Projectile.hpp"
 using namespace std;
 
 /** 
@@ -47,7 +49,7 @@ class State {
         State();
         //virtual double changeWind(double newwind); //RETURNS NEW SPEED, IF CHANGED
         //virtual double getWind(); //RETURNS SPEED
-        //virtual void hitObj(Coord coord, Projectile &proj);
+        virtual void hitObj(Coord coord, Projectile &proj);
         virtual pixel_type_t getPixel(Coord coord);  //Gets the pixel defined at row, column
         virtual pixel_type_t getPixel(int x, int y);  //Gets the pixel defined at row, column
         virtual string setMap(string mapname);//Not fully implemented yet
@@ -67,10 +69,9 @@ class State {
         string mapname;
         bool battlestarted;
         int weaponid;
-        vector< Coord > objects;
+        vector<GameObject::GameObj> objs;
         Map map;
 };
-
 /**
  * @}
  */

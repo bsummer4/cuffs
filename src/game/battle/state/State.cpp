@@ -14,13 +14,11 @@ double State::getWind() {
 */
 
 ///Creates an explosion based on which object_id it hit with
-/*
 void State::hitObj(Coord coord, Projectile &proj) {
   if(DEBUG)
     cerr << "hitObj called with a coord" << endl;
   map.explosion(coord, proj.radius);
 }
-*/
 
 ///Method for getting the pixel at Coordinate coord
 pixel_type_t State::getPixel(Coord coord) {
