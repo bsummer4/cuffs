@@ -44,9 +44,9 @@ namespace GameObject {
       Coord location;
       int type;
     protected:
-      GameObj() {}
-      GameObj(int objtype, Coord coord) : type(objtype), location(coord) {}
-      GameObj(int objtype, int x, int y) : type(objtype), location(Coord(x,y)) {}
+      //GameObj() {};
+      GameObj(int objtype, Coord coord) : type(objtype), location(coord) {};
+      GameObj(int objtype, int x, int y) : type(objtype), location(Coord(x,y)) {};
   };
 
 }

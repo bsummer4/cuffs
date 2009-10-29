@@ -11,7 +11,11 @@ LIBSYNC = $(top_srcdir)/src/game/battle/synchronizer/libsync.la
 LIBINT = $(top_srcdir)/src/game/battle/interpreter/libint.la
 LIBGEN = $(top_srcdir)/src/game/battle/generator/libgen.la
 
-noinst_PROGRAMS = CMBTests 
+noinst_PROGRAMS = CMBserverTest 
 
-CMBTests_SOURCES = CMBTests.cpp
-CMBTests_LDADD = $(LIBSYNC) $(LIBINT) $(LIBGEN) -lboost_thread 
+CMBserverTest_SOURCES = CMBserverTest.cpp
+CMBserverTest_LDADD = $(LIBSYNC) $(LIBINT) $(LIBGEN) -lboost_thread 
+
+noinst_PROGRAMS = CMBclientTest 
+CMBclientTest_SOURCES = CMBclientTest.cpp
+CMBclientTest_LDADD = $(LIBSYNC) $(LIBINT) $(LIBGEN) -lboost_thread 
