@@ -22,9 +22,10 @@
  *
  */
 class Coord {
-    public:
-        int x;
-        int y;
+  public:
+    Coord(int xcoord, int ycoord);
+    int x;
+    int y;
 };
 
 /**
