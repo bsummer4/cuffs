@@ -7,7 +7,7 @@ using namespace GameObject;
 int main (int argc, char **argv)
 {
 
-  Projectile proj(0, Coord(0,0), 5, 5);
+  Projectile proj(1, 0, Coord(0,0), 5, 5);
 
   //-1*1+5*1 + 0
   //-1*4+5*2 + 0

@@ -12,10 +12,10 @@ double State::getWind() {
 }//RETURNS SPEED
 
 ///Creates an explosion based on which object_id it hit with
-void State::hitObj(Coord coord, Projectile &proj) {
+void State::projHit(Coord coord, Projectile &proj) {
   if(DEBUG)
     cerr << "hitObj called with a coord" << endl;
-  map.explosion(coord, proj.radius);
+  bmap.explosion(coord, proj.radius);
 }
 
 ///Method for getting the pixel at Coordinate coord
@@ -27,7 +27,7 @@ pixel_type_t State::getPixel(Coord coord) {
     cerr << "No map defined when trying to get a pixel from the map." << endl;
     return 0;
   }
-  map.getPixel(coord);
+  bmap.getPixel(coord);
 }//Gets the pixel defined at coord
 
 ///Method for getting the pixel at Coordinate coord
@@ -39,7 +39,7 @@ pixel_type_t State::getPixel(int x, int y) {
     cerr << "No map defined when trying to get a pixel from the map." << endl;
     return 0;
   }
-  map.getPixel(Coord(x,y));
+  bmap.getPixel(Coord(x,y));
 }//Gets the pixel defined at coord
 
 string State::setMap(string name) {
@@ -92,21 +92,21 @@ void State::setupMap() {
     cerr << "No map defined when trying to set up the map." << endl;
     return;
   }
-  map.loadMap(mapname);
+  bmap.loadMap(mapname);
 }
 
-void State::addPlayer(Coord coord, int team, int health) {
+void State::addPlayer(string name, Coord coord, int team, int health) {
   if(DEBUG)
     cerr << "addPlayer called" << endl;
-  players.push_back(Player(coord, team, health));
+  players.insert(make_pair(name, Player(name, coord, team, health)));
 }
 
-void State::addProjectile(int weapontype, int x, int y, float xvel, float yvel) {
-  projectiles.push_back(Projectile(weapontype, Coord(x, y), xvel, yvel));
+void State::addProjectile(int projID, int weapontype, int x, int y, float xvel, float yvel) {
+  projectiles.insert(make_pair(projID, Projectile(projID, weapontype, Coord(x, y), xvel, yvel)));
 }
 
-void State::addProjectile(int weapontype, Coord coord, float xvel, float yvel) {
-  projectiles.push_back(Projectile(weapontype, coord, xvel, yvel));
+void State::addProjectile(int projID, int weapontype, Coord coord, float xvel, float yvel) {
+  projectiles.insert(make_pair(projID, Projectile(projID, weapontype, coord, xvel, yvel)));
 }
 
 float State::getGravity() {
@@ -118,5 +118,9 @@ void State::setGravity(float newgrav) {
 }
 
 void State::moveObj(int obj_id, int x, int y)
+{
+}
+
+void State::hitObj(int obj_id, int x, int y)
 {
 }

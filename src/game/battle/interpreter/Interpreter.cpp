@@ -100,6 +100,21 @@ void GameInterpreter::handleEvent(string &event) {
         }
         state.moveObj(stringtoint(token[2]), stringtoint(token[3]), stringtoint(token[4]));
         break;
+      case HIT:
+        if(token.size() < 5) {
+          cerr << "Malformed command sent to interpreter.  /hit must be followed by a valid integer obj_id, x, and y" << endl;
+          return;
+        }
+        state.hitObj(stringtoint(token[2]), stringtoint(token[3]), stringtoint(token[4]));
+        break;
+      case QUERY:
+        if(token.size() < 4)
+        {
+          cerr << "Malformed command sent to interpreter.  /query must be followed by a valid integer obj_id, x, and y" << endl;
+          return;
+        }
+        //WHATEVER WE QUERY???
+        break;
     }
   }
   return;

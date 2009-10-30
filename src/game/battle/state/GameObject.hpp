@@ -46,13 +46,11 @@ namespace GameObject {
       int type;
       float xvelocity;
       float yvelocity;
-      time_t starttime;
       virtual void movePhysics(int time, float gravity, float windspeed);
     protected:
       //GameObj() {};
       GameObj(int objtype, Coord coord, float xv, float yv);
   };
-
 }
 /**
  * @}

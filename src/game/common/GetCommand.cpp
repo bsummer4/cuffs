@@ -31,6 +31,10 @@ namespace GameUtils{
       return LAUNCHGAME;
     } else if (command.compare("/move") == 0) {
       return MOVE;
+    } else if (command.compare("/hit") == 0) {
+      return HIT;
+    } else if (command.compare("/query") == 0) {
+      return HIT;
     } else {
       return MESSAGE;
     }

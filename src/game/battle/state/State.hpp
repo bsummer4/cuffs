@@ -50,7 +50,7 @@ class State {
         State();
         virtual double changeWind(float newwind); //RETURNS NEW SPEED, IF CHANGED
         virtual double getWind(); //RETURNS SPEED
-        virtual void hitObj(Coord coord, Projectile &proj);
+        virtual void projHit(Coord coord, Projectile &proj);
         virtual pixel_type_t getPixel(Coord coord);  //Gets the pixel defined at row, column
         virtual pixel_type_t getPixel(int x, int y);  //Gets the pixel defined at row, column
         virtual string setMap(string mapname);//Not fully implemented yet
@@ -60,12 +60,13 @@ class State {
         virtual bool getBattleState();
         virtual bool changeWeapon(int weapon);  //sets current weapon
         virtual int getWeapon();    //returns current weapon
-        virtual void addPlayer(Coord coord, int team, int health);
-        virtual void addProjectile(int weapontype, Coord coord, float xvel, float yvel);
-        virtual void addProjectile(int weapontype, int x, int y, float xvel, float yvel);
+        virtual void addPlayer(string name, Coord coord, int team, int health);
+        virtual void addProjectile(int projID, int weapontype, Coord coord, float xvel, float yvel);
+        virtual void addProjectile(int projID, int weapontype, int x, int y, float xvel, float yvel);
         virtual float getGravity();
         virtual void setGravity(float newgrav);
         virtual void moveObj(int obj_id, int x, int y);
+        virtual void hitObj(int obj_id, int x, int y);
 
     protected:
         virtual void setupMap();
@@ -74,10 +75,10 @@ class State {
         string mapname;
         bool battlestarted;
         int weaponid;
-        vector<Player> players;
-        vector<Projectile> projectiles;
-        vector<Projectile> myprojectiles;
-        BattleMap map;
+        map<string, Player> players;
+        map<int, Projectile> projectiles;
+        map<int, Projectile> myprojectiles;
+        BattleMap bmap;
         float gravity;
 };
 /**
