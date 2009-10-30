@@ -19,25 +19,41 @@ lib_LTLIBRARIES = libconnection.la
 libconnection_la_SOURCES = Connection.cpp SwitchboxAdmin.cpp
 libconnection_la_LIBADD = libmessaging.la
 
+## SWIG Stuff Autotoolized http://realmike.org/python/swig_linux.htm
+BUILT_SOURCES = switchbox_client_wrap.c
+SWIG_SOURCES = switchbox_client.i
+
+pkgpyexec_LTLIBRARIES = _switchbox_client.la
+
+pkgpython_PYTHON = switchbox_client.py
+SWIG_PYTHON_OPT = -python -lcpointer.i
+
+_switchbox_client_la_SOURCES = message.c switchbox_client.c switchbox_client_wrap.c
+_switchbox_client_la_CPPFLAGS = $(SWIG_PYTHON_CPPFLAGS) -I/usr/include/python@PYTHON_VERSION@
+_switchbox_client_la_LDFLAGS = -module
+
+switchbox_client_wrap.c :$(SWIG_SOURCES)
+	$(SWIG) $(SWIG_PYTHON_OPT) -o $@ $<
+
 #####################
 # Manual make rules #
 #####################
 
-all-local: bindings
+#all-local: bindings
 
 SOURCES = $(switchbox_SOURCES)
 python_junk =  *.pyc switchbox_client.py
 clean-local:; rm -f *wrap.o *wrap.c *.so *.cflow $(python_junk)
 
 # Python Bindings
-bindings: _switchbox_client.so
+#bindings: _switchbox_client.so
 
-switchbox_client_wrap.c: switchbox_client.i
-	swig -python -lcpointer.i switchbox_client.i
+#switchbox_client_wrap.c: switchbox_client.i
+#	swig -python -lcpointer.i switchbox_client.i
 
-_switchbox_client.so: message.c switchbox_client.c switchbox_client_wrap.c
-	$(CC) --std=gnu99 -c $^ -I/usr/include/python2.6
-	$(CC) $(^:.c=.o) -shared -o _switchbox_client.so
+#_switchbox_client.so: message.c switchbox_client.c switchbox_client_wrap.c
+#	$(CC) --std=gnu99 -c $^ -I/usr/include/python2.6
+#	$(CC) $(^:.c=.o) -shared -o _switchbox_client.so
 
 # Tools
 ide: call_graph.cflow reverse_call_graph.cflow

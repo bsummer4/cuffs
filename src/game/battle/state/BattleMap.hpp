@@ -16,7 +16,11 @@
  */
 
 /// Value pixel_type_t takes when the map is empty.
-static const char MAP_EMPTY = 0;
+static const unsigned char MAP_EMPTY = 0;
+/// Value pixel_type_t takes for a destructable pixel.
+static const unsigned char MAP_DESTRUCTABLE = 128;
+/// Value pixel_type_t takes for an destructable pixel.
+static const unsigned char MAP_INDESTRUCTABLE = 255;
 
 /// A typedef that is the container for one pixel for the map.
 typedef unsigned char pixel_type_t;
@@ -39,7 +43,7 @@ class BattleMap{
         std::vector<Coord> getTeamSpawns(int team);
 
     private:
-        void readPPM(std::string fileName);
+        void readPGM(std::string fileName);
     private:
         int x_size;
         int y_size;

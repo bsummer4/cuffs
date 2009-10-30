@@ -35,6 +35,6 @@ else
     if [ ! -e NEWS ]; then ln -s doc/news.rst NEWS; fi
     if [ ! -e ChangeLog ]; then ln -s doc/changes.rst ChangeLog; fi
 
-    echo "$PROMPT" autoreconf --install
-    autoreconf --install
+    echo "$PROMPT" autoreconf -I m4 --install
+    autoreconf -I m4 --install
 fi

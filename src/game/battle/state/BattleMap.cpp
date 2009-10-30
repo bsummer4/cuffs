@@ -42,7 +42,7 @@ void BattleMap::loadMap(std::string fileName){
     (*it).second.push_back(Coord(xpos,ypos));
   } else {
     // If sscanf fails, assume that we're done and this is the map file
-    readPPM(inputLine1);
+    readPGM(inputLine1);
   }
 }
 
@@ -52,7 +52,7 @@ void BattleMap::loadMap(std::string fileName){
  * 
  * @param fileName The name of the .ppm file. 
  */
-void BattleMap::readPPM(std::string fileName){
+void BattleMap::readPGM(std::string fileName){
     ifstream inFile(fileName.c_str());
 
     char inputLine1[81];
@@ -73,7 +73,14 @@ void BattleMap::readPPM(std::string fileName){
     for (int i=0; i<x_size; i++){
         for (int j=0; j<y_size; j++) {
             inFile >> nextChar;
-            map[i*x_size+j] = nextChar;
+            if ( nextChar == MAP_EMPTY ||
+                 nextChar == MAP_DESTRUCTABLE ||
+                 nextChar == MAP_INDESTRUCTABLE ) {
+                map[i*x_size+j] = nextChar;
+            } else { 
+                cerr << "Got a bad pixel value in the image" << endl;
+                ///@TODO Throw an exception here.
+            }
         }
     }
     cout << "Map input complete.\n";
@@ -95,6 +102,19 @@ pixel_type_t BattleMap::getPixel(int x, int y){
  */
 pixel_type_t BattleMap::getPixel(Coord c){
     return map[c.x*x_size+c.y];
+}
+
+/**
+ * Get a vector of all the spawn points for the given 
+ * team number
+ */
+std::vector<Coord> BattleMap::getTeamSpawns(int team){
+    std::map< int , std::vector<Coord> >::iterator it;
+    it = teamSpawnMap.find(team);
+    if ( it != teamSpawnMap.end() ){
+        return std::vector<Coord>();
+    }
+    return (*it).second;
 }
 
 /** 

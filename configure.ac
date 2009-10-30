@@ -1,6 +1,9 @@
 # initial information about the project
 AC_INIT([Fistacuffs],[0.1],[])
 
+# Bootstrap told me to do it!
+AC_CONFIG_MACRO_DIR([m4])
+
 # check if the source folder is available
 #AC_CONFIG_SRCDIR([src/MYSOURCEFILE.cpp])
 
@@ -32,6 +35,12 @@ AC_TYPE_SIZE_T
 # --> set these variables instead of CXXFLAGS or LDFLAGS (for user only)
 AC_SUBST([AM_CXXFLAGS])
 AC_SUBST([AM_LDFLAGS])
+
+# Check for SWIG
+AM_PATH_PYTHON(2.6)
+AX_PKG_SWIG(1.3.17, [], [ AC_MSG_ERROR([SWIG is required to build..]) ])
+AX_SWIG_ENABLE_C
+AX_SWIG_ENABLE_PYTHON
 
 ########################################################################
 # Check for pthread headers.
