@@ -1,3 +1,26 @@
+/*
+  Some pointers for reading this:
+
+  - We use the switchbox_client, and message libraries, read those
+    first.
+  - Each client has its own thread:  This is somewhat inefficient, but
+    it's simple, and it's good enough for what we're doing.
+  - New clients are always assigned the lowest available address.
+  - Client and Group addresses are indexes into a big global array of
+    structs.  This is simple and efficient.
+  - Clients are only locked when sending them data.
+  - Messages can be any size are are stored on the heap.  This is
+    simple and flexible (no limit on message size).
+
+  Possible preformance enhancements:
+
+  - Use select() instead of threads.
+  - Use a message buffer on the stack and only malloc/free if the
+    message is too big for the buffer.
+
+  These are all complicated and probably not worth doing.
+*/
+
 #include "switchbox_client.h"
 #include <pthread.h>
 #include <assert.h>
@@ -9,10 +32,10 @@
 
 enum { NEW_CLIENT, DELETED_CLIENT };
 
-void run_switchbox(int port);
-void init_switchbox();
+void run(int port);
+void init();
 void announce(SBMessage *admin_message);
-bool switchbox_locking_send(SBMessage * m);
+bool locking_send(SBMessage * m);
 void print_message(SBMessage * m);
 
 // Implementation
@@ -23,8 +46,8 @@ int main(int argc, char **argv) {
   // of stopping the program
   signal(SIGPIPE, SIG_IGN);
 
-  init_switchbox();
-  run_switchbox(SWITCHBOX_PORT);
+  init();
+  run(SWITCHBOX_PORT);
   return 0;
 }
 
@@ -51,7 +74,7 @@ char *routing_type_to_string(int routing_type) {
 typedef struct client {
   Socket connection;
   pthread_t thread;
-  pthread_mutex_t lock;
+  pthread_mutex_t lock; // for sending
   bool used;
 } Client;
 
@@ -160,7 +183,7 @@ void send_error(int to, int type) {
   msg->routing_type = type;
   msg->from = -1;
   msg->to = to;
-  switchbox_locking_send(msg);
+  locking_send(msg);
   free(msg);
 }
 
@@ -203,7 +226,7 @@ bool define_group(int group_id, int num_clients, int *users) {
   return true;
 }
 
-void switchbox_handle_admin(SBMessage * m) {
+void handle_admin(SBMessage * m) {
   admin_message *admin = (admin_message *) m->data;
   size_t header_size = sizeof(int) * 4;
   size_t admin_size = sizeof(admin_task_t) + sizeof(int);
@@ -244,21 +267,21 @@ void switchbox_handle_admin(SBMessage * m) {
 }
 
 /// Locks the m.target's client while sending.
-bool switchbox_locking_send(SBMessage * m) {
+bool locking_send(SBMessage * m) {
   Client *target = clients + m->to;
   Socket socket = target->connection;
   if (!is_client_used(target))
     return false;
   if (debug) {
     printf
-      ("switchbox_locking_send: Locking before sending message to %d.  \n",
+      ("locking_send: Locking before sending message to %d.  \n",
        m->to);
     print_message(m);
   }
   pthread_mutex_lock(&target->lock);
   bool success = switchbox_send(socket, m);
   if (debug)
-    printf("switchbox_locking_send: [%d] Sent, unlocking... \n", m->to);
+    printf("locking_send: [%d] Sent, unlocking... \n", m->to);
   pthread_mutex_unlock(&target->lock);
   return success;
 }
@@ -282,7 +305,7 @@ bool multicast(SBMessage * m) {
 
   iter(ii, 0, g->num_members) {
     m->to = g->members[ii];
-    if (!switchbox_locking_send(m)) {
+    if (!locking_send(m)) {
       if (debug)
         printf("MULTICAST ERROR: couldn't send to %d\n", m->to);
       return false;
@@ -299,7 +322,7 @@ bool broadcast(SBMessage * m) {
       if (debug)
         printf("broadcasting to %d\n", ii);
     m->to = ii;
-    if (!switchbox_locking_send(m))
+    if (!locking_send(m))
       return false;
   }
   return true;
@@ -332,7 +355,7 @@ void *handle_connection(void *client_) {
     }
     switch (m->routing_type) {
     case UNICAST:
-      if (!switchbox_locking_send(m)) {
+      if (!locking_send(m)) {
         if (debug)
           printf
             ("handle_connection: ERROR bad client %d (disconnected?).  \n",
@@ -348,14 +371,13 @@ void *handle_connection(void *client_) {
         send_error(client_id, INVALID_TARGET);
       break;
     case ADMIN:
-      switchbox_handle_admin(m);
+      handle_admin(m);
       break;
     default:
       send_error(client_id, TYPE_ERROR);
     }
     free(m);
   }
-
 
   // The connection has been closed
   remove_client(client);
@@ -380,11 +402,12 @@ void setup_connection(Socket s) {
   pthread_create(&(client->thread), NULL, handle_connection, client);
 }
 
-void init_switchbox() {
+void init() {
   iter(ii, 0, MAX_GROUPS) groups[ii].used = false;
+  iter(ii, 0, MAX_CLIENTS) clients[ii].used = false;
 }
 
-void run_switchbox(int port) {
+void run(int port) {
   Listener l = make_listener(port);
   Socket s;
   while (valid_socket(s = accept_connection(l)))
