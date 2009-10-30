@@ -1,0 +1,29 @@
+#!/bin/sh
+
+find_file_up_tree() {
+  [ $# = 1 ] || exit 1
+  target_filename=$1
+  search_dir=$PWD
+
+  while [ 1 ]
+  do
+    target=$search_dir/$target_filename
+    [ $search_dir = '/' ] && target="/$target_fileanme"
+    if [ -e $target ]; then echo $target; exit; fi
+    [ $search_dir = '/' ] && exit 1
+    search_dir=`dirname $search_dir`
+  done
+}
+
+invoke=`basename $0`
+
+if [ $invoke = "proot" ]
+then dirname `find_file_up_tree Project`; fi
+
+if [ $invoke = "pbuild" ]
+then dir=`dirname \`find_file_up_tree Project\``
+     pfile=$dir/Project
+     command=`awk '$2 == "build" {for(i=4;i<=NF;i++) printf "%s ", $i}' < $pfile`
+     cd $dir
+     $command
+fi
