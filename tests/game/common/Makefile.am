@@ -5,7 +5,7 @@ AM_CPPFLAGS = -I$(top_srcdir)/src/game/battle/synchronizer \
               -I$(top_srcdir)/src/switchbox \
               -I$(top_srcdir)/src/game/common
 
-TESTS=CMBTest
+TESTS=CMBgo.sh
 
 LIBSYNC = $(top_srcdir)/src/game/battle/synchronizer/libsync.la
 LIBINT = $(top_srcdir)/src/game/battle/interpreter/libint.la

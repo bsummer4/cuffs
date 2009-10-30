@@ -1,13 +1,15 @@
 #!/bin/bash 
 
 echo "Starting switchbox" 
-ssh -f ccraig7@hydra3.eecs.utk.edu '~/Fistacuffs/trunk/src/switchbox/switchbox &'
+ssh -f ccraig7@hydra3.eecs.utk.edu '~/Fistacuffs/trunk/src/switchbox/switchbox & > whatSheSaid.txt; varpid=`echo $!`'
 
 switchpid=$!
 echo "pid = $switchpid"
 echo "Running CMB on clients"
-ssh -f ccraig7@hydra4.eecs.utk.edu '~/Fistacuffs/trunk/test/game/common/CMBclientTest < 'hydra3' > whatIsaid.txt'
-ssh -f ccraig7@hydra5.eecs.utk.edu '~/Fistacuffs/trunk/test/game/common/CMBclientTest < 'hydra3' > whatIsaid.txt'
+ssh -f ccraig7@hydra4.eecs.utk.edu '~/Fistacuffs/trunk/test/game/common/CMBclientTest < 'hydra3' > whatIsaid4.txt'
+ssh -f ccraig7@hydra5.eecs.utk.edu '~/Fistacuffs/trunk/test/game/common/CMBclientTest < 'hydra3' > whatIsaid5.txt'
+ssh -f ccraig7@hydra3.eecs.utk.edu 'pkill $var'
+
 #echo "[./SimpleSynchronizer_test < 1.in > 1.test_simple]"
 #./SimpleSynchronizer_test < 1.in > 1.test_simple
 #GOT=`sort 1.test_simple`

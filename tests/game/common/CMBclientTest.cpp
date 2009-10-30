@@ -32,7 +32,7 @@ int main(){
     */
     //cout << connections << endl;
     //Push hosts on the hosts vector"
-   cons.push_back(new Connection(server.c_str(), SWITCHBOX_PORT)); 
+    cons.push_back(new Connection(server.c_str(), SWITCHBOX_PORT)); 
     cons.push_back(new Connection("localhost", SWITCHBOX_PORT)); 
 
     for (i = 0; i < 2; i++){
@@ -67,7 +67,7 @@ int main(){
       //cout << " clientnum = " << clientnum << " message: " << buf << endl;
 */
       
-      cons.at(1)->sendMessage(4*sizeof(int)+strlen(buf)+1, UNICAST, cons.at(0)->getAddress(), buf);
+      cons.at(1)->sendMessage(4*sizeof(int)+strlen(buf)+1, BROADCAST, cons.at(0)->getAddress(), buf);
       usleep(1000);
       sleep(rand()%4+1);
     }
