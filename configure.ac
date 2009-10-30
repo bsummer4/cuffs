@@ -96,6 +96,7 @@ AC_CONFIG_FILES([Makefile
                  tests/game/battle/generator/Makefile
                  tests/game/battle/interpreter/Makefile
                  tests/game/battle/synchronizer/Makefile
+                 tests/game/battle/state/Makefile
                  doc/Makefile])
 
 # finally this generates the Makefiles etc. for the build

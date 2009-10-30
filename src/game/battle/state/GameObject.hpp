@@ -42,6 +42,7 @@ namespace GameObject {
   class GameObj {
     public:
       Coord location;
+      Coord initlocation;
       int type;
       float xvelocity;
       float yvelocity;

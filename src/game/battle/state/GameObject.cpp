@@ -6,12 +6,12 @@ namespace GameObject {
   {
     float deltat;
     deltat = (float) time;
-    location.y = .5*gravity*deltat*deltat + yvelocity*deltat + location.y;
-    location.x = .5*windspeed*deltat*deltat + xvelocity*deltat + location.x;
+    location.y = .5*gravity*deltat*deltat + yvelocity*deltat + initlocation.y;
+    location.x = .5*windspeed*deltat*deltat + xvelocity*deltat + initlocation.x;
   }
 
   GameObj::GameObj(int objtype, Coord coord, float xv, float yv)
-    : type(objtype), location(coord), xvelocity(xv), 
+    : type(objtype), initlocation(coord), location(coord), xvelocity(xv), 
     yvelocity(yv){ };
 }
 
