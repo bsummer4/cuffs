@@ -93,6 +93,13 @@ void GameInterpreter::handleEvent(string &event) {
         }
         state.changeWeapon(stringtoint(token[2]));
         break;
+      case MOVE:
+        if(token.size() < 5) {
+          cerr << "Malformed command sent to interpreter.  /move must be followed by a valid integer obj_id, x, and y" << endl;
+          return;
+        }
+        state.moveObj(stringtoint(token[2]), stringtoint(token[3]), stringtoint(token[4]));
+        break;
     }
   }
   return;

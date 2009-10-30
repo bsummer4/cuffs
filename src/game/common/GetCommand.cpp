@@ -29,6 +29,8 @@ namespace GameUtils{
       return FIGHT;
     } else if (command.compare("/launchgame") == 0) {
       return LAUNCHGAME;
+    } else if (command.compare("/move") == 0) {
+      return MOVE;
     } else {
       return MESSAGE;
     }

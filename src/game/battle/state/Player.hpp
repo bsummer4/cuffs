@@ -49,6 +49,7 @@ class Player : public GameObj {
     int team;
     int health;
     void hit(int damage);
+    string name;
 };
 
 /**

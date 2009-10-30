@@ -30,6 +30,18 @@ pixel_type_t State::getPixel(Coord coord) {
   map.getPixel(coord);
 }//Gets the pixel defined at coord
 
+///Method for getting the pixel at Coordinate coord
+pixel_type_t State::getPixel(int x, int y) {
+  if(DEBUG)
+    cerr << "getPixel called with x" << x << "and y" << y << endl;
+  if(mapname.length() == 0)
+  {
+    cerr << "No map defined when trying to get a pixel from the map." << endl;
+    return 0;
+  }
+  map.getPixel(Coord(x,y));
+}//Gets the pixel defined at coord
+
 string State::setMap(string name) {
   if(DEBUG)
     cerr << "setMap called with " << name << endl;
@@ -89,6 +101,10 @@ void State::addPlayer(Coord coord, int team, int health) {
   players.push_back(Player(coord, team, health));
 }
 
+void State::addProjectile(int weapontype, int x, int y, float xvel, float yvel) {
+  projectiles.push_back(Projectile(weapontype, Coord(x, y), xvel, yvel));
+}
+
 void State::addProjectile(int weapontype, Coord coord, float xvel, float yvel) {
   projectiles.push_back(Projectile(weapontype, coord, xvel, yvel));
 }
@@ -99,4 +115,8 @@ float State::getGravity() {
 
 void State::setGravity(float newgrav) {
   gravity = newgrav;
+}
+
+void State::moveObj(int obj_id, int x, int y)
+{
 }
