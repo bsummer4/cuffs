@@ -1,9 +1,8 @@
 #include "State.hpp"
 
-State::State() {}
+State::State() { gravity = 9.8;}
 
-/*
-double State::changeWind(double newwind) {
+double State::changeWind(float newwind) {
   wind = newwind;
   return newwind;
 }//RETURNS NEW SPEED, IF CHANGED
@@ -11,7 +10,6 @@ double State::changeWind(double newwind) {
 double State::getWind() {
   return wind;
 }//RETURNS SPEED
-*/
 
 ///Creates an explosion based on which object_id it hit with
 void State::hitObj(Coord coord, Projectile &proj) {
@@ -31,18 +29,6 @@ pixel_type_t State::getPixel(Coord coord) {
   }
   map.getPixel(coord);
 }//Gets the pixel defined at coord
-
-///Method for getting the pixel at row, column 
-pixel_type_t State::getPixel(int row, int column) {
-  if(DEBUG)
-    cerr << "getPixel called with " << row << "row and " << column << "column" << endl;
-  if(mapname.length() == 0)
-  {
-    cerr << "No map defined when trying to set up the map." << endl;
-    return 0;
-  }
-  map.getPixel(row, column);
-}//Gets the pixel defined at row, column
 
 string State::setMap(string name) {
   if(DEBUG)
@@ -103,4 +89,14 @@ void State::addPlayer(Coord coord, int team, int health) {
   players.push_back(Player(coord, team, health));
 }
 
-void State::addProjectile(Coord coord, int team) {}
+void State::addProjectile(int weapontype, Coord coord, float xvel, float yvel) {
+  projectiles.push_back(Projectile(weapontype, coord, xvel, yvel));
+}
+
+float State::getGravity() {
+  return gravity;
+}
+
+void State::setGravity(float newgrav) {
+  gravity = newgrav;
+}

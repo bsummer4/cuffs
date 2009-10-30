@@ -48,11 +48,10 @@ static const int DEBUG = 1;
 class State {
     public:
         State();
-        //virtual double changeWind(double newwind); //RETURNS NEW SPEED, IF CHANGED
-        //virtual double getWind(); //RETURNS SPEED
+        virtual double changeWind(float newwind); //RETURNS NEW SPEED, IF CHANGED
+        virtual double getWind(); //RETURNS SPEED
         virtual void hitObj(Coord coord, Projectile &proj);
         virtual pixel_type_t getPixel(Coord coord);  //Gets the pixel defined at row, column
-        virtual pixel_type_t getPixel(int x, int y);  //Gets the pixel defined at row, column
         virtual string setMap(string mapname);//Not fully implemented yet
         virtual string getMapName();//Not fully implemented yet
         virtual void startBattle(); //Not fully implemented yet
@@ -61,11 +60,13 @@ class State {
         virtual bool changeWeapon(int weapon);  //sets current weapon
         virtual int getWeapon();    //returns current weapon
         virtual void addPlayer(Coord coord, int team, int health);
-        virtual void addProjectile(Coord coord, int team);
+        virtual void addProjectile(int weapontype, Coord coord, float xvel, float yvel);
+        virtual float getGravity();
+        virtual void setGravity(float newgrav);
 
     protected:
         virtual void setupMap();
-        //double wind;  //wind speed and direction--negative for left positive for right
+        float wind;  //wind speed and direction--negative for left positive for right
         ifstream mapstream;
         string mapname;
         bool battlestarted;
@@ -73,6 +74,7 @@ class State {
         vector<Player> players;
         vector<Projectile> projectiles;
         BattleMap map;
+        float gravity;
 };
 /**
  * @}
