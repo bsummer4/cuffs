@@ -21,14 +21,14 @@ Version 2
 #define MAXLEN 512 
 
 /**
-  * @Generator Constructor
+  * Generator Constructor
   * Builds the Generator class
   *
 **/
 /* Code goes here*/
 
 /** 
- * @genid 
+ * genid 
  * Generates a random number
  */
 int Generator::genID()
@@ -36,7 +36,7 @@ int Generator::genID()
   return rand() %1000;
 };
 /**
- * @genBool
+ * genBool
  * Generates a random boolean
  */
 bool Generator::genBool()
@@ -45,7 +45,7 @@ bool Generator::genBool()
 }
 
 /**
- * @genName
+ * genName
  * Generates a random string
  */
 string Generator::genName()
@@ -61,7 +61,7 @@ string Generator::genName()
 }
 
 /**
- * @genStateMsg buffer length time
+ * genStateMsg buffer length time
  * Prints state messages
  */
 //buffer for the state message, length = length of buffer

@@ -2,9 +2,13 @@
 #include "Connection.hpp"
 #include <iostream>
 #include "switchbox_client.h"
+
 /**
- * @defgroup SyncTest Testing
- * @ingroup Synchronizer
+ * @defgroup Tests Tests
+ */
+/**
+ * @defgroup SyncTest SyncTest
+ * @ingroup Tests
  */
 /**
  * @addtogroup SyncTest

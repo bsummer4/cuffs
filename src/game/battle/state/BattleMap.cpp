@@ -22,7 +22,7 @@ BattleMap::~BattleMap(){
  * enumerated. Once this occurs, a string that contains the name
  * of the .ppm file to load up as a map is given. 
  * 
- * @filename fileName The name of the .map file to open. 
+ * @param fileName fileName The name of the .map file to open. 
  */
 void BattleMap::loadMap(std::string fileName){
   ifstream inFile(fileName.c_str());
