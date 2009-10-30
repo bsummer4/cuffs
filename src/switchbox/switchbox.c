@@ -107,6 +107,7 @@ void update_last_used_client(int what_changed, int index) {
     while ((last_used_client >= 0) &&
            !is_client_used(clients + last_used_client))
       last_used_client--;
+    break;
   default:
     assert(false);
   }
