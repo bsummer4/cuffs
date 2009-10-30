@@ -33,12 +33,13 @@ int main(){
     //cout << connections << endl;
     //Push hosts on the hosts vector"
     cons.push_back(new Connection(server.c_str(), SWITCHBOX_PORT)); 
-    cons.push_back(new Connection("localhost", SWITCHBOX_PORT)); 
+    cons.at(0)->start();
+    //cons.push_back(new Connection("localhost", SWITCHBOX_PORT)); 
 
-    for (i = 0; i < 2; i++){
-      cons.push_back(new Connection(hosts[i].c_str(), SWITCHBOX_PORT));
-      cons.at(i)->start();
-    }
+//    for (i = 0; i < 2; i++){
+     // cons.push_back(new Connection(hosts[i].c_str(), SWITCHBOX_PORT));
+//      cons.at(i)->start();
+//    }
 
     //Connection mycon("localhost", SWITCHBOX_PORT);
     //mycon.start();
@@ -50,9 +51,9 @@ int main(){
     srand(time (NULL));
 
     // Send a Null message.
-    for (int i = 0; i < connections; i++){
-      cons.at(i)->sendMessage(4*sizeof(int)+3, UNICAST, cons.at(0)->getAddress(), (char*)"0 "); //sent to switchbox?
-    }
+ //   for (int i = 0; i < connections; i++){
+      cons.at(0)->sendMessage(4*sizeof(int)+3, BROADCAST, cons.at(0)->getAddress(), (char*)"0 "); //sent to switchbox?
+ //   }
     sync.Start();
 
     //while(1){
@@ -66,8 +67,7 @@ int main(){
       buf[strlen(buf)-1] = '\0';
       //cout << " clientnum = " << clientnum << " message: " << buf << endl;
 */
-      
-      cons.at(1)->sendMessage(4*sizeof(int)+strlen(buf)+1, BROADCAST, cons.at(0)->getAddress(), buf);
+      cons.at(0)->sendMessage(4*sizeof(int)+strlen(buf)+1, BROADCAST, cons.at(0)->getAddress(), buf);
       usleep(1000);
       sleep(rand()%4+1);
     }
