@@ -48,6 +48,8 @@ class Player : public GameObj {
     Player(int type, Coord coord, int team);
     Player(int type, int x, int y, int team);
     int team;
+    int health;
+    void hit(int damage);
 };
 
 /**
