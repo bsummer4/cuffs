@@ -1,5 +1,10 @@
-def read_lines_of_words(stream):
-    return [line.strip().split() for line in stream.readlines()]
+"""
+Library for loading overworld maps in python.
+
+If called as a script, prints the map in JSON.
+"""
+
+from lib import *
 
 def read_map(input_stream):
     result = {'edges': [], 'name': None, 'image': None, 'zones': []}

@@ -1,9 +1,20 @@
 #!/usr/bin/python
 
 """
+
 This implements a game server for the overworld game.  Right now it
 only handles user logins and the current map.
+
+TODO
+====
+
+- Handle party messages correctly
+- Write code for forking off another game, and accepting results from
+  it.
+- more...
+
 """
+
 
 repo_root = "../../../"
 switchbox_dir = repo_root + 'src/switchbox/'

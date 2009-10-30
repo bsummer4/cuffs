@@ -1,5 +1,8 @@
 from functools import *
 
+def read_lines_of_words(stream):
+    return [line.strip().split() for line in stream.readlines()]
+
 def combine_dicts2(x, y):
     result = {}
     for key in x: result[key] = x[key]
