@@ -15,15 +15,28 @@ find_file_up_tree() {
   done
 }
 
+proot=`dirname \`find_file_up_tree Project\``
+pfile=$proot/Project
+
+custom_command () {
+  [ $# = 1 ] || exit 1
+
+  command=$1
+  awk="\$2 == \"$command\" {for(i=4;i<=NF;i++) printf \"%s \", \$i}"
+  command=`awk "\\$2 == \\"$command\\" {for(i=4;i<=NF;i++) printf \\"%s \\", \\$i}" < $pfile`
+  echo running $command at $proot
+  cd $proot
+  eval $command
+}
+
+
 invoke=`basename $0`
 
-if [ $invoke = "proot" ]
-then dirname `find_file_up_tree Project`; fi
-
+if [ $invoke = "proot" ]; then echo $proot; fi
+if [ $invoke = "pclean" ]; then custom_command clean; fi
+if [ $invoke = "psetup" ]; then custom_command setup; fi
 if [ $invoke = "pbuild" ]
-then dir=`dirname \`find_file_up_tree Project\``
-     pfile=$dir/Project
-     command=`awk '$2 == "build" {for(i=4;i<=NF;i++) printf "%s ", $i}' < $pfile`
-     cd $dir
-     $command
+then 
+     [ -e $proot/Makefile ] || custom_command setup
+     custom_command build
 fi

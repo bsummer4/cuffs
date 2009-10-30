@@ -3,12 +3,12 @@
 # Generates the autotools stuff.  E.g. ./configure
 
 PROMPT="  [$0]$"
-autotools_stuff="aclocal.m4 config.h.in autom4te.cache configure missing
-                 install-sh Makefile.in src/Makefile.in
-                 src/switchbox/Makefile.in build-aux depcomp doc/Makefile.in
-                 doc/Makefile tests/Makefile.in tests/switchbox/Makefile.in
-                 ltmain.sh config.sub config.guess src/common/Makefile.in
-                 doc/doxygen src/stateGen/Makefile.in"
+infiles=`find -name Makefile.in`
+autotools_stuff="aclocal.m4 autom4te.cache configure missing install-sh
+                 build-aux depcomp doc/Makefile ltmain.sh config.sub
+                 config.guess doc/doxygen $infiles py-compile
+                 m4/ltsugar.m4 m4/libtool.m4 m4/ltversion.m4 m4/lt~obsolete.m4
+                 m4/ltoptions.m4"
 
 symbolic_links="README DESIGN COPYING NEWS AUTHORS INSTALL ChangeLog"
 
