@@ -10,8 +10,8 @@ namespace GameObject {
     location.x = .5*windspeed*deltat*deltat + xvelocity*deltat + initlocation.x;
   }
 
-  GameObj::GameObj(int objtype, Coord coord, float xv, float yv)
-    : type(objtype), initlocation(coord), location(coord), xvelocity(xv), 
+  GameObj::GameObj(int objID, int objtype, Coord coord, float xv, float yv)
+    : id(objID), type(objtype), initlocation(coord), location(coord), xvelocity(xv), 
     yvelocity(yv){ };
 }
 

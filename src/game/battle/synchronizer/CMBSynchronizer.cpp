@@ -1,4 +1,5 @@
 #include "Synchronizer.hpp"
+using namespace std;
 /**
  * @file CMBSynchronizer.cpp
  * @author John R. Hoare

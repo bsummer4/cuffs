@@ -1,4 +1,6 @@
 #include "Interpreter.hpp"
+using namespace std;
+using namespace GameUtils;
 
 int eventParser(string &event, vector<string> &token){
   string::size_type start;

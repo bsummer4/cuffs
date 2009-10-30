@@ -1,4 +1,6 @@
 #include "State.hpp"
+using namespace std;
+using namespace GameObject;
 
 State::State() { gravity = 9.8;}
 
@@ -95,18 +97,27 @@ void State::setupMap() {
   bmap.loadMap(mapname);
 }
 
-void State::addPlayer(string name, Coord coord, int team, int health) {
+void State::addPlayer(int objID, string name, Coord coord, int team, int health) {
   if(DEBUG)
     cerr << "addPlayer called" << endl;
-  players.insert(make_pair(name, Player(name, coord, team, health)));
+  Player *play = new Player(objID, name, coord, team, health);
+  players.insert(make_pair(objID, play));
 }
 
 void State::addProjectile(int projID, int weapontype, int x, int y, float xvel, float yvel) {
-  projectiles.insert(make_pair(projID, Projectile(projID, weapontype, Coord(x, y), xvel, yvel)));
+  Projectile *proj = new Projectile(projID, weapontype, Coord(x, y), xvel, yvel);
+  GameObj *go = dynamic_cast<GameObj *>(proj);
+  projectiles.insert(make_pair(projID, proj));
+  myprojectiles.insert(make_pair(projID, proj));
+  objects.insert(make_pair(projID, go));
 }
 
 void State::addProjectile(int projID, int weapontype, Coord coord, float xvel, float yvel) {
-  projectiles.insert(make_pair(projID, Projectile(projID, weapontype, coord, xvel, yvel)));
+  Projectile *proj = new Projectile(projID, weapontype, coord, xvel, yvel);
+  GameObj *go = dynamic_cast<GameObj *>(proj);
+  projectiles.insert(make_pair(projID, proj));
+  myprojectiles.insert(make_pair(projID, proj));
+  objects.insert(make_pair(projID, go));
 }
 
 float State::getGravity() {
@@ -117,10 +128,11 @@ void State::setGravity(float newgrav) {
   gravity = newgrav;
 }
 
-void State::moveObj(int obj_id, int x, int y)
-{
+void State::moveObj(int obj_id, int x, int y) {
+  map<int, GameObject::GameObj *>::iterator it;
+  it = objects.find(obj_id);
 }
 
-void State::hitObj(int obj_id, int x, int y)
-{
+void State::hitObj(int obj_id, int x, int y) {
+  map<int, GameObject::GameObj>::iterator it;
 }

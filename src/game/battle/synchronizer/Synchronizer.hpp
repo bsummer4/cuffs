@@ -79,7 +79,7 @@ class CMBEvent{
         }
 
         /// So we can prettyprint this object
-        friend ostream& operator<<(ostream& output, const CMBEvent& c) {
+        friend std::ostream& operator<<(std::ostream& output, const CMBEvent& c) {
             output << "Time: " << c.eventOccurs << " String: " << c.eventString;
             return output;
         }

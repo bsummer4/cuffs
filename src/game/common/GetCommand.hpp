@@ -1,10 +1,9 @@
 #pragma once
 #include <string>
 #include <iostream>
-using namespace std;
 
 namespace GameUtils {
   enum { LOGIN, MAP, ZONE, USER, GROUP, PARTY, FIGHT, LAUNCHGAME, SHOOT, BATTLESTART, BATTLESTOP, WEAPON, MESSAGE, MOVE, HIT, QUERY};
 
-  int GetCommand(string command);
+  int GetCommand(std::string command);
 };

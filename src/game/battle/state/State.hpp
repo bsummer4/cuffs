@@ -11,7 +11,6 @@
 #include "GameObject.hpp"
 #include "Projectile.hpp"
 #include "Player.hpp"
-using namespace std;
 
 /** 
  * @defgroup Game Game
@@ -53,14 +52,14 @@ class State {
         virtual void projHit(Coord coord, Projectile &proj);
         virtual pixel_type_t getPixel(Coord coord);  //Gets the pixel defined at row, column
         virtual pixel_type_t getPixel(int x, int y);  //Gets the pixel defined at row, column
-        virtual string setMap(string mapname);//Not fully implemented yet
-        virtual string getMapName();//Not fully implemented yet
+        virtual std::string setMap(std::string mapname);//Not fully implemented yet
+        virtual std::string getMapName();//Not fully implemented yet
         virtual void startBattle(); //Not fully implemented yet
         virtual void stopBattle();  //Not fully implemented yet
         virtual bool getBattleState();
         virtual bool changeWeapon(int weapon);  //sets current weapon
         virtual int getWeapon();    //returns current weapon
-        virtual void addPlayer(string name, Coord coord, int team, int health);
+        virtual void addPlayer(int objID, std::string name, Coord coord, int team, int health);
         virtual void addProjectile(int projID, int weapontype, Coord coord, float xvel, float yvel);
         virtual void addProjectile(int projID, int weapontype, int x, int y, float xvel, float yvel);
         virtual float getGravity();
@@ -71,13 +70,14 @@ class State {
     protected:
         virtual void setupMap();
         float wind;  //wind speed and direction--negative for left positive for right
-        ifstream mapstream;
-        string mapname;
+        std::ifstream mapstream;
+        std::string mapname;
         bool battlestarted;
         int weaponid;
-        map<string, Player> players;
-        map<int, Projectile> projectiles;
-        map<int, Projectile> myprojectiles;
+        std::map<int, Player *> players;
+        std::map<int, Projectile *> projectiles;
+        std::map<int, Projectile *> myprojectiles;
+        std::map<int, GameObject::GameObj *> objects;
         BattleMap bmap;
         float gravity;
 };

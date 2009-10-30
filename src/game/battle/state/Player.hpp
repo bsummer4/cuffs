@@ -2,8 +2,6 @@
 #include <string>
 #include "GameObject.hpp"
 #include "coord.hpp"
-using namespace std;
-using namespace GameObject;
 
 /** 
  * @defgroup Game Game
@@ -43,13 +41,13 @@ using namespace GameObject;
  *
  */
 
-class Player : public GameObj {
+class Player : public GameObject::GameObj {
   public:
-    Player(string pname, Coord coord, int teamnum, int inithealth);
+    Player(int objId, std::string pname, Coord coord, int teamnum, int inithealth);
     int team;
     int health;
     void hit(int damage);
-    string name;
+    std::string name;
 };
 
 /**

@@ -1,5 +1,6 @@
 #include "Interpreter.hpp"
 #include "State.hpp"
+using namespace std;
 
 int main(int argc, char **argv) {
   SimpleInterpreter si;

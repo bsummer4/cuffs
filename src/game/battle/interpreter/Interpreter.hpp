@@ -7,8 +7,6 @@
 #include <sstream>
 #include "State.hpp"
 #include "GetCommand.hpp"
-using namespace std;
-using namespace GameUtils;
 
 /** 
  * @defgroup Game Game
@@ -38,7 +36,7 @@ using namespace GameUtils;
  */
 class Interpreter {
     public:
-        virtual void handleEvent(string &event) = 0;
+        virtual void handleEvent(std::string &event) = 0;
 };
 
 /**
@@ -49,7 +47,7 @@ class Interpreter {
 class CatInterpreter : public Interpreter{
     public: 
         CatInterpreter() {};
-        virtual void handleEvent(string &event);
+        virtual void handleEvent(std::string &event);
 };
 
 /**
@@ -60,7 +58,7 @@ class CatInterpreter : public Interpreter{
 class SimpleInterpreter : public Interpreter{
     public: 
         SimpleInterpreter();
-        virtual void handleEvent(string &event);
+        virtual void handleEvent(std::string &event);
 };
 
 /**
@@ -71,7 +69,7 @@ class SimpleInterpreter : public Interpreter{
 class GameInterpreter : public Interpreter{
     public: 
         GameInterpreter(State &gameState);
-        virtual void handleEvent(string &event);
+        virtual void handleEvent(std::string &event);
     protected:
         State &state;
 };
