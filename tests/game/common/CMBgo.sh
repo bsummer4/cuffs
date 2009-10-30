@@ -5,12 +5,14 @@ echo "Starting switchbox"
 #ssh -f ccraig7@hydra3.eecs.utk.edu '~/Fistacuffs/trunk/src/switchbox/switchbox & > whatSheSaid.txt; varpid=`echo $!`'
 
 switchpid=$!
+hname=`hostname`
 echo "pid = $switchpid"
+echo "hostname = $hname"
 echo "Running CMB on clients"
 
 #it crashes here
-ssh -f ccraig7@cetus4.eecs.utk.edu '~/Fistacuffs/trunk/test/game/common/CMBclientTest < `hostname` > whatIsaid4.txt'
-ssh -f ccraig7@cetus5.eecs.utk.edu '~/Fistacuffs/trunk/test/game/common/CMBclientTest < `hostname` > whatIsaid5.txt'
+ssh -f ccraig7@cetus4.eecs.utk.edu '~/Fistacuffs/trunk/test/game/common/CMBclientTest < $hname > whatIsaid4.txt'
+ssh -f ccraig7@cetus5.eecs.utk.edu '~/Fistacuffs/trunk/test/game/common/CMBclientTest < $hname > whatIsaid5.txt'
 
 echo "Killing Switchbox"
 echo "[kill $switchpid]"

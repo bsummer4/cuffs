@@ -18,7 +18,6 @@ int main(){
     cout << "Who's the server? (name only/eecs domain)" << endl;
     cin >> server;
     server.append(".eecs.utk.edu");
- // I'll cut the crap. it's hydra3
  //  server = "hydra3.eecs.utk.edu";
 
   //  cout << "How many hosts?(up to 3)" << endl;
@@ -37,7 +36,7 @@ int main(){
     //cons.push_back(new Connection("localhost", SWITCHBOX_PORT)); 
 
 //    for (i = 0; i < 2; i++){
-     // cons.push_back(new Connection(hosts[i].c_str(), SWITCHBOX_PORT));
+//      cons.push_back(new Connection(hosts[i].c_str(), SWITCHBOX_PORT));
 //      cons.at(i)->start();
 //    }
 
@@ -52,7 +51,7 @@ int main(){
 
     // Send a Null message.
  //   for (int i = 0; i < connections; i++){
-      cons.at(0)->sendMessage(4*sizeof(int)+3, BROADCAST, cons.at(0)->getAddress(), (char*)"0 "); //sent to switchbox?
+    cons.at(5)->sendMessage(4*sizeof(int)+3, BROADCAST, cons.at(0)->getAddress(), (char*)"0 "); //sent to switchbox?
  //   }
     sync.Start();
 
