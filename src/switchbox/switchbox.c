@@ -42,12 +42,14 @@ void print_message(SBMessage * m);
 // ==============
 
 int main(int argc, char **argv) {
+  int port = (argc <= 1) ? 0 : atoi(argv[1]);
+
   // A broken pipe should just cause read() and write() to fail insead
   // of stopping the program
   signal(SIGPIPE, SIG_IGN);
 
   init();
-  run(SWITCHBOX_PORT);
+  run(port);
   return 0;
 }
 
@@ -409,6 +411,9 @@ void init() {
 
 void run(int port) {
   Listener l = make_listener(port);
+  printf("listening\n");
+  printf("port %d\n", listener_port(l));
+
   Socket s;
   while (valid_socket(s = accept_connection(l)))
     setup_connection(s);

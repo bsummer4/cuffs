@@ -22,8 +22,9 @@ extern bool debug;
 Socket open_connection(const char *hostname, const int port);
 Listener make_listener(int port);
 Socket accept_connection(Listener);
-void close_connection(Socket s);
+void close_connection(Socket);
 bool valid_socket(Socket);
+int listener_port(Listener);
 
 bool send_message(Socket, Message *);
 Message *receive_message(Socket);

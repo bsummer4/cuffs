@@ -238,19 +238,24 @@ make_listener_error:return -1;
 }
 
 
+int listener_port(Listener l) {
+  socklen_t socklen = sizeof(l);
+  struct sockaddr_in addr;
+  getsockname(l, (struct sockaddr*) &addr, &socklen);
+  return ntohs(addr.sin_port);
+}
+
 // Returns an invalid Socket on error
 Socket accept_connection(Listener l) {
-  struct sockaddr_in address;
-  int descriptor, addrlen = sizeof(address);
+  struct sockaddr address;
+  socklen_t addrlen = sizeof(address);
+  int descriptor;
 
-  if ((descriptor = accept(l, (struct sockaddr *) &address, &addrlen)) == -1) {
+  if ((descriptor = accept(l, &address, &addrlen)) == -1) {
     perror("accept");
-    goto accept_connection_error;
-  }
+    return -1; }
 
   return descriptor;
-
-accept_connection_error:return -1;
 }
 
 void close_connection(Socket s) {

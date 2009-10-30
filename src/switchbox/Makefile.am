@@ -41,23 +41,11 @@ switchbox_client_wrap.c :$(SWIG_SOURCES)
 all-local: _switchbox_client.so
 
 _switchbox_client.so: _switchbox_client.la
-	ln -s -f .libs/_switchbox_client.so _switchbox_client.so 
-
-#all-local: bindings
+	ln -s -f .libs/_switchbox_client.so _switchbox_client.so
 
 SOURCES = $(switchbox_SOURCES)
 python_junk =  *.pyc switchbox_client.py
-clean-local:; rm -f *wrap.o *wrap.c *.so *.cflow $(python_junk) _switchbox_client.so
-
-# Python Bindings
-#bindings: _switchbox_client.so
-
-#switchbox_client_wrap.c: switchbox_client.i
-#	swig -python -lcpointer.i switchbox_client.i
-
-#_switchbox_client.so: message.c switchbox_client.c switchbox_client_wrap.c
-#	$(CC) --std=gnu99 -c $^ -I/usr/include/python2.6
-#	$(CC) $(^:.c=.o) -shared -o _switchbox_client.so
+clean-local:; rm -f *wrap.o *wrap.c *.so *.cflow $(python_junk)
 
 # Tools
 ide: call_graph.cflow reverse_call_graph.cflow
