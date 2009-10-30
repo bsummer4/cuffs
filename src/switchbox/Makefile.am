@@ -38,12 +38,16 @@ switchbox_client_wrap.c :$(SWIG_SOURCES)
 #####################
 # Manual make rules #
 #####################
+all-local: _switchbox_client.so
+
+_switchbox_client.so: _switchbox_client.la
+	ln -s -f .libs/_switchbox_client.so _switchbox_client.so 
 
 #all-local: bindings
 
 SOURCES = $(switchbox_SOURCES)
 python_junk =  *.pyc switchbox_client.py
-clean-local:; rm -f *wrap.o *wrap.c *.so *.cflow $(python_junk)
+clean-local:; rm -f *wrap.o *wrap.c *.so *.cflow $(python_junk) _switchbox_client.so
 
 # Python Bindings
 #bindings: _switchbox_client.so
