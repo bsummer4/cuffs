@@ -6,8 +6,8 @@ namespace GameObject {
   {
     float deltat;
     deltat = (float) time;
-    location.y = .5*gravity*deltat*deltat + yvelocity*deltat + initlocation.y;
-    location.x = .5*windspeed*deltat*deltat + xvelocity*deltat + initlocation.x;
+    location.y = floor(.5*gravity*deltat*deltat + yvelocity*deltat + initlocation.y + .5);
+    location.x = floor(.5*windspeed*deltat*deltat + xvelocity*deltat + initlocation.x + .5);
   }
 
   GameObj::GameObj(int objID, int objtype, Coord coord, float xv, float yv)

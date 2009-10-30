@@ -1,6 +1,7 @@
 #pragma once 
 #include <string>
 #include "coord.hpp"
+#include <cmath>
 
 /** 
  * @defgroup Game Game
