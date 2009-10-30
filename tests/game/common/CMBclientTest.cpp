@@ -15,11 +15,11 @@ int main(){
     string host, server;
     int i;
 
- //   cout << "Who's the server? (name only/eecs domain)" << endl;
- //   cin >> server;
- //   server.append(".eecs.utk.edu");
+    cout << "Who's the server? (name only/eecs domain)" << endl;
+    cin >> server;
+    server.append(".eecs.utk.edu");
  // I'll cut the crap. it's hydra3
-    server = "hydra3.eecs.utk.edu";
+ //  server = "hydra3.eecs.utk.edu";
 
   //  cout << "How many hosts?(up to 3)" << endl;
   //  scanf("%d", &connections);

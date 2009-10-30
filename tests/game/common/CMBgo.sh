@@ -11,7 +11,6 @@ echo "Running CMB on clients"
 #it crashes here
 ssh -f ccraig7@cetus4.eecs.utk.edu '~/Fistacuffs/trunk/test/game/common/CMBclientTest < `hostname` > whatIsaid4.txt'
 ssh -f ccraig7@cetus5.eecs.utk.edu '~/Fistacuffs/trunk/test/game/common/CMBclientTest < `hostname` > whatIsaid5.txt'
-ssh -f ccraig7@hydra3.eecs.utk.edu 'pkill $var'
 
 echo "Killing Switchbox"
 echo "[kill $switchpid]"
