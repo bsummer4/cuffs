@@ -7,9 +7,6 @@
 #pragma once
 #include "message.h"
 
-/// @TODO remove this and use a command-line argument
-#define SWITCHBOX_PORT 80044
-
 typedef enum {
   UNICAST,
   BROADCAST,

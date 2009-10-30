@@ -4,6 +4,8 @@ Fistacuffs
 
 Awesome
 
+.. contents::
+
 Setup
 =====
 
@@ -63,3 +65,4 @@ Coding Style
 
     astyle -Uas2 *.cpp *.hpp # for c++ code
     indent -npsl -npcs -bli0 -brs -brf -br -nut *.c *.h # for pure c code
+

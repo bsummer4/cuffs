@@ -1,18 +1,35 @@
-======
 Design
 ======
 
 Designed to be awesome.
 
-.. contents::
-
 
 Switchbox
-=========
+---------
 
 A program for handling routing between programs.  There is a client
 library for connecting to and creating messages to be sent through the
 switchbox.  This library is available in python, c, and c++.
+
+Running
+^^^^^^^
+
+usage: switchbox [port]
+
+If you pass a port of 0 or you don't pass a port, it will just use
+some available port.
+
+Status Updates
+^^^^^^^^^^^^^^
+
+- listening:  We opened a port and are accepting connections
+- port number: We are listening on port 'number'
+
+We might eventually add status updates for other events, like
+connections and disconnections.  For now, there is no need.
+
+Client Library
+^^^^^^^^^^^^^^
 
 Basically, when you want to do things with the switchbox, you:
 
@@ -31,10 +48,10 @@ See 'src/switchbox/switchbox_client.h' for details.
 
 
 General Game Design
-===================
+-------------------
 
 Game Messaging Language
------------------------
+^^^^^^^^^^^^^^^^^^^^^^^
 
 The definition of the messages sent in the game.
 
@@ -44,7 +61,7 @@ like IRC).
 
 
 Overworld Messages
-^^^^^^^^^^^^^^^^^^
+%%%%%%%%%%%%%%%%%%
 
 - /login name
 - /map map-id
@@ -60,7 +77,7 @@ Overworld Messages
 - /query player user-id
 
 Battle Messages
-^^^^^^^^^^^^^^^
+%%%%%%%%%%%%%%%
 
 - /shoot user-id angle power weapon-id
 - /map map-id
@@ -72,7 +89,7 @@ Battle Messages
 
 
 Overworld Map File Format
--------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Maps use yet another line-based command-then-arguments format.  An
 'edge' is a attack route between two zones.  Edges are undirected
@@ -85,7 +102,7 @@ common image file format (ppm, png, etc).  The commands are:
 - image file-name
 
 Example
-^^^^^^^
+%%%%%%%
 
 Here is an example map file.  The filename should be the same as the
 map name, so this could be 'example.map'::
@@ -100,7 +117,7 @@ map name, so this could be 'example.map'::
 
 
 Event Generator (interfaces)
-----------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Random Event Generator
 - Assume: All generators can run on the same system – That way they
@@ -121,7 +138,7 @@ Event Generator (interfaces)
     - "Simulator"
 
 Event Synchronizer
-------------------
+^^^^^^^^^^^^^^^^^^
 
 - Orders messages correctly
 - Hands messages in order to Event Interpreter
@@ -138,7 +155,7 @@ Event Synchronizer
 
 
 Event Interpreter (interfaces)
-------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Print method: prints whatever it sees.
 - Games will use it.
@@ -157,3 +174,4 @@ Event Interpreter (interfaces)
   - Real version – Calls proper API call for the given message.
 
 State Object – Mutators and accessors for specific state of game.
+
