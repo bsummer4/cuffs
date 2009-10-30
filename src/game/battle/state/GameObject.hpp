@@ -43,10 +43,11 @@ namespace GameObject {
     public:
       Coord location;
       int type;
+      float xvelocity;
+      float yvelocity;
     protected:
       //GameObj() {};
-      GameObj(int objtype, Coord coord) : type(objtype), location(coord) {};
-      GameObj(int objtype, int x, int y) : type(objtype), location(Coord(x,y)) {};
+      GameObj(int objtype, Coord coord, float xv, float yv) : type(objtype), location(coord), xvelocity(xv), yvelocity(yv) {};
   };
 
 }

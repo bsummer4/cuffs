@@ -45,7 +45,7 @@ using namespace GameObject;
 
 class Projectile : public GameObj {
   public:
-    Projectile(int type, Coord coord);
+    Projectile(int type, Coord coord, float xv, float yv);
     int weapontype;
     float radius;
 };
