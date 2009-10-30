@@ -45,8 +45,7 @@ using namespace GameObject;
 
 class Player : public GameObj {
   public:
-    Player(int type, Coord coord, int teamnum);
-    Player(int type, int x, int y, int teamnum);
+    Player(Coord coord, int teamnum, int inithealth);
     int team;
     int health;
     void hit(int damage);

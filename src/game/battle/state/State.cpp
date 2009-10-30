@@ -97,8 +97,10 @@ void State::setupMap() {
   map.loadMap(mapname);
 }
 
-void State::addObject(int objtype, int x, int y) {
+void State::addPlayer(Coord coord, int team, int health) {
+  if(DEBUG)
+    cerr << "addPlayer called" << endl;
+  players.push_back(Player(coord, team, health));
 }
 
-void State::addObject(int objtype, Coord coord) {
-}
+void State::addProjectile(Coord coord, int team) {}

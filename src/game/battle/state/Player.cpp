@@ -1,5 +1,4 @@
 #include "Player.hpp"
 
-Player::Player(int objtype, Coord coord, int teamnum) : GameObj(objtype, coord), team(teamnum) { health = 10;}
-Player::Player(int objtype, int x, int y, int teamnum) : GameObj(objtype, x, y), team(teamnum) { health = 10;}
+Player::Player(Coord coord, int teamnum, int inithealth) : GameObj(PLAYER, coord), team(teamnum), health(inithealth) {}
 void Player::hit(int damage) { health -= damage; };

@@ -10,6 +10,7 @@
 #include "coord.hpp"
 #include "GameObject.hpp"
 #include "Projectile.hpp"
+#include "Player.hpp"
 using namespace std;
 
 /** 
@@ -59,8 +60,8 @@ class State {
         virtual bool getBattleState();
         virtual bool changeWeapon(int weapon);  //sets current weapon
         virtual int getWeapon();    //returns current weapon
-        virtual void addObject(int objtype, int x, int y);
-        virtual void addObject(int objtype, Coord coord);
+        virtual void addPlayer(Coord coord, int team, int health);
+        virtual void addProjectile(Coord coord, int team);
 
     protected:
         virtual void setupMap();
@@ -69,7 +70,8 @@ class State {
         string mapname;
         bool battlestarted;
         int weaponid;
-        vector<GameObject::GameObj> objs;
+        vector<Player> players;
+        vector<Projectile> projectiles;
         BattleMap map;
 };
 /**
