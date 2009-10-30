@@ -171,6 +171,7 @@ int main(int argc, char* argv[]) {
 
   while (clients.size() < MAXPAIRS) {
     spawn_pair();
+    spawn_pair();
     // Let the clients run
     sleep(1);
     for (int i = 0; i < clients.size(); i++) {

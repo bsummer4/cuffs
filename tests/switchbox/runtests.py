@@ -83,7 +83,7 @@ def main():
     print "Edge Case Tests sucessfully completed\n"
 
     print "\nRunning Latency/Scalability Tests"
-    if ( False == run_test("./latency_test 50", 120) or retval != 0):
+    if ( False == run_test("./latency_test 50", 240) or retval != 0):
         return cleanup_sys(sm);
     print "Latency/Scalability Tests Completed"
 

@@ -119,8 +119,11 @@ class CMBSynchronizer : public Synchronizer {
     public:
         CMBSynchronizer(Connection * con, Interpreter * interpreter);
         virtual void Run();
+        void startSendToInt();
     private:
         CMBQueue cmb;
+    protected:
+        bool send_to_int;
 };
 
 /**

@@ -40,11 +40,14 @@ int main(){
 
     CatInterpreter sint;
     CMBSynchronizer sync(cons.at(0), &sint);
+    sync.Start();
+
     // Send a Null message.
     for (int i = 0; i < connections; i++){
         cons.at(i)->sendMessage(4*sizeof(int)+3, UNICAST, cons.at(0)->getAddress(), (char*)"0 ");
     }
-    sync.Start();
+    usleep(10000);
+    sync.startSendToInt();
 
     while(1){
         int clientnum;

@@ -7,6 +7,9 @@ switchpid=$!
 
 echo "pid = $switchpid"
 
+echo "[rm -f 1.test_simple 1.test_cmb]"
+rm -f 1.test_simple 1.test_cmb
+
 echo "[./SimpleSynchronizer_test < 1.in > 1.test_simple]"
 ./SimpleSynchronizer_test < 1.in > 1.test_simple
 GOT=`sort 1.test_simple`

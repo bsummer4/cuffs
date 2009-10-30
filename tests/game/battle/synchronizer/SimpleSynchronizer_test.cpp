@@ -25,8 +25,9 @@ vector<Connection*> cons;
 char buf[512];
 
 int main(){
-    int connections;
+    int connections = 0;
     scanf("%d", &connections);
+    cerr << "Got " << connections << " connections" << endl;
     for (int i = 0; i < connections; i++){
         cons.push_back(new Connection("localhost", SWITCHBOX_PORT));
         cons.at(i)->start();
@@ -42,16 +43,17 @@ int main(){
     for (int i = 0; i < connections; i++){
         cons.at(i)->sendMessage(4*sizeof(int)+3, UNICAST, mycon.getAddress(), "0 ");
     }
+    usleep(10000); 
     sync.Start();
+
 
     while(1){
         int clientnum;
         if ( 1 != scanf("%d ", &clientnum) )
             break;
-        /*
+        //cerr << clientnum << endl;
         fgets(buf, 511, stdin);
         buf[strlen(buf)-1] = '\0';
-        */
         cons.at(clientnum)->sendMessage(4*sizeof(int)+strlen(buf)+1, UNICAST, mycon.getAddress(), buf);
     }
 

@@ -20,5 +20,5 @@ int main(int argc, char** argv)
     g.genStateMsg(buffer, MAXLEN, (int)rawtime);
     sleep(1); //Assumed it will wait 1/2 a sec untill the next message
   }
-  return 1;
+  return 0;
 }

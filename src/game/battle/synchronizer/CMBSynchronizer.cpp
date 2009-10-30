@@ -7,6 +7,7 @@
 CMBSynchronizer::CMBSynchronizer(Connection * con, Interpreter * interpreter) 
     : Synchronizer(con, interpreter)
 {
+  send_to_int = false;
 }
 
 void CMBSynchronizer::Run(){
@@ -22,23 +23,37 @@ void CMBSynchronizer::Run(){
         // Place it into the data structure
         cmb.queueMessage(process, CMBEvent(message_contents));
 
-        // Check to see if we can run any events
-        cmb_timestamp t= cmb.getLowestTime();
+        if ( send_to_int ){
+          // Check to see if we can run any events
+          cmb_timestamp t= cmb.getLowestTime();
 
-        //cout << "Lowest time is " << t << endl;
+          //cout << "Lowest time is " << t << endl;
 
-        // If time is not -1 then we can advance time along.
-        if ( t != -1 ){
-            cmb_pqueue pq = cmb.getEvents(t);
-            while ( !pq.empty() ){
-                CMBEvent e = pq.top();
-                pq.pop();
-                interpreter->handleEvent(e.eventString);
-            }
-            boost::mutex::scoped_lock l(timeLock);
-            cTime = t;
+          // If time is not -1 then we can advance time along.
+          if ( t != -1 ){
+              cmb_pqueue pq = cmb.getEvents(t);
+              while ( !pq.empty() ){
+                  CMBEvent e = pq.top();
+                  pq.pop();
+                  interpreter->handleEvent(e.eventString);
+              }
+              boost::mutex::scoped_lock l(timeLock);
+              cTime = t;
+          }
         }
     }
+}
+
+/**
+ * Tell the Synchronizer that it is okay to start sending messages 
+ * along to the interpreter to be interpreted. 
+ *
+ * Basically, you will call @ref Start to start the thread, and it 
+ * will begin appending messages to the queue. However, this needs
+ * to be called once everybody is connected and you can start running. 
+ */
+void CMBSynchronizer::startSendToInt(){
+  send_to_int = true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

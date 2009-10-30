@@ -1,0 +1,22 @@
+/** @mainpage Fistacuffs 
+@author John R. Hoare
+
+@section Introduction
+
+Hello, and welcome to the doxygen page for the Fistacuffs project. Please refer to the left frame
+for how to get around. 
+
+A good idea is to look at the "Modules" Tree, as it will show you different "Modules" that breaks up
+our code into more logical blocks for ease of navigation through documentation. 
+
+This main page is mostly a placeholder of sorts for now. I'm sure it will be improved in the future. 
+
+@section Tests
+
+For tests documenation you can look at a few places. 
+  -# The doc/testing directory of the source tree. (depricated, we're trying to keep everything on doxygen now)
+    - Specifically the switchbox testing doc is here
+  -# The Test List on the left
+  -# The Tests Module on in the "Modules" tree, where the test sources themselves are documented. 
+
+**/
