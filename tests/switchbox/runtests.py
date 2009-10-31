@@ -22,10 +22,10 @@ class switchbox_manager():
             str = os.popen('which valgrind').read()
             if ( len(str) > 0 ):
                 # We have valgrind
-                os.execlp("valgrind", "valgrind", "-q", "--log-fd=1", self.switchbox_path)
+                os.execlp("valgrind", "valgrind", "-q", "--log-fd=1", self.switchbox_path, "5151")
             else: 
                 # We don't have valgrind
-                os.execlp(self.switchbox_path, self.switchbox_path)
+                os.execlp(self.switchbox_path, self.switchbox_path, "5151")
             # Shouldn't get here
             os._exit(0)
 

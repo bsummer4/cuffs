@@ -3,6 +3,8 @@
 #include <iostream>
 #include "switchbox_client.h"
 
+static const int SWITCHBOX_PORT = 5151;
+
 /**
  * @defgroup Tests Tests
  */

@@ -1,7 +1,7 @@
 #!/bin/bash 
 
 echo "Starting switchbox" 
-../../../../src/switchbox/switchbox &
+../../../../src/switchbox/switchbox 5151&
 
 switchpid=$!
 

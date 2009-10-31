@@ -1,7 +1,7 @@
 #!/bin/bash 
 
 echo "Starting switchbox" 
-~/Fistacuffs/trunk/src/switchbox/switchbox &
+~/Fistacuffs/trunk/src/switchbox/switchbox 5151&
 #ssh -f ccraig7@hydra3.eecs.utk.edu '~/Fistacuffs/trunk/src/switchbox/switchbox & > whatSheSaid.txt; varpid=`echo $!`'
 
 switchpid=$!

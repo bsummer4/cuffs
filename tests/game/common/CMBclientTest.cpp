@@ -6,6 +6,8 @@
 #include <string>
 using namespace std;
 
+static const int SWITCHBOX_PORT = 5151;
+
 vector<Connection*> cons;
 vector<string> hosts;
 char buf[512];

@@ -2,6 +2,8 @@
 #include "Connection.hpp"
 #include <cstdio>
 
+static const int SWITCHBOX_PORT = 5151;
+
 /**
  * @addtogroup SyncTest
  * @{

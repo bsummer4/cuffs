@@ -1,5 +1,6 @@
 #pragma once
 
+static const int SWITCHBOX_PORT = 5151;
 static const int USLEEP_TIME = 100000;
 
 char* HOST= (char*) "localhost";
