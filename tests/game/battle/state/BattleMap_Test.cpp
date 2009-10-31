@@ -58,6 +58,15 @@ int main(){
     test_image_loaded(bm);
 
     /// Check the Team Spawns are Correct
+    vector<Coord> teamOne = bm.getTeamSpawns(0);
+    assert(teamOne.at(0) == Coord(100,100));
+    assert(teamOne.at(1) == Coord(300,300));
+    assert(teamOne.at(2) == Coord(400,400));
+    vector<Coord> teamTwo = bm.getTeamSpawns(1);
+    assert(teamTwo.at(0) == Coord(200,200));
+    assert(teamTwo.at(1) == Coord(300,300));
+    assert(teamTwo.at(2) == Coord(450,450));
+
 
     /// Check Explosion
     bm.explosion(Coord(10,100),5);

@@ -146,7 +146,7 @@ pixel_type_t BattleMap::getPixel(Coord c){
 std::vector<Coord> BattleMap::getTeamSpawns(int team){
     std::map< int , std::vector<Coord> >::iterator it;
     it = teamSpawnMap.find(team);
-    if ( it != teamSpawnMap.end() ){
+    if ( it == teamSpawnMap.end() ){
         return std::vector<Coord>();
     }
     return (*it).second;

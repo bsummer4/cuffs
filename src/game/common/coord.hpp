@@ -27,6 +27,7 @@ class Coord {
     Coord(int xcoord, int ycoord);
     int x;
     int y;
+    bool operator==(const Coord &other) const;
 };
 
 /**

@@ -14,9 +14,25 @@ This main page is mostly a placeholder of sorts for now. I'm sure it will be imp
 @section Tests
 
 For tests documenation you can look at a few places. 
-  -# The doc/testing directory of the source tree. (depricated, we're trying to keep everything on doxygen now)
-    - Specifically the switchbox testing doc is here
+  -# The doc/testing directory of the source tree. 
   -# The Test List on the left
   -# The Tests Module on in the "Modules" tree, where the test sources themselves are documented. 
 
+@section Building
+
+Building the project is pretty standard as we use autotools. 
+  -# Run ./Bootstrap
+  -# Run ./configure 
+  -# Run make 
+And then if you wish to run the tests:
+  -# Run make check
+
+@section Requirements
+Our project is assuming that you have a few things on your system installed. Configure does its best
+to make sure you have them installed, but it's not as perfect as it should be. 
+  -# boost (specifically the threading library, but we'll use more with time)
+  -# swig (to build the python bindings)
+  -# Python development packages (and obviously python as well)
+  -# doxygen (if you want to build the documentation)
+  -# docutils (again if you want to build the rst documenation)
 **/

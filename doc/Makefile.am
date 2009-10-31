@@ -1,7 +1,8 @@
 doc_DATA = doc.html
 
-# TODO Doxygen stuff should be built with the other things in this
-# directory
+html: readme.html changes.html design.html news.html doc.html
+latex: readme.tex changes.tex design.tex news.tex 
+pdf: readme.pdf changes.pdf design.pdf news.pdf
 
 clean-local:; rm -f doc.rst doc.html
 
