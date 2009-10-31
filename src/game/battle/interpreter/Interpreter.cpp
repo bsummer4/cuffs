@@ -87,13 +87,14 @@ void GameInterpreter::handleEvent(std::string &event) {
         break;
       case SHOOT:
 
-        if(token.size() < 5) {
-          cerr << "Malformed command sent to interpreter.  /shoot must be followed by user_id, angle, power, and weaponid" << endl;
+        if(token.size() < 6) {
+          cerr << "Malformed command sent to interpreter.  /shoot must be followed by user_id, angle, power, weaponid, and projectile-id" << endl;
           return;
         }
         coord = state.getPlayerLocation(token[2]);
         xvel = stringtofloat(token[4]) * cos(stringtofloat(token[3]));
         yvel = stringtofloat(token[4]) * sin(stringtofloat(token[3]));
+        state.addProjectile(token[6], token[5], coord, xvel, yvel);
         
         //FIGURE OUT HOW TO SHOOT
         break;
