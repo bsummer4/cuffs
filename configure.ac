@@ -1,5 +1,5 @@
 # initial information about the project
-AC_INIT([Fistacuffs],[0.1],[])
+AC_INIT([Fistacuffs],[0.2],[])
 
 # Bootstrap told me to do it!
 AC_CONFIG_MACRO_DIR([m4])

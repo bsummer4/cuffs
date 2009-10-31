@@ -60,7 +60,12 @@ int main(){
     /// Check the Team Spawns are Correct
 
     /// Check Explosion
-    bm.explosion(Coord(10,10),5);
+    bm.explosion(Coord(10,100),5);
+    bm.explosion(Coord(30,100),10);
+    bm.explosion(Coord(100,100),20);
+    bm.explosion(Coord(200,100),20);
+    bm.explosion(Coord(300,100),40);
+
     bm.outputMap("test.pgm");
 
     // This map is 800x600 so test that.
@@ -71,7 +76,7 @@ int main(){
 void test_image_loaded(BattleMap& bm){
     int x_size,y_size,maxVal;
     char inputLine1[81];
-    char nextChar;
+    int nextChar;
     ifstream inFile("../../../gamefiles/battle/maps/map1.pgm");
 
     /* Read past first line */
@@ -80,14 +85,13 @@ void test_image_loaded(BattleMap& bm){
     /* Read in width, height, maxVal */
     inFile >> x_size >> y_size >> maxVal;
 
-    for (int i=0; i<x_size; i++){
-        for (int j=0; j<y_size; j++) {
+    for (int j=0; j<y_size; j++) {
+        for (int i=0; i<x_size; i++){
             inFile >> nextChar;
             assert(nextChar == bm.getPixel(i,j));
         }
     }
 }
-
 
 /**
  * @}

@@ -6,7 +6,7 @@
 #LDADD = $(LIBCONNECTION) libsbcommon.la
 #TESTS=Interpreter_test
 
-TESTS=Physics_Test BattleMap_Test
+TESTS=Physics_Test BattleMap_Test testMap.sh
 bin_PROGRAMS=Physics_Test BattleMap_Test
 Physics_Test_SOURCES=Physics.cpp
 Physics_Test_LDADD=$(top_srcdir)/src/game/battle/state/libstate.la $(top_srcdir)/src/game/common/libgameutils.la

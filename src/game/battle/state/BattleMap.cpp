@@ -23,6 +23,8 @@ BattleMap::~BattleMap(){
  * with spaces, and continues until all spawn positions are
  * enumerated. Once this occurs, a string that contains the name
  * of the .ppm file to load up as a map is given. 
+ *
+ * @TODO Do a lot more error checking here. This is assuming it has a good file. 
  * 
  * @param fileName fileName The name of the .map file to open. 
  */
@@ -35,7 +37,7 @@ void BattleMap::loadMap(std::string fileName){
 
   while(1){
       inFile.getline(inputLine1,80);
-      cout << "Line: " << inputLine1 << endl;
+      //cout << "Line: " << inputLine1 << endl;
       val = sscanf(inputLine1, "%d %d %d", &team, &xpos, &ypos);
       if ( val == 3 ){
         it = teamSpawnMap.find(team);
@@ -69,29 +71,29 @@ void BattleMap::readPGM(std::string fileName){
 
     /* Read in width, height, maxVal */
     inFile >> x_size >> y_size >> maxVal;
-    cout << "Width = " << x_size << ", Height = " << y_size << endl;
+    //cout << "Width = " << x_size << ", Height = " << y_size << endl;
 
     map = new pixel_type_t[x_size*y_size];
 
     for (int i = 0; i< x_size*y_size; i++) map[i] = 0;
 
     /* Read in map; */
-    for (int x=0; x < x_size; x++){
-        for (int y=0; y < y_size; y++) {
+    for (int y=0; y < y_size; y++) {
+        for (int x=0; x < x_size; x++){
             inFile >> nextChar;
             if ( nextChar == MAP_EMPTY ||
                  nextChar == MAP_DESTRUCTABLE ||
                  nextChar == MAP_INDESTRUCTABLE ) {
                 // y_size - j to flip the map around to put origin in bottom left. 
-                //map[POINT(x,(y_size-y-1))] = nextChar;
-                map[POINT(x,y)] = nextChar;
+                map[POINT(x,(y_size-y-1))] = nextChar;
+                //map[POINT(x,y)] = nextChar;
             } else { 
                 cerr << "Got a bad pixel value in the image: " << (int)nextChar << endl;
                 ///@TODO Throw an exception here.
             }
         }
     }
-    cout << "Map input complete.\n";
+    //cout << "Map input complete.\n";
 }
 
 /**
@@ -107,11 +109,12 @@ void BattleMap::outputMap(std::string outfile){
     outFile << x_size << " " << y_size << endl
           << maxVal << endl;
 
-    for (int i=0; i<x_size; i++){
-        for (int j=0; j<y_size; j++) {
+    for (int j=0; j<y_size; j++) {
+        for (int i=0; i<x_size; i++){
             //outFile << map[(y_size-j-1)*x_size+i];
             //outFile << map[POINT(i,(y_size-j-1))]; 
-            outFile << map[POINT(i,j)];
+            //outFile << map[POINT(i,j)];
+            outFile << map[POINT(i,(y_size-j-1))];
         }
     }
     //cout << "Scaled map output to file.\n";
@@ -161,11 +164,8 @@ void BattleMap::explosion(int x, int y, float radius){
     e_x = min(x_size-1,x+r);
     s_y = max(0,y-r);
     e_y = min(y_size-1,y+r);
-    //s_x = x-r;
-    //e_x = x+r;
-    //s_y = y-r;
-    //e_y = y+r;
 
+    /*
     cout << "EXPLOSION" << endl;
     cout << "x = " << x << endl;
     cout << "y = " << y << endl;
@@ -176,6 +176,7 @@ void BattleMap::explosion(int x, int y, float radius){
     cout << "s_y = " << s_y << endl;
     cout << "e_y = " << e_y << endl;
     cout << "x_size = " << x_size << endl;
+    */
 
     for (int myy = s_y; myy < e_y; myy++){
         for (int myx = s_x; myx < e_x; myx++){
@@ -186,8 +187,8 @@ void BattleMap::explosion(int x, int y, float radius){
                     map[POINT(myx,myy)] = MAP_EMPTY;
                     //cout << "Explosion hit something!" << endl;
                 } else {
-                    cout << "(" << myx << "," << myy << ") = " << POINT(myx,myy) << " Equals " << (int)map[POINT(myx,myy)] << endl;
-                    map[POINT(myx,myy)] = MAP_INDESTRUCTABLE;
+                    //cout << "(" << myx << "," << myy << ") = " << POINT(myx,myy) << " Equals " << (int)map[POINT(myx,myy)] << endl;
+                    //map[POINT(myx,myy)] = MAP_INDESTRUCTABLE;
                 }
             }
         }
