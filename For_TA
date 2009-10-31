@@ -1,12 +1,17 @@
-A starting place to see our documentation is by looking at our doxygen documentation. 
+Documentation
+=============
+
+We have pretty good docs between the doxygen stuff, doc/readme.rst,
+and doc/design.rst.
 
 You can see most of our docs at
 http://www.cs.utk.edu/~jhoare/cs594ng/
 
-And in there you can look at the doc.html which is built from all the .rst files in /doc
-as well as the doxygen documentation by clicking on the doxygen directory. 
+And in there you can look at the doc.html which is built from all the
+.rst files in /doc as well as the doxygen documentation by clicking on
+the doxygen directory.
 
-You can build the doxygen docs yourself as well. 
+You can build the doxygen docs yourself as well.
 
 ./Bootstrap
 ./configure
@@ -14,8 +19,25 @@ make doxygen
 
 And then open the html file: doc/doxygen/html/index.html
 
-If you look at the main page, it should tell you a lot more throughly where to look and more 
-information. 
+If you look at the main page, it should tell you a lot more thoroughly
+where to look and more information.
 
-Thanks, 
+
+Status with respect to this timebox
+===================================
+
+Our code is not really 'there' yet.
+
+- The 'overworld' server (which doesn't use CMB), is working but buggy
+  (with no automated tests yet).
+
+- A lot of code has been written for the 'Battle' stuff.  The
+  interpreter, generator, gameState aren't very mature yet.  There is
+  an experimental fork in one of the branches.
+
+  Ben Says: I'm under the impressions that the Networking code and the
+            map code works, but I haven't read or tried it myself so I
+            can't say for sure.
+
+Thanks,
   Dashinggents
