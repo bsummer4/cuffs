@@ -2,4 +2,4 @@
 using namespace std;
 using namespace GameObject;
 
-Projectile::Projectile(string objID, string type, Coord coord, float xv, float yv) : GameObj(objID, PROJECTILE, coord, xv, yv) , weapontype(type) { radius = 5;}
+Projectile::Projectile(std::string objID, std::string type, Coord coord, float xv, float yv) : GameObj(objID, PROJECTILE, coord, xv, yv) , weapontype(type) { radius = 5;}

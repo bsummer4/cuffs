@@ -44,7 +44,7 @@ pixel_type_t State::getPixel(int x, int y) {
   bmap.getPixel(Coord(x,y));
 }//Gets the pixel defined at coord
 
-string State::setMap(string name) {
+string State::setMap(std::string name) {
   if(DEBUG)
     cerr << "setMap called with " << name << endl;
   mapname = name;
@@ -74,7 +74,7 @@ bool State::getBattleState() {
   return battlestarted;
 }
 
-bool State::changeWeapon(string weapon) {
+bool State::changeWeapon(std::string weapon) {
   if(DEBUG)
     cerr << "changeWeapon called with " << weapon << endl;
   weaponid = weapon;
@@ -97,14 +97,14 @@ void State::setupMap() {
   bmap.loadMap(mapname);
 }
 
-void State::addPlayer(string name, Coord coord, int team, int health) {
+void State::addPlayer(std::string name, Coord coord, int team, int health) {
   if(DEBUG)
     cerr << "addPlayer called" << endl;
   Player *play = new Player(name, coord, team, health);
   players.insert(make_pair(name, play));
 }
 
-void State::addProjectile(string projID, string weapontype, int x, int y, float xvel, float yvel) {
+void State::addProjectile(std::string projID, std::string weapontype, int x, int y, float xvel, float yvel) {
   Projectile *proj = new Projectile(projID, weapontype, Coord(x, y), xvel, yvel);
   GameObj *go = dynamic_cast<GameObj *>(proj);
   projectiles.insert(make_pair(projID, proj));
@@ -112,7 +112,7 @@ void State::addProjectile(string projID, string weapontype, int x, int y, float 
   objects.insert(make_pair(projID, go));
 }
 
-void State::addProjectile(string projID, string weapontype, Coord coord, float xvel, float yvel) {
+void State::addProjectile(std::string projID, std::string weapontype, Coord coord, float xvel, float yvel) {
   Projectile *proj = new Projectile(projID, weapontype, coord, xvel, yvel);
   GameObj *go = dynamic_cast<GameObj *>(proj);
   projectiles.insert(make_pair(projID, proj));
@@ -128,7 +128,7 @@ void State::setGravity(float newgrav) {
   gravity = newgrav;
 }
 
-void State::moveObj(string obj_id, int x, int y) {
+void State::moveObj(std::string obj_id, int x, int y) {
   map<string, GameObject::GameObj *>::iterator it;
   it = objects.find(obj_id);
   if(it == objects.end()) {
@@ -139,7 +139,7 @@ void State::moveObj(string obj_id, int x, int y) {
   }
 }
 
-void State::hitObj(string obj_id, int x, int y) {
+void State::hitObj(std::string obj_id, int x, int y) {
   map<string, GameObject::GameObj *>::iterator it;
   it = objects.find(obj_id);
   if(it == objects.end()) {
@@ -153,7 +153,7 @@ void State::hitObj(string obj_id, int x, int y) {
   }
 }
 
-Coord State::getPlayerLocation(string userid) {
+Coord State::getPlayerLocation(std::string userid) {
   map<string, Player *>::iterator it;
   it = players.find(userid);
   if(it == players.end())
