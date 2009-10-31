@@ -6,10 +6,10 @@ echo "Starting switchbox"
 switchpid=$!
 me=`whoami`
 echo `hostname` > server.txt
-scp server.txt ccraig7@star.eecs.utk.edu:. #Throw it on the eecs domain for reading.Bad, I know.
 echo "pid = $switchpid"
 echo "hostname = `hostname`"
 echo "me = $me"
+scp server.txt $me@star.eecs.utk.edu:. #Throw it on the eecs domain for reading.Bad, I know.
 
 echo "Running CMBsingle Test"
 ./CMBsingleTest < f1.txt 
