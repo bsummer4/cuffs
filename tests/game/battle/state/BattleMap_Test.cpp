@@ -5,7 +5,7 @@
  * Tests for the map class. 
  */
 /**
- * @defgroup BattleMap_Test
+ * @defgroup BattleMap_Test BattleMap_Test
  * @ingroup Tests
  *
  * All the tests for the BattleMap Object
