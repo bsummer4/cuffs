@@ -3,7 +3,7 @@
 # Generates the autotools stuff.  E.g. ./configure
 
 PROMPT="  [$0]$"
-infiles=`find -name Makefile.in`
+infiles=`find . -name Makefile.in`
 autotools_stuff="aclocal.m4 autom4te.cache configure missing install-sh
                  build-aux depcomp doc/Makefile ltmain.sh config.sub
                  config.guess doc/doxygen $infiles py-compile
