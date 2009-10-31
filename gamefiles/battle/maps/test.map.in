@@ -1,0 +1,7 @@
+0 100 100 
+0 300 300
+0 400 400
+1 200 200
+1 300 300 
+1 450 450
+@abs_top_srcdir@/gamefiles/battle/maps/map1.pgm
