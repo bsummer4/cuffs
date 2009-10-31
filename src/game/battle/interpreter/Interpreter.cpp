@@ -2,7 +2,7 @@
 using namespace std;
 using namespace GameUtils;
 
-int eventParser(string &event, vector<string> &token){
+int eventParser(std::string &event, vector<std::string> &token){
   string::size_type start;
   string::size_type end;
   end = event.find_first_of(' '); 
@@ -17,27 +17,27 @@ int eventParser(string &event, vector<string> &token){
   return token.size();
 }
 
-int stringtoint(string str){
+int stringtoint(std::string str){
   int ret = 0;
   stringstream SStream(str);
   SStream >> ret;
   return ret;
 }
 
-float stringtofloat(string str){
+float stringtofloat(std::string str){
   float ret = 0;
   stringstream SStream(str);
   SStream >> ret;
   return ret;
 }
 
-void CatInterpreter::handleEvent(string &event){
+void CatInterpreter::handleEvent(std::string &event){
     cout << event << endl;
 }
 
 SimpleInterpreter::SimpleInterpreter(){};
 
-void SimpleInterpreter::handleEvent(string &event){
+void SimpleInterpreter::handleEvent(std::string &event){
   int timestamp;
   vector<string> token;
   eventParser(event, token);
@@ -60,7 +60,7 @@ void SimpleInterpreter::handleEvent(string &event){
 
 GameInterpreter::GameInterpreter(State &gameState) : state(gameState) { };
 
-void GameInterpreter::handleEvent(string &event) {
+void GameInterpreter::handleEvent(std::string &event) {
   Coord coord;
   int xvel;
   int yvel;
