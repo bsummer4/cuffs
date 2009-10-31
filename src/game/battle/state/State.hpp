@@ -33,10 +33,6 @@
  * @{
  */
 
-///MAP PIXEL DEFINED AS
-#define MAPPIXEL int
-
-
 /**
  * State virtual class.
  *
@@ -57,29 +53,33 @@ class State {
         virtual void startBattle(); //Not fully implemented yet
         virtual void stopBattle();  //Not fully implemented yet
         virtual bool getBattleState();
-        virtual bool changeWeapon(int weapon);  //sets current weapon
-        virtual int getWeapon();    //returns current weapon
-        virtual void addPlayer(int objID, std::string name, Coord coord, int team, int health);
-        virtual void addProjectile(int projID, int weapontype, Coord coord, float xvel, float yvel);
-        virtual void addProjectile(int projID, int weapontype, int x, int y, float xvel, float yvel);
+        virtual bool changeWeapon(std::string weapon);  //sets current weapon
+        virtual std::string getWeapon();    //returns current weapon
+        virtual void addPlayer(std::string name, Coord coord, int team, int health);
+        virtual void addProjectile(std::string projID, std::string weapontype, Coord coord, float xvel, float yvel);
+        virtual void addProjectile(std::string projID, std::string weapontype, int x, int y, float xvel, float yvel);
         virtual float getGravity();
         virtual void setGravity(float newgrav);
-        virtual void moveObj(int obj_id, int x, int y);
-        virtual void hitObj(int obj_id, int x, int y);
+        virtual void moveObj(std::string obj_id, int x, int y);
+        virtual void hitObj(std::string obj_id, int x, int y);
+        virtual Coord getPlayerLocation(std::string userid);
+        virtual std::string newProjID();
 
     protected:
         virtual void setupMap();
+        std::string userid;
         float wind;  //wind speed and direction--negative for left positive for right
         std::ifstream mapstream;
         std::string mapname;
         bool battlestarted;
-        int weaponid;
-        std::map<int, Player *> players;
-        std::map<int, Projectile *> projectiles;
-        std::map<int, Projectile *> myprojectiles;
-        std::map<int, GameObject::GameObj *> objects;
+        std::string weaponid;
+        std::map<std::string, Player *> players;
+        std::map<std::string, Projectile *> projectiles;
+        std::map<std::string, Projectile *> myprojectiles;
+        std::map<std::string, GameObject::GameObj *> objects;
         BattleMap bmap;
         float gravity;
+        int projnumber;
 };
 /**
  * @}

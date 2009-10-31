@@ -2,7 +2,7 @@
 using namespace std;
 using namespace GameObject;
 
-State::State() { gravity = 9.8;}
+State::State() { projnumber = 0; gravity = 9.8;}
 
 double State::changeWind(float newwind) {
   wind = newwind;
@@ -74,13 +74,13 @@ bool State::getBattleState() {
   return battlestarted;
 }
 
-bool State::changeWeapon(int weapon) {
+bool State::changeWeapon(string weapon) {
   if(DEBUG)
     cerr << "changeWeapon called with " << weapon << endl;
   weaponid = weapon;
 }//sets current weapon
 
-int State::getWeapon() {
+string State::getWeapon() {
   if(DEBUG)
     cerr << "getWeapon called" << endl;
   return weaponid;
@@ -97,14 +97,14 @@ void State::setupMap() {
   bmap.loadMap(mapname);
 }
 
-void State::addPlayer(int objID, string name, Coord coord, int team, int health) {
+void State::addPlayer(string name, Coord coord, int team, int health) {
   if(DEBUG)
     cerr << "addPlayer called" << endl;
-  Player *play = new Player(objID, name, coord, team, health);
-  players.insert(make_pair(objID, play));
+  Player *play = new Player(name, coord, team, health);
+  players.insert(make_pair(name, play));
 }
 
-void State::addProjectile(int projID, int weapontype, int x, int y, float xvel, float yvel) {
+void State::addProjectile(string projID, string weapontype, int x, int y, float xvel, float yvel) {
   Projectile *proj = new Projectile(projID, weapontype, Coord(x, y), xvel, yvel);
   GameObj *go = dynamic_cast<GameObj *>(proj);
   projectiles.insert(make_pair(projID, proj));
@@ -112,7 +112,7 @@ void State::addProjectile(int projID, int weapontype, int x, int y, float xvel, 
   objects.insert(make_pair(projID, go));
 }
 
-void State::addProjectile(int projID, int weapontype, Coord coord, float xvel, float yvel) {
+void State::addProjectile(string projID, string weapontype, Coord coord, float xvel, float yvel) {
   Projectile *proj = new Projectile(projID, weapontype, coord, xvel, yvel);
   GameObj *go = dynamic_cast<GameObj *>(proj);
   projectiles.insert(make_pair(projID, proj));
@@ -128,11 +128,46 @@ void State::setGravity(float newgrav) {
   gravity = newgrav;
 }
 
-void State::moveObj(int obj_id, int x, int y) {
-  map<int, GameObject::GameObj *>::iterator it;
+void State::moveObj(string obj_id, int x, int y) {
+  map<string, GameObject::GameObj *>::iterator it;
   it = objects.find(obj_id);
+  if(it == objects.end()) {
+    cerr << "Object of moveObj call not found.  ID = " << obj_id << endl;
+  } else {
+    it->second->location.x = x;
+    it->second->location.y = y;
+  }
 }
 
-void State::hitObj(int obj_id, int x, int y) {
-  map<int, GameObject::GameObj>::iterator it;
+void State::hitObj(string obj_id, int x, int y) {
+  map<string, GameObject::GameObj *>::iterator it;
+  it = objects.find(obj_id);
+  if(it == objects.end()) {
+    cerr << "Object of hitObj call not found.  ID = " << obj_id << endl;
+  } else
+  {
+    if(it->second->type == PROJECTILE)
+    {
+      projHit(Coord(x, y), *(static_cast<Projectile *>(it->second)));
+    }
+  }
+}
+
+Coord State::getPlayerLocation(string userid) {
+  map<string, Player *>::iterator it;
+  it = players.find(userid);
+  if(it == players.end())
+  {
+    cerr << "In getPlayerLocation: Player " << userid << " not found" << endl;
+  }
+  return it->second->location;
+}
+
+string State::newProjID()
+{
+  stringstream sstream;
+  string retstring;
+  sstream << userid << "-" << weaponid << "-" << projnumber;
+  projnumber++;
+  return retstring;
 }

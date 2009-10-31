@@ -43,7 +43,7 @@
 
 class Player : public GameObject::GameObj {
   public:
-    Player(int objId, std::string pname, Coord coord, int teamnum, int inithealth);
+    Player(std::string pname, Coord coord, int teamnum, int inithealth);
     int team;
     int health;
     void hit(int damage);

@@ -2,12 +2,14 @@
 #include "Projectile.hpp"
 #include "Player.hpp"
 #include "coord.hpp"
+using namespace std;
 using namespace GameObject;
 
 int main (int argc, char **argv)
 {
 
-  Projectile proj(1, 0, Coord(0,0), 5, 5);
+  string projname = "lofty-laser-1";
+  Projectile proj(projname, 0, Coord(0,0), 5, 5);
 
   //-1*1+5*1 + 0
   //-1*4+5*2 + 0

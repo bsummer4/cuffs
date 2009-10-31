@@ -24,6 +24,13 @@ int stringtoint(string str){
   return ret;
 }
 
+float stringtofloat(string str){
+  float ret = 0;
+  stringstream SStream(str);
+  SStream >> ret;
+  return ret;
+}
+
 void CatInterpreter::handleEvent(string &event){
     cout << event << endl;
 }
@@ -54,6 +61,9 @@ void SimpleInterpreter::handleEvent(string &event){
 GameInterpreter::GameInterpreter(State &gameState) : state(gameState) { };
 
 void GameInterpreter::handleEvent(string &event) {
+  Coord coord;
+  int xvel;
+  int yvel;
   int timestamp;
   int command;
   vector<string> token;
@@ -76,10 +86,15 @@ void GameInterpreter::handleEvent(string &event) {
         state.setMap(token[2]);
         break;
       case SHOOT:
+
         if(token.size() < 5) {
           cerr << "Malformed command sent to interpreter.  /shoot must be followed by user_id, angle, power, and weaponid" << endl;
           return;
         }
+        coord = state.getPlayerLocation(token[2]);
+        xvel = stringtofloat(token[4]) * cos(stringtofloat(token[3]));
+        yvel = stringtofloat(token[4]) * sin(stringtofloat(token[3]));
+        
         //FIGURE OUT HOW TO SHOOT
         break;
       case BATTLESTART:
@@ -93,21 +108,21 @@ void GameInterpreter::handleEvent(string &event) {
           cerr << "Malformed command sent to interpreter.  /weapon must be followed by a valid integer weaponid" << endl;
           return;
         }
-        state.changeWeapon(stringtoint(token[2]));
+        state.changeWeapon(token[2]);
         break;
       case MOVE:
         if(token.size() < 5) {
           cerr << "Malformed command sent to interpreter.  /move must be followed by a valid integer obj_id, x, and y" << endl;
           return;
         }
-        state.moveObj(stringtoint(token[2]), stringtoint(token[3]), stringtoint(token[4]));
+        state.moveObj(token[2], stringtoint(token[3]), stringtoint(token[4]));
         break;
       case HIT:
         if(token.size() < 5) {
           cerr << "Malformed command sent to interpreter.  /hit must be followed by a valid integer obj_id, x, and y" << endl;
           return;
         }
-        state.hitObj(stringtoint(token[2]), stringtoint(token[3]), stringtoint(token[4]));
+        state.hitObj(token[2], stringtoint(token[3]), stringtoint(token[4]));
         break;
       case QUERY:
         if(token.size() < 4)

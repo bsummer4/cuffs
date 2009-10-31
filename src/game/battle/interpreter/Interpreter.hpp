@@ -7,6 +7,8 @@
 #include <sstream>
 #include "State.hpp"
 #include "GetCommand.hpp"
+#include "coord.hpp"
+#include <cmath>
 
 /** 
  * @defgroup Game Game

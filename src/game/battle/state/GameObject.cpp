@@ -1,4 +1,5 @@
 #include "GameObject.hpp"
+using namespace std;
 
 namespace GameObject {
 
@@ -10,7 +11,7 @@ namespace GameObject {
     location.x = floor(.5*windspeed*deltat*deltat + xvelocity*deltat + initlocation.x + .5);
   }
 
-  GameObj::GameObj(int objID, int objtype, Coord coord, float xv, float yv)
+  GameObj::GameObj(string objID, int objtype, Coord coord, float xv, float yv)
     : id(objID), type(objtype), initlocation(coord), location(coord), xvelocity(xv), 
     yvelocity(yv){ };
 }

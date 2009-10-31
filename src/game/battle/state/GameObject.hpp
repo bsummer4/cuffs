@@ -44,13 +44,13 @@ namespace GameObject {
       Coord location;
       Coord initlocation;
       int type;
-      int id;
+      std::string id;
       float xvelocity;
       float yvelocity;
       virtual void movePhysics(int time, float gravity, float windspeed);
     protected:
       //GameObj() {};
-      GameObj(int objID, int objtype, Coord coord, float xv, float yv);
+      GameObj(std::string objID, int objtype, Coord coord, float xv, float yv);
   };
 }
 /**
