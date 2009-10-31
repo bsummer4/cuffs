@@ -14,3 +14,7 @@ LIBGEN = $(top_srcdir)/src/game/battle/generator/libgen.la
 noinst_PROGRAMS = CMBclientTest 
 CMBclientTest_SOURCES = CMBclientTest.cpp
 CMBclientTest_LDADD = $(LIBSYNC) $(LIBINT) $(LIBGEN) -lboost_thread 
+
+noinst_PROGRAMS = CMBsingleTest 
+CMBsingleTest_SOURCES = CMBsingleTest.cpp
+CMBsingleTest_LDADD = $(LIBSYNC) $(LIBINT) $(LIBGEN) -lboost_thread 

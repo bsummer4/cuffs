@@ -18,7 +18,7 @@ int main(){
     int i;
 
     cout << "Who's the server? (name only/eecs domain)" << endl;
-    cin >> server;
+    cin >> server; //better replacement
     server.append(".eecs.utk.edu");
  //  server = "hydra3.eecs.utk.edu";
 
@@ -31,19 +31,13 @@ int main(){
       hosts.push_back(host.append(".eecs.utk.edu"));
     }
     */
-    //cout << connections << endl;
     //Push hosts on the hosts vector"
-    cons.push_back(new Connection(server.c_str(), SWITCHBOX_PORT)); 
-    cons.at(0)->start();
-    //cons.push_back(new Connection("localhost", SWITCHBOX_PORT)); 
+    //cons.push_back(new Connection(server.c_str(), SWITCHBOX_PORT)); 
+    //cons.at(0)->start();
+    Connection *con = new Connection(server.c_str(), SWITCHBOX_PORT);
+    con->start();
 
-//    for (i = 0; i < 2; i++){
-//      cons.push_back(new Connection(hosts[i].c_str(), SWITCHBOX_PORT));
-//      cons.at(i)->start();
-//    }
-
-    //Connection mycon("localhost", SWITCHBOX_PORT);
-    //mycon.start();
+    //setup
     usleep(10000); 
     CatInterpreter sint;
     CMBSynchronizer sync(cons.at(0), &sint);
@@ -51,27 +45,16 @@ int main(){
     gen.debug = false;
     srand(time (NULL));
 
-    // Send a Null message.
- //   for (int i = 0; i < connections; i++){
-    cons.at(5)->sendMessage(4*sizeof(int)+3, BROADCAST, cons.at(0)->getAddress(), (char*)"0 "); //sent to switchbox?
- //   }
-    sync.Start();
+    // Send a Null message. from 
+    con->sendMessage(4*sizeof(int)+3, BROADCAST, con->getAddress(), (char*)"0 "); //sent to switchbox?
+    usleep(10000);
+    sync.startSendToInt();
 
-    //while(1){
     for(i=0;i<10;i++){
-//      int clientnum;
-//      if ( 1 != scanf("%d ", &clientnum) )
-//        break;
       gen.genStateMsg(buf, strlen(buf), sync.currentTime());
-      
-/*      fgets(buf, 511, stdin);
-      buf[strlen(buf)-1] = '\0';
-      //cout << " clientnum = " << clientnum << " message: " << buf << endl;
-*/
-      cons.at(0)->sendMessage(4*sizeof(int)+strlen(buf)+1, BROADCAST, cons.at(0)->getAddress(), buf);
+      con->sendMessage(4*sizeof(int)+strlen(buf)+1, BROADCAST, con->getAddress(), buf);
       usleep(1000);
       sleep(rand()%4+1);
     }
     sleep(2);
-  //}
 }
