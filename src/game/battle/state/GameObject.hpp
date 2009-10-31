@@ -47,7 +47,7 @@ namespace GameObject {
       std::string id;
       float xvelocity;
       float yvelocity;
-      virtual void movePhysics(int time, float gravity, float windspeed);
+      virtual Coord movePhysics(int time, float gravity, float windspeed);
     protected:
       //GameObj() {};
       GameObj(std::string objID, int objtype, Coord coord, float xv, float yv);
