@@ -75,6 +75,7 @@ Overworld Messages
 - /fight partyid zone id
 - /launchgame gametype zone-id switchbox-ip switchbox-port
 - /query player user-id
+- /error whatever whatever etc.
 
 Battle Messages
 %%%%%%%%%%%%%%%
