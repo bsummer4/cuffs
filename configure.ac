@@ -100,7 +100,6 @@ AC_CONFIG_FILES([Makefile
                  gamefiles/Makefile
                  gamefiles/battle/Makefile
                  gamefiles/battle/maps/Makefile
-                 gamefiles/battle/maps/test.map
                  doc/Makefile])
 
 # finally this generates the Makefiles etc. for the build
