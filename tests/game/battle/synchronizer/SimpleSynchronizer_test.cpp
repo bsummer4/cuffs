@@ -19,7 +19,7 @@ static const int SWITCHBOX_PORT = 5151;
  * @{
  */
 /**
- * @file 
+ * @file
  * @author John R. Hoare
  *
  * Tests the SimpleSynchronizer Class
@@ -30,30 +30,30 @@ using namespace std;
 vector<Connection*> cons;
 char buf[512];
 
-int main(){
+int main() {
     int connections = 0;
     scanf("%d", &connections);
     cerr << "Got " << connections << " connections" << endl;
-    for (int i = 0; i < connections; i++){
+    for (int i = 0; i < connections; i++) {
         cons.push_back(new Connection("localhost", SWITCHBOX_PORT));
         cons.at(i)->start();
     }
     Connection mycon("localhost", SWITCHBOX_PORT);
     mycon.start();
-    usleep(10000); 
+    usleep(10000);
 
     CatInterpreter sint;
     SimpleSynchronizer sync(&mycon, &sint);
-  
+
     // Send a Null message.
-    for (int i = 0; i < connections; i++){
+    for (int i = 0; i < connections; i++) {
         cons.at(i)->sendMessage(4*sizeof(int)+3, UNICAST, mycon.getAddress(), "0 ");
     }
-    usleep(10000); 
+    usleep(10000);
     sync.Start();
 
 
-    while(1){
+    while (1) {
         int clientnum;
         if ( 1 != scanf("%d ", &clientnum) )
             break;

@@ -1,42 +1,42 @@
 #include "GetCommand.hpp"
 using namespace std;
 
-namespace GameUtils{
+namespace GameUtils {
 
-  ///RETURNS THE ENUMERATED INTEGER ASSOCIATED WITH EACH COMMAND
-  int GetCommand(string command) {
+///RETURNS THE ENUMERATED INTEGER ASSOCIATED WITH EACH COMMAND
+int GetCommand(string command) {
     if (command.compare("/map") == 0) {
-      return MAP;
+        return MAP;
     } else if (command.compare("/shoot") == 0) {
-      return SHOOT;
+        return SHOOT;
     } else if (command.compare("/battlestart") == 0) {
-      return BATTLESTART;
+        return BATTLESTART;
     } else if (command.compare("/battlestop") == 0) {
-      return BATTLESTOP;
+        return BATTLESTOP;
     } else if (command.compare("/weapon") == 0) {
-      return WEAPON;
+        return WEAPON;
     } else if (command.compare("/login") == 0) {
-      return LOGIN;
+        return LOGIN;
     } else if (command.compare("/zone") == 0) {
-      return ZONE;
+        return ZONE;
     } else if (command.compare("/user") == 0) {
-      return USER;
+        return USER;
     } else if (command.compare("/group") == 0) {
-      return GROUP;
+        return GROUP;
     } else if (command.compare("/party") == 0) {
-      return PARTY;
+        return PARTY;
     } else if (command.compare("/fight") == 0) {
-      return FIGHT;
+        return FIGHT;
     } else if (command.compare("/launchgame") == 0) {
-      return LAUNCHGAME;
+        return LAUNCHGAME;
     } else if (command.compare("/move") == 0) {
-      return MOVE;
+        return MOVE;
     } else if (command.compare("/hit") == 0) {
-      return HIT;
+        return HIT;
     } else if (command.compare("/query") == 0) {
-      return HIT;
+        return HIT;
     } else {
-      return MESSAGE;
+        return MESSAGE;
     }
-  }
+}
 }

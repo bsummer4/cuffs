@@ -3,7 +3,7 @@
 #include <iostream>
 
 namespace GameUtils {
-  enum { LOGIN, MAP, ZONE, USER, GROUP, PARTY, FIGHT, LAUNCHGAME, SHOOT, BATTLESTART, BATTLESTOP, WEAPON, MESSAGE, MOVE, HIT, QUERY};
+enum { LOGIN, MAP, ZONE, USER, GROUP, PARTY, FIGHT, LAUNCHGAME, SHOOT, BATTLESTART, BATTLESTOP, WEAPON, MESSAGE, MOVE, HIT, QUERY};
 
-  int GetCommand(std::string command);
+int GetCommand(std::string command);
 };

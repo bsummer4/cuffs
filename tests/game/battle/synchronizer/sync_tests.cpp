@@ -7,11 +7,11 @@ static const int SWITCHBOX_PORT = 5151;
 /**
  * @addtogroup SyncTest
  * @{
- * @addtogroup CMBSynchronizer_Test 
+ * @addtogroup CMBSynchronizer_Test
  * @{
  */
 /**
- * @file 
+ * @file
  * @author John R. Hoare
  *
  * Tests the CMBSynchronizer Class
@@ -28,30 +28,30 @@ using namespace std;
 vector<Connection*> cons;
 char buf[512];
 
-int main(){
+int main() {
     int connections;
     scanf("%d", &connections);
     //cout << connections << endl;
-    for (int i = 0; i < connections; i++){
+    for (int i = 0; i < connections; i++) {
         cons.push_back(new Connection("localhost", SWITCHBOX_PORT));
         cons.at(i)->start();
     }
     //Connection mycon("localhost", SWITCHBOX_PORT);
     //mycon.start();
-    usleep(10000); 
+    usleep(10000);
 
     CatInterpreter sint;
     CMBSynchronizer sync(cons.at(0), &sint);
     sync.Start();
 
     // Send a Null message.
-    for (int i = 0; i < connections; i++){
+    for (int i = 0; i < connections; i++) {
         cons.at(i)->sendMessage(4*sizeof(int)+3, UNICAST, cons.at(0)->getAddress(), (char*)"0 ");
     }
     usleep(10000);
     sync.startSendToInt();
 
-    while(1){
+    while (1) {
         int clientnum;
         if ( 1 != scanf("%d ", &clientnum) )
             break;

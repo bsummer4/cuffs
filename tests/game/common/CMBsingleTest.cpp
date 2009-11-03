@@ -16,21 +16,21 @@ static const int SWITCHBOX_PORT = 5151;
 vector<Connection*> cons;
 char buf[512];
 
-int main(){
+int main() {
     int connections;
     int i;
-     if ( 1 != scanf("%d ", &connections) ){
-       cout << "error: bad file" << endl;
-       exit(1);
-     }
+    if ( 1 != scanf("%d ", &connections) ) {
+        cout << "error: bad file" << endl;
+        exit(1);
+    }
     //cout << connections << endl;
-    for (int i = 0; i < connections; i++){
+    for (int i = 0; i < connections; i++) {
         cons.push_back(new Connection("localhost", SWITCHBOX_PORT));
         cons.at(i)->start();
     }
     //Connection mycon("localhost", SWITCHBOX_PORT);
     //mycon.start();
-    usleep(10000); 
+    usleep(10000);
 
     CatInterpreter sint;
     CMBSynchronizer sync(cons.at(0), &sint);
@@ -40,19 +40,19 @@ int main(){
     srand(time(NULL));
 
     // Send a Null message.
-    for (i = 0; i < connections; i++){
+    for (i = 0; i < connections; i++) {
         cons.at(i)->sendMessage(4*sizeof(int)+3, UNICAST, cons.at(0)->getAddress(), (char*)"0 ");
     }
     usleep(10000);
     sync.startSendToInt();
 
-    for(i=0;i<10;i++){
-      int clientnum;
-      clientnum = (int)(rand() % connections);
-      gen.genStateMsg(buf, 512, rand()%100/*sync.currentTime()*/);
+    for (i=0;i<10;i++) {
+        int clientnum;
+        clientnum = (int)(rand() % connections);
+        gen.genStateMsg(buf, 512, rand()%100/*sync.currentTime()*/);
 //        int clientnum;
 //        if ( 1 != scanf("%d ", &clientnum) )
- //           break;
+//           break;
 //        fgets(buf, 511, stdin);
 //        buf[strlen(buf)-1] = '\0';
         //cout << " clientnum = " << clientnum << " message: " << buf << endl;

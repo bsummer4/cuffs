@@ -5,7 +5,7 @@
  * @{
  * @addtogroup CMBEvent_tests
  * @{
- * @file 
+ * @file
  * @author John R. Hoare
  *
  * Unit Tests for the CMBEvent class.
@@ -13,14 +13,14 @@
 
 using namespace std;
 
-/** 
- * @class CMBEvent 
+/**
+ * @class CMBEvent
  * @test
  * Verifies that the events are ordered in the priority queue correctly.
- * Correctly means that the Event with the lowest time is at the "top" of 
+ * Correctly means that the Event with the lowest time is at the "top" of
  * the queue.
  */
-void checkOrder(){
+void checkOrder() {
     cmb_timestamp one = 1;
     cmb_timestamp two = 2;
     cmb_timestamp three = 3;
@@ -47,7 +47,7 @@ void checkOrder(){
     //cout << endl;
 }
 
-int main(){
+int main() {
     cout << "================================================" << endl;
     cout << "Testing CMBEvent Class" << endl;
     //checkOrder();

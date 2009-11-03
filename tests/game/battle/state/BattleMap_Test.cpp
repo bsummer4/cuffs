@@ -26,11 +26,12 @@ vector<Coord> explList;
 void test_image_loaded(BattleMap& bm, const char* image_filename);
 
 bool valid_pixel (pixel_type_t pixel) {
-  return (pixel == MAP_EMPTY ||
-          pixel == MAP_DESTRUCTABLE ||
-          pixel == MAP_INDESTRUCTABLE); }
+    return (pixel == MAP_EMPTY ||
+            pixel == MAP_DESTRUCTABLE ||
+            pixel == MAP_INDESTRUCTABLE);
+}
 
-int main(){
+int main() {
     explList.push_back(Coord(10,10));
 
     BattleMap bm;
@@ -42,7 +43,7 @@ int main(){
          << endl;
     for (int xpos = 0; xpos < 800; xpos++)
         for (int ypos = 0; ypos < 600; ypos++)
-          assert(bm.getPixel(xpos,ypos) != MAP_INDESTRUCTABLE);
+            assert(bm.getPixel(xpos,ypos) != MAP_INDESTRUCTABLE);
     assert(bm.getXSize() == 800);
     assert(bm.getYSize() == 600);
 
@@ -102,7 +103,7 @@ void test_image_loaded(BattleMap& bm, const char* image_filename) {
     inFile >> x_size >> y_size >> maxVal;
 
     for (int j=0; j<y_size; j++) {
-        for (int i=0; i<x_size; i++){
+        for (int i=0; i<x_size; i++) {
             inFile >> nextChar;
             assert(nextChar == bm.getPixel(i,j));
         }

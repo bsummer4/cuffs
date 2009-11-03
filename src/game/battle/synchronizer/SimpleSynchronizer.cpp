@@ -1,18 +1,18 @@
 #include "Synchronizer.hpp"
 using namespace std;
 
-/** 
+/**
  * @file SimpleSynchronizer.cpp
  * @author John R. Hoare
  */
 
-SimpleSynchronizer::SimpleSynchronizer(Connection * con, Interpreter * interpreter) 
-    : Synchronizer(con, interpreter)
+SimpleSynchronizer::SimpleSynchronizer(Connection * con, Interpreter * interpreter)
+        : Synchronizer(con, interpreter)
 {
 }
 
-void SimpleSynchronizer::Run(){
-    while(!stopRequested)
+void SimpleSynchronizer::Run() {
+    while (!stopRequested)
     {
         con->blockForMessage();
         SBMessage* msg = con->getMessage();

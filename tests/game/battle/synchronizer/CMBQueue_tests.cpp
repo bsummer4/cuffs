@@ -5,7 +5,7 @@
  * @{
  * @addtogroup CMBQueue_tests
  * @{
- * @file 
+ * @file
  * @author John R. Hoare
  *
  * Unit Tests for the CMBQueue class.
@@ -18,11 +18,11 @@ using namespace std;
  *
  * @test Tests with one process that the queue orders the messages correctly.
  */
-void testOne(){
+void testOne() {
     cout << "Testing with one process" << endl;
     CMBEvent cmbe1(1,"foo");
     CMBEvent cmbe2(2,"foo");
-    CMBQueue q; 
+    CMBQueue q;
     q.queueMessage(1, cmbe1);
     q.queueMessage(1, cmbe2);
     cmb_timestamp time = q.getLowestTime();
@@ -35,11 +35,11 @@ void testOne(){
  *
  * @test Tests with two processes that the queue orders the messages correctly.
  */
-void testTwo(){
+void testTwo() {
     cout << "Testing with two processes" << endl;
     CMBEvent cmbe1(1,"foo");
     CMBEvent cmbe2(2,"foo");
-    CMBQueue q; 
+    CMBQueue q;
     q.queueMessage(1, cmbe1);
     q.queueMessage(2, cmbe2);
     cmb_timestamp time = q.getLowestTime();
@@ -50,14 +50,14 @@ void testTwo(){
 /**
  * @class CMBQueue
  *
- * @test Tests with two processes that the the lowest Time is correct, and the 
+ * @test Tests with two processes that the the lowest Time is correct, and the
  * correct runnable events are returned.
  */
-void testThree(){
+void testThree() {
     cout << "Testing getEvents()" << endl;
     CMBEvent cmbe1(1,"foo");
     CMBEvent cmbe2(2,"foo");
-    CMBQueue q; 
+    CMBQueue q;
     q.queueMessage(1, cmbe1);
     q.queueMessage(2, cmbe2);
     cmb_timestamp time = q.getLowestTime();
@@ -68,7 +68,7 @@ void testThree(){
     assert(pq.top().eventOccurs==1);
 }
 
-int main(){
+int main() {
     cout << "================================================" << endl;
     cout << "Testing CMBQueue Class" << endl;
     testOne();

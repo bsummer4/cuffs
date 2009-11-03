@@ -1,17 +1,17 @@
-#pragma once 
+#pragma once
 
-/** 
+/**
  * @defgroup Common Common
- * Everything that goes into the game backend. 
+ * Everything that goes into the game backend.
  */
 
-/** 
+/**
  * @defgroup Coord Coord
  * @ingroup Common
  * Coord class, holds x & y coordinates in one class.
  */
 
-/** 
+/**
  * @addtogroup Coord
  * @{
  */
@@ -22,7 +22,7 @@
  *
  */
 class Coord {
-  public:
+public:
     Coord();
     Coord(int xcoord, int ycoord);
     int x;
