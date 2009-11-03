@@ -1,8 +1,9 @@
-#pragma once 
 /**
  * @file
  * @author John R. Hoare
  */
+
+#pragma once
 
 #include <string>
 #include <map>
@@ -14,6 +15,11 @@
  * @ingroup State
  * @{
  */
+
+/// @TODO Why can't doxygen infer this from the directory structure.
+///       It's pretty damn obvious!
+
+/// @TODO Maybe make an enum for these inside the class?
 
 /// Value pixel_type_t takes when the map is empty.
 static const unsigned char MAP_EMPTY = 255;
@@ -28,6 +34,12 @@ typedef unsigned char pixel_type_t;
 
 /**
  * The Map class, this class holds a bitmap for the map.
+
+ * @TODO Consider making x_size, maxVal, y_size, map, and teamSpawnMap
+ *       constant (and public, besides map).  Make the constructor
+ *       take these things as arguments, and make loadMap static.
+ *
+ * @TODO Operator overloading [] might be appropriate here.
  */
 class BattleMap{
     public:
@@ -51,6 +63,8 @@ class BattleMap{
         int maxVal;
         pixel_type_t * map;
         std::map< int , std::vector<Coord> > teamSpawnMap;
+        bool is_destructable(pixel_type_t pixel);
+        void destroy(pixel_type_t *pixel);
 };
 
 /**
