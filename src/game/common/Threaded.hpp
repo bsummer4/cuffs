@@ -12,14 +12,14 @@
  */
 class Threaded {
 public:
-    Threaded();
-    virtual void Start();
-    virtual void Stop();
+  Threaded();
+  virtual void Start();
+  virtual void Stop();
 private:
-    virtual void Run() = 0;
+  virtual void Run() = 0;
 
 private:
-    boost::shared_ptr<boost::thread> runThread;
+  boost::shared_ptr<boost::thread> runThread;
 protected:
-    volatile bool stopRequested;
+  volatile bool stopRequested;
 };

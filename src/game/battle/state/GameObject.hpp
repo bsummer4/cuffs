@@ -41,16 +41,16 @@ enum { PLAYER, PROJECTILE };
 
 class GameObj {
 public:
-    Coord location;
-    Coord initlocation;
-    int type;
-    std::string id;
-    float xvelocity;
-    float yvelocity;
-    virtual Coord movePhysics(int time, float gravity, float windspeed);
+  Coord location;
+  Coord initlocation;
+  int type;
+  std::string id;
+  float xvelocity;
+  float yvelocity;
+  virtual Coord movePhysics(int time, float gravity, float windspeed);
 protected:
-    //GameObj() {};
-    GameObj(std::string objID, int objtype, Coord coord, float xv, float yv);
+  //GameObj() {};
+  GameObj(std::string objID, int objtype, Coord coord, float xv, float yv);
 };
 }
 /**

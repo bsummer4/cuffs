@@ -43,10 +43,10 @@
 
 class Projectile : public GameObject::GameObj {
 public:
-    Projectile(std::string objID, std::string type, Coord coord, float xv, float yv);
-    std::string weapontype;
-    float radius;
-    int id;
+  Projectile(std::string objID, std::string type, Coord coord, float xv, float yv);
+  std::string weapontype;
+  float radius;
+  int id;
 };
 
 /**

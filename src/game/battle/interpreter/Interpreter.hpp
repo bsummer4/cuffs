@@ -38,7 +38,7 @@
  */
 class Interpreter {
 public:
-    virtual void handleEvent(std::string &event) = 0;
+  virtual void handleEvent(std::string &event) = 0;
 };
 
 /**
@@ -48,8 +48,8 @@ public:
  */
 class CatInterpreter : public Interpreter {
 public:
-    CatInterpreter() {};
-    virtual void handleEvent(std::string &event);
+  CatInterpreter() {};
+  virtual void handleEvent(std::string &event);
 };
 
 /**
@@ -59,8 +59,8 @@ public:
  */
 class SimpleInterpreter : public Interpreter {
 public:
-    SimpleInterpreter();
-    virtual void handleEvent(std::string &event);
+  SimpleInterpreter();
+  virtual void handleEvent(std::string &event);
 };
 
 /**
@@ -70,10 +70,10 @@ public:
  */
 class GameInterpreter : public Interpreter {
 public:
-    GameInterpreter(State &gameState);
-    virtual void handleEvent(std::string &event);
+  GameInterpreter(State &gameState);
+  virtual void handleEvent(std::string &event);
 protected:
-    State &state;
+  State &state;
 };
 
 /**

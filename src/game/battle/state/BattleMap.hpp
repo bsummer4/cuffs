@@ -43,28 +43,28 @@ typedef unsigned char pixel_type_t;
  */
 class BattleMap {
 public:
-    BattleMap();
-    ~BattleMap();
-    void loadMap(std::string fileName);
-    pixel_type_t getPixel(Coord c);
-    pixel_type_t getPixel(int x, int y);
-    void explosion(Coord c, float radius);
-    void explosion(int x, int y, float radius);
-    int getXSize();
-    int getYSize();
-    std::vector<Coord> getTeamSpawns(int team);
-    void outputMap(std::string outfile);
+  BattleMap();
+  ~BattleMap();
+  void loadMap(std::string fileName);
+  pixel_type_t getPixel(Coord c);
+  pixel_type_t getPixel(int x, int y);
+  void explosion(Coord c, float radius);
+  void explosion(int x, int y, float radius);
+  int getXSize();
+  int getYSize();
+  std::vector<Coord> getTeamSpawns(int team);
+  void outputMap(std::string outfile);
 
 private:
-    void readPGM(std::string fileName);
+  void readPGM(std::string fileName);
 private:
-    int x_size;
-    int y_size;
-    int maxVal;
-    pixel_type_t * map;
-    std::map< int , std::vector<Coord> > teamSpawnMap;
-    bool is_destructable(pixel_type_t pixel);
-    void destroy(pixel_type_t *pixel);
+  int x_size;
+  int y_size;
+  int maxVal;
+  pixel_type_t * map;
+  std::map< int , std::vector<Coord> > teamSpawnMap;
+  bool is_destructable(pixel_type_t pixel);
+  void destroy(pixel_type_t *pixel);
 };
 
 /**

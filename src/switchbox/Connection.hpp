@@ -35,73 +35,73 @@ extern "C" {
  */
 class Connection {
 public:
-    Connection(const char* switchbox_hostname, const int switchbox_port);
+  Connection(const char* switchbox_hostname, const int switchbox_port);
 
-    // Put a message on the send queue
-    // This will free the message when it's finished.  So make a copy if
-    // you want to keep it around.
-    void sendMessage(SBMessage *message);
+  // Put a message on the send queue
+  // This will free the message when it's finished.  So make a copy if
+  // you want to keep it around.
+  void sendMessage(SBMessage *message);
 
-    /// Create a message to put on the send queue.
-    void sendMessage(int size, message_type_t type, int to, char *string);
+  /// Create a message to put on the send queue.
+  void sendMessage(int size, message_type_t type, int to, char *string);
 
-    /// Get a message off the receive queue.
-    SBMessage * getMessage();
+  /// Get a message off the receive queue.
+  SBMessage * getMessage();
 
-    /// Start the messaging thread.
-    void start();
+  /// Start the messaging thread.
+  void start();
 
-    /// Stop the messaging thread.
-    void stop();
+  /// Stop the messaging thread.
+  void stop();
 
-    /// Get the count of messages on the recieve queue.
-    int getMessageCount();
+  /// Get the count of messages on the recieve queue.
+  int getMessageCount();
 
-    /// Get the address of this client.
-    int getAddress();
+  /// Get the address of this client.
+  int getAddress();
 
-    /// Check to see if the messaging thread is running
-    bool isRunning();
+  /// Check to see if the messaging thread is running
+  bool isRunning();
 
-    /// A convienence function that will block until there is a message
-    /// on the messaging queue.
-    void blockForMessage();
+  /// A convienence function that will block until there is a message
+  /// on the messaging queue.
+  void blockForMessage();
 
-    /// A convienence function that will block until there is a message
-    /// on the messaging queue or the given timeout expires.
-    bool blockForMessage(int msec_timeout);
+  /// A convienence function that will block until there is a message
+  /// on the messaging queue or the given timeout expires.
+  bool blockForMessage(int msec_timeout);
 
-    /// Clear out the receive message queue
-    void clearMessageQueue();
+  /// Clear out the receive message queue
+  void clearMessageQueue();
 
-    /// @TODO Why aren't these private if you shouldn't need to call
-    ///   them?
+  /// @TODO Why aren't these private if you shouldn't need to call
+  ///   them?
 
-    /// Function for the receive messaing thread to call, you shouldn't
-    /// need to call this.
-    void receiveUpdate();
+  /// Function for the receive messaing thread to call, you shouldn't
+  /// need to call this.
+  void receiveUpdate();
 
-    /// Function for the send messaing thread to call, you shouldn't
-    /// need to call this.
-    void sendUpdate();
+  /// Function for the send messaing thread to call, you shouldn't
+  /// need to call this.
+  void sendUpdate();
 
-    virtual void handleAnnounceMessage(SBMessage * msg);
+  virtual void handleAnnounceMessage(SBMessage * msg);
 
 private:
-    Socket connection;
-    pthread_mutex_t receive_queue_lock;
-    std::queue<SBMessage*> receive_queue;
-    pthread_mutex_t send_queue_lock;
-    pthread_cond_t message_ready_to_be_sent;
-    std::queue<SBMessage*> send_queue;
-    pthread_cond_t blocking_for_message;
-    int address;
-    int switchbox_port;
-    bool messaging_threads_running;
-    std::string switchbox_hostname;
-    pthread_t receive_thread;
-    pthread_t send_thread;
-    struct pollfd descriptors_for_poll[1];
+  Socket connection;
+  pthread_mutex_t receive_queue_lock;
+  std::queue<SBMessage*> receive_queue;
+  pthread_mutex_t send_queue_lock;
+  pthread_cond_t message_ready_to_be_sent;
+  std::queue<SBMessage*> send_queue;
+  pthread_cond_t blocking_for_message;
+  int address;
+  int switchbox_port;
+  bool messaging_threads_running;
+  std::string switchbox_hostname;
+  pthread_t receive_thread;
+  pthread_t send_thread;
+  struct pollfd descriptors_for_poll[1];
 };
 
 

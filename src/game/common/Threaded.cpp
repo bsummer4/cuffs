@@ -1,16 +1,15 @@
 #include "Threaded.hpp"
 
 Threaded::Threaded()
-        : stopRequested(false)
-{
+  : stopRequested(false) {
 }
 
 /**
  * Starts a thread calling the Run() function.
  */
 void Threaded::Start() {
-    assert(!runThread);
-    runThread = boost::shared_ptr<boost::thread>(new boost::thread(boost::bind(&Threaded::Run, this)));
+  assert(!runThread);
+  runThread = boost::shared_ptr<boost::thread>(new boost::thread(boost::bind(&Threaded::Run, this)));
 }
 
 /**
@@ -18,7 +17,7 @@ void Threaded::Start() {
  * This expects the running thread to respect the stopRequested bool.
  */
 void Threaded::Stop() {
-    assert(runThread);
-    stopRequested = true;
-    runThread->join();
+  assert(runThread);
+  stopRequested = true;
+  runThread->join();
 }

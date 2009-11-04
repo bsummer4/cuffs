@@ -43,14 +43,14 @@ using namespace std;
  */
 class Generator {
 public:
-    //Global flag debug
-    Generator() {};
-    bool debug;
-    bool genBool();
-    int genID();
-    int genRun();
-    string genName();
-    void genStateMsg(char* buffer, int length, int time);
+  //Global flag debug
+  Generator() {};
+  bool debug;
+  bool genBool();
+  int genID();
+  int genRun();
+  string genName();
+  void genStateMsg(char* buffer, int length, int time);
 };
 /**
  * @}
