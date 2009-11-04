@@ -63,6 +63,5 @@ Coding Style
 
 - Run Code beautifiers on code before you commit::
 
-    astyle -Uas2 *.cpp *.hpp # for c++ code
-    indent -npsl -npcs -bli0 -brs -brf -br -nut *.c *.h # for pure c code
-
+    astyle -Uas2 # for c++ code
+    indent -npsl -npcs -bli0 -brs -brf -br -nut # for pure c code
