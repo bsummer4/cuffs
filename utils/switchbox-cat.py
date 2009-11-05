@@ -16,7 +16,7 @@ def send_data():
     global nice_close
     try:
         while True:
-            if target < 0: c.broadcast()
+            if target < 0: c.broadcast(raw_input(""))
             else: c.send(target, raw_input(""))
     except Exception as e:
         nice_close = True
