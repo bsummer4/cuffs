@@ -173,18 +173,18 @@ void BattleMap::destroy(pixel_type_t *pixel) {
 void BattleMap::explosion(int center_x, int center_y, float radius) {
   if(radius <= 0) return;
   int r = ceil(radius);
-  int low_x = max(0, center_x - r);
+  int low_x  = max(0, center_x - r);
   int high_x = min(x_size - 1, center_x + r);
-  int low_y = max(0, center_y - r);
+  int low_y  = max(0, center_y - r);
   int high_y = min(y_size - 1, center_y + r);
 
   for(int x = low_x; x <= high_x; x++)
     for(int y = low_y; y <= high_y; y++) {
-      pixel_type_t *pixel = map + POINT(x,y);
-      // To destroy a circle, check if:
-      //   distance((x, y), (center_x, center_y)) <= r
-      if(is_destructable(*pixel))
-        destroy(pixel);
+      if ( hypot(center_x-x,center_y-y) < radius ){
+        if ( map[POINT(x,y)] == MAP_DESTRUCTABLE ){
+          map[POINT(x,y)] = MAP_EMPTY;
+        }
+      }
     }
 }
 
