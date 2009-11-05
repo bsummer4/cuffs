@@ -1,15 +1,13 @@
 #!/usr/bin/python
 
+import sys, os
+sys.path.append("../src/switchbox")
 import client
 from client import Connection
 from threading import Thread
-import sys, os
 
-# * TODO I'm using os._exit to exit
-#   This is because one thread is blocking in an external library, and I
-#   don't know of any other way to get python to kill it.
-
-command, hostname, port = sys.argv
+command, hostname, port, target = sys.argv
+target = int(target)
 c = Connection(hostname, int(port))
 
 nice_close = False
@@ -17,11 +15,12 @@ nice_close = False
 def send_data():
     global nice_close
     try:
-        while True: c.send(0, raw_input(""))
+        while True:
+            if target < 0: c.broadcast()
+            else: c.send(target, raw_input(""))
     except Exception as e:
         nice_close = True
         c.close()
-        raise e
 
 def get_data():
     try:

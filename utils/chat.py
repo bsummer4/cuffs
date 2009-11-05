@@ -1,9 +1,11 @@
 #!/usr/bin/python
 
+import sys, os
+sys.path.append("../src/switchbox")
+
 import client
 from client import Connection
 from threading import Thread
-import sys, os
 
 # * TODO I'm using os._exit to exit
 #   This is because one thread is blocking in an external library, and I
