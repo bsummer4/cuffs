@@ -1,0 +1,79 @@
+I ran some code to check the ualarm time accuracy.  I calculated the
+time difference between the beggining and end of the program (in 5 ms
+intervals), and the number of times the signal handler was called
+(with sigalarm(5000, 5000)).  Here was the output:
+
+    ; ./a.out > /dev/null
+    timing error: 33455 vs 33453
+
+I think this is good enough.  Especially given that all the machines
+will tend towards slightly long intervals.
+
+
+Here is the code:
+
+    #include <unistd.h>
+    #include <signal.h>
+    #include <sys/time.h>
+    #include <iostream>
+    #include <assert.h>
+    #include <cstdlib>
+    #include <cstring>
+
+    using namespace std;
+
+    // Utility
+
+    #define iter(var, begin, end) for(int var=begin; var<end; var++)
+
+    long long timeval_to_us(struct timeval *tv) {
+      return 1000000LL * tv->tv_sec + tv->tv_usec; }
+
+    long long timeval_diff(struct timeval *start, struct timeval *end) {
+      struct timeval result;
+      result.tv_sec = end->tv_sec -start->tv_sec ;
+      result.tv_usec = end->tv_usec - start->tv_usec;
+      while (result.tv_usec < 0) {
+        result.tv_usec += 1000000;
+        result.tv_sec--; }
+      return (timeval_to_us(&result)); }
+
+
+    unsigned long interval = 5; // ms
+    char *queue[1024];
+    int queue_size = 0;
+    bool sending = false;
+    int count = 0;
+
+    void send (int signum) {
+      assert(!sending); // We can't handle this pace
+      sending = true;
+      if (!queue_size) printf("%d\n", count);
+      iter (ii, 0, queue_size) {
+        printf("%d %s\n", count, queue[ii]);
+        free(queue[ii]); }
+      count++;
+      queue_size = 0;
+      sending = false; }
+
+    int main(int argc, char **argv) {
+      char buffer[1024];
+
+      (void) signal(SIGALRM, send);
+      struct timeval tv_0, tv_1;
+      struct timezone tz_0, tz_1;
+      gettimeofday(&tv_0, &tz_0);
+
+      ualarm(interval*1000, interval*1000);
+      while (cin.getline(buffer, 1024)) {
+        char *str = strdup(buffer);
+
+        // We need to be sure this will happen atomically
+        queue[queue_size++] = str;
+      }
+
+      gettimeofday(&tv_1, &tz_1);
+      unsigned long intervals = timeval_diff(&tv_0, &tv_1) / (1000 * interval);
+      fprintf(stderr, "timing error: %lu vs %u\n", intervals, count);
+      return 0;
+    }
