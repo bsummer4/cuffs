@@ -21,7 +21,7 @@ int main() {
   int i;
   if(1 != scanf("%d ", &connections)) {
     cout << "error: bad file" << endl;
-    exit(1);
+    exit(0);
   }
   //cout << connections << endl;
   for(int i = 0; i < connections; i++) {
@@ -34,14 +34,14 @@ int main() {
 
   CatInterpreter sint;
   CMBSynchronizer sync(cons.at(0), &sint);
-  Generator gen = Generator();
+  Generator gen;
   gen.debug = false;
   sync.Start();
   srand(time(NULL));
 
   // Send a Null message.
   for(i = 0; i < connections; i++) {
-    cons.at(i)->sendMessage(4*sizeof(int)+3, UNICAST, cons.at(0)->getAddress(), (char*)"0 ");
+    cons.at(i)->sendMessage(4*sizeof(int)+3, BROADCAST, cons.at(0)->getAddress(), (char*)"0 ");
   }
   usleep(10000);
   sync.startSendToInt();
@@ -49,17 +49,18 @@ int main() {
   for(i=0; i<10; i++) {
     int clientnum;
     clientnum = (int)(rand() % connections);
-    gen.genStateMsg(buf, 512, rand()%100/*sync.currentTime()*/);
+    gen.genStateMsg(buf, 512, sync.currentTime());
 //        int clientnum;
 //        if ( 1 != scanf("%d ", &clientnum) )
 //           break;
 //        fgets(buf, 511, stdin);
 //        buf[strlen(buf)-1] = '\0';
     //cout << " clientnum = " << clientnum << " message: " << buf << endl;
-    cons.at(clientnum)->sendMessage(4*sizeof(int)+strlen(buf)+1, UNICAST, cons.at(0)->getAddress(), buf);
+    cons.at(clientnum)->sendMessage(4*sizeof(int)+strlen(buf)+1, BROADCAST, cons.at(0)->getAddress(), buf);
     usleep(1000);
-    sleep(1);
+    //sleep(1);
   }
   sleep(2);
+  return 1;
 }
 

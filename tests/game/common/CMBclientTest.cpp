@@ -8,7 +8,7 @@ using namespace std;
 
 static const int SWITCHBOX_PORT = 5151;
 
-vector<Connection*> cons;
+//vector<Connection*> cons;
 vector<string> hosts;
 char buf[512];
 
@@ -20,27 +20,13 @@ int main() {
   cout << "Who's the server? (name only/eecs domain)" << endl;
   cin >> server; //better replacement
   server.append(".eecs.utk.edu");
-//  server = "hydra3.eecs.utk.edu";
-
-  //  cout << "How many hosts?(up to 3)" << endl;
-  //  scanf("%d", &connections);
-  //  cout << "Please list  hosts on the eecs domain (name only: hydra3, cetus4, etc)" << endl;
-  /*  for(i=0; i < connections; i++){
-      //scanf("%s", &host);
-      cin >> host;
-      hosts.push_back(host.append(".eecs.utk.edu"));
-    }
-    */
-  //Push hosts on the hosts vector"
-  //cons.push_back(new Connection(server.c_str(), SWITCHBOX_PORT));
-  //cons.at(0)->start();
   Connection *con = new Connection(server.c_str(), SWITCHBOX_PORT);
   con->start();
 
   //setup
   usleep(10000);
   CatInterpreter sint;
-  CMBSynchronizer sync(cons.at(0), &sint);
+  CMBSynchronizer sync(con, &sint);
   Generator gen = Generator();
   gen.debug = false;
   srand(time(NULL));
@@ -54,7 +40,6 @@ int main() {
     gen.genStateMsg(buf, strlen(buf), sync.currentTime());
     con->sendMessage(4*sizeof(int)+strlen(buf)+1, BROADCAST, con->getAddress(), buf);
     usleep(1000);
-    sleep(rand()%4+1);
   }
   sleep(2);
 }
