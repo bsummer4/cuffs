@@ -19,10 +19,12 @@ char buf[512];
 int main() {
   int connections;
   int i;
-  if(1 != scanf("%d ", &connections)) {
+ /* if(1 != scanf("%d ", &connections)) {
     cout << "error: bad file" << endl;
     exit(0);
   }
+  */
+  connections = 3;
   //cout << connections << endl;
   for(int i = 0; i < connections; i++) {
     cons.push_back(new Connection("localhost", SWITCHBOX_PORT));

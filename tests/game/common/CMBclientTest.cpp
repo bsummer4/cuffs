@@ -2,7 +2,6 @@
 #include "Synchronizer.hpp"
 #include "Interpreter.hpp"
 #include "Connection.hpp"
-#include <cstdio>
 #include <string>
 using namespace std;
 
