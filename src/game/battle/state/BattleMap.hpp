@@ -16,21 +16,8 @@
  * @{
  */
 
-/// @TODO Why can't doxygen infer this from the directory structure.
-///       It's pretty damn obvious!
-
-/// @TODO Maybe make an enum for these inside the class?
-
-/// Value pixel_type_t takes when the map is empty.
-static const unsigned char MAP_EMPTY = 255;
-/// Value pixel_type_t takes for a destructable pixel.
-static const unsigned char MAP_DESTRUCTABLE = 128;
-/// Value pixel_type_t takes for an destructable pixel.
-static const unsigned char MAP_INDESTRUCTABLE = 0;
-
 /// A typedef that is the container for one pixel for the map.
 typedef unsigned char pixel_type_t;
-
 
 /**
  * The Map class, this class holds a bitmap for the map.
@@ -42,6 +29,14 @@ typedef unsigned char pixel_type_t;
  * @TODO Operator overloading [] might be appropriate here.
  */
 class BattleMap {
+public:
+  enum PixelType{ /// Value pixel_type_t takes for an destructable pixel.
+                  MAP_INDESTRUCTABLE = 0, 
+                  /// Value pixel_type_t takes for a destructable pixel.
+                  MAP_DESTRUCTABLE   = 128,
+                  /// Value pixel_type_t takes when the map is empty.
+                  MAP_EMPTY          = 255 
+                };
 public:
   BattleMap();
   ~BattleMap();
