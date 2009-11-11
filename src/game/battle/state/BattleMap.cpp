@@ -166,9 +166,7 @@ void BattleMap::destroy(pixel_type_t *pixel) {
 
 /**
  * Removes all destructable terrain within radius of x,y
- *
- * @TODO This actually deletes a square for now.  It's much easier to
- * implement.  For now, let's just pretend that's what we really want.
+ * at once. 
  */
 void BattleMap::explosion(int center_x, int center_y, float radius) {
   if(radius <= 0) return;
