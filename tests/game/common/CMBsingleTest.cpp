@@ -52,11 +52,6 @@ int main() {
     int clientnum;
     clientnum = (int)(rand() % connections);
     gen.genStateMsg(buf, 512, sync.currentTime());
-//        int clientnum;
-//        if ( 1 != scanf("%d ", &clientnum) )
-//           break;
-//        fgets(buf, 511, stdin);
-//        buf[strlen(buf)-1] = '\0';
     //cout << " clientnum = " << clientnum << " message: " << buf << endl;
     cons.at(clientnum)->sendMessage(4*sizeof(int)+strlen(buf)+1, BROADCAST, cons.at(0)->getAddress(), buf);
     usleep(1000);
