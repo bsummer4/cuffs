@@ -3,6 +3,7 @@
 #include "Player.hpp"
 #include "coord.hpp"
 #include "assert.h"
+#include <cstdio>
 using namespace std;
 using namespace GameObject;
 

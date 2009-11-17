@@ -4,6 +4,8 @@
 #include <fstream>
 #include <math.h>
 
+#include <assert.h>
+
 #define POINT(X,Y) x_size*(Y)+(X)
 
 using namespace std;
@@ -92,6 +94,7 @@ void BattleMap::readPGM(std::string fileName) {
         //map[POINT(x,y)] = nextChar;
       } else {
         cerr << "Got a bad pixel value in the image: " << (int)nextChar << endl;
+	assert(false);
         ///@TODO Throw an exception here.
       }
     }
