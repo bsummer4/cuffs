@@ -18,7 +18,7 @@ int main() {
   int i;
 
   cout << "What is the server (hostname only)" << endl;
-  cin >> server; //better replacement
+  cin >> server; //needs a better replacement
   server.append(".eecs.utk.edu");
   Connection *con = new Connection(server.c_str(), SWITCHBOX_PORT);
   con->start();
@@ -33,11 +33,11 @@ int main() {
   srand(time(NULL));
 
   // Send a Null message. from
-  con->sendMessage(4*sizeof(int)+3, BROADCAST, con->getAddress(), (char*)"0 "); //sent to switchbox?
+  con->sendMessage(4*sizeof(int)+3, BROADCAST, con->getAddress(), "0 "); //sent to switchbox?
   usleep(10000);
   sync.startSendToInt();
 
-  for(i=0; i<10; i++) {
+  for (i=0; i<10; i++) {
     gen.genStateMsg(buf, 512, sync.currentTime());
     con->sendMessage(4*sizeof(int)+strlen(buf)+1, BROADCAST, con->getAddress(), buf);
     usleep(1000);

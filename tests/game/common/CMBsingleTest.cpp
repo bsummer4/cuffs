@@ -19,14 +19,14 @@ char buf[512];
 int main() {
   int connections;
   int i;
- /* if(1 != scanf("%d ", &connections)) {
-    cout << "error: bad file" << endl;
-    exit(0);
-  }
-  */
+  /* if(1 != scanf("%d ", &connections)) {
+     cout << "error: bad file" << endl;
+     exit(0);
+   }
+   */
   connections = 3;
   //cout << connections << endl;
-  for(int i = 0; i < connections; i++) {
+  for (int i = 0; i < connections; i++) {
     cons.push_back(new Connection("localhost", SWITCHBOX_PORT));
     cons.at(i)->start();
   }
@@ -42,13 +42,13 @@ int main() {
   srand(time(NULL));
 
   // Send a Null message.
-  for(i = 0; i < connections; i++) {
+  for (i = 0; i < connections; i++) {
     cons.at(i)->sendMessage(4*sizeof(int)+3, BROADCAST, cons.at(0)->getAddress(), (char*)"0 ");
   }
   usleep(10000);
   sync.startSendToInt();
 
-  for(i=0; i<10; i++) {
+  for (i=0; i<10; i++) {
     int clientnum;
     clientnum = (int)(rand() % connections);
     gen.genStateMsg(buf, 512, sync.currentTime());
