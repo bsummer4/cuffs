@@ -59,6 +59,18 @@ if test $FOUND_BOOSTTHREAD != 1; then
 fi
 
 ########################################################################
+# Check for libsdl headers.
+########################################################################
+AC_CHECK_HEADER(SDL/SDL.h, FOUND_SDL=1, FOUND_SDL=0)
+AC_CHECK_HEADER(SDL/SDL_image.h, FOUND_SDL_IMAGE=1, FOUND_SDL_IMAGE=0)
+if test $FOUND_SDL != 1; then
+    AC_MSG_ERROR([SDL.h Not found but is needed.])
+fi
+if test $FOUND_SDL_IMAGE != 1; then
+    AC_MSG_ERROR([SDL_image.h Not found but is needed.])
+fi
+
+########################################################################
 # DOXYGEN SUPPORT
 # ######################################################################
 
