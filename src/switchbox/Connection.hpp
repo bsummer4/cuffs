@@ -79,7 +79,7 @@ public:
 
   /// Function for the receive messaing thread to call, you shouldn't
   /// need to call this.
-  void receiveUpdate();
+  virtual void receiveUpdate();
 
   /// Function for the send messaing thread to call, you shouldn't
   /// need to call this.
@@ -87,7 +87,7 @@ public:
 
   virtual void handleAnnounceMessage(SBMessage * msg);
 
-private:
+protected:
   Socket connection;
   pthread_mutex_t receive_queue_lock;
   std::queue<SBMessage*> receive_queue;

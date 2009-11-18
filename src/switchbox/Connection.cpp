@@ -2,6 +2,7 @@
 extern "C" {
 #include <sys/time.h>
 #include <errno.h>
+#include <assert.h>
 }
 
 // Prototype for thread.
@@ -31,6 +32,7 @@ Connection::Connection(const char* switchbox_hostname,
 void Connection::start() {
   this->connection = open_connection(switchbox_hostname.c_str(),
                                      switchbox_port);
+  assert(this->connection != -1);
   descriptors_for_poll[0].fd = this->connection;
   descriptors_for_poll[0].events = POLLIN;
   this->messaging_threads_running = true;
