@@ -49,7 +49,7 @@ void checkOrder() {
 int main() {
   cout << "================================================" << endl;
   cout << "Testing CMBEvent Class" << endl;
-  //checkOrder();
+  checkOrder();
   cout << "Done Testing CMBEvent Class" << endl;
   cout << "================================================" << endl;
 }
