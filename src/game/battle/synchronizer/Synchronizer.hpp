@@ -13,12 +13,6 @@
 #include <queue>
 
 /**
- * @defgroup Synchronizer Synchronizer
- * @ingroup Battle
- * The Synchronizer portion of the CMB triad.
- */
-
-/**
  * @addtogroup Synchronizer
  * @author John R. Hoare
  * @{

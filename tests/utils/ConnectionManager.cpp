@@ -99,7 +99,6 @@ bool ConnectionManager::addConnection(int key){
  * The memory will also have delete called on it.
  *
  * @param key The key to associate with this connection.(or id)
- * @param connection The pointer to the connection object. 
  *
  * @return True if it added sucessfully, False if it didn't.
  * (Likely false implies that something with that key already exists.)
@@ -138,6 +137,7 @@ bool ConnectionManager::sendMessage(int key, char* msg, int msgl){
     return false;
 }
 
+/*
 void ConnectionManager::printMessages(int key){
     std::map< int, Connection* >::iterator it;
     it = connection_map.find(key);
@@ -145,3 +145,4 @@ void ConnectionManager::printMessages(int key){
         cout << (*it).second->getMessageCount() << endl;
     }
 }
+*/

@@ -12,7 +12,6 @@ class ConnectionManager{
         bool addConnection(int key);
         bool removeConnection(int key);
         bool sendMessage(int key, char* msg, int msgl);
-        void printMessages(int key);
     public:
         std::map< int, Connection* > connection_map;
         std::string hostname;

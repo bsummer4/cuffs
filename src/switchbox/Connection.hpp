@@ -9,14 +9,6 @@ extern "C" {
 #include <pthread.h>
 }
 
-/** @defgroup Switchbox Switchbox
- * The switchbox and everything related.
- */
-/** @defgroup ClientLib ClientLib
- * @ingroup Switchbox
- * C++ Client library for communication via switchbox.
- */
-
 /** @addtogroup ClientLib
  * @{
  */

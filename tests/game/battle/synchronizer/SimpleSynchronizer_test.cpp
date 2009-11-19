@@ -6,13 +6,6 @@
 static const int SWITCHBOX_PORT = 5151;
 
 /**
- * @defgroup Tests Tests
- */
-/**
- * @defgroup SyncTest SyncTest
- * @ingroup Tests
- */
-/**
  * @addtogroup SyncTest
  * @{
  * @addtogroup SimpleSynchronizer_Test

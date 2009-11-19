@@ -12,24 +12,6 @@
 #include "BattleMap.hpp"
 #include "coord.hpp"
 
-
-/**
- * @defgroup Game Game
- * Everything that goes into the game backend.
- */
-
-/**
- * @defgroup Battle Battle
- * @ingroup Game
- * Everything involved for the "Battle" Portion of the game.
- */
-
-/**
- * @defgroup State State
- * @ingroup Battle
- * The State portion of the CMB triad.
- */
-
 /**
  * @addtogroup State
  * @{

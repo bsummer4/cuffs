@@ -12,23 +12,6 @@ extern "C" {
 #include "Connection.hpp"
 using namespace std;
 
-
-/**
- * @defgroup Game Game
- * Everything that goes into the game backend.
- */
-/**
- * @defgroup Battle Battle
- * @ingroup Game
- * Everything involved for the "Battle" Portion of the game.
- */
-
-/**
- * @defgroup Generator Generator
- * @ingroup Battle
- * The Generator portion of the CMB triad.
- */
-
 /**
  * @addtogroup Generator
  * @{

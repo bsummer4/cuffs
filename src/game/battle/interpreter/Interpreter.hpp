@@ -11,22 +11,6 @@
 #include <cmath>
 
 /**
- * @defgroup Game Game
- * Everything that goes into the game backend.
- */
-/**
- * @defgroup Battle Battle
- * @ingroup Game
- * Everything involved for the "Battle" Portion of the game.
- */
-
-/**
- * @defgroup Interpreter Interpreter
- * @ingroup Battle
- * The Interpreter portion of the CMB triad.
- */
-
-/**
  * @addtogroup Interpreter
  * @{
  */
