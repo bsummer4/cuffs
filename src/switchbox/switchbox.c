@@ -1,9 +1,8 @@
-/*
-  Some pointers for reading this:
-
+/**
+  # Some pointers for reading this:
   - We use the switchbox_client, and message libraries, read those
     first.
-  - Each client has its own thread:  This is somewhat inefficient, but
+  - Each client has its own thread: This is somewhat inefficient, but
     it's simple, and it's good enough for what we're doing.
   - New clients are always assigned the lowest available address.
   - Client and Group addresses are indexes into a big global array of
@@ -12,13 +11,20 @@
   - Messages can be any size are are stored on the heap.  This is
     simple and flexible (no limit on message size).
 
-  Possible preformance enhancements:
-
+  # Possible preformance enhancements:
   - Use select() instead of threads.
   - Use a message buffer on the stack and only malloc/free if the
     message is too big for the buffer.
 
   These are all complicated and probably not worth doing.
+
+  # TODO
+
+  @TODO What if a member of a group dissconnects?  Should the group be
+        removed?  Maybe that member should be removed from the group.
+        For now sending to the group sends to a subset of the members
+        and then an error is send to the sender.  This is not a very
+        good solution.
 */
 
 #include "switchbox_client.h"
@@ -314,7 +320,9 @@ bool multicast(SBMessage * m) {
   return true;
 }
 
+/// Returns false if we couldn't send to one or more clients
 bool broadcast(SBMessage * m) {
+  bool success = true;
   if (debug)
     printf("broadcast from %d\n", m->from);
   iter(ii, 0, last_used_client + 1) {
@@ -323,9 +331,10 @@ bool broadcast(SBMessage * m) {
         printf("broadcasting to %d\n", ii);
     m->to = ii;
     if (!locking_send(m))
-      return false;
+      success = false; // Don't stop just because one person
+                       // disconnected
   }
-  return true;
+  return success;
 }
 
 void announce(SBMessage * admin_message) {
@@ -364,7 +373,14 @@ void *handle_connection(void *client_) {
       }
       break;
     case BROADCAST:
-      assert(broadcast(m));
+      /// If this fails, we know a client has disconnected.  We could
+      /// try to close off the client now, but it should be handled
+      /// very soon by its own thread.
+      ///
+      /// We also have no need to send an error to the sender since
+      /// they don't really care.  They just want the message to get
+      /// to everyone connected.
+      broadcast(m);
       break;
     case MULTICAST:
       if (!multicast(m))
