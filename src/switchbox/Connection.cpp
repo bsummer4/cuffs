@@ -1,9 +1,12 @@
 #include "Connection.hpp"
+#include<iostream>
 extern "C" {
 #include <sys/time.h>
 #include <errno.h>
 #include <assert.h>
 }
+
+using namespace std;
 
 // Prototype for thread.
 extern "C" void * receive_messaging_thread(void* arg);
@@ -29,6 +32,20 @@ Connection::Connection(const char* switchbox_hostname,
   pthread_cond_init(&message_ready_to_be_sent, NULL);
 }
 
+/**
+ * Destructor makes sure that the threads are completly shut down, and the
+ * send queue has been purged.
+ */
+Connection::~Connection(){
+  //cout << "Destructing!" << endl;
+  if ( this->messaging_threads_running ){
+      stop();
+  }
+  if ( valid_socket(this->connection) ){
+      close_connection(this->connection);
+  }
+}
+
 void Connection::start() {
   this->connection = open_connection(switchbox_hostname.c_str(),
                                      switchbox_port);
@@ -44,8 +61,10 @@ void Connection::start() {
 
 void Connection::stop() {
   this->messaging_threads_running = false;
-  pthread_cancel(receive_thread);
-  pthread_cancel(send_thread);
+  // Send a broadcast to make sure everything is sent before we leave. 
+  pthread_cond_broadcast(&message_ready_to_be_sent);
+  //pthread_cancel(receive_thread);
+  //pthread_cancel(send_thread);
   pthread_join(receive_thread, NULL);
   pthread_join(send_thread, NULL);
 }
@@ -148,7 +167,6 @@ void Connection::receiveUpdate() {
  */
 void Connection::sendUpdate() {
   pthread_mutex_lock(&send_queue_lock);
-  pthread_cond_wait(&message_ready_to_be_sent, &send_queue_lock);
 
   // Check if there's any messages to send
   while(!send_queue.empty()) {
@@ -157,6 +175,11 @@ void Connection::sendUpdate() {
     switchbox_send(this->connection, msg);
     free(msg);
   }
+
+  // If the thread is still running then wait on the cond variable
+  // if it isn't just leave. 
+  if ( this->messaging_threads_running )
+      pthread_cond_wait(&message_ready_to_be_sent, &send_queue_lock);
   pthread_mutex_unlock(&send_queue_lock);
 }
 
@@ -164,17 +187,23 @@ void Connection::sendUpdate() {
 /**
  * This function will return when there is a message on the receive
  * queue.
+ * 
+ * @returns True if there is a message, False if there is an error 
+ *      (perhaps the Object is being destructed).
  */
-void Connection::blockForMessage() {
-  if(!receive_queue.empty()) return;
+bool Connection::blockForMessage() {
+  if(!receive_queue.empty()) return true;
   pthread_mutex_lock(&receive_queue_lock);
   pthread_cond_wait(&blocking_for_message, &receive_queue_lock);
   pthread_mutex_unlock(&receive_queue_lock);
+  return !receive_queue.empty();
 }
 
 /**
  * This function will return when there is a message on the receive queue,
  * or if the timeout has been reached.
+ *
+ * @returns True if there is a message
  */
 bool Connection::blockForMessage(int msec_timeout) {
   if(!receive_queue.empty()) return true;
@@ -189,7 +218,7 @@ bool Connection::blockForMessage(int msec_timeout) {
   int rc = pthread_cond_timedwait(&blocking_for_message, &receive_queue_lock,
                                   &ts);
   pthread_mutex_unlock(&receive_queue_lock);
-  if(rc == 0) return true;
+  if(rc == 0) return !receive_queue.empty();
   if(rc == ETIMEDOUT) return false;
 
   perror("cond_timewait:");
@@ -220,5 +249,8 @@ extern "C" void * receive_messaging_thread(void* arg) {
 extern "C" void * send_messaging_thread(void* arg) {
   Connection * c = reinterpret_cast<Connection*>(arg);
   while(c->isRunning()) c->sendUpdate();
+  // We run it one more time to make sure everything is sent before we go.
+  //cout << "Send Messaging thread doing one last pass" << endl;
+  c->sendUpdate();
   pthread_exit(NULL);
 }

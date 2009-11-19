@@ -3,6 +3,9 @@
 #include <string>
 #include <cstdio>
 #include <cstring>
+extern "C"{
+#include <assert.h>
+}
 
 using namespace std;
 
@@ -19,12 +22,13 @@ bool handle_special_command(char* buf){
     int client_num = -1;
     cout << "Handling message: " << buf << endl;
     char command[512];
-    sscanf(buf, "%s %i", command, &client_num);
+    assert( 2 == sscanf(buf, "%s %i", command, &client_num));
     if ( strstr(command, "new_connection") != NULL ){
-        cm->addConnection(client_num);
+        assert(cm->addConnection(client_num));
     } else {
-        cm->removeConnection(client_num);
+        assert(cm->removeConnection(client_num));
     }
+    return true;
 }
 
 int main(int argc, char* argv[]){
@@ -50,15 +54,17 @@ int main(int argc, char* argv[]){
         fgets(buf2, 511, script);
         //cout << client_num << endl << buf2 << endl;
         if(client_num == -1){
-            handle_special_command(buf2);
+            assert(handle_special_command(buf2));
         } else{
-            cout << "sending message: " << client_num << " : " << buf2 << endl;
-            cm->sendMessage(client_num, buf2, strlen(buf2));
+            //cout << "sending message: " << client_num << " : " << buf2 << endl;
+            assert(cm->sendMessage(client_num, buf2, strlen(buf2)));
         }
     }
+    /*
     sleep(1);
     cout << "Press enter when done." << endl;
     std::string foo;
     cin >> foo;
+    */
     return 0;
 }

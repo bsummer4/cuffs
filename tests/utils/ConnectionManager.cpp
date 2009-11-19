@@ -87,6 +87,7 @@ bool ConnectionManager::addConnection(int key){
     else 
         connection = new Connection(hostname.c_str(), port);
     connection->start();
+    assert(connection->isRunning());
     connection_map.insert(std::pair< int, Connection* >(key, connection));
     return true;
 }
@@ -130,7 +131,7 @@ bool ConnectionManager::sendMessage(int key, char* msg, int msgl){
     std::map< int, Connection* >::iterator it;
     it = connection_map.find(key);
     if ( it != connection_map.end()){
-        cout << "sent Message: " << msg << endl;
+        //cout << "sent Message: " << msg << endl;
         (*it).second->sendMessage(msgl+4*sizeof(int), BROADCAST, -1, msg);
         return true;
     }

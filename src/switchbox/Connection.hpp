@@ -36,6 +36,7 @@ extern "C" {
 class Connection {
 public:
   Connection(const char* switchbox_hostname, const int switchbox_port);
+  ~Connection();
 
   // Put a message on the send queue
   // This will free the message when it's finished.  So make a copy if
@@ -65,7 +66,7 @@ public:
 
   /// A convienence function that will block until there is a message
   /// on the messaging queue.
-  void blockForMessage();
+  bool blockForMessage();
 
   /// A convienence function that will block until there is a message
   /// on the messaging queue or the given timeout expires.
