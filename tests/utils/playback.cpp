@@ -12,7 +12,7 @@ using namespace std;
 ConnectionManager* cm;
 
 void print_usage(char* argv[]){
-    cout << "usage: " << argv[0] << " switchbox_hostname switchbox_port script_file" << endl;
+    cout << "usage: " << argv[0] << " switchbox_hostname switchbox_port [script_file]" << endl;
 }
 
 /**
@@ -32,7 +32,7 @@ bool handle_special_command(char* buf){
 }
 
 int main(int argc, char* argv[]){
-    if ( argc != 4 ){
+    if ( argc != 4 and argc != 3 ){
         print_usage(argv);
         exit(1);
     }
@@ -41,7 +41,12 @@ int main(int argc, char* argv[]){
 
     char buf[512];
     char buf2[512];
-    FILE* script = fopen(argv[3], "r");
+    FILE* script;
+    if ( argc == 3 ){
+        script = stdin;
+    } else {
+        script = fopen(argv[3], "r");
+    }
     if ( script == NULL ){
         cout << "Could not open file " << argv[3] << endl;
         print_usage(argv);
