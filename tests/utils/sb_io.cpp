@@ -63,16 +63,27 @@ int main(int argc, char* argv[]){
 
 
     int client_num;
+    int fscanf_ret_val;
     
-    while (fgets(buf, 511, script)){
-        if (sscanf(buf, "%i", &client_num) != 1) continue;
+    while (true){
+        if ((fscanf_ret_val = fscanf(script, "%i", &client_num)) != 1){
+            // Check if it failed because we got an eof
+            if ( fscanf_ret_val == EOF ) return 0;
+            cerr << "Could not get client number" << endl;
+            // Read the line and throw it out because it's invalid.
+            fgets(buf, 511, script);
+            continue;
+        }
+
         fgets(buf2, 511, script);
         //cerr << client_num << endl << buf2 << endl;
         if(client_num == -1){
             assert(handle_special_command(buf2));
         } else{
             //cerr << "sending message: " << client_num << " : " << buf2 << endl;
-            assert(cm->sendMessage(client_num, buf2, strlen(buf2)));
+            if(!cm->sendMessage(client_num, buf2, strlen(buf2))){
+                cerr << "Error Message not sent. Bad client number: " << client_num << endl;
+            }
         }
     }
     return 0;
