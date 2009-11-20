@@ -63,13 +63,15 @@ int main(int argc, char* argv[]){
 
 
     int client_num;
-    while (fscanf(script, "%i", &client_num) == 1){
+    
+    while (fgets(buf, 511, script)){
+        if (sscanf(buf, "%i", &client_num) != 1) continue;
         fgets(buf2, 511, script);
-        cerr << client_num << endl << buf2 << endl;
+        //cerr << client_num << endl << buf2 << endl;
         if(client_num == -1){
             assert(handle_special_command(buf2));
         } else{
-            cerr << "sending message: " << client_num << " : " << buf2 << endl;
+            //cerr << "sending message: " << client_num << " : " << buf2 << endl;
             assert(cm->sendMessage(client_num, buf2, strlen(buf2)));
         }
     }
