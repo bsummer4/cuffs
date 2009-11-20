@@ -1,54 +1,39 @@
-/** @defgroup Switchbox Switchbox
- * The switchbox and everything related.
- */
-/** @defgroup ClientLib ClientLib
- * @ingroup Switchbox
- * C++ Client library for communication via switchbox.
- */
+/**
+   @defgroup Switchbox Switchbox
+   The switchbox and everything related.
 
-/**
- * @defgroup Game Game
- * Everything that goes into the game backend.
- */
-/**
- * @defgroup Battle Battle
- * @ingroup Game
- * Everything involved for the "Battle" Portion of the game.
- */
+   @defgroup ClientLib ClientLib
+   @ingroup Switchbox
+   C++ Client library for communication via switchbox.
 
+   @defgroup Game Game
+   Everything that goes into the game backend.
 
-/**
- * @defgroup Generator Generator
- * @ingroup Battle
- * The Generator portion of the CMB triad.
- */
+   @defgroup Battle Battle
+   @ingroup Game
+   Everything involved for the "Battle" Portion of the game.
 
-/**
- * @defgroup Interpreter Interpreter
- * @ingroup Battle
- * The Interpreter portion of the CMB triad.
- */
+   @defgroup Generator Generator
+   @ingroup Battle
+   The Generator portion of the CMB triad.
 
-/**
- * @defgroup State State
- * @ingroup Battle
- * The State portion of the CMB triad.
- */
+   @defgroup Interpreter Interpreter
+   @ingroup Battle
+   The Interpreter portion of the CMB triad.
 
-/**
- * @defgroup Synchronizer Synchronizer
- * @ingroup Battle
- * The Synchronizer portion of the CMB triad.
- */
+   @defgroup State State
+   @ingroup Battle
+   The State portion of the CMB triad.
 
-/**
- * @defgroup Common Common
- * Everything that goes into the game backend.
- */
-/**
- * @defgroup Tests Tests
- */
-/**
- * @defgroup SyncTest SyncTest
- * @ingroup Tests
- */
+   @defgroup Synchronizer Synchronizer
+   @ingroup Battle
+   The Synchronizer portion of the CMB triad.
+
+   @defgroup Common Common
+   Everything that goes into the game backend.
+
+   @defgroup Tests Tests
+
+   @defgroup SyncTest SyncTest
+   @ingroup Tests
+*/
