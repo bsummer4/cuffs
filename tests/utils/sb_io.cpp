@@ -23,6 +23,13 @@ bool handle_special_command(char* buf){
     cout << "Handling message: " << buf << endl;
     char command[512];
     assert( 2 == sscanf(buf, "%s %i", command, &client_num));
+
+    // Special case client_num 0, he is explicitly there
+    if ( client_num == 0 ){
+        cerr << "Got a command to add/remove client 0, but it is explicitly there. Ignoring..." << endl;
+        return true;
+    }
+
     if ( strstr(command, "new_connection") != NULL ){
         assert(cm->addConnection(client_num));
     } else {
@@ -32,6 +39,10 @@ bool handle_special_command(char* buf){
 }
 
 int main(int argc, char* argv[]){
+    char buf[512];
+    char buf2[512];
+    FILE* script;
+
     if ( argc != 4 and argc != 3 ){
         print_usage(argv);
         exit(1);
@@ -39,9 +50,6 @@ int main(int argc, char* argv[]){
 
     cm = new ConnectionManager(std::string(argv[1]), atoi(argv[2]));
 
-    char buf[512];
-    char buf2[512];
-    FILE* script;
     if ( argc == 3 ){
         script = stdin;
     } else {
@@ -57,19 +65,13 @@ int main(int argc, char* argv[]){
     int client_num;
     while (fscanf(script, "%i", &client_num) == 1){
         fgets(buf2, 511, script);
-        //cout << client_num << endl << buf2 << endl;
+        cerr << client_num << endl << buf2 << endl;
         if(client_num == -1){
             assert(handle_special_command(buf2));
         } else{
-            //cout << "sending message: " << client_num << " : " << buf2 << endl;
+            cerr << "sending message: " << client_num << " : " << buf2 << endl;
             assert(cm->sendMessage(client_num, buf2, strlen(buf2)));
         }
     }
-    /*
-    sleep(1);
-    cout << "Press enter when done." << endl;
-    std::string foo;
-    cin >> foo;
-    */
     return 0;
 }

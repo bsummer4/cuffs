@@ -60,11 +60,12 @@ class PrinterConnection : public Connection{
       int key;
 };
 
-ConnectionManager::ConnectionManager(std::string hostname, unsigned int port, bool printer_mode){
+ConnectionManager::ConnectionManager(std::string hostname, unsigned int port){
     this->hostname = hostname;
     this->port = port;
-    this->printer_mode = printer_mode;
+    assert(spawnPrinterConnection());
 }
+
 
 /**
  * Assocate a new connection with the ConnectionManager
@@ -82,10 +83,7 @@ bool ConnectionManager::addConnection(int key){
         return false;
     }
     Connection * connection;
-    if ( printer_mode ) 
-        connection = new PrinterConnection(hostname.c_str(), port);
-    else 
-        connection = new Connection(hostname.c_str(), port);
+    connection = new Connection(hostname.c_str(), port);
     connection->start();
     assert(connection->isRunning());
     connection_map.insert(std::pair< int, Connection* >(key, connection));
@@ -137,12 +135,18 @@ bool ConnectionManager::sendMessage(int key, char* msg, int msgl){
     return false;
 }
 
-/*
-void ConnectionManager::printMessages(int key){
+bool ConnectionManager::spawnPrinterConnection(){
+    int key = 0;
     std::map< int, Connection* >::iterator it;
     it = connection_map.find(key);
+
     if ( it != connection_map.end()){
-        cout << (*it).second->getMessageCount() << endl;
+        return false;
     }
+    Connection * connection;
+    connection = new PrinterConnection(hostname.c_str(), port);
+    connection->start();
+    assert(connection->isRunning());
+    connection_map.insert(std::pair< int, Connection* >(key, connection));
+    return true;
 }
-*/
