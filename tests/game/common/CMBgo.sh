@@ -16,7 +16,7 @@ echo "Running CMBsingle Test"
 ./CMBsingleTest > singleTest.txt
 
 echo "Running CMB on clients"
-ssh -f $me@cetus6.eecs.utk.edu "cd $ppath; ./CMBclientTest < server.txt > client3.txt"
+ssh -f $me@cetus6.eecs.utk.edu "cd $ppath; ./CMBclientTest < server.txt > client1.txt"
 ssh -f $me@cetus7.eecs.utk.edu "cd $ppath; ./CMBclientTest < server.txt > client2.txt"
 sleep 10
 

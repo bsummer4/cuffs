@@ -37,8 +37,10 @@ int main() {
   usleep(10000);
   sync.startSendToInt();
 
+  cout << "test\n";
   for (i=0; i<10; i++) {
     gen.genStateMsg(buf, 512, sync.currentTime());
+    cout << buf << endl;
     con->sendMessage(4*sizeof(int)+strlen(buf)+1, BROADCAST, con->getAddress(), buf);
     usleep(1000);
   }
