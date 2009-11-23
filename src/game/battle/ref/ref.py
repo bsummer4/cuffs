@@ -27,18 +27,19 @@ import client
 from client import Connection
 
 team1list = team2list = None # globals
+messageQ = []
 
 def addplayer(player, id):
   print "Player ", player, " has joined\n"
   tmp = '/new player-%s player %d %d'%(player, 50, 50)
-  command = c.broadcast(tmp)
+  messageQ.append(tmp)
+ # command = c.broadcast(tmp)
 
 def go():
-  # TODO broadcast the map
+  c.broadcast('/map ../../../../gamefiles/battle/maps/map1.pgm') 
   c.broadcast('/start')
-  # TODO Maybe it would be better to send the '/new' messages after
-  # '/start'.  You could just add them all to a global list of
-  # messages then send them all here
+  for tmp in messageQ:
+    c.broadcast(tmp)
 
 def waiting4players():
   pcount = 0;
@@ -54,16 +55,15 @@ def waiting4players():
       return
 
 if __name__ == '__main__':
-  if len(sys.argv) != 4:
-    # TODO "./ref hostname port team1list team2list" would be better
-    print "usage: ./ref name1,name2... name5,name6... sbport"
+  if len(sys.argv) != 5:
+    print "usage: ./ref hostname port name1,name2... name4,name5..."
     sys.exit(1)
 
-  command, team1, team2, sbport = sys.argv
+  command, hostname, sbport, team1, team2 = sys.argv
   team1list = team1.split(',')
   team2list = team2.split(',')
-  # TODO localhost should not be assumed
-  c = Connection('localhost', int(sbport))
+
+  c = Connection(hostname, int(sbport))
 
   waiting4players()
   go()
