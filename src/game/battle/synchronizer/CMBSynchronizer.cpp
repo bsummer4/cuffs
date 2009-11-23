@@ -146,7 +146,7 @@ void CMBSynchronizer::Run() {
  * to be called once everybody is connected and you can start running.
  */
 void CMBSynchronizer::startSendToInt() {
-  cerr << "I know of " << cmb.getKnownProcessCount() << " clients" << endl;
+  //cerr << "I know of " << cmb.getKnownProcessCount() << " clients" << endl;
   send_to_int = true;
 }
 
