@@ -1,7 +1,8 @@
 #!/bin/bash 
 
 echo "Starting switchbox" 
-~/Fistacuffs/trunk/src/switchbox/switchbox 5151&
+
+../../../src/switchbox/switchbox 5151&
 
 switchpid=$!
 me=`whoami`
