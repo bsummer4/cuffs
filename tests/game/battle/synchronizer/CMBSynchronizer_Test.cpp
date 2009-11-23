@@ -1,6 +1,7 @@
 #include "Synchronizer.hpp"
 #include "Connection.hpp"
 #include <cstdio>
+#include <cstring>
 
 static const int SWITCHBOX_PORT = 5151;
 
@@ -31,7 +32,8 @@ char buf[512];
 int main() {
   int connections;
   scanf("%d", &connections);
-  //cout << connections << endl;
+  cerr << "Connections: " << connections << endl;
+  assert(connections>0);
   for(int i = 0; i < connections; i++) {
     cons.push_back(new Connection("localhost", SWITCHBOX_PORT));
     cons.at(i)->start();
@@ -41,15 +43,15 @@ int main() {
   usleep(10000);
 
   CatInterpreter sint;
-  CMBSynchronizer sync(cons.at(0), &sint);
+  CMBSynchronizer sync(cons.at(0), &sint, connections);
   sync.Start();
 
   // Send a Null message.
   for(int i = 0; i < connections; i++) {
-    cons.at(i)->sendMessage(4*sizeof(int)+3, UNICAST, cons.at(0)->getAddress(), (char*)"0 ");
+    cons.at(i)->sendMessage(4*sizeof(int)+5, UNICAST, cons.at(0)->getAddress(), "0.0 ");
   }
-  usleep(10000);
-  sync.startSendToInt();
+  //usleep(10000);
+  //sync.startSendToInt();
 
   while(1) {
     int clientnum;

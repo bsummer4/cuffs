@@ -18,7 +18,33 @@
  * @{
  */
 
-typedef int cmb_timestamp;
+/**
+ * @addtogroup CMBSynchronizer
+ * @{
+ */
+class cmb_timestamp{
+public:
+    cmb_timestamp(int time=-1, int order=0);
+
+    std::string extractTimestamp(std::string event);
+
+    friend bool operator<(const cmb_timestamp& x, const cmb_timestamp& y);
+    friend bool operator<=(const cmb_timestamp& x, const cmb_timestamp& y);
+    friend bool operator==(const cmb_timestamp& x, const cmb_timestamp& y);
+    friend bool operator>(const cmb_timestamp& x, const cmb_timestamp& y);
+    friend bool operator>=(const cmb_timestamp& x, const cmb_timestamp& y);
+    friend std::ostream& operator<<(std::ostream& output, const cmb_timestamp& c);
+    //friend std::istream operator>>(std::istream &stream, cmb_timestamp &obj);
+
+public:
+    int time;
+    int order;
+};
+
+/**
+ * @}
+ */
+
 
 /**
  * The base class for the synchronizer that defines the interface.
@@ -100,6 +126,7 @@ public:
   CMBQueue() {};
   void queueMessage(int processId, CMBEvent cmbe);
   void removeProcess(int processId);
+  int  getKnownProcessCount();
   cmb_timestamp getLowestTime();
   cmb_pqueue getEvents(cmb_timestamp tillTime);
 private:
@@ -111,13 +138,15 @@ private:
  */
 class CMBSynchronizer : public Synchronizer {
 public:
-  CMBSynchronizer(Connection * con, Interpreter * interpreter);
+  CMBSynchronizer(Connection * con, Interpreter * interpreter, int num_of_clients=-1);
   virtual void Run();
   void startSendToInt();
 private:
   CMBQueue cmb;
 protected:
   bool send_to_int;
+  /// The number of clients to expect.
+  int num_of_clients;
 };
 
 /**

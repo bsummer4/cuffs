@@ -63,9 +63,9 @@ int main(int argc, char* argv[]) {
     //exit(2);
   }
   // Disconnect clientD
-  //cout << "clientd stop" << endl;
+  cout << "clientd stop" << endl;
   clientD->stop();
-  //cout << "after clientd stop" << endl;
+  cout << "after clientd stop" << endl;
 
   /// @TODO: Fix this, you should be able to stop and restart
   delete clientD;

@@ -54,6 +54,7 @@ int main() {
     fgets(buf, 511, stdin);
     buf[strlen(buf)-1] = '\0';
     cons.at(clientnum)->sendMessage(4*sizeof(int)+strlen(buf)+1, UNICAST, mycon.getAddress(), buf);
+    usleep(10000);
   }
 
   sleep(2);
