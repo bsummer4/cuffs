@@ -37,7 +37,6 @@ Connection::Connection(const char* switchbox_hostname,
  * send queue has been purged.
  */
 Connection::~Connection(){
-  //cout << "Destructing!" << endl;
   if ( this->messaging_threads_running ){
       stop();
   }
@@ -63,10 +62,11 @@ void Connection::stop() {
   this->messaging_threads_running = false;
   // Send a broadcast to make sure everything is sent before we leave. 
   pthread_cond_broadcast(&message_ready_to_be_sent);
-  //pthread_cancel(receive_thread);
   //pthread_cancel(send_thread);
-  pthread_join(receive_thread, NULL);
   pthread_join(send_thread, NULL);
+  
+  pthread_cancel(receive_thread);
+  pthread_join(receive_thread, NULL);
 }
 
 void Connection::sendMessage(SBMessage *message) {
@@ -250,7 +250,6 @@ extern "C" void * send_messaging_thread(void* arg) {
   Connection * c = reinterpret_cast<Connection*>(arg);
   while(c->isRunning()) c->sendUpdate();
   // We run it one more time to make sure everything is sent before we go.
-  //cout << "Send Messaging thread doing one last pass" << endl;
   c->sendUpdate();
   pthread_exit(NULL);
 }
