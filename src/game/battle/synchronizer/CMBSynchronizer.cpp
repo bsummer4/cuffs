@@ -53,8 +53,8 @@ std::ostream& operator<<(std::ostream& output, const cmb_timestamp& c){
 std::string cmb_timestamp::extractTimestamp(std::string event){
     // The regular expression that defines our timestamp + message
     // It will allow (and trim) whitespace before and after the timestamp.
-    boost::regex e("^[[:s:]]*([0-9]+)\\.([0-9]+)[[:s:]]+(.*)$");
-    boost::regex e2("^[[:s:]]*([0-9]+)[[:s:]]+(.*)$");
+    boost::regex e("^[[:s:]]*([0-9]+)\\.([0-9]+)[[:s:]]*(.*)$");
+    boost::regex e2("^[[:s:]]*([0-9]+)[[:s:]]*(.*)$");
     boost::cmatch res;
     if (boost::regex_match(event.c_str(), res, e)){
         //res[0] contains whole string
