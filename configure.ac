@@ -69,6 +69,9 @@ fi
 if test $FOUND_SDL_IMAGE != 1; then
     AC_MSG_ERROR([SDL_image.h Not found but is needed.])
 fi
+if test $FOUND_SDL_IMAGE != 1; then
+    AC_MSG_ERROR([SDL_mixer.h Not found but is needed.])
+fi
 
 ########################################################################
 # DOXYGEN SUPPORT
