@@ -12,7 +12,8 @@ using namespace std;
 ConnectionManager* cm;
 
 void print_usage(char* argv[]){
-    cout << "usage: " << argv[0] << " switchbox_hostname switchbox_port [script_file]" << endl;
+    cout << "usage: " << argv[0] << " switchbox_hostname switchbox_port "
+         << "[script_file]" << endl;
 }
 
 /**
@@ -26,7 +27,8 @@ bool handle_special_command(char* buf){
 
     // Special case client_num 0, he is explicitly there
     if ( client_num == 0 ){
-        cerr << "Got a command to add/remove client 0, but it is explicitly there. Ignoring..." << endl;
+        cerr << "Got a command to add/remove client 0, but it is explicitly"
+             << "there. Ignoring..." << endl;
         return true;
     }
 
@@ -61,7 +63,6 @@ int main(int argc, char* argv[]){
         exit(1);
     }
 
-
     int client_num;
     int fscanf_ret_val;
     
@@ -82,7 +83,8 @@ int main(int argc, char* argv[]){
         } else{
             //cerr << "sending message: " << client_num << " : " << buf2 << endl;
             if(!cm->sendMessage(client_num, buf2, strlen(buf2))){
-                cerr << "Error Message not sent. Bad client number: " << client_num << endl;
+                cerr << "Error Message not sent. Bad client number: " 
+                     << client_num << endl;
             }
         }
     }

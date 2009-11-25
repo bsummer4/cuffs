@@ -23,6 +23,9 @@ int main(int argc, char * argv[]){
     Connection in(private_switchbox_hostname, private_switchbox_port);
     Connection out(main_switchbox_hostname, main_switchbox_port);
 
+    in.start();
+    out.start();
+
     while(1){
         in.blockForMessage(TIMEOUT);
         SBMessage* msg = in.getMessage();
