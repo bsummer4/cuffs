@@ -8,7 +8,7 @@ SWITCHBOX_BIN=../../src/switchbox/switchbox
 case "$1" in
   start)
         if [ ! -e switchboxpid ]; then 
-            $SWITCHBOX_BIN 1234 2>&1 > /dev/null & 
+            $SWITCHBOX_BIN 3214 2>&1 > /dev/null & 
             echo $! > switchboxpid
         else 
             echo "Can not start switchbox. Already running. (Or stale switchboxpid file)"

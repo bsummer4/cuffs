@@ -90,6 +90,7 @@ bool ConnectionManager::addConnection(int key){
     return true;
 }
 
+
 /**
  * Remove (disconnect) a connection from the ConnectionManager
  * 
@@ -149,4 +150,105 @@ bool ConnectionManager::spawnPrinterConnection(){
     assert(connection->isRunning());
     connection_map.insert(std::pair< int, Connection* >(key, connection));
     return true;
+}
+
+
+bool ConnectionManager::connectionExists(int key){
+    std::map< int, Connection* >::iterator it;
+    it = connection_map.find(key);
+    return ( it != connection_map.end() );
+}
+
+
+// REMOTE CONNECTION MANAGER STUFF
+MonitorConnection::MonitorConnection(const char *switchbox_hostname, const int switchbox_port)
+: Connection(switchbox_hostname, switchbox_port){};
+
+void MonitorConnection::resetConnectionList(){
+    new_connections.clear();
+}
+
+vector<int> MonitorConnection::getNewConnections(){
+    return new_connections;
+}
+
+void MonitorConnection::handleAnnounceMessage(SBMessage *msg){
+    admin_message * adm = (admin_message*)msg->data;
+    if ( adm->task == NEW_CONNECTION ){
+        new_connections.push_back(msg->from);
+    }
+    // Now that we're done inspecting the message let the connection object do 
+    // its real work.
+    return Connection::handleAnnounceMessage(msg);
+}
+
+RemoteConnectionManager::RemoteConnectionManager(std::string hostname, 
+                                                 unsigned int port)
+: ConnectionManager(hostname,port){
+    this->remoteClients = false;
+    this->privateSwitchboxPort = 3214;
+    this->forwarderConnection = NULL;
+}
+
+RemoteConnectionManager::~RemoteConnectionManager(){
+    char buf[512];
+    if ( remoteClients ){
+        cerr << "Closing all remote connections" << endl;
+        // Send a close message for everyone and then shut off the switchbox.
+        std::map<int,int>::iterator it;
+        for (it = key_to_remote_address.begin(); it != key_to_remote_address.end(); it++){
+            snprintf(buf,512, "lost_connection %i\n" , it->second);
+            sendMessage(it->first, buf, strlen(buf));
+        }
+        /// @TODO Just wait and hope thats enough for now.
+        usleep(100000);
+        cerr << "Turning off the private switcbhox" << endl;
+        system("./switchbox.sh stop");
+    }
+}
+
+bool RemoteConnectionManager::addRemoteConnection(int key, std::string remote_hostname){
+    char command[1024];
+    if ( !remoteClients ){
+        // I am the first, so I need to spawn a connection 
+        assert(system("./switchbox.sh start"));
+        char buf[512];
+        assert(gethostname(buf,512));
+        privateSwitchboxAddress = buf;
+        forwarderConnection = new MonitorConnection(privateSwitchboxAddress.c_str(),
+                                                    privateSwitchboxPort);
+        remoteClients = true;
+        usleep(10000);
+    }
+    forwarderConnection->resetConnectionList();
+    snprintf(command, 1024, "ssh -f %s \"./repeater %s %i %s %i %i\"",                 
+            remote_hostname.c_str(),
+            hostname.c_str(),     
+            port,        
+            privateSwitchboxAddress.c_str(),    
+            privateSwitchboxPort,       
+            key);  
+    assert(system(command));
+    vector<int> newConnections;
+    while ( newConnections.size() == 0 ){
+        /// @TODO This is kind of ugly just polling, if it turns out to become 
+        /// wasteful make sure to change it.
+        usleep(10000);
+        newConnections = forwarderConnection->getNewConnections();
+    }
+    assert(newConnections.size()==1);
+    key_to_remote_address.insert( std::pair< int, int > (key, newConnections[0]) );
+    return true;
+}
+
+bool RemoteConnectionManager::sendMessage(int key, char* msg, int msgl){
+    std::map<int,int>::iterator it;
+    it = key_to_remote_address.find(key);
+    if ( it != key_to_remote_address.end() ){
+        forwarderConnection->sendMessage(msgl+4*sizeof(int), UNICAST, it->second, msg);
+        return true;
+    }
+    else{
+        return ConnectionManager::sendMessage(key,msg,msgl);
+    }
 }

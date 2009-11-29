@@ -3,13 +3,20 @@
 #include <string>
 #include <cstdio>
 #include <cstring>
+#include <string>
 extern "C"{
 #include <assert.h>
 }
 
 using namespace std;
+bool private_switchbox_running = false;
 
-ConnectionManager* cm;
+char * public_switchbox_address;
+int public_switchbox_port;
+char private_switchbox_address[1024];
+int private_switchbox_port = 3214;
+
+RemoteConnectionManager* cm;
 
 void print_usage(char* argv[]){
     cout << "usage: " << argv[0] << " switchbox_hostname switchbox_port "
@@ -22,8 +29,10 @@ void print_usage(char* argv[]){
 bool handle_special_command(char* buf){
     int client_num = -1;
     cout << "Handling message: " << buf << endl;
-    char command[512];
-    assert( 2 == sscanf(buf, "%s %i", command, &client_num));
+    string command;
+    //assert( 2 == sscanf(buf, "%s %i", command, &client_num));
+    cin >> command;
+
 
     // Special case client_num 0, he is explicitly there
     if ( client_num == 0 ){
@@ -32,9 +41,20 @@ bool handle_special_command(char* buf){
         return true;
     }
 
-    if ( strstr(command, "new_connection") != NULL ){
+    if ( command.find("new_connection") != string::npos ){
+        cin >> client_num;
+        assert(!cin.fail());
+        assert(client_num>0);
         assert(cm->addConnection(client_num));
-    } else {
+    } else if ( command.find("new_remote_connection") != string::npos ){
+        string hostname;
+        cin >> hostname >> client_num;
+        cm->addRemoteConnection(client_num,hostname);
+    }
+    else {
+        cin >> client_num;
+        assert(!cin.fail());
+        assert(client_num>0);
         assert(cm->removeConnection(client_num));
     }
     return true;
@@ -50,7 +70,13 @@ int main(int argc, char* argv[]){
         exit(1);
     }
 
-    cm = new ConnectionManager(std::string(argv[1]), atoi(argv[2]));
+    public_switchbox_address = argv[1];
+    public_switchbox_port = atoi(argv[2]);
+
+    // Determine my system's hostname
+    assert(gethostname(private_switchbox_address,512));
+
+    cm = new RemoteConnectionManager(public_switchbox_address, public_switchbox_port);
 
     if ( argc == 3 ){
         script = stdin;
