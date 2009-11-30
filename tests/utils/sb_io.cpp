@@ -7,6 +7,7 @@
 #include <sstream>
 extern "C"{
 #include <assert.h>
+#include <signal.h>
 }
 
 using namespace std;
@@ -15,6 +16,11 @@ char * public_switchbox_address;
 int public_switchbox_port;
 
 RemoteConnectionManager* cm;
+
+extern "C" void handler(int signum){
+    delete cm;
+    exit(0);
+}
 
 void print_usage(char* argv[]){
     cout << "usage: " << argv[0] << " switchbox_hostname switchbox_port "
@@ -59,7 +65,7 @@ bool handle_special_command(char* buf){
         string hostname;
         ss >> hostname >> client_num;
         assert(!ss.fail());
-        cm->addRemoteConnection(client_num,hostname);
+        assert(cm->addRemoteConnection(client_num,hostname));
     }
     else if( command.find("lost_connection") != string::npos ){
         if (CMDEBUG) cerr << "lost connection" << endl;
@@ -70,6 +76,7 @@ bool handle_special_command(char* buf){
     } else { 
         cerr << "Warning: Did not understand message... skipping" << endl;
     }
+    cerr << "done" << endl;
     return true;
 }
 
@@ -82,6 +89,8 @@ int main(int argc, char* argv[]){
         print_usage(argv);
         exit(1);
     }
+    // Set up a signal handler
+    signal(SIGINT, handler);
 
     public_switchbox_address = argv[1];
     public_switchbox_port = atoi(argv[2]);

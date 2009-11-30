@@ -187,9 +187,12 @@ MonitorConnection::getNewConnections(){
 
 void
 MonitorConnection::handleAnnounceMessage(SBMessage *msg){
-    admin_message * adm = (admin_message*)msg->data;
-    if ( adm->task == NEW_CONNECTION ){
-        new_connections.push_back(msg->from);
+    if (CMDEBUG) cerr << "MonitorConnection::handleAnnounceMessage()" << endl;
+    if ( msg->from != msg->to ){
+        admin_message * adm = (admin_message*)msg->data;
+        if ( adm->task == NEW_CONNECTION ){
+            new_connections.push_back(msg->from);
+        }
     }
     // Now that we're done inspecting the message let the connection object do 
     // its real work.
@@ -208,6 +211,7 @@ RemoteConnectionManager::RemoteConnectionManager(std::string hostname,
 
 RemoteConnectionManager::~RemoteConnectionManager(){
     char buf[512];
+    if (CMDEBUG) cerr << "Destructor" << endl;
     if ( remoteClients ){
         if (CMDEBUG) cerr << "Closing all remote connections" << endl;
         // Send a close message for everyone and then shut off the switchbox.
@@ -244,7 +248,7 @@ RemoteConnectionManager::addRemoteConnection(int key, std::string remote_hostnam
                                           privateSwitchboxAddress.c_str(),
                                           privateSwitchboxPort);
         remoteClients = true;
-        usleep(10000);
+        usleep(100000);
     }
     forwarderConnection->resetConnectionList();
     snprintf(command, 2048, "ssh -f %s \"%s/repeater %s %i %s %i %i\"",                 
@@ -258,11 +262,14 @@ RemoteConnectionManager::addRemoteConnection(int key, std::string remote_hostnam
     if (CMDEBUG) cerr << command << endl;
     assert(0 == system(command));
     vector<int> newConnections;
+    int counter = 0;
     while ( newConnections.size() == 0 ){
         /// @TODO This is kind of ugly just polling, if it turns out to become 
         /// wasteful make sure to change it.
         usleep(10000);
         newConnections = forwarderConnection->getNewConnections();
+        counter++;
+        assert(counter<10000);
     }
     assert(newConnections.size()==1);
     key_to_remote_address.insert( std::pair<int,int>(key, newConnections[0]));

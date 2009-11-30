@@ -30,7 +30,8 @@ class ConnectionManager{
 class MonitorConnection : public Connection{
     public:
         MonitorConnection(const char *switchbox_hostname, const int switchbox_port);
-        void handleAnnounceMessage(SBMessage *msg);
+        /// @TODO: WHY IS THIS NOT BEING CALLED!?
+        virtual void handleAnnounceMessage(SBMessage *msg);
         void resetConnectionList();
         std::vector<int> getNewConnections();
     private:
