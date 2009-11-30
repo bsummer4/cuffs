@@ -32,7 +32,7 @@ class PrinterConnection : public Connection{
         SBMessage* result = switchbox_receive(this->connection);
         //cout << "After Receive" << endl;
 
-        Connection::handleAnnounceMessage(result);
+        this->handleAnnounceMessage(result);
 
         // Lock writing mutex
         //boost::mutex::scoped_lock l(stdout_lock);
