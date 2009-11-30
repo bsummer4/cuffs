@@ -51,7 +51,6 @@ class RemoteConnectionManager : public ConnectionManager{
         std::string privateSwitchboxAddress;
         int privateSwitchboxPort;
         std::string mycwd;
-        MonitorConnection* forwarderConnetion;
         // Key, Address
         std::map< int, int > key_to_remote_address;
         MonitorConnection * forwarderConnection;
