@@ -6,12 +6,12 @@ static const int TIMEOUT = 240000; // 4 Minutes
 using namespace std;
 
 void print_usage(char* binname){
-    cout << "Usage: " << binname << "main_switchbox_hostname main_switchbox_port "
+    cout << "Usage: " << binname << " main_switchbox_hostname main_switchbox_port "
          << "private_switchbox_hostname private_switchbox_port key" << endl;
 }
 
 int main(int argc, char * argv[]){
-    if ( argc != 5 ){
+    if ( argc != 6 ){
         print_usage(argv[0]);
         exit(1);
     }

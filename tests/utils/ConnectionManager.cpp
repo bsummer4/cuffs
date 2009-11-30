@@ -9,10 +9,9 @@ extern "C"{
 #include <switchbox_client.h>
 }
 
-using namespace std;
+int CMDEBUG = true;
 
-// Global mutex for writing to stderr
-//boost::mutex stdout_lock;
+using namespace std;
 
 /** 
  * PrinterConnection takes the Connection function and 
@@ -26,7 +25,8 @@ class PrinterConnection : public Connection{
         : Connection(switchbox_hostname, switchbox_port){};
     
 
-    virtual void receiveUpdate(){
+    virtual void
+    receiveUpdate(){
         // Get message
         //cout << "Before Receive" << endl;
         SBMessage* result = switchbox_receive(this->connection);
@@ -75,7 +75,8 @@ ConnectionManager::ConnectionManager(std::string hostname, unsigned int port){
  * @return True if it added sucessfully, False if it didn't.
  * (Likely false implies that something with that key already exists.)
  */
-bool ConnectionManager::addConnection(int key){
+bool
+ConnectionManager::addConnection(int key){
     std::map< int, Connection* >::iterator it;
     it = connection_map.find(key);
 
@@ -102,7 +103,8 @@ bool ConnectionManager::addConnection(int key){
  * @return True if it added sucessfully, False if it didn't.
  * (Likely false implies that something with that key already exists.)
  */
-bool ConnectionManager::removeConnection(int key){
+bool
+ConnectionManager::removeConnection(int key){
     std::map< int, Connection* >::iterator it;
     it = connection_map.find(key);
     if ( it != connection_map.end()){
@@ -125,22 +127,23 @@ bool ConnectionManager::removeConnection(int key){
  * 
  * @returns True if the message sent, False if failed.
  */
-bool ConnectionManager::sendMessage(int key, char* msg, int msgl){
+bool
+ConnectionManager::sendMessage(int key, char* msg, int msgl){
     std::map< int, Connection* >::iterator it;
     it = connection_map.find(key);
     if ( it != connection_map.end()){
-        //cout << "sent Message: " << msg << endl;
+        if (CMDEBUG) cerr << "ConnectionManager::sendMessage(): sent Message: " << msg << endl;
         (*it).second->sendMessage(msgl+4*sizeof(int), BROADCAST, -1, msg);
         return true;
     }
     return false;
 }
 
-bool ConnectionManager::spawnPrinterConnection(){
+bool
+ConnectionManager::spawnPrinterConnection(){
     int key = 0;
     std::map< int, Connection* >::iterator it;
     it = connection_map.find(key);
-
     if ( it != connection_map.end()){
         return false;
     }
@@ -148,12 +151,20 @@ bool ConnectionManager::spawnPrinterConnection(){
     connection = new PrinterConnection(hostname.c_str(), port);
     connection->start();
     assert(connection->isRunning());
+    usleep(10000);
+    assert(connection->getAddress() >= 0);
+    if ( connection->getAddress() != 0 ){
+        cerr << "Warning: The Printer connection's address is not 0. This"        << endl
+             << "         likely means that the input will not match the output!" << endl;
+    }
     connection_map.insert(std::pair< int, Connection* >(key, connection));
+    if (CMDEBUG) cerr << "ConnectionManager::spawnPrinterConnection(): success" << endl;
     return true;
 }
 
 
-bool ConnectionManager::connectionExists(int key){
+bool
+ConnectionManager::connectionExists(int key){
     std::map< int, Connection* >::iterator it;
     it = connection_map.find(key);
     return ( it != connection_map.end() );
@@ -164,15 +175,18 @@ bool ConnectionManager::connectionExists(int key){
 MonitorConnection::MonitorConnection(const char *switchbox_hostname, const int switchbox_port)
 : Connection(switchbox_hostname, switchbox_port){};
 
-void MonitorConnection::resetConnectionList(){
+void
+MonitorConnection::resetConnectionList(){
     new_connections.clear();
 }
 
-vector<int> MonitorConnection::getNewConnections(){
+vector<int>
+MonitorConnection::getNewConnections(){
     return new_connections;
 }
 
-void MonitorConnection::handleAnnounceMessage(SBMessage *msg){
+void
+MonitorConnection::handleAnnounceMessage(SBMessage *msg){
     admin_message * adm = (admin_message*)msg->data;
     if ( adm->task == NEW_CONNECTION ){
         new_connections.push_back(msg->from);
@@ -182,9 +196,11 @@ void MonitorConnection::handleAnnounceMessage(SBMessage *msg){
     return Connection::handleAnnounceMessage(msg);
 }
 
+
 RemoteConnectionManager::RemoteConnectionManager(std::string hostname, 
                                                  unsigned int port)
-: ConnectionManager(hostname,port){
+: ConnectionManager(hostname,port)
+{
     this->remoteClients = false;
     this->privateSwitchboxPort = 3214;
     this->forwarderConnection = NULL;
@@ -193,7 +209,7 @@ RemoteConnectionManager::RemoteConnectionManager(std::string hostname,
 RemoteConnectionManager::~RemoteConnectionManager(){
     char buf[512];
     if ( remoteClients ){
-        cerr << "Closing all remote connections" << endl;
+        if (CMDEBUG) cerr << "Closing all remote connections" << endl;
         // Send a close message for everyone and then shut off the switchbox.
         std::map<int,int>::iterator it;
         for (it = key_to_remote_address.begin(); it != key_to_remote_address.end(); it++){
@@ -202,33 +218,45 @@ RemoteConnectionManager::~RemoteConnectionManager(){
         }
         /// @TODO Just wait and hope thats enough for now.
         usleep(100000);
-        cerr << "Turning off the private switcbhox" << endl;
+        if (CMDEBUG) cerr << "Turning off the private switcbhox" << endl;
         system("./switchbox.sh stop");
     }
 }
 
-bool RemoteConnectionManager::addRemoteConnection(int key, std::string remote_hostname){
-    char command[1024];
+bool 
+RemoteConnectionManager::addRemoteConnection(int key, std::string remote_hostname){
+    char command[2048];
     if ( !remoteClients ){
-        // I am the first, so I need to spawn a connection 
-        assert(system("./switchbox.sh start"));
-        char buf[512];
-        assert(gethostname(buf,512));
+        // I am the first, so I need to spawn a switchbox and create a connection to it. 
+        system("./switchbox.sh start");
+        char buf[1024];
+        if ( 0 != gethostname(buf,1024)){
+            perror("gethostname: ");
+            exit(1);
+        }
         privateSwitchboxAddress = buf;
-        forwarderConnection = new MonitorConnection(privateSwitchboxAddress.c_str(),
-                                                    privateSwitchboxPort);
+        if ( NULL == getcwd(buf,1024) ){
+            perror("getcwd(): ");
+            exit(1);
+        }
+        mycwd = buf;
+        forwarderConnection = new MonitorConnection(
+                                          privateSwitchboxAddress.c_str(),
+                                          privateSwitchboxPort);
         remoteClients = true;
         usleep(10000);
     }
     forwarderConnection->resetConnectionList();
-    snprintf(command, 1024, "ssh -f %s \"./repeater %s %i %s %i %i\"",                 
+    snprintf(command, 2048, "ssh -f %s \"%s/repeater %s %i %s %i %i\"",                 
             remote_hostname.c_str(),
+            mycwd.c_str(),
             hostname.c_str(),     
             port,        
             privateSwitchboxAddress.c_str(),    
             privateSwitchboxPort,       
             key);  
-    assert(system(command));
+    if (CMDEBUG) cerr << command << endl;
+    assert(0 == system(command));
     vector<int> newConnections;
     while ( newConnections.size() == 0 ){
         /// @TODO This is kind of ugly just polling, if it turns out to become 
@@ -237,18 +265,24 @@ bool RemoteConnectionManager::addRemoteConnection(int key, std::string remote_ho
         newConnections = forwarderConnection->getNewConnections();
     }
     assert(newConnections.size()==1);
-    key_to_remote_address.insert( std::pair< int, int > (key, newConnections[0]) );
+    key_to_remote_address.insert( std::pair<int,int>(key, newConnections[0]));
     return true;
 }
 
-bool RemoteConnectionManager::sendMessage(int key, char* msg, int msgl){
+bool
+RemoteConnectionManager::sendMessage(int key, char* msg, int msgl){
     std::map<int,int>::iterator it;
     it = key_to_remote_address.find(key);
     if ( it != key_to_remote_address.end() ){
-        forwarderConnection->sendMessage(msgl+4*sizeof(int), UNICAST, it->second, msg);
+        forwarderConnection->sendMessage(msgl+4*sizeof(int), 
+                                         UNICAST, 
+                                         it->second, 
+                                         msg);
         return true;
     }
     else{
+        if(CMDEBUG) cerr << "Couldn't send remotely sending using "
+                         << "ConnectionManager::sendMessage()" << endl;
         return ConnectionManager::sendMessage(key,msg,msgl);
     }
 }
