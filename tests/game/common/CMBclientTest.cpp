@@ -5,11 +5,13 @@
 #include "Interpreter.hpp"
 #include "Connection.hpp"
 #include <string>
+#include <vector>
 using namespace std;
 
 static const int SWITCHBOX_PORT = 5151;
 
 vector<string> hosts;
+vector<int> clients;
 char buf[512];
 
 int main() {
@@ -23,19 +25,16 @@ int main() {
   Connection *con = new Connection(server.c_str(), SWITCHBOX_PORT);
   con->start();
   if (!con->isRunning()) return 0;
+  sleep(1);
+  clients.push_back(con->getAddress());
 
   //setup
-  usleep(10000);
   CatInterpreter sint;
-  CMBSynchronizer sync(con, &sint);
+  CMBSynchronizer sync(con, &sint, clients);
   Generator gen = Generator();
   gen.debug = false;
   srand(time(NULL));
 
-  // Send a Null message. from
-  con->sendMessage(4*sizeof(int)+3, BROADCAST, con->getAddress(), "0 "); //sent to switchbox?
-  usleep(10000);
-  sync.startSendToInt();
 
   cout << "test\n";
   for (i=0; i<10; i++) {

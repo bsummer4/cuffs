@@ -123,8 +123,8 @@ typedef std::map< int, cmb_pqueue* > cmb_processes;
  */
 class CMBQueue {
 public:
-  CMBQueue() {};
-  void queueMessage(int processId, CMBEvent cmbe);
+  CMBQueue(std::vector<int> &clients);
+  bool queueMessage(int processId, CMBEvent cmbe);
   void removeProcess(int processId);
   int  getKnownProcessCount();
   cmb_timestamp getLowestTime();
@@ -138,15 +138,10 @@ private:
  */
 class CMBSynchronizer : public Synchronizer {
 public:
-  CMBSynchronizer(Connection * con, Interpreter * interpreter, int num_of_clients=-1);
+  CMBSynchronizer(Connection * con, Interpreter * interpreter, std::vector<int> &clients);
   virtual void Run();
-  void startSendToInt();
 private:
   CMBQueue cmb;
-protected:
-  bool send_to_int;
-  /// The number of clients to expect.
-  int num_of_clients;
 };
 
 /**

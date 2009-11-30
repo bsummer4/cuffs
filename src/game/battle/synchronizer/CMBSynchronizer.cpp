@@ -87,14 +87,13 @@ std::string cmb_timestamp::extractTimestamp(std::string event){
 
 
 /** 
- * Set num_of_clients if you know how many clients are going to join. The synchronizer will start 
- * to run as soon as it "knows" this many clients. Otherwise set it to -1 and use the sendToInt()
- * function to start the synchronizer. 
+ * Set
  */
-CMBSynchronizer::CMBSynchronizer(Connection * con, Interpreter * interpreter, int num_of_clients)
-  : Synchronizer(con, interpreter) {
-  send_to_int = false;
-  this->num_of_clients = num_of_clients;
+CMBSynchronizer::CMBSynchronizer(Connection * con, 
+                                 Interpreter * interpreter, 
+                                 std::vector<int> &clients) 
+: Synchronizer(con, interpreter), cmb(clients)
+{
 }
 
 void CMBSynchronizer::Run() {
@@ -110,73 +109,60 @@ void CMBSynchronizer::Run() {
     // Place it into the data structure
     cmb.queueMessage(process, CMBEvent(message_contents));
 
-    //cerr << "Count = " << cmb.getKnownProcessCount() << endl;
-    //cerr << "num_of_clients = " << num_of_clients << endl;
-    if ( num_of_clients > 0 && cmb.getKnownProcessCount() == num_of_clients ){
-        send_to_int = true;
-    }
+    // Check to see if we can run any events
+    cmb_timestamp t = cmb.getLowestTime();
 
-    if(send_to_int) {
-      // Check to see if we can run any events
-      cmb_timestamp t = cmb.getLowestTime();
+    //cout << "Lowest time is " << t << endl;
 
-      //cout << "Lowest time is " << t << endl;
-
-      // If time is not -1 then we can advance time along.
-      if(t.time > -1 && t.order==0) {
-        cmb_pqueue pq = cmb.getEvents(t);
-        while(!pq.empty()) {
-          CMBEvent e = pq.top();
-          pq.pop();
-          interpreter->handleEvent(e.eventString);
-        }
-        boost::mutex::scoped_lock l(timeLock);
-        cTime = t.time;
+    // If time is not -1 then we can advance time along.
+    if(t.time > -1 && t.order==0) {
+      cmb_pqueue pq = cmb.getEvents(t);
+      while(!pq.empty()) {
+        CMBEvent e = pq.top();
+        pq.pop();
+        interpreter->handleEvent(e.eventString);
       }
+      boost::mutex::scoped_lock l(timeLock);
+      cTime = t.time;
     }
   }
 }
 
-/**
- * Tell the Synchronizer that it is okay to start sending messages
- * along to the interpreter to be interpreted.
- *
- * Basically, you will call @ref Start to start the thread, and it
- * will begin appending messages to the queue. However, this needs
- * to be called once everybody is connected and you can start running.
- */
-void CMBSynchronizer::startSendToInt() {
-  //cerr << "I know of " << cmb.getKnownProcessCount() << " clients" << endl;
-  send_to_int = true;
-}
 
 ///////////////////////////////////////////////////////////////////////////////
 // CMBQueue methods below
 ///////////////////////////////////////////////////////////////////////////////
+
+CMBQueue::CMBQueue(std::vector<int> &clients){
+    for (int i = 0; i < clients.size(); i++){
+        cmb_pqueue * cmbq = new cmb_pqueue;
+        cmbQueue.insert(pair< int, cmb_pqueue* >(clients[i], cmbq));
+    }
+    assert(cmbQueue.size() == clients.size());
+}
 
 /**
  * Place the given CMBEvent message onto the queue associated with the given ProcessId.
  *
  * @param processId The Id of the process that this message is associated with
  * @param event The CMBEvent object representing the event.
+ *
+ * @returns True if sucessfully queued the message.
  */
-void CMBQueue::queueMessage(int processId, CMBEvent event) {
+bool CMBQueue::queueMessage(int processId, CMBEvent event) {
   // Try to see if this processId already has a queue created
   cmb_processes::iterator it;
   it = cmbQueue.find(processId);
 
   if(it == cmbQueue.end()) {
-    // We do not have one already so create it
-    cmb_pqueue * cmbq = new cmb_pqueue;
-    cmbQueue.insert(pair< int, cmb_pqueue* >(processId, cmbq));
-
-    it = cmbQueue.find(processId);
-    assert(it != cmbQueue.end());
+    // If we didn't find it we just ignore it.
+    return false;
   }
 
   // Okay now "it" points to the queue for this process
   it->second->push(event);
   //cout << "pushed message: process " << processId << endl;
+  return true;
 }
 
 

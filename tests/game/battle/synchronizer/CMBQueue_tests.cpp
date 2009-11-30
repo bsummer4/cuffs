@@ -1,5 +1,6 @@
 #include "Synchronizer.hpp"
 #include <iostream>
+#include <vector>
 /**
  * @addtogroup SyncTest
  * @{
@@ -13,6 +14,10 @@
 
 using namespace std;
 
+vector<int> twoClients;
+vector<int> oneClient;
+
+
 /**
  * @class CMBQueue
  *
@@ -22,11 +27,11 @@ void testOne() {
   cout << "Testing with one process" << endl;
   CMBEvent cmbe1(1,"foo");
   CMBEvent cmbe2(2,"foo");
-  CMBQueue q;
-  q.queueMessage(1, cmbe1);
-  q.queueMessage(1, cmbe2);
+  CMBQueue q(oneClient);
+  assert(q.queueMessage(1, cmbe1));
+  assert(q.queueMessage(1, cmbe2));
   cmb_timestamp time = q.getLowestTime();
-  //cout << "time: " << time;
+  //cout << "time (should be 1): " << time;
   assert(time==1);
 }
 
@@ -39,11 +44,11 @@ void testTwo() {
   cout << "Testing with two processes" << endl;
   CMBEvent cmbe1(1,"foo");
   CMBEvent cmbe2(2,"foo");
-  CMBQueue q;
+  CMBQueue q(twoClients);
   q.queueMessage(1, cmbe1);
   q.queueMessage(2, cmbe2);
   cmb_timestamp time = q.getLowestTime();
-  //cout << "time: " << time;
+  //cout << "time (should be 1): " << time;
   assert(time==1);
 }
 
@@ -57,7 +62,7 @@ void testThree() {
   cout << "Testing getEvents()" << endl;
   CMBEvent cmbe1(1,"foo");
   CMBEvent cmbe2(2,"foo");
-  CMBQueue q;
+  CMBQueue q(twoClients);
   q.queueMessage(1, cmbe1);
   q.queueMessage(2, cmbe2);
   cmb_timestamp time = q.getLowestTime();
@@ -69,6 +74,9 @@ void testThree() {
 }
 
 int main() {
+  twoClients.push_back(1);
+  twoClients.push_back(2);
+  oneClient.push_back(1);
   cout << "================================================" << endl;
   cout << "Testing CMBQueue Class" << endl;
   testOne();

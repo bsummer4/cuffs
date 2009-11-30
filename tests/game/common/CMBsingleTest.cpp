@@ -14,6 +14,7 @@ using namespace std;
 static const int SWITCHBOX_PORT = 5151;
 
 vector<Connection*> cons;
+vector<int> clients;
 char buf[512];
 
 int main() {
@@ -32,21 +33,28 @@ int main() {
   }
   //Connection mycon("localhost", SWITCHBOX_PORT);
   //mycon.start();
-  usleep(10000);
+  sleep(1);
+
+  // Gather all the addresses in a vector
+  for (int i = 0; i < connections; i++){
+      clients.push_back(cons.at(i)->getAddress());
+  }
 
   CatInterpreter sint;
-  CMBSynchronizer sync(cons.at(0), &sint);
+  CMBSynchronizer sync(cons.at(0), &sint, clients);
   Generator gen;
   gen.debug = false;
   sync.Start();
   srand(time(NULL));
 
   // Send a Null message.
+  /*
   for (i = 0; i < connections; i++) {
     cons.at(i)->sendMessage(4*sizeof(int)+3, BROADCAST, cons.at(0)->getAddress(), (char*)"0 ");
   }
   usleep(10000);
   sync.startSendToInt();
+  */
 
   for (i=0; i<10; i++) {
     int clientnum;
