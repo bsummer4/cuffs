@@ -1,1 +1,0 @@
-SUBDIRS = battle common overworld

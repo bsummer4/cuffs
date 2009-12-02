@@ -1,0 +1,46 @@
+This is a bunch of small programs that use various internal libraries.
+This provieds a set of entry points for manually testing code, and
+serves as light ad-hock documentation for the libraries themselves.
+Most of this code is very simple and readable.
+
+Most of these utilities take their input from stdin and output to
+stdout so you can set up automatic testing very easily by recording a
+manual testing session (with the unix command 'tee') to two files, and
+then replaying the session back to see if the results match.  For
+example:
+
+    $ tee input | ./delayed_cat | tee output
+    hi
+    there
+    1
+    2
+    3
+    done
+    ^D
+    $ ./delayed_cat < input > test_output
+    $ diff output test_output
+    $ rm output input test_output
+
+
+# Testing
+
+There are a couple of utillities for running tests.  ./test and
+./run-tests.  ./run-tests uses the file test_data/tests to get a list
+of programs to test, then calls ./test on all of them, ./test runs
+test_data/$program_in and compares the output to
+test_data/$program_out.  Some of the programs tested don't have any
+output.  The point of theses is to make sure the program doesn't fail
+with the given output, or for the test-runner to manually verify the
+on-screen output (render).
+
+# Running
+
+To run the game do:
+
+    xterm0> cd $SBDIR; ./switchbox 38235
+    xterm1> ./sixty-nine './ref.py ben john' './switchbox-connect localhost 38235'
+    xterm2> ./sixty-nine './game ben' './switchbox-connect localhost 38235'
+    xterm3> ./sixty-nine './game john' './switchbox-connect localhost 38235'
+
+This should open two SDL windows.  You can press SPACE in either
+window to drop a rock from the position of the associated player.

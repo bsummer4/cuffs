@@ -1,0 +1,3 @@
+Simpler Game States
+to build do make -C src all
+to clean do make -C src clean

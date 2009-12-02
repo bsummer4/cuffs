@@ -1,0 +1,15 @@
+#!/bin/sh
+
+run() {
+    while [ 1 ]
+    do
+        read line
+        first_word=`echo $line | awk '{print \$1}'`
+        [ ! $first_word ] && exit
+        echo running "test: '$line'"
+        ./test $line
+    done
+}
+
+tests_dir=../tests
+run < $tests_dir/tests

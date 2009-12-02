@@ -1,0 +1,7 @@
+/new rock projectile 0 0
+/move rock 100 100
+/delete rock
+/new rock projectile 0 0
+/move rock 10000 10000
+/move rock -10000 -10000
+/delete rock

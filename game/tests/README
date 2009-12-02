@@ -1,0 +1,5 @@
+These are inputfiles for testing.  The filename format is $PROGRAM_in
+and $PROGRAM_out.  Programs are the execuables build in the /src
+directory.  There are two special files in this directory, this file
+and 'tests'; A list of programs (and their options) that can be tested
+against files in this directory.

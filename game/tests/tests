@@ -1,0 +1,8 @@
+delayed-cat
+map-pgm example
+sync-cat
+interpret
+physics example.map 1 1
+cat
+render
+sleep-cat

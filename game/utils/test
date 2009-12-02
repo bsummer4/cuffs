@@ -1,0 +1,25 @@
+#!/bin/sh
+
+# Usage: test program [arguments]
+# Example: test game 999
+#
+# Upon failure, the diff between the expected and actual output is
+# printed
+
+programs_dir=../src
+tests_dir=../tests
+
+program=$1
+shift
+options=$*
+tmpfile=/tmp/$$-out
+
+program_path=${programs_dir}/${program}
+infile=${tests_dir}/${program}-in
+outfile=${tests_dir}/${program}-out
+
+$programs_dir/sleep-cat < $infile | $program_path $options > $tmpfile
+diff $tmpfile $outfile
+failure=$?
+rm $tmpfile
+if [ $failure = 0 ]; then echo "PASSED"; else echo "FAILED"; fi

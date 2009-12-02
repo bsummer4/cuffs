@@ -1,0 +1,100 @@
+# Directory Layout
+## Project
+This file specifies some basic information about the project in a
+human and machine-readable way.  It serves as slight documentation and
+a base for some tools we use.
+
+## README
+This file.  Several directories have a file named this.  It just
+broadly describes the layout and purpose of everything below that
+directory.
+
+## utils
+Utilities that are not part of the game itself.  The testing framework
+for example.
+
+## data
+Data used in the game.  All programs change directory to this
+directory on startup.
+
+## object
+Source code that is not directoy linked to an executable.  Mostly a
+collection of objects in header files.
+
+## src
+All source code that results in executables.  This includes Python
+code which is itself executable.
+
+## tests
+Input and output files for tests.  Much of these are for the
+input-file-based testing framework in utils/
+
+# Overall Architecture
+There is a one-to-one correspondence between a given objects in the
+game and which client controls its state.  This is usually the client
+that created it, but there is an exception for the player objects
+which are initially created by the referee client until taken over by
+the players themselves.
+
+A the client broadcasts, across the switchbox, messages indicating the
+change in attributes of the objects it owns.  The client's state is
+only changed when it receives its own messages back from the
+switchbox.  Also, before the messages are interpreted they are
+synchronized with the messages from other clients.  This keeps the
+screens of all players more-or-less consistent.
+
+Because the state object contains only information send over the
+network and is not itself responsible for behavior, the client
+controlling a given object must maintain additional information
+external to the state object (for example, the velocity of an object).
+
+## Prerequisites--Ubuntu Package names
+libsdl1.2debian
+libsdl1.2-dev
+libsdl-image1.2
+libsdl-image1.2-dev
+libsdl-mixer1.2
+libsdl-mixer1.2-dev
+libboost-dev
+
+### Other Packages
+SDL_draw-1.2.13
+
+## State/Interpreter
+The game state is designed to behave like a
+map<string,map<string,string>>.  This is so you can have commands like
+
+    /set player-ben x 8
+    /set global wind -0.33
+
+This way the interpreter doesn't need to know hardly anything about
+the implementation of the state.  The individual state objects
+implement a set(attribute, value) method, and the interpreter can just
+call it.
+
+    object["player-ben"].set("x", "8")
+
+### Commands
+* /new object type x y
+* /delete object
+* /set object property value
+* /query object property
+* /explode x y radius
+* /move id x y
+* /map filename
+
+### Properties
+All objects have these properties:
+
+* x
+* y
+* type -- Changes how it looks.
+
+### The 'global' Object
+There is a special object 'global' (type 'global') which has the
+following additional properties:
+
+* wind
+* gravity
+* mapname
+* map

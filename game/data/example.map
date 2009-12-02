@@ -1,0 +1,7 @@
+spawn 0 100 100
+spawn 0 300 300
+spawn 0 400 400
+spawn 1 200 200
+spawn 1 300 300
+spawn 1 450 450
+map example.pgm

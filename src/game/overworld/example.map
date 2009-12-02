@@ -1,5 +1,0 @@
-name hi
-zone a 0 0
-zone b 2 2
-edge a b
-image hi.pbm
