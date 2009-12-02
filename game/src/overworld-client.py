@@ -47,6 +47,7 @@ class OverworldFrame(wx.Frame):
 
   def OnPlay(self, event):
     print "/play", " ".join(add_new(self.world.username, self.SelectedPlayers()))
+    sys.stdout.flush()
 
   def OnLogout(self, event):
     print "/logout " + self.world.username
@@ -64,6 +65,7 @@ class Overworld(wx.App):
     print "/login", self.username
     print "/list" # This gets the currently logged in players.  
                   # After this we just keep track of /login, /logout messages ourself
+    sys.stdout.flush()
     return True
 
 def listen(OverFrame):
