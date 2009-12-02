@@ -52,29 +52,15 @@ class OverworldFrame(wx.Frame):
     print "/logout " + self.world.username
     sys.exit(0) # TODO Does wx have a 'correct' way of closing out?
 
-  def GetHostname(self):
-    while True:
-      dialog = wx.TextEntryDialog(self, "Underworld Server Hostname:", "localhost", "")
-      if dialog.ShowModal() != wx.ID_OK: exit(0)
-      hostname = dialog.GetValue()
-      dialog.Destroy()
-      if hostname: return hostname
-
-  def GetName(self):
-    while True:
-      dialog = wx.TextEntryDialog(self, "Username:", "Player", "")
-      if dialog.ShowModal() != wx.ID_OK: exit(0)
-      username = dialog.GetValue()
-      dialog.Destroy()
-      if username: return username
-    
 class Overworld(wx.App):
+  def __init__(self, username, hostname):
+    self.username = username
+    self.hostname = hostname
+    wx.App.__init__(self)
   def OnInit(self):
     self.OverFrame = OverworldFrame(self, None, -1, "")
     self.OverFrame.Show(True)
     self.SetTopWindow(self.OverFrame)
-    self.username = self.OverFrame.GetName()
-    self.hostname = self.OverFrame.GetHostname()
     print "/login", self.username
     print "/list" # This gets the currently logged in players.  
                   # After this we just keep track of /login, /logout messages ourself
@@ -92,6 +78,8 @@ def listen(OverFrame):
       for arg in args:
         app.OverFrame.PlayerList.Delete(app.OverFrame.PlayerList.FindString(arg))
     elif command == '/players':
+      if username in args:
+        args.remove(username)
       app.OverFrame.PlayerList.Set(args)
     elif command == '/play':
       sys.stderr.write('playing\n')
@@ -101,7 +89,8 @@ def listen(OverFrame):
                                                                           underworld_port))
 
 if __name__ == "__main__":
-  app = Overworld()
+  program,username,hostname = sys.argv
+  app = Overworld(username,hostname)
   t = threading.Thread(target=listen, name="MainThread", args=(app,))
   t.start()
   app.MainLoop()
