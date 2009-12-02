@@ -1,13 +1,10 @@
 AM_LDFLAGS = -lpthread
 AM_CFLAGS = -Wall
 
-bin_PROGRAMS = switchbox switchbox_test chat_test
+bin_PROGRAMS = switchbox chat_test
 
 switchbox_SOURCES = switchbox.c
 switchbox_LDADD = libmessaging.la
-
-switchbox_test_SOURCES = test.c
-switchbox_test_LDADD = libmessaging.la
 
 chat_test_SOURCES = chat_test.cpp
 chat_test_LDADD = libconnection.la
