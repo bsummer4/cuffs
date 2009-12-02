@@ -76,5 +76,7 @@ DX_INIT_DOXYGEN([$PACKAGE_NAME],[doxygen.cfg],[doc/doxygen])
 # Files to generate from .am or .in files
 AC_CONFIG_FILES([Makefile
                  switchbox/Makefile
+                 game/Makefile
+                 game/src/Makefile
                  doc/Makefile])
 AC_OUTPUT
