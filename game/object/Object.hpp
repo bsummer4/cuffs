@@ -12,9 +12,15 @@ namespace game {
 
   class Object {
   public:
+    // These are important enough to have their own public slots for
+    // easy access.  However, much code should talk to this through
+    // the above methods.
+    std::string id, type;
+    int x, y;
+
     Object() {}
     Object(const string &id, const string &type, int x, int y)
-      : id(id), x(x), y(y), type(type) {}
+      : id(id), type(type), x(x), y(y) {}
     Object(const string &id, const string &type,
            const string& x, const string& y)
         : id(id), type(type) {
@@ -42,13 +48,6 @@ namespace game {
     friend bool operator< (const Object &x, const Object &y);
 
     string &operator[] (const string &prop) {
-      return this->getProperty(prop);}
-
-    // These are important enough to have their own public slots for
-    // easy access.  However, much code should talk to this through
-    // the above methods.
-    int x, y;
-    std::string id, type;
-  };
+      return this->getProperty(prop);}};
 
   bool operator< (const Object &x, const Object &y) { return x.id < y.id; }}

@@ -1,8 +1,8 @@
 #AM_LDFLAGS = -lpthread -lboost_thread
 AM_LDFLAGS = @SDL_LIBS@  -lSDL_image -lSDL_draw -lSDL_mixer \
-           -lboost_thread 
+             -lboost_thread
 AM_CXXFLAGS = -Wall -O0 -g -I../object -I../../switchbox/src @SDL_CFLAGS@
-AM_CFLAGS = $(AM_CXXFLAGS) 
+AM_CFLAGS = $(AM_CXXFLAGS)
 
 bin_PROGRAMS = sync-cat delayed-cat interpret cat render switchbox-cat \
                game keylisten sleep-cat map-pgm sixty-nine \
