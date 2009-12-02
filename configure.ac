@@ -42,6 +42,8 @@ if test $FOUND_BOOSTTHREAD != 1; then
     AC_MSG_ERROR([boost/thread.hpp Not found. Please make sure you have it installed.])
 fi
 
+PKG_CHECK_MODULES(SDL, sdl >= 1.2)
+
 ## libsdl
 AC_CHECK_HEADER(SDL/SDL.h, FOUND_SDL=1, FOUND_SDL=0)
 AC_CHECK_HEADER(SDL/SDL_image.h, FOUND_SDL_IMAGE=1, FOUND_SDL_IMAGE=0)
