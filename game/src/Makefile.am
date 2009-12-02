@@ -1,8 +1,8 @@
 #AM_LDFLAGS = -lpthread -lboost_thread
 AM_LDFLAGS = @SDL_LIBS@  -lSDL_image -lSDL_draw -lSDL_mixer \
            -lboost_thread 
-AM_CXXFLAGS = -Wall -O0 -g -I../object -I../../switchbox/src
-AM_CFLAGS = $(AM_CXXFLAGS)
+AM_CXXFLAGS = -Wall -O0 -g -I../object -I../../switchbox/src @SDL_CFLAGS@
+AM_CFLAGS = $(AM_CXXFLAGS) 
 #CFLAGS=$(AM_CFLAGS)
 #CXXFLAGS=$(AM_CXXFLAGS)
 
@@ -25,7 +25,9 @@ physics_SOURCES = physics.cpp
 render_SOURCES = render.cpp
 sleep_cat_SOURCES = sleep-cat.cpp
 switchbox_cat_SOURCES = switchbox-cat.cpp
+switchbox_cat_LDADD = ../../switchbox/src/libmessaging.la
 switchbox_connect_SOURCES = switchbox-connect.cpp
+switchbox_connect_LDADD = ../../switchbox/src/libmessaging.la
 sync_cat_SOURCES = sync-cat.cpp
 
 
