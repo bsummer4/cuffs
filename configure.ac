@@ -82,5 +82,6 @@ AC_CONFIG_FILES([Makefile
                  switchbox/test/Makefile
                  game/Makefile
                  game/src/Makefile
+                 game/utils/Makefile
                  doc/Makefile])
 AC_OUTPUT

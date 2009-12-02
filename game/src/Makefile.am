@@ -3,11 +3,6 @@ AM_LDFLAGS = @SDL_LIBS@  -lSDL_image -lSDL_draw -lSDL_mixer \
            -lboost_thread 
 AM_CXXFLAGS = -Wall -O0 -g -I../object -I../../switchbox/src @SDL_CFLAGS@
 AM_CFLAGS = $(AM_CXXFLAGS) 
-#CFLAGS=$(AM_CFLAGS)
-#CXXFLAGS=$(AM_CXXFLAGS)
-
-
-TESTS=../utils/run-test
 
 bin_PROGRAMS = sync-cat delayed-cat interpret cat render switchbox-cat \
                game keylisten sleep-cat map-pgm sixty-nine \
@@ -29,10 +24,3 @@ switchbox_cat_LDADD = ../../switchbox/src/libmessaging.la
 switchbox_connect_SOURCES = switchbox-connect.cpp
 switchbox_connect_LDADD = ../../switchbox/src/libmessaging.la
 sync_cat_SOURCES = sync-cat.cpp
-
-
-#%: %.o; $(CXX) $(LDFLAGS) $^ -o $@
-#.o.cpp: $(CXX) $(AM_CXXFLAGS) -c $^
-#lib.o: ../object/lib.c; $(CXX) $(CXXFLAGS) -c $^
-#dispatcher: lib.o dispatcher.o; $(CXX) $(AM_CFLAGS) $(AM_LDFLAGS) $^ -o $@
-#dispatcher2: lib.o dispatcher2.o; $(CXX) $(AM_CFLAGS) $(AM_LDFLAGS) $^ -o $@
