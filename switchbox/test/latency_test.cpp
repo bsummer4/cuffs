@@ -6,6 +6,7 @@
 #include <sys/time.h>
 #include <iostream>
 #include <sched.h>
+#include <assert.h>
 
 using namespace std;
 
@@ -155,11 +156,13 @@ void * update_thread(void* arg) {
 }
 
 int main(int argc, char* argv[]) {
-  if(argc != 2) {
-    cerr << "Usage: " << argv[0] << " Num_Of_Max_Pairs" << endl;
+  if(argc != 3) {
+    cerr << "Usage: " << argv[0] << " Pair_Step_Size Num_Of_Max_Pairs" << endl;
     exit(1);
   }
-  int MAXPAIRS = atoi(argv[1]);
+  int STEPSIZE = atoi(argv[1]);
+  int MAXPAIRS = atoi(argv[2]);
+  assert(STEPSIZE > 0 && MAXPAIRS > STEPSIZE);
 
   double sum;
   double avgLatency;
@@ -168,8 +171,9 @@ int main(int argc, char* argv[]) {
   double packetLoss;
 
   while(clients.size() < MAXPAIRS) {
-    spawn_pair();
-    spawn_pair();
+    for(int i=0; i<STEPSIZE; i++) 
+        spawn_pair();
+
     // Let the clients run
     sleep(1);
     for(int i = 0; i < clients.size(); i++) {
