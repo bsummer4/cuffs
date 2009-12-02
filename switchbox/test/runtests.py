@@ -11,7 +11,7 @@ retval = 0
 class switchbox_manager():
     def __init__(self):
         self.pid = -1
-        self.switchbox_path="../../src/switchbox/switchbox"
+        self.switchbox_path="../src/switchbox"
     def start_switchbox(self):
         self.pid = os.fork()
         if (self.pid == 0):

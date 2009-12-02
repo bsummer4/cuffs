@@ -1,8 +1,8 @@
 TESTS=runtests.py
 
-LIBCONNECTION = $(top_srcdir)/src/switchbox/libconnection.la
+LIBCONNECTION = ../src/libconnection.la
 
-AM_CPPFLAGS = -I$(top_srcdir)/src/switchbox
+AM_CPPFLAGS = -I../src
 LDADD = $(LIBCONNECTION) libsbcommon.la
 
 noinst_LTLIBRARIES = libsbcommon.la 
