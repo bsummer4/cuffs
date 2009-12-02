@@ -1,14 +1,4 @@
-# Directory Layout
-## Project
-This file specifies some basic information about the project in a
-human and machine-readable way.  It serves as slight documentation and
-a base for some tools we use.
-
-## README
-This file.  Several directories have a file named this.  It just
-broadly describes the layout and purpose of everything below that
-directory.
-
+# Sub-directories
 ## utils
 Utilities that are not part of the game itself.  The testing framework
 for example.
