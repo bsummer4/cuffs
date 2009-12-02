@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <sstream>
 #include <cstdlib>
-#include "sdl.h++"
+#include "sdl.hpp"
 #include "macro.h"
 
 namespace sdl {

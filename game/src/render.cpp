@@ -1,7 +1,7 @@
 #include <unistd.h>
 #include <iostream>
-#include "sdl.h++"
-#include "misc.h++"
+#include "sdl.hpp"
+#include "misc.hpp"
 using namespace misc;
 using namespace std;
 

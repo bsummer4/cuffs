@@ -5,10 +5,10 @@
 #include <sstream>
 #include <stdexcept>
 #include "Connection.hpp"
-#include "Interpreter.h++"
-#include "Threaded.h++"
+#include "Interpreter.hpp"
+#include "Threaded.hpp"
 #include "lib.h"
-#include "misc.h++"
+#include "misc.hpp"
 
 namespace cmb {
   using namespace std;

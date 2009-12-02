@@ -1,7 +1,7 @@
 /// Simple implementation of the unix utillity 'cat' using the event
 /// handler architecture.
 #include <assert.h>
-#include "misc.h++"
+#include "misc.hpp"
 using namespace misc;
 
 /// Intercept 'sleep time' and 'usleep time' commands and cause the

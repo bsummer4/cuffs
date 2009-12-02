@@ -5,7 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include <boost/function.hpp>
-#include "Threaded.h++"
+#include "Threaded.hpp"
 #include "macro.h"
 #include "lib.h"
 

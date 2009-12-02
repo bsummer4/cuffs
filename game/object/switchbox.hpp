@@ -4,7 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include "Connection.hpp"
-#include "Threaded.h++"
+#include "Threaded.hpp"
 
 extern "C" {
 #  include <sys/time.h>

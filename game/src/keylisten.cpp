@@ -1,8 +1,8 @@
 #include <unistd.h>
 #include <iostream>
-#include "keyListen.h++"
-#include "sdl.h++"
-#include "misc.h++"
+#include "keyListen.hpp"
+#include "sdl.hpp"
+#include "misc.hpp"
 using namespace sdl;
 using namespace std;
 

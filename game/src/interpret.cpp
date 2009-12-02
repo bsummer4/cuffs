@@ -5,10 +5,10 @@
 #include <assert.h>
 #include <unistd.h>
 #include <stdexcept>
-#include "cmb.h++"
+#include "cmb.hpp"
 #include "Connection.hpp"
-#include "Interpreter.h++"
-#include "misc.h++"
+#include "Interpreter.hpp"
+#include "misc.hpp"
 #include "lib.h"
 using namespace std;
 

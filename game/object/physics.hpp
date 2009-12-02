@@ -1,6 +1,6 @@
 #pragma once
 #include <algorithm>
-#include "state.h++"
+#include "state.hpp"
 
 /// Physics for projectils
 namespace physics {

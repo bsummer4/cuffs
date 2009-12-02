@@ -34,8 +34,8 @@
 #include <cstdlib>
 #include <cstring>
 #include <sstream>
-#include "Threaded.h++"
-#include "misc.h++"
+#include "Threaded.hpp"
+#include "misc.hpp"
 #include "lib.h"
 using namespace std;
 using namespace misc;

@@ -7,7 +7,7 @@
 #include <fstream>
 #include <cmath>
 #include <stdexcept>
-#include "sdl.h++"
+#include "sdl.hpp"
 
 namespace game {
   using namespace std;

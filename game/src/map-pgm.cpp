@@ -1,8 +1,8 @@
 /// Copies an arbitrary image and writes it to stdout as a pgm image
 
 #include <string>
-#include "Map.h++"
-#include "sdl.h++"
+#include "Map.hpp"
+#include "sdl.hpp"
 using namespace std;
 
 int main (int num_args, char **argv) {

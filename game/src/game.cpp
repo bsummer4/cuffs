@@ -2,13 +2,13 @@
 /// render messages to stdout.
 
 #include <sstream>
-#include "state.h++"
-#include "sdl.h++"
-#include "misc.h++"
-#include "cmb.h++"
-#include "Interpreter.h++"
-#include "keyListen.h++"
-#include "physics.h++"
+#include "state.hpp"
+#include "sdl.hpp"
+#include "misc.hpp"
+#include "cmb.hpp"
+#include "Interpreter.hpp"
+#include "keyListen.hpp"
+#include "physics.hpp"
 #include "macro.h"
 using namespace misc;
 using namespace game;

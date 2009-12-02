@@ -1,8 +1,8 @@
 #include <unistd.h>
 #include <iostream>
 #include <assert.h>
-#include "switchbox.h++"
-#include "misc.h++"
+#include "switchbox.hpp"
+#include "misc.hpp"
 using namespace std;
 using namespace misc;
 

@@ -2,7 +2,7 @@
 #include <sstream>
 #include <iostream>
 #include <stdexcept>
-#include "state.h++"
+#include "state.hpp"
 
 namespace game {
   using namespace std;

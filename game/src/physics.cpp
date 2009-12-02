@@ -1,8 +1,8 @@
-#include "state.h++"
-#include "sdl.h++"
-#include "misc.h++"
-#include "Interpreter.h++"
-#include "physics.h++"
+#include "state.hpp"
+#include "sdl.hpp"
+#include "misc.hpp"
+#include "Interpreter.hpp"
+#include "physics.hpp"
 
 using namespace std;
 using namespace game;

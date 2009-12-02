@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <iostream>
 #include <assert.h>
-#include "misc.h++"
+#include "misc.hpp"
 using namespace std;
 using namespace misc;
 

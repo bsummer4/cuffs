@@ -3,9 +3,9 @@
 #include <map>
 #include <iostream>
 #include <string.h>
-#include "Object.h++"
-#include "Map.h++"
-#include "sdl.h++"
+#include "Object.hpp"
+#include "Map.hpp"
+#include "sdl.hpp"
 #include "macro.h"
 
 namespace game {
