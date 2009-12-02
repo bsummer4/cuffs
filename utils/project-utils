@@ -36,7 +36,7 @@ if [ $invoke = "proot" ]; then echo $proot; fi
 if [ $invoke = "pclean" ]; then custom_command clean; fi
 if [ $invoke = "psetup" ]; then custom_command setup; fi
 if [ $invoke = "pbuild" ]
-then 
+then
      [ -e $proot/Makefile ] || custom_command setup
      custom_command build
 fi
