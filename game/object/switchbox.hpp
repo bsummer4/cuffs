@@ -1,21 +1,22 @@
 #pragma once
+
 #include <string>
 #include <queue>
 #include <iostream>
 #include <sstream>
-#include "Connection.hpp"
 #include "Threaded.hpp"
-
 extern "C" {
-#  include <sys/time.h>
-#  include <errno.h>
-#  include <assert.h>
-#  include <poll.h>
-#  include <pthread.h>
-#  include "switchbox_client.h"
+# include <sys/time.h>
+# include <errno.h>
+# include <assert.h>
+# include <poll.h>
+# include <pthread.h>
 }
 
 namespace switchbox {
+  extern "C" {
+#   include "switchbox_client.h"
+  }
   using namespace std;
 
   /// We can't just pass it to the string constructor because it might
@@ -40,7 +41,7 @@ namespace switchbox {
   bool not_admin_junk(string event) { return !is_admin_junk(event); }
   string broadcast_encode(string event) {
     SBMessage *m = string_to_message(BROADCAST, -1, -1,
-                                     const_cast<char *>(event.c_str()));
+                                    const_cast<char *>(event.c_str()));
     string result(stringify(m));
     free(m);
     return result; }
@@ -78,6 +79,21 @@ namespace switchbox {
     void address() { return _address; }
     bool know_address() { return _address != -1; }
 
+    /// Recieves all messages and passes them to the handler.  If they
+    /// are announcements, then pass them to our announcehandler first.
+    /// We stop when stop() is called or when we lose our connection to
+    /// the switchbox.
+    void run() {
+      while (!stopRequested) {
+        SBMessage * result = switchbox_receive(_connection);
+        if (!result) break;
+        if (result->routing_type == ANNOUNCE)
+          handleAnnounceMessage(result);
+        handler.handleEvent(stringify(result));
+        free (result);
+        run(); }
+      close_connection(_connection); }
+
   protected:
     H handler;
     Socket _connection;
@@ -92,19 +108,4 @@ namespace switchbox {
     void sendMessage(SBMessage *message) {
       boost::mutex::scoped_lock l(sendLock);
       bool success = switchbox_send(_connection, message);
-      if (!success) stop(); }
-
-    /// Recieves all messages and passes them to the handler.  If they
-    /// are announcements, then pass them to our announcehandler first.
-    /// We stop when stop() is called or when we lose our connection to
-    /// the switchbox.
-    void run() {
-      while (!stopRequested) {
-        SBMessage * result = switchbox_receive(_connection);
-        if (!result) break;
-        if (result->routing_type == ANNOUNCE)
-          handleAnnounceMessage(result);
-        handler.handleEvent(stringify(result));
-        free (result);
-        run(); }
-      close_connection(_connection); }};}
+      if (!success) stop(); }};}
