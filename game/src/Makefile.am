@@ -10,8 +10,8 @@ bin_PROGRAMS = sync-cat delayed-cat interpret cat render switchbox-cat \
 
 cat_SOURCES = cat.cpp
 delayed_cat_SOURCES = delayed-cat.cpp
-dispatcher2_SOURCES = dispatcher2.cpp
-dispatcher_SOURCES = dispatcher.cpp
+dispatcher2_SOURCES = dispatcher2.cpp ../object/lib.c
+dispatcher_SOURCES = dispatcher.cpp ../object/lib.c
 game_SOURCES = game.cpp
 interpret_SOURCES = interpret.cpp
 keylisten_SOURCES = keylisten.cpp
