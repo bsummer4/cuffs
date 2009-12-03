@@ -1,0 +1,32 @@
+# Building
+You only need to run the first command if you've checked out this code
+from a repository.  Tarball releases will have had that done for you
+already.
+
+    $ ./Bootstrap
+    $ ./configure
+    $ make
+    $ make install
+
+# Directories
+- /doc -- All Documentation; Formatted in ReStructured Text.
+- /Bootstrap -- Shell script for generating the build.
+- /switchbox -- A tool for group communication over the network.
+- /game -- The game itself.
+
+# Prerequisites
+TODO
+
+## Building Doxygen Documentation
+The output is generated in ./doc/doxygen, and the docs are available
+online at http://www.cs.utk.edu/~jhoare/cs594ng/doxygen
+
+    $ make doxygen-doc
+
+# Coding Style
+C source files are .c and .h, c++ source files are .c++ and .h++.
+Style rules for c++ and c are codified by using code beautifiers.
+Here are the options we use:
+
+    astyle -Uas4 # for c++ code
+    indent -npsl -i4 -npcs -bli0 -brs -brf -br -nut # for pure c code
