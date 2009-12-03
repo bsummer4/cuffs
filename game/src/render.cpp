@@ -5,7 +5,7 @@
 using namespace misc;
 using namespace std;
 
-int main() {
+int main(int argc, char *argv[]) {
   chdir("../data");
   sdl::SDL s(true, true);
   s.initVideo(800, 600, 32, "Rendering Utillity");
