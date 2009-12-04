@@ -3,10 +3,10 @@ You only need to run the first command if you've checked out this code
 from a repository.  Tarball releases will have had that done for you
 already.
 
-    $ ./Bootstrap
-    $ ./configure
-    $ make
-    $ make install
+    $ ./Bootstrap  # Setup the autotools build
+    $ ./configure  # Generate the makefiles
+    $ make         # Perform the build
+    $ make install # Install the binarys to your system
 
 # Directories
 - /doc -- All Documentation; Formatted in ReStructured Text.

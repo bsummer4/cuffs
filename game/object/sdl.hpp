@@ -147,7 +147,8 @@ namespace sdl {
                    int x0, int y0, int x1, int y1) {
       cerr << "draw_line" << width << red << green << blue << x0 << y0 << x1 << y1 << endl;
       ITER (offset, -width, width + 1)
-        Draw_Line (sdl.screen, x0 + offset, y0, x1 + offset, y1,
+        Draw_Line (sdl.screen, MAX(0, x0 + offset), y0,
+                   MAX(0, x1 + offset), y1,
                    SDL_MapRGB(sdl.screen->format, red, green, blue)); }
 
     void handleEvent(std::string event) {
