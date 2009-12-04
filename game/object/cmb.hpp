@@ -22,6 +22,7 @@ namespace cmb {
     int time;
     int order;
     Timestamp(int time, int order) : time(time), order(order) {}
+    Timestamp(int time) : time(time), order(0) {}
     std::string extractTimestamp(std::string event);
     friend bool operator<(const Timestamp &x, const Timestamp& y) {
       return (x.time == y.time) ? (x.order < y.order) : (x.time < y.time); }
@@ -77,6 +78,11 @@ namespace cmb {
     Event(Timestamp time, string event)
       : eventOccurs(time), eventString(event) {}
 
+    /// So we can prettyprint this object
+    friend std::ostream& operator<<(std::ostream& output, const Event& c) {
+        output << "Time: " << c.eventOccurs << " String: " << c.eventString;
+        return output;}
+
     /// Need to do this to use in priority queue.
     /// http://www.codeguru.com/cpp/tic/tic0229.shtml
     /// This is actually backwards so that it gets ordered in the way
@@ -84,17 +90,30 @@ namespace cmb {
     friend bool operator<(const Event& x, const Event& y) {
       return (x.eventOccurs > y.eventOccurs);}};
 
+
+
   /// A priority queue class that manages placing events into
   /// appropriate queues as well as determining if the global time can
   /// be advanced.
   class Queue {
     processes cmbQueue;
+    bool strictClients;
 
-  public:
+    public:
+    Queue() : strictClients(false) {};
+    /// Pass the constructor a vector of client addresses. Any messages 
+    /// received by clients not in this initial list are ignored. 
+    Queue(std::vector<int> &clients) : strictClients(true){
+      for (int i = 0; i < clients.size(); i++){
+        cmbQueue.insert(pair< int, cmb::pqueue>(clients[i], cmb::pqueue()));}
+      assert(cmbQueue.size() == clients.size());}
+
     /// Place the given Event message onto the queue associated with
     /// the given ProcessId.
-    void queueMessage(int processId, Event event) {
-      cmbQueue[processId].push(event); }
+    bool queueMessage(int processId, Event event) {
+      if (strictClients && cmbQueue.count(processId) == 0) return false;
+      cmbQueue[processId].push(event); 
+      return true;}
 
     /// All events before @ref time
     pqueue getEvents(Timestamp time) {
@@ -142,6 +161,8 @@ namespace cmb {
       return current_time; }
     Synchronizer(H handler)
       : handler(handler), current_time(-1) {}
+    Synchronizer(H handler, vector<int> clients)
+      : cmb(clients), handler(handler), current_time(-1) {}
     void handleEvent(string event) {
       int process;
       Timestamp time(0, -1);

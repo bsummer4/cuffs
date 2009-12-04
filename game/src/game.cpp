@@ -14,6 +14,7 @@ using namespace misc;
 using namespace game;
 
 typedef Queue <string> MsgQueue;
+typedef map <int,string> PlayerMap;
 
 static int start_time; // set in main
 const static int game_interval = 50;
@@ -111,7 +112,7 @@ public:
     cerr << "6";
     iteration++; }};
 
-void ref_handshake(string username, map <int, string> &players, string &map) {
+void ref_handshake(string username, PlayerMap &players, string &map) {
   cout << "/identify " << username << endl;
   LOOP {
     char buffer[1024];
@@ -142,7 +143,7 @@ int main(int num_args, char **args) {
   sdl.initVideo(800, 600, 32, "Rock-Throwing Game");
 
   // Ref Handshake
-  map <int, string> players;
+  PlayerMap players;
   string mapname;
   ref_handshake(username, players, mapname);
   start_time = SDL_GetTicks();
@@ -165,6 +166,12 @@ int main(int num_args, char **args) {
   render.flip();
   game::Interpreter i(state);
 
+
+  // Gather up the process numbers of the players
+  vector <int> clients;
+  FOREACH (PlayerMap, it, players)
+    clients.push_back((*it).first);
+
   // IO and Pipeline
   cerr << "Starting Pipeline" << endl;
   MsgQueue inQ, userQ;
@@ -172,7 +179,7 @@ int main(int num_args, char **args) {
   UserInterface ui;
   MouseHandler mh(sdl, ui);
   Pipeline <Printer&> pipeline(inQ, userQ, render, i, state, sim, p, ui);
-  cmb::Synchronizer <typeof(inQ)&> sync(inQ);
+  cmb::Synchronizer <typeof(inQ)&> sync(inQ, clients);
   LineReader <typeof(sync)&> lr(cin, sync);
 
   // Event handling
