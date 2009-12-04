@@ -36,9 +36,9 @@ struct UserInterface {
   Point cursor;
   UserInterface() : cursor(0, 0) {}
   void render(State &state, vector <string> &output) {
-    cerr << "ui" << endl;
+    //cerr << "ui" << endl;
     if (!state.player_alive()) return;
-    cerr << "UI" << endl;
+    //cerr << "UI" << endl;
     game::Object &player = state.player();
     { ostringstream line, circle;
       line << "line 2 0 255 0 "
@@ -55,7 +55,7 @@ struct MouseHandler {
   MouseHandler(sdl::SDL &sdl, UserInterface &ui) : sdl(sdl), ui(ui) {}
   void operator()(SDL_Event& e) {
     if (e.type != SDL_MOUSEMOTION) return;
-    cerr << "mouse motion.  ";
+    //cerr << "mouse motion.  ";
     // Get the mouse offsets
     int x = e.motion.x, y = e.motion.y;
     ui.cursor = Point(x, y); }};
@@ -81,7 +81,7 @@ public:
     : gameInQ(gameInQ), userInQ(userInQ), r(r), i(i), state(state), sim(sim_),
       simInt(sim, state), iteration(0), output(output), ta(0), game_time(0), ui(ui) {}
   void operator()(SDL_Event& e) {
-    cerr << ".";
+    //cerr << ".";
     int new_game_time = (SDL_GetTicks() - start_time) / game_interval;
     if (new_game_time <= game_time) return;
     // TODO If we have moved forward multiple steps, then we need to
@@ -89,30 +89,31 @@ public:
     // someone with a slow computer could move slower than from fast
     // computers
     game_time = new_game_time;
-    cerr << "gametime++ -> " << game_time << endl;
+    // cerr << "gametime++ -> " << game_time << endl;
     handleAll <typeof(i)&> (gameInQ, i);
-    cerr << "1";
+    // cerr << "1";
     vector <string> ignore = userInQ.popAll();
     handleAll <typeof(simInt)&> (ignore, simInt);
-    FOREACH (vector <string>, it, ignore)
-      cerr << "\t--" << *it << endl;
-    cerr << "2";
+    // FOREACH (vector <string>, it, ignore)
+    // cerr << "\t--" << *it << endl;
+    // cerr << "2";
     vector <string> stuff(sim.move());
-    cerr << "3";
+    // cerr << "3";
     ta.time = game_time;
-    cerr << "4";
+    // cerr << "4";
 
     vector <string> output_messages = ta(stuff);
     handleAll <typeof(output)&> (output_messages, output);
-    cerr << "5";
+    // cerr << "5";
     vector <string> render_messages;
     render_state(state, render_messages);
     ui.render(state, render_messages);
     handleAll <typeof(r)&> (render_messages, r);
-    cerr << "6";
+    // cerr << "6";
     iteration++; }};
 
-void ref_handshake(string username, PlayerMap &players, string &map) {
+void ref_handshake(string username, PlayerMap &players, string &map,
+                   int &ref) {
   cout << "/identify " << username << endl;
   LOOP {
     char buffer[1024];
@@ -124,7 +125,7 @@ void ref_handshake(string username, PlayerMap &players, string &map) {
       players[from] = name;
       continue; }
     if (!command.compare("/map")) { i >> map; continue; }
-    if (!command.compare("/start")) return;
+    if (!command.compare("/start")) { ref = from; return; }
     throw runtime_error("Bad handshake message"); }}
 
 Uint32 gameLoopTimer(Uint32 interval, void* param) {
@@ -145,9 +146,10 @@ int main(int num_args, char **args) {
   // Ref Handshake
   PlayerMap players;
   string mapname;
-  ref_handshake(username, players, mapname);
+  int ref_address;
+  ref_handshake(username, players, mapname, ref_address);
   start_time = SDL_GetTicks();
-  cerr << "Handshake done" << endl;
+  // cerr << "Handshake done" << endl;
 
   if (!mapname.size()) throw runtime_error("No map given");
   mapname += ".map";
@@ -169,11 +171,12 @@ int main(int num_args, char **args) {
 
   // Gather up the process numbers of the players
   vector <int> clients;
+  clients.push_back(ref_address);
   FOREACH (PlayerMap, it, players)
     clients.push_back((*it).first);
 
   // IO and Pipeline
-  cerr << "Starting Pipeline" << endl;
+  // cerr << "Starting Pipeline" << endl;
   MsgQueue inQ, userQ;
   Printer p;
   UserInterface ui;
@@ -192,7 +195,7 @@ int main(int num_args, char **args) {
 
   // Run everything
   lr.start();
-  cerr << "Running event loop" << endl;
+  // cerr << "Running event loop" << endl;
   sdl.runEventLoop();
 
   return 0; }

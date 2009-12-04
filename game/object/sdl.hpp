@@ -145,14 +145,14 @@ namespace sdl {
 
     void draw_line(int width, int red, int green, int blue,
                    int x0, int y0, int x1, int y1) {
-      cerr << "draw_line" << width << red << green << blue << x0 << y0 << x1 << y1 << endl;
+      // cerr << "draw_line" << width << red << green << blue << x0 << y0 << x1 << y1 << endl;
       ITER (offset, -width, width + 1)
         Draw_Line (sdl.screen, MAX(0, x0 + offset), y0,
                    MAX(0, x1 + offset), y1,
                    SDL_MapRGB(sdl.screen->format, red, green, blue)); }
 
     void handleEvent(std::string event) {
-      cerr << " [render]-> " << event << endl;
+      // cerr << " [render]-> " << event << endl;
       istringstream in(event);
       string command;
       in >> command;
@@ -174,12 +174,12 @@ namespace sdl {
         string id, filename;
         in >> id >> filename;
         new_sound(id, filename);
-        cerr << "loaded sound: " << id << endl; }
+        /* cerr << "loaded sound: " << id << endl; */ }
       if (!command.compare("play")) {
         string id;
         in >> id;
         play(id);
-        cerr << "Played: " << id << endl; }}
+        /* cerr << "Played: " << id << endl; */ }}
 
     /// TODO This is a hack.  Don't use this unless you really know
     /// what's up

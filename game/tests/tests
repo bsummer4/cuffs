@@ -5,4 +5,5 @@ interpret
 physics example.map 1 1
 cat
 render
+game ben
 sleep-cat

@@ -1,21 +1,15 @@
+/// @file
+/// Unit Tests for the Event class.
+
 #include "cmb.hpp"
 #include <iostream>
-/*
- * @file
- * @author John R. Hoare
- *
- * Unit Tests for the Event class.
- */
 
 using namespace std;
 
-/**
- * @class Event
- * @test
- * Verifies that the events are ordered in the priority queue correctly.
- * Correctly means that the Event with the lowest time is at the "top" of
- * the queue.
- */
+/// @class Event
+/// @test Verifies that the events are ordered in the priority queue
+/// correctly.  Correctly means that the Event with the lowest time is
+/// at the "top" of the queue.
 void checkOrder1() {
   string sone("1.0 string one");
   string stwo("2.0 string two");
@@ -47,12 +41,8 @@ void checkOrder2() {
   string s21("2.1 string twoone");
   string s22("2.2 string twotwo");
 
-  cmb::Event cmbe1(sone);
-  cmb::Event cmbe2(stwo);
-  cmb::Event cmbe3(sthree);
-  cmb::Event cmbe4(s20);
-  cmb::Event cmbe5(s21);
-  cmb::Event cmbe6(s22);
+  cmb::Event cmbe1(sone), cmbe2(stwo), cmbe3(sthree), cmbe4(s20), cmbe5(s21),
+             cmbe6(s22);
   cmb::pqueue pq;
   pq.push(cmbe2);
   pq.push(cmbe5);
@@ -79,7 +69,5 @@ int main() {
   cout << "================================================" << endl;
 }
 
-/**
- * @}
- * @}
- */
+/// @}
+/// @}

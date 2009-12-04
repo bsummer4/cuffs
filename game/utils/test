@@ -19,7 +19,11 @@ infile=${tests_dir}/${program}-in
 outfile=${tests_dir}/${program}-out
 
 $programs_dir/sleep-cat < $infile | $program_path $options > $tmpfile
-diff $tmpfile $outfile
-failure=$?
+
+if [ -e $outfile ]
+then diff $tmpfile $outfile; failure=$?
+else failure=0;
+fi
+
 rm $tmpfile
 if [ $failure = 0 ]; then echo "PASSED"; else echo "FAILED"; fi
