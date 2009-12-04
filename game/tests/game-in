@@ -1,0 +1,14 @@
+1 /identify ben
+2 /identify fred
+0 /map big
+0 /start
+0 0.0 /new player-ben player 30 30
+0 0.0 /new player-fred player 400 30
+0 1000.0 hihihihi
+sleep 1
+1 1.0 /explode 400 400 160
+2 1.0 /move player-fred 30 30
+5 1.0 /new SHOULD BE IGNORED BY CMB!!!!!
+sleep 1
+1 1.0 The next line is a hack to cause a segfault so the test will exit
+2 0.0 /explode 0 0 1000
