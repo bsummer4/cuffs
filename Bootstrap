@@ -27,7 +27,8 @@ then
 
 else
     echo "Generating autotools stuff:"
-    echo "$PROMPT" generating DESIGN COPYING NEWS ChangeLog and AUTHORS
+    echo "$PROMPT" generating README DESIGN COPYING NEWS ChangeLog and AUTHORS
+    if [ ! -e README ]; then ln -s doc/readme.rst README; fi
     if [ ! -e DESIGN ]; then ln -s doc/design.rst DESIGN; fi
     if [ ! -e COPYING ]; then ln -s doc/copyright.rst COPYING; fi
     if [ ! -e AUTHORS ]; then ln -s doc/authors AUTHORS; fi
