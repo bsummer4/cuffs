@@ -8,6 +8,7 @@ namespace physics {
 
   struct Point {
     int x, y;
+    Point() : x(0), y(0) {};
     Point(int x, int y) : x(x), y(y) {};
     bool operator!=(const Point other) {
       return x != other.x || y != other.y; }};
@@ -17,7 +18,7 @@ namespace physics {
     return !(p.x > max.x || p.x < min.x || p.y > max.y || p.y < min.y); }
 
   /// Find the point closest to p0 between p0 and p1 that is solid,
-  /// and set result to it.  return false if there was not such point.
+  /// and set result to it.  Return false if there was not such point.
   bool find_hit(game::Map &map, Point p0, Point p1, Point &result) {
     int x0 = p0.x, x1 = p1.x, y0 = p0.y, y1 = p1.y;
     vector <Point> hits;
@@ -53,7 +54,7 @@ namespace physics {
         y += ystep;
         error = error - 1.0; }}
 
-    // Calculate the closest hit and return it.  Return p2 if there
+    // Calculate the closest hit and return it.  Return false if there
     // was no hit
     if (!hits.size()) return false;
     float lowest_distance = INFINITY;
@@ -68,7 +69,7 @@ namespace physics {
     float x, y, dx, dy;
     Projectile(float x, float y, float dx, float dy)
       : x(x), y(y), dx(dx), dy(dy) {}
-    Projectile() {}
+    Projectile() {} // Uninitialized!!
     void move() { x += dx; y += dy; }
     void accelerate(float ddx, float ddy) { dx += ddx; dy += ddy; }};
 
@@ -87,6 +88,24 @@ namespace physics {
       ostringstream o; o << "/delete " << id;
       return o.str(); }}
 
+  class Simulation;
+
+  // Virtual
+  struct SmartProjectile {
+  public:
+    bool is_new;
+    Simulation *sim;
+    string id;
+    Projectile p;
+    SmartProjectile (Simulation *sim, string id,
+                     float x, float y, float dx, float dy)
+      : sim(sim), is_new(true), id(id), p(x, y, dx, dy) {}
+    float x() { return p.x; };
+    float y() { return p.y; };
+    float dx() { return p.dx; };
+    float dy() { return p.dy; };
+    virtual void update(game::State&, vector <string>&, bool&) = 0; };
+
   /// Maintain projectils we (a client) are responsible for.  We
   /// examine things in the state object to determine their effects on
   /// our projectiles.  All the projectiles we maintain also have
@@ -97,73 +116,26 @@ namespace physics {
   /// interpreter (or broadcast over a network).
   class Simulation {
     typedef string id;
-    typedef std::map <id, Projectile> Projectiles;
+    typedef std::map <id, SmartProjectile*> Projectiles;
     Projectiles projectiles;
-    vector <id> new_projectiles; /// Have not been '/new'ed yet
     game::Map &map; /// state.global.map.map
     game::State &state; /// Read-only
   public:
     bool playerMoved; /// Hack
     Simulation(game::State &s)
       : state(s), map(s.global->map), playerMoved(false) {}
-
-    void set (id id, float x, float y, float dx, float dy) {
-      //cerr << "*.set:" << id << endl;
-      if (!projectiles.count(id))
-        new_projectiles.push_back(id);
-      Projectile p(x, y, dx, dy);
-      projectiles[id] = p; }
-
-    bool irrelevant(Projectile &p) {
+    ~Simulation() { FOREACH (Projectiles, it, projectiles)
+                      delete it->second; }
+    void add(SmartProjectile *p) { projectiles[p->id] = p; }
+    bool irrelevant(SmartProjectile *p) {
       Point min(-2 * map.width, -2 * map.height);
       Point max(3 * map.width, 3 * map.height);
-      return (p.x > max.x || p.x < min.x || p.y > max.y || p.y < min.y); }
-
-    void notnew(const string id) {
-      new_projectiles.erase
-        (find
-         (new_projectiles.begin(),
-          new_projectiles.end(),
-          id)); }
-
-    bool isnew(const string id) {
-      return count(new_projectiles.begin(), new_projectiles.end(), id); }
-
-    /// Update the projectile and return a message to use to update
-    /// the state.  "" means no message.  (erase == true) implies that
-    /// the projectile should be deleted from the simulation
-    string update(const string id, Projectile &p, bool &erase,
-                  string &extra) {
-      //cerr << "*.update:" << id << endl;
-      erase = false;
-      Point old(p.x, p.y);
-      if (isnew(id)) { notnew(id); return helper::msg_new(id, p.x, p.y); }
-      if (irrelevant(p)) { erase = true; return helper::msg_delete(id); }
-      // Update projectile
-      p.accelerate(state.global->wind, state.global->gravity);
-      p.move();
-      Point new_(p.x, p.y);
-      Point hit = new_;
-      bool has_hit = find_hit(map, old, new_, hit);
-      if (has_hit) {
-        //cerr << "hit" << endl;
-        erase = true;
-        /// TODO calculate the radius from some property of the
-        /// projectile
-        extra = helper::msg_delete(id);
-        return helper::msg_explode(hit.x, hit.y, 50); }
-      return helper::msg_move(id, new_.x, new_.y); }
+      return (p->x() > max.x || p->x() < min.x ||
+              p->y() > max.y || p->y() < min.y); }
 
     /// Update all projectiles and return a sequence of message for
     /// the interpreter to update the state.
     vector <string> move() {
-      //cerr << "*.move:" << endl;
-      //cerr << "projs" << endl;
-      //FOREACH (Projectiles, it, projectiles)
-      //cerr << "  " << it->first << endl;
-      //cerr << "new_projs" << endl;
-      //FOREACH (vector <Simulation::id>, it, new_projectiles)
-      //cerr << "  " << *it << endl;
       vector <string> erase_after_loop;
       vector <string> messages;
       if (playerMoved) {
@@ -172,18 +144,54 @@ namespace physics {
         playerMoved = false; }
       FOREACH (Projectiles, it, projectiles) {
         id id(it->first);
-        Projectile &p(it->second);
+        SmartProjectile *p = it->second;
         bool erase;
-        string extra;
-        string msg = update(id, p, erase, extra);
-        if (msg.size()) messages.push_back(msg);
-        if (extra.size()) messages.push_back(extra);
+        p->update(state, messages, erase);
         if (erase) erase_after_loop.push_back(id); }
-      FOREACH (vector<string>, it, erase_after_loop) {
-        // cerr << "erasing: " << *it << endl;
+      FOREACH (vector <string>, it, erase_after_loop)
         projectiles.erase(*it);
-      }
       return messages; }};
+
+  class Rock : public SmartProjectile {
+    Rock (Simulation *sim, string id,
+          float x, float y, float dx, float dy)
+      : SmartProjectile(sim, id, x, y, dx, dy) {};
+
+    /// Add whatever messages are needed to communicate our state
+    /// changes.  if (erase) then we should be removed from the
+    /// simulation.
+    virtual void update(game::State &state, vector <string> &messages,
+                        bool &erase) {
+      erase = false;
+      Point start(x(), y());
+
+      if (is_new) {
+        is_new = false;
+        messages.push_back(helper::msg_new(id, p.x, p.y));
+        return; }
+      if (sim->irrelevant(this)) {
+        erase = true;
+        messages.push_back(helper::msg_delete(id));
+        return; }
+
+      // Modify ourself
+      p.accelerate(state.global->wind, state.global->gravity);
+      p.move();
+
+      Point end(x(), y());
+      { Point hit; // We are sure that this will be set in find_hit in
+                   // all cases where we use it.
+        if (find_hit(state.global->map, start, end, hit)) {
+          erase = true;
+          messages.push_back(helper::msg_delete(id));
+          messages.push_back(helper::msg_explode(hit.x, hit.y, 50));
+          return; }}
+      messages.push_back(helper::msg_move(id, end.x, end.y)); }};
+
+  SmartProjectile *make_projectile(Simulation *sim,
+                                   const string type, const string id,
+                                   float x, float y, float dx, float dy) {
+    return NULL; }
 
   struct Interpreter {
     int count;
@@ -214,7 +222,8 @@ namespace physics {
         ostringstream s_id;
         s_id << state.username << "-" << type << "-" << count++;
         string id = s_id.str();
-        sim.set(id, player.x, player.y, dx, dy); }
+        sim.add(make_projectile(&sim, type, id,
+                                player.x, player.y, dx, dy)); }
 
       if (!command.compare("move")) {
         float dx, dy;

@@ -32,7 +32,6 @@ int main (int num_args, char **args) {
   s.add(new game::Object("player-username", "player", x, y));
   physics::Simulation sim(s);
   physics::Interpreter simInt(sim, s);
-  Printer p;
   Hack hack(simInt, sim);
   LineReader <typeof(hack)&> lr(cin, hack);
   lr.start();

@@ -105,7 +105,8 @@ public:
            sdl::Renderer &r, Interpreter &i, State &state,
            physics::Simulation &sim_, O output, UserInterface &ui)
     : gameInQ(gameInQ), userInQ(userInQ), r(r), i(i), state(state), sim(sim_),
-      simInt(sim, state), iteration(0), output(output), ta(0), game_time(0), ui(ui) {}
+      simInt(sim, state), iteration(0), output(output), ta(0), game_time(0),
+      ui(ui) {}
   void operator()(SDL_Event& e) {
     //cerr << ".";
     int new_game_time = (SDL_GetTicks() - start_time) / game_interval;
