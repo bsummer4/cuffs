@@ -5,7 +5,7 @@
   where interval must be less than 1000
 
   Reads lines from stdin.  Every 'interval' ms, send all the lines
-  that we have recieved with a interval count at the beginning.  If no
+  that we have recieved with a interval counter at the beginning.  If no
   lines were received in a given interval, then print a single, blank
   line for that interval.
 
@@ -38,7 +38,7 @@
 using namespace std;
 
 unsigned long interval = 5; // ms
-unsigned long count = 0;
+unsigned long counter = 0;
 bool sending = false;
 int queue_size = 0;
 char *queue[1024];
@@ -46,11 +46,11 @@ char *queue[1024];
 void send (int signum) {
   assert(!sending); // We can't handle this pace
   sending = true;
-  if (!queue_size) printf("%lu\n", count);
+  if (!queue_size) printf("%lu\n", counter);
   ITER (ii, 0, queue_size) {
-    printf("%lu %s\n", count, queue[ii]);
+    printf("%lu %s\n", counter, queue[ii]);
     free(queue[ii]); }
-  count++;
+  counter++;
   queue_size = 0;
   sending = false;}
 
@@ -73,5 +73,5 @@ int main(int argc, char **argv) {
   // report
   gettimeofday(&tv_1, &ignore);
   unsigned long intervals = timeval_diff(&tv_0, &tv_1) / (1000 * interval);
-  fprintf(stderr, "timing error: %lu vs %lu\n", intervals, count);
+  fprintf(stderr, "timing error: %lu vs %lu\n", intervals, counter);
   return 0; }

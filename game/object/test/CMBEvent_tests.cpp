@@ -60,7 +60,7 @@ void checkOrder2() {
   cout << "Passed" << endl;
 }
 
-int main() {
+int main(int argc, char ** argv) {
   cout << "================================================" << endl;
   cout << "Testing CMBEvent Class" << endl;
   checkOrder1();

@@ -56,7 +56,7 @@ void testThree() {
   assert(pq.top().eventOccurs==1);
 }
 
-int main() {
+int main(int argc, char **argv) {
   twoClients.push_back(1);
   twoClients.push_back(2);
   oneClient.push_back(1);
