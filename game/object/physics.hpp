@@ -152,7 +152,7 @@ namespace physics {
         projectiles.erase(*it);
       return messages; }};
 
-  class Rock : public SmartProjectile {
+  struct Rock : public SmartProjectile {
     Rock (Simulation *sim, string id,
           float x, float y, float dx, float dy)
       : SmartProjectile(sim, id, x, y, dx, dy) {};
@@ -183,15 +183,15 @@ namespace physics {
                    // all cases where we use it.
         if (find_hit(state.global->map, start, end, hit)) {
           erase = true;
-          messages.push_back(helper::msg_delete(id));
           messages.push_back(helper::msg_explode(hit.x, hit.y, 50));
+          messages.push_back(helper::msg_delete(id));
           return; }}
       messages.push_back(helper::msg_move(id, end.x, end.y)); }};
 
   SmartProjectile *make_projectile(Simulation *sim,
                                    const string type, const string id,
                                    float x, float y, float dx, float dy) {
-    return NULL; }
+    return new Rock(sim, id, x, y, dx, dy); }
 
   struct Interpreter {
     int count;
