@@ -162,12 +162,11 @@ int main(int num_args, char **args) {
   MsgQueue gameQ;
   sdl::Renderer render(sdl);
   render.inject_image("global", state.global->map.map);
-  render.new_image("player", "team-red.ppm");
+  render.new_image("player", "player.pgm");
   render.new_image("projectile", "rock.pgm");
   render.draw("global", 0, 0);
   render.flip();
   game::Interpreter i(state);
-
 
   // Gather up the process numbers of the players
   vector <int> clients;
