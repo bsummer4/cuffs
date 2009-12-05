@@ -68,6 +68,3 @@ int main() {
   cout << "Done Testing CMBQueue Class" << endl;
   cout << "================================================" << endl;
 }
-
-/// @}
-/// @}
