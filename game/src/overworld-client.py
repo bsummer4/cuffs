@@ -14,7 +14,9 @@ class OverworldFrame(wx.Frame):
     kwds["style"] = wx.DEFAULT_FRAME_STYLE
     wx.Frame.__init__(self, *args, **kwds)
     self.world = oworld
-    self.PlayerList = wx.ListBox(self, -1, choices=[], style=wx.LB_MULTIPLE|wx.LB_EXTENDED|wx.LB_NEEDED_SB, size=(150,400))
+    self.PlayerList = wx.ListBox(self, -1, choices=[],
+                                 style=wx.LB_MULTIPLE|wx.LB_EXTENDED|wx.LB_NEEDED_SB,
+                                 size=(150,400))
     self.Play = wx.Button(self, -1, "Play", style=wx.BU_EXACTFIT)
     self.Logout = wx.Button(self, -1, "Logout")
 
@@ -22,7 +24,7 @@ class OverworldFrame(wx.Frame):
     self.__do_layout()
     self.Bind(wx.EVT_BUTTON, self.OnPlay, id=self.Play.GetId())
     self.Bind(wx.EVT_BUTTON, self.OnLogout, id=self.Logout.GetId())
-    self.Bind(wx.EVT_CLOSE, self.OnLogout) 
+    self.Bind(wx.EVT_CLOSE, self.OnLogout)
 
   def __set_properties(self):
     self.SetTitle("Fistacuffs Lobby")
@@ -30,7 +32,8 @@ class OverworldFrame(wx.Frame):
   def __do_layout(self):
     OverFrameSizer = wx.FlexGridSizer(2, 1, 5, 5)
     ButtonBox = wx.BoxSizer(wx.HORIZONTAL)
-    OverFrameSizer.Add(self.PlayerList, 0, wx.EXPAND|wx.ALIGN_CENTER_HORIZONTAL, 0)
+    OverFrameSizer.Add(self.PlayerList, 0,
+                       wx.EXPAND|wx.ALIGN_CENTER_HORIZONTAL, 0)
     ButtonBox.Add((0, 0), 1, wx.EXPAND, 0)
     ButtonBox.Add(self.Play, 1, wx.EXPAND, 0)
     ButtonBox.Add(self.Logout, 1, wx.EXPAND, 0)
@@ -63,8 +66,9 @@ class Overworld(wx.App):
     self.OverFrame.Show(True)
     self.SetTopWindow(self.OverFrame)
     print "/login", self.username
-    print "/list" # This gets the currently logged in players.  
-                  # After this we just keep track of /login, /logout messages ourself
+    print "/list" # This gets the currently logged in players.  After
+                  # this we just keep track of /login, /logout
+                  # messages ourself
     sys.stdout.flush()
     return True
 
@@ -78,7 +82,8 @@ def listen(OverFrame):
         app.OverFrame.PlayerList.Append(arg)
     elif command == '/logout':
       for arg in args:
-        app.OverFrame.PlayerList.Delete(app.OverFrame.PlayerList.FindString(arg))
+        app.OverFrame.PlayerList.Delete (
+            app.OverFrame.PlayerList.FindString(arg))
     elif command == '/players':
       if username in args:
         args.remove(username)
@@ -86,12 +91,14 @@ def listen(OverFrame):
     elif command == '/play':
       sys.stderr.write('playing\n')
       if app.username in args:
-        os.system("./sixty-nine './game %s' './switchbox-connect %s %d'"%(app.username, 
-                                                                          app.hostname,
-                                                                          underworld_port))
+        os.system(
+            "./sixty-nine './game %s' './switchbox-connect %s %d'"%(
+                app.username,
+                app.hostname,
+                underworld_port))
 
 if __name__ == "__main__":
-  program,username,hostname = sys.argv
+  program, username, hostname = sys.argv
   app = Overworld(username,hostname)
   t = threading.Thread(target=listen, name="MainThread", args=(app,))
   t.start()

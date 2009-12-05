@@ -5,23 +5,22 @@
 
 ./ref team-A-names team-B-players
 
-example: ./ref fred,alex ben,james
+example: ./ref player1 [...]
 
-The first group of names belong to team1 and the second group
-belong to team 2.
-
-Ref will:
-  * Waits for all clients to "/identify $name" themselves
-  * Starts Game '/start'
-  * Place all the player objects ("0 /new player-$name player $x $y")
+The referee will:
+  * Wait for all clients to "/identify $name" themselves.
+  * Starts the game with '/start'
+  * Place all the player objects in their initial locations:
+      ("0 /new player-$name player $x $y")
 """
 
 import sys, os, random, time
 
-def randPos(): return random.randint(0, 800)
+def randX(): return random.randint(0, 800)
+def randY(): return random.randint(40, 120)
 
 def place_player(player):
-    return '/new player-%s player %d %d'%(player, randPos(), 80)
+    return '/new player-%s player %d %d'%(player, randX(), randY())
 
 def go(player_placements):
     sys.stdout.write('/map big' + "\n")
@@ -31,30 +30,23 @@ def go(player_placements):
         remain -= 1
         sys.stdout.write("0.%d %s\n"%(remain, placement_message))
 
-def wait_for_players(team_a, team_b):
+def wait_for_players(players_):
+    players = list(players_) # Copy because we modify it
     result = []
     while True:
-        if len(team_a) + len(team_b) == 0: break
-        message = sys.stdin.readline()
-        message_ = message.split()
-        if message_[1] != '/identify':
+        if not players: break
+        message = sys.stdin.readline().split()
+        if len(message) != 3 or message[1] != '/identify':
             raise Exception("bad /identify message")
-        who, command, player_name = message_
-        if player_name in team_a:
-            team_a.remove(player_name)
-        elif player_name in team_b:
-            team_b.remove(player_name)
-        else: continue
-        result.append(place_player(player_name))
+        who, command, player = message
+        if player in players:
+            players.remove(player)
+            result.append(place_player(player))
     return result
 
 if __name__ == '__main__':
-    if len(sys.argv) != 3:
-        print __doc__
-        exit(1)
-    command, team_a, team_b = sys.argv
-    player_messages = wait_for_players(team_a.split(','), team_b.split(','))
-    go(player_messages)
+    sys.stderr.write(" ".join(sys.argv))
+    go(wait_for_players(sys.argv[1:]))
 
     # TODO: We will need to send messages to keep the syncronizer
     # running.  This hack sorta works for now

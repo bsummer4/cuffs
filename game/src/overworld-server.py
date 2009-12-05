@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 """
-Usage: overServer.py 
+Usage: overServer.py
 Maintains a list of players currently on the switchbox
 interfaces with the rest of the game using stdin and stdout
 """
@@ -27,12 +27,13 @@ def playerUpdate():
             names = line[2:]
             pid = os.fork()
             if pid == 0:
-                os.system("../../../trunk/src/switchbox/switchbox %d"%game_port)
+                os.system("../../switchbox/src/switchbox %d"%game_port)
                 exit
             time.sleep(0.1) # just in case
-            os.system("./sixty-nine './ref.py %s %s' './switchbox-connect localhost %d'"%(firstname,
-                                                                                          ','.join(names),
-                                                                                           game_port))
+            os.system(
+                "./sixty-nine './ref.py %s' './switchbox-connect localhost %d'"%(
+                    ' '.join(names),
+                    game_port))
         sys.stdout.flush()
 
 if __name__ == '__main__':
