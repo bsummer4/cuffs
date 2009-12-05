@@ -89,7 +89,7 @@ def listen(OverFrame):
         args.remove(username)
       app.OverFrame.PlayerList.Set(args)
     elif command == '/play':
-      sys.stderr.write('playing\n')
+      print '/logout ' + app.username
       if app.username in args:
         os.system(
             "./sixty-nine './game %s' './switchbox-connect %s %d'"%(
