@@ -14,6 +14,7 @@ class LauncherFrame(wx.Frame):
     self.hostLabel = wx.StaticText(self, -1, 'Hostname:', name='hostlabel')
     self.hostBox = wx.TextCtrl(self,-1, name='host')
     self.hostBox.SetValue('localhost')
+    self.servercheck = wx.CheckBox(self, -1, 'Run Server?', name='servercheck')
     self.go = wx.Button(self, -1, "Go")
     self.quit = wx.Button(self, -1, "NoGo")
     self.launcher = launcher
@@ -31,17 +32,25 @@ class LauncherFrame(wx.Frame):
   def __do_layout(self):
     oversizer = wx.FlexGridSizer(2, 1, 5, 5)
     hbox = wx.FlexGridSizer(1,4,5,5)
+    vbox = wx.BoxSizer(wx.VERTICAL)
     buttonsizer = wx.BoxSizer(wx.HORIZONTAL)
-    hbox.Add(self.userLabel, 0, wx.EXPAND, 0)
-    hbox.Add(self.userBox, 1, wx.EXPAND, 1)
-    hbox.Add(self.userLabel, 0, wx.EXPAND, 2)
-    hbox.Add(self.hostBox, 1, wx.EXPAND, 3)
+
+    vbox.Add(self.userLabel, flag = wx.ALIGN_CENTER)
+    vbox.Add(self.servercheck, flag = wx.ALIGN_CENTER)
+
+    hbox.Add(self.userLabel, 0, wx.ALIGN_CENTER, 0)
+    hbox.Add(self.userBox, 1, 0, 1)
+    hbox.Add(vbox, 0, wx.EXPAND, 2)
+    hbox.Add(self.hostBox, 1, 0, 3)
+
     buttonsizer.Add((0,0), 1, wx.EXPAND, 0)
     buttonsizer.Add(self.go)
     buttonsizer.Add(self.quit)
     buttonsizer.Add((0,0), 1, wx.EXPAND, 0)
+
     oversizer.Add(hbox, 0, wx.EXPAND|wx.ALIGN_CENTER_HORIZONTAL, 0)
     oversizer.Add(buttonsizer, 1, wx.EXPAND|wx.ALIGN_CENTER_HORIZONTAL, 0)
+
     self.SetSizer(oversizer)
     oversizer.Fit(self)
     oversizer.AddGrowableRow(0)
