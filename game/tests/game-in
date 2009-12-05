@@ -9,6 +9,8 @@ sleep 1
 1 1.0 /explode 400 400 160
 2 1.0 /move player-fred 30 30
 5 1.0 /new SHOULD BE IGNORED BY CMB!!!!!
+1 2.0 hello
+0 2.0 wonderful day we're having!
 sleep 1
-1 1.0 The next line is a hack to cause a segfault so the test will exit
-2 0.0 /explode 0 0 1000
+1 3.0 The next line is a hack to cause a segfault so the test will exit
+2 3.0 /explode 0 0 1000

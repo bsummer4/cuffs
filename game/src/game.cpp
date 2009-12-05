@@ -32,9 +32,31 @@ struct InputHandler {
       if (event == keys[ii])
         return handler.handleEvent(results[ii]); }};
 
+class Explosion{
+  public:
+    int x, y, radius;
+    Explosion():x(0),y(0),radius(0){};
+    Explosion(int x,int y,int radius):x(x),y(y),radius(radius){};
+};
+
 struct UserInterface {
   Point cursor;
+  vector<Explosion> explosion_list;
   UserInterface() : cursor(0, 0) {}
+  void handleEvent(const string &event){
+    cerr << "UserInterface::handleEvent(): ";
+    istringstream i(event);
+
+    // Get the command from input
+    string command;
+    i >> command;
+    cerr << command << endl;
+    if (!command.compare("")) return;
+
+    if ( Interpreter::EXPLODE == Interpreter::hashCommand(command) ){
+      int x,y,radius;
+      i >> x >> y >> radius;
+      explosion_list.push_back(Explosion(x,y,radius));}}
   void render(State &state, vector <string> &output) {
     //cerr << "ui" << endl;
     if (!state.player_alive()) return;
@@ -47,6 +69,10 @@ struct UserInterface {
       circle << "circle 4 0 255 0 " << cursor.x << " " << cursor.y;
       output.push_back(line.str());
       output.push_back(circle.str()); }
+    // @TODO hack
+    if ( explosion_list.size() != 0 ){
+      output.push_back("play explode");
+      explosion_list.clear();}
     output.push_back("flip"); }};
 
 struct MouseHandler {
@@ -89,11 +115,14 @@ public:
     // someone with a slow computer could move slower than from fast
     // computers
     game_time = new_game_time;
+
     // cerr << "gametime++ -> " << game_time << endl;
-    handleAll <typeof(i)&> (gameInQ, i);
+    vector <string> stateChangeMsgs = gameInQ.popAll();
+    handleAll <typeof(i)&> (stateChangeMsgs, i);
+    handleAll <typeof(ui)&>(stateChangeMsgs, ui);
     // cerr << "1";
-    vector <string> ignore = userInQ.popAll();
-    handleAll <typeof(simInt)&> (ignore, simInt);
+    vector <string> userEvents = userInQ.popAll();
+    handleAll <typeof(simInt)&> (userEvents, simInt);
     // FOREACH (vector <string>, it, ignore)
     // cerr << "\t--" << *it << endl;
     // cerr << "2";
@@ -140,8 +169,9 @@ int main(int num_args, char **args) {
 
   // SDL
   chdir("../data");
-  sdl::SDL sdl(true);
+  sdl::SDL sdl(true, true);
   sdl.initVideo(800, 600, 32, "Rock-Throwing Game");
+  sdl.initAudio();
 
   // Ref Handshake
   PlayerMap players;
@@ -164,6 +194,7 @@ int main(int num_args, char **args) {
   render.inject_image("global", state.global->map.map);
   render.new_image("player", "player.pgm");
   render.new_image("projectile", "rock.pgm");
+  render.new_sound("explode", "explosion3.wav");
   render.draw("global", 0, 0);
   render.flip();
   game::Interpreter i(state);

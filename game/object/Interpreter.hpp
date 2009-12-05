@@ -8,6 +8,7 @@ namespace game {
   using namespace std;
 
   class Interpreter {
+  public: 
     typedef enum { NEW, DELETE, SET, QUERY, EXPLODE, MOVE, MAP, INVALID,
                    MESSAGE } command_hash_t;
   public:
@@ -62,8 +63,8 @@ namespace game {
       case INVALID:
       default:
         throw runtime_error("Invalid Command");}}
-  private:
-    command_hash_t hashCommand(string &command) {
+  public:
+    static command_hash_t hashCommand(string &command) {
       if (command.at(0) != '/') return MESSAGE;
       if (!command.compare(string("/new"))) return NEW;
       if (!command.compare(string("/delete"))) return DELETE;
