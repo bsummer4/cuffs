@@ -13,6 +13,11 @@ namespace physics {
     bool operator!=(const Point other) {
       return x != other.x || y != other.y; }};
 
+  struct Explosion{
+      int x, y, radius;
+      Explosion():x(0),y(0),radius(0){};
+      Explosion(int x,int y,int radius):x(x),y(y),radius(radius){};};
+
   bool on_map(game::Map &map, Point p) {
     Point min(0, 0), max(map.width - 1, map.height - 1);
     return !(p.x > max.x || p.x < min.x || p.y > max.y || p.y < min.y); }
@@ -121,9 +126,10 @@ namespace physics {
     game::Map &map; /// state.global.map.map
     game::State &state; /// Read-only
   public:
+    vector <Explosion> explosions; 
     bool playerMoved; /// Hack
     Simulation(game::State &s)
-      : state(s), map(s.global->map), playerMoved(false) {}
+      : map(s.global->map), state(s), playerMoved(false){}
     ~Simulation() { FOREACH (Projectiles, it, projectiles)
                       delete it->second; }
     void add(SmartProjectile *p) { projectiles[p->id] = p; }
@@ -198,21 +204,20 @@ namespace physics {
     game::State &state;
     Simulation &sim;
     Interpreter(Simulation &sim, game::State &state)
-      : sim(sim), count(0), state(state) {};
+      : count(0), state(state), sim(sim) {};
     void handleEvent(string s) {
-      //cerr << "&sim" << (unsigned long long) &sim << endl;
-      //cerr << "&state" << (unsigned long long) &state << endl;
-      //cerr << "Interpreter::Invoked!" << endl;
-      //cerr << "got player????? " << "player-" << state.username << endl;
-      //FOREACH (game::State::id_objects, it, state.objects)
-      //cerr << "  " << &it->first << endl;
       if (!state.has("player-" + state.username)) return;
       game::Object &player = state["player-" + state.username];
-      //cerr << "Interpreter::got us a player!" << endl;
 
       istringstream i(s);
       string command;
       if (!(i >> command)) return;
+
+      if (game::hashCommand(command) == game::EXPLODE ){
+        int x,y,radius;
+        i >> x >> y >> radius;
+        sim.explosions.push_back(Explosion(x,y,radius));
+        return;}
 
       if (!command.compare("shoot")) {
         string type;

@@ -17,10 +17,10 @@ namespace game {
   class GlobalObject : public Object {
   public:
     GlobalObject (const string &map_filename, sdl::SDL &sdl)
-      : map(MapLoader(map_filename, sdl)),
-        wind(0), gravity(0),
+      : Object("global", "global", 0, 0),
         mapname(map_filename),
-        Object("global", "global", 0, 0) {}
+        map(MapLoader(map_filename, sdl)),
+        wind(0), gravity(0) {}
     string mapname;
     Map map;
     float wind, gravity; };

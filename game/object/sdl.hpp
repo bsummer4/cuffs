@@ -29,8 +29,8 @@ namespace sdl {
     SDL_Surface *screen;
 
     SDL (bool video=false, bool audio=false)
-      : video(video), audio(audio), screen(NULL),
-        _video_initialized(false), _audio_initialized(false) {
+      : _video_initialized(false), _audio_initialized(false), 
+        video(video), audio(audio), screen(NULL){
       Uint32 flags = 0 | SDL_INIT_TIMER;
       if (video) flags = (flags | SDL_INIT_VIDEO);
       if (audio) flags = (flags | SDL_INIT_AUDIO);

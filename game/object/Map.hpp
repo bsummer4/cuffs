@@ -33,10 +33,10 @@ namespace game {
     sdl::SDL &sdl;
   public:
     SDL_Surface* map;
-    multimap<Team, Point> &spawn_points;
+    multimap<Team, Point> spawn_points;
 
     MapLoader(const string &filename, sdl::SDL &sdl)
-      : spawn_points(*new multimap<Team, Point>()), sdl(sdl) {
+      : sdl(sdl) {
       ifstream in(filename.c_str());
       if (!in.is_open()) throw runtime_error("Invalid map file.  ");
       map = NULL;

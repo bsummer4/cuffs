@@ -32,19 +32,12 @@ struct InputHandler {
       if (event == keys[ii])
         return handler.handleEvent(results[ii]); }};
 
-class Explosion{
-  public:
-    int x, y, radius;
-    Explosion():x(0),y(0),radius(0){};
-    Explosion(int x,int y,int radius):x(x),y(y),radius(radius){};
-};
 
 struct UserInterface {
   Point cursor;
-  vector<Explosion> explosion_list;
+  vector<physics::Explosion> explosion_list;
   UserInterface() : cursor(0, 0) {}
   void handleEvent(const string &event){
-    cerr << "UserInterface::handleEvent(): ";
     istringstream i(event);
 
     // Get the command from input
@@ -53,10 +46,10 @@ struct UserInterface {
     cerr << command << endl;
     if (!command.compare("")) return;
 
-    if ( Interpreter::EXPLODE == Interpreter::hashCommand(command) ){
+    if ( game::EXPLODE == game::hashCommand(command) ){
       int x,y,radius;
       i >> x >> y >> radius;
-      explosion_list.push_back(Explosion(x,y,radius));}}
+      explosion_list.push_back(physics::Explosion(x,y,radius));}}
   void render(State &state, vector <string> &output) {
     //cerr << "ui" << endl;
     if (!state.player_alive()) return;
@@ -124,6 +117,7 @@ public:
     // cerr << "1";
     vector <string> userEvents = userInQ.popAll();
     handleAll <typeof(simInt)&> (userEvents, simInt);
+    handleAll <typeof(simInt)&> (stateChangeMsgs, simInt);
     // FOREACH (vector <string>, it, ignore)
     // cerr << "\t--" << *it << endl;
     // cerr << "2";
@@ -169,7 +163,7 @@ int main(int num_args, char **args) {
   string username(args[1]);
 
   // SDL
-  chdir("../data");
+  assert(0 == chdir("../data"));
   sdl::SDL sdl(true, true);
   sdl.initVideo(800, 600, 32, "Rock-Throwing Game");
   sdl.initAudio();
@@ -222,7 +216,8 @@ int main(int num_args, char **args) {
   sdl.registerEventHandler(listen);
   sdl.registerEventHandler(pipeline);
   sdl.registerEventHandler(mh);
-  SDL_TimerID timer = SDL_AddTimer(40, gameLoopTimer, NULL);
+  SDL_TimerID timer;
+  timer = SDL_AddTimer(40, gameLoopTimer, NULL);
 
   // Run everything
   lr.start();

@@ -6,11 +6,21 @@
 
 namespace game {
   using namespace std;
+  typedef enum { NEW, DELETE, SET, QUERY, EXPLODE, MOVE, MAP, INVALID,
+                 MESSAGE } command_hash_t;
+  command_hash_t hashCommand(string &command) {
+    if (command.at(0) != '/') return MESSAGE;
+    if (!command.compare(string("/new"))) return NEW;
+    if (!command.compare(string("/delete"))) return DELETE;
+    if (!command.compare(string("/set"))) return SET;
+    if (!command.compare(string("/query"))) return QUERY;
+    if (!command.compare(string("/explode"))) return EXPLODE;
+    if (!command.compare(string("/move"))) return MOVE;
+    if (!command.compare(string("/map"))) return MAP;
+    return INVALID;}
 
   class Interpreter {
   public: 
-    typedef enum { NEW, DELETE, SET, QUERY, EXPLODE, MOVE, MAP, INVALID,
-                   MESSAGE } command_hash_t;
   public:
     Interpreter(State &state) : state(state) {}
     void handleEvent(const string &event) {
@@ -63,15 +73,4 @@ namespace game {
       case INVALID:
       default:
         throw runtime_error("Invalid Command");}}
-  public:
-    static command_hash_t hashCommand(string &command) {
-      if (command.at(0) != '/') return MESSAGE;
-      if (!command.compare(string("/new"))) return NEW;
-      if (!command.compare(string("/delete"))) return DELETE;
-      if (!command.compare(string("/set"))) return SET;
-      if (!command.compare(string("/query"))) return QUERY;
-      if (!command.compare(string("/explode"))) return EXPLODE;
-      if (!command.compare(string("/move"))) return MOVE;
-      if (!command.compare(string("/map"))) return MAP;
-      return INVALID;}
     State &state;};}
