@@ -26,4 +26,10 @@ else failure=0;
 fi
 
 rm $tmpfile
-if [ $failure = 0 ]; then echo "PASSED"; else echo "FAILED"; fi
+if [ $failure = 0 ]; then 
+  echo "PASSED"; 
+  exit 0 
+else 
+  echo "FAILED"; 
+  exit 1
+fi

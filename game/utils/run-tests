@@ -1,13 +1,17 @@
 #!/bin/sh
 
+testsfailed=0
+
 run() {
     while [ 1 ]
     do
         read line
         first_word=`echo $line | awk '{print \$1}'`
-        [ ! $first_word ] && exit
+        [ ! $first_word ] && exit $testsfailed
         echo running "test: '$line'"
         ./test $line
+        testsfailed=`expr $? + $testsfailed`
+        echo $testsfailed
     done
 }
 
