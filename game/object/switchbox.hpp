@@ -11,12 +11,10 @@ extern "C" {
 # include <assert.h>
 # include <poll.h>
 # include <pthread.h>
+# include "switchbox_client.h"
 }
 
 namespace switchbox {
-  extern "C" {
-#   include "switchbox_client.h"
-  }
   using namespace std;
 
   /// We can't just pass it to the string constructor because it might
