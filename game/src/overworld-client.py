@@ -94,11 +94,10 @@ def listen(OverFrame):
     elif command == '/play':
       print '/logout ' + app.username
       if app.username in args:
-        os.system(
-            "./sixty-nine './game %s' './switchbox-connect %s %d'"%(
-                app.username,
-                app.hostname,
-                underworld_port))
+        os.execlp("./sixty-nine", "./sixty-nine", './game %s'%(app.username),
+                                              './switchbox-connect %s %d'%(
+                                                              app.hostname,
+                                                          underworld_port))
 
 if __name__ == "__main__":
   program, username, hostname = sys.argv

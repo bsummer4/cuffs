@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import wx, sys, threading, os
+import wx, sys, threading, os, time
 
 underworld_port = 5151
 overworld_port = 38235
@@ -59,22 +59,21 @@ class LauncherFrame(wx.Frame):
     self.Layout()
 
   def OnGo(self, event):
+    sboxconnectstr = './switchbox-connect ' + self.launcher.hostname + " " + str(overworld_port)
     if self.servercheck.IsChecked():
       pid = os.fork()
       if pid == 0:
-        os.system("../../switchbox/src/switchbox %d"%overworld_port)
-        sys.exit(0)
+        os.execlp("../../switchbox/src/switchbox", "./../switchbox/src/switchbox", str(overworld_port))
+        sys.exit(1)
       else:
         pid = os.fork()
         if pid == 0:
-          os.system("./sixty-nine './overworld-server.py' './switchbox-connect localhost %d'"%(
-                                                                      overworld_port))
-          sys.exit(0)
-    os.system("./sixty-nine './overworld-client.py %s %s' './switchbox-connect %s %d'"%(
-                                                                      self.launcher.username,
-                                                                      self.launcher.hostname,
-                                                                      self.launcher.hostname,
-                                                                      overworld_port))
+          time.sleep(0.1)
+          os.execlp("./sixty-nine", './sixty-nine', "'./overworld-server.py'",sboxconnectstr)
+          sys.exit(1)
+    time.sleep(0.2)
+    oclientstr = './overworld-client.py %s %s'%( self.launcher.username, self.launcher.hostname)
+    os.execlp("./sixty-nine", './sixty-nine', oclientstr, sboxconnectstr)
     sys.exit(0)
 
   def OnNoGo(self, event):
