@@ -104,7 +104,7 @@ namespace cmb {
     /// Pass the constructor a vector of client addresses. Any messages
     /// received by clients not in this initial list are ignored.
     Queue(std::vector<int> &clients) : strictClients(true) {
-      FORII ((int)clients.size()) cmbQueue[clients[ii]];
+      FORII ((int)clients.size()){ cmbQueue[clients[ii]]; cerr << clients[ii] << endl; }
       assert(cmbQueue.size() == clients.size()); }
 
     /// Place the given Event message onto the queue associated with

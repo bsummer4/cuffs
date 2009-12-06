@@ -25,13 +25,17 @@ def place_player(player):
 
 def go(player_placements):
     sys.stdout.write('/map big' + "\n")
-    sys.stdout.write('/start' + "\n")
+    startstr = '/start '
+    for i,n in playerDict.iteritems():
+        startstr += str(i) + ":" + str(n) + " "
+    startstr += "\n"
+    sys.stdout.write(startstr)
     remain = len(player_placements)
     for placement_message in player_placements:
         remain -= 1
         sys.stdout.write("0.%d %s\n"%(remain, placement_message))
 
-def wait_for_players(players_):
+def wait_for_players(players_, playerDict):
     players = list(players_) # Copy because we modify it
     result = []
     while True:
@@ -43,12 +47,15 @@ def wait_for_players(players_):
         if player in players:
             players.remove(player)
             result.append(place_player(player))
+            playerDict[who] = player
     return result
 
 if __name__ == '__main__':
+    playerDict = {}
     sys.stderr.write(" ".join(sys.argv))
-    go(wait_for_players(sys.argv[1:len(sys.argv)-1]))
+    go(wait_for_players(sys.argv[1:len(sys.argv)-1],playerDict))
     annotation_file = open(sys.argv[-1], "w+")
+
 
     # TODO: We will need to send messages to keep the syncronizer
     # running.  This hack sorta works for now

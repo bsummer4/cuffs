@@ -91,6 +91,9 @@ namespace physics {
       return o.str(); }
     string msg_delete(string id) {
       ostringstream o; o << "/delete " << id;
+      return o.str(); }
+    string msg_annotate(string msg) {
+      ostringstream o; o << "/annotate " << msg;
       return o.str(); }}
 
   class Simulation;
@@ -165,6 +168,7 @@ namespace physics {
           if (feel_explosion(*it)) {
             erase = true;
             sim->_alive = false;
+            messages.push_back(helper::msg_annotate(id));
             messages.push_back(helper::msg_delete(id));
             return; }
         if (moved) {

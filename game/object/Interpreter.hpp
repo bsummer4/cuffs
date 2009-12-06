@@ -7,7 +7,7 @@
 namespace game {
   using namespace std;
   typedef enum { NEW, DELETE, SET, QUERY, EXPLODE, MOVE, MAP, INVALID,
-                 MESSAGE } command_hash_t;
+                 MESSAGE, ANNOTATE } command_hash_t;
   command_hash_t hashCommand(string &command) {
     if (command.at(0) != '/') return MESSAGE;
     if (!command.compare(string("/new"))) return NEW;
@@ -17,6 +17,7 @@ namespace game {
     if (!command.compare(string("/explode"))) return EXPLODE;
     if (!command.compare(string("/move"))) return MOVE;
     if (!command.compare(string("/map"))) return MAP;
+    if (!command.compare(string("/annotate"))) return ANNOTATE;
     return INVALID;}
 
   class Interpreter {
@@ -69,6 +70,9 @@ namespace game {
         break;
       case MESSAGE: {
         cerr << "Message: " << event << endl; }
+        break;
+      case ANNOTATE:
+        // Just ignore message
         break;
       case INVALID:
       default:
