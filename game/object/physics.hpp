@@ -109,7 +109,13 @@ namespace physics {
     float y() { return p.y; };
     float dx() { return p.dx; };
     float dy() { return p.dy; };
-    virtual void update(game::State&, vector <string>&, bool&) = 0; };
+    virtual void update(game::State&, vector <string>&, bool&, vector<Explosion>&) = 0; 
+    /// Returns the ammount of damage taken by the explosion.
+    int feel_explosion(Explosion &e){
+        if ( hypot(p.x-e.x,p.y-e.y) < e.radius ) {
+            // Right now just return the radius
+            return e.radius;}
+        return 0;}};
 
   /// Maintain projectils we (a client) are responsible for.  We
   /// examine things in the state object to determine their effects on
@@ -167,7 +173,7 @@ namespace physics {
     /// changes.  if (erase) then we should be removed from the
     /// simulation.
     virtual void update(game::State &state, vector <string> &messages,
-                        bool &erase) {
+                        bool &erase, vector<Explosion> &explosions) {
       erase = false;
       Point start(x(), y());
 
@@ -179,6 +185,12 @@ namespace physics {
         erase = true;
         messages.push_back(helper::msg_delete(id));
         return; }
+      FOREACH(vector<Explosion>, it, explosions){
+        if ( feel_explosion(*it) > 0 ){
+          erase = true;
+          messages.push_back(helper::msg_explode(p.x, p.y, 50));
+          messages.push_back(helper::msg_delete(id));
+          return; }}
 
       // Modify ourself
       p.accelerate(state.global->wind, state.global->gravity);
