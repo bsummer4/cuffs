@@ -141,8 +141,8 @@ namespace sdl {
       applySurface(x, y, images[id], sdl.screen); }
     void play(string id) {
       if (!sounds.count(id)) throw runtime_error("No such sound");
-      assert(-1 != Mix_PlayChannel(-1, sounds[id], 0)); }
-
+      if (-1 != Mix_PlayChannel(-1, sounds[id], 0)) 
+          cerr << "Warning: Unable to play sound:" << id << endl; } 
     void draw_line(int width, int red, int green, int blue,
                    int x0, int y0, int x1, int y1) {
       // cerr << "draw_line" << width << red << green << blue << x0 << y0 << x1 << y1 << endl;
