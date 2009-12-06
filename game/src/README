@@ -38,7 +38,7 @@ on-screen output (render).
 To run the game do:
 
     xterm0> cd $SBDIR; ./switchbox 38235
-    xterm1> ./sixty-nine './ref.py ben john' './switchbox-connect localhost 38235'
+    xterm1> ./sixty-nine './ref.py ben john annotations.txt' './switchbox-connect localhost 38235'
     xterm2> ./sixty-nine './game ben' './switchbox-connect localhost 38235'
     xterm3> ./sixty-nine './game john' './switchbox-connect localhost 38235'
 
