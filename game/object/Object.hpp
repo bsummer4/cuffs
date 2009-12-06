@@ -40,7 +40,7 @@ namespace game {
       if (!property.compare("type")) return type;
       throw runtime_error("Invalid ID for getting.  "); }
 
-    string &setProperty(const string &property, const string &value) {
+    void setProperty(const string &property, const string &value) {
       if (!property.compare("x")) x = atoi(value.c_str());
       else if (!property.compare("y")) y = atoi(value.c_str());
       else throw runtime_error("Invalid ID for setting.  "); }
