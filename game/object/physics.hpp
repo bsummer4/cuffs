@@ -98,8 +98,8 @@ namespace physics {
   // Virtual
   struct SmartProjectile {
   public:
-    bool is_new;
     Simulation *sim;
+    bool is_new;
     string id;
     Projectile p;
     SmartProjectile (Simulation *sim, string id,
@@ -126,16 +126,17 @@ namespace physics {
   /// describing the changes which can be given to the state
   /// interpreter (or broadcast over a network).
   class Simulation {
+
     typedef string id;
     typedef std::map <id, SmartProjectile*> Projectiles;
-    Projectiles projectiles;
     game::Map &map; /// state.global.map.map
     game::State &state; /// Read-only
+    Projectiles projectiles;
   public:
-    vector <Explosion> explosions; 
-    bool playerMoved; /// Hack
+    bool _alive;
+    vector <Explosion> explosions;
     Simulation(game::State &s)
-      : map(s.global->map), state(s), playerMoved(false){}
+      : map(s.global->map), state(s), _alive(false) {}
     ~Simulation() { FOREACH (Projectiles, it, projectiles)
                       delete it->second; }
     void add(SmartProjectile *p) { projectiles[p->id] = p; }
@@ -145,23 +146,52 @@ namespace physics {
       return (p->x() > max.x || p->x() < min.x ||
               p->y() > max.y || p->y() < min.y); }
 
+    SmartProjectile *player() {
+      if (!_alive)
+        throw runtime_error
+          ("Trying to get at player object before it is created");
+      return projectiles["player-" + state.username]; }
+
+    class PlayerProj : public SmartProjectile {
+    public:
+      bool moved;
+      PlayerProj(game::Object &player, Simulation *sim)
+        : SmartProjectile (sim, player.id, player.x, player.y, 0, 0),
+          moved(false) {}
+      virtual void update(game::State &state, vector <string> &messages,
+                          bool &erase, vector <Explosion> &explosions) {
+        erase = false;
+        FOREACH (vector <Explosion>, it, explosions)
+          if (feel_explosion(*it)) {
+            erase = true;
+            sim->_alive = false;
+            messages.push_back(helper::msg_delete(id));
+            return; }
+        if (moved)
+          messages.push_back(helper::msg_move(id, x(), y())); }};
+
+    bool alive() {
+      if (_alive) return true;
+      if (!state.player_alive()) return false;
+      add(new PlayerProj(state.player(), this));
+      _alive = true;
+      return true; }
+
     /// Update all projectiles and return a sequence of message for
     /// the interpreter to update the state.
     vector <string> move() {
       vector <string> erase_after_loop;
       vector <string> messages;
-      if (playerMoved) {
-        game::Object &player = state.player();
-        messages.push_back(helper::msg_move(player.id, player.x, player.y));
-        playerMoved = false; }
+      alive();
       FOREACH (Projectiles, it, projectiles) {
         id id(it->first);
         SmartProjectile *p = it->second;
         bool erase;
-        p->update(state, messages, erase);
+        p->update(state, messages, erase, explosions);
         if (erase) erase_after_loop.push_back(id); }
       FOREACH (vector <string>, it, erase_after_loop)
         projectiles.erase(*it);
+      explosions.clear();
       return messages; }};
 
   struct Rock : public SmartProjectile {
@@ -218,34 +248,34 @@ namespace physics {
     Interpreter(Simulation &sim, game::State &state)
       : count(0), state(state), sim(sim) {};
     void handleEvent(string s) {
-      if (!state.has("player-" + state.username)) return;
-      game::Object &player = state["player-" + state.username];
-
       istringstream i(s);
       string command;
       if (!(i >> command)) return;
 
-      if (game::hashCommand(command) == game::EXPLODE ){
+      if (game::hashCommand(command) == game::EXPLODE) {
         int x,y,radius;
         i >> x >> y >> radius;
         sim.explosions.push_back(Explosion(x,y,radius));
-        return;}
+        return; }
+
+      if (!sim.alive()) return;
+      Simulation::PlayerProj *player = reinterpret_cast
+        <Simulation::PlayerProj*>
+        (sim.player());
 
       if (!command.compare("shoot")) {
         string type;
         float dx, dy;
         if (!(i >> type >> dx >> dy)) return;
-
         ostringstream s_id;
         s_id << state.username << "-" << type << "-" << count++;
         string id = s_id.str();
         sim.add(make_projectile(&sim, type, id,
-                                player.x, player.y, dx, dy)); }
+                                player->x(), player->y(), dx, dy)); }
 
       if (!command.compare("move")) {
         float dx, dy;
         i >> dx >> dy;
-        /// @TODO hack!!!
-        player.x += dx;
-        player.y += dy;
-        sim.playerMoved = true; }}};}
+        player->p.x += dx;
+        player->p.y += dy;
+        player->moved = true; }}};}

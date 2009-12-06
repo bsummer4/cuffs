@@ -82,15 +82,14 @@ namespace misc {
   /// Max line length is 1024
   template <typename H>
   class LineReader : public Threaded {
+    istream &in;
+    H h;
   public:
     LineReader(istream &in, H handler) : in(in), h(handler) {}
     void run() {
       char buffer[1024];
       while (!stopRequested && in.getline(buffer, 1024))
-        h.handleEvent(string(buffer)); }
-  private:
-    H h;
-    istream &in;};
+        h.handleEvent(string(buffer)); }};
 
   /// Basically lets you attach cout to an event handler.
   class Printer {

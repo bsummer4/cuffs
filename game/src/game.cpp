@@ -87,9 +87,9 @@ class Pipeline {
   game::State &state;
   physics::Simulation &sim;
   physics::Interpreter simInt;
-  cmb::TimestampAdder ta;
-  O output;
   int iteration;
+  O output;
+  cmb::TimestampAdder ta;
   int game_time;
   UserInterface &ui;
 
@@ -110,30 +110,21 @@ public:
     // computers
     game_time = new_game_time;
 
-    // cerr << "gametime++ -> " << game_time << endl;
     vector <string> stateChangeMsgs = gameInQ.popAll();
     handleAll <typeof(i)&> (stateChangeMsgs, i);
     handleAll <typeof(ui)&>(stateChangeMsgs, ui);
-    // cerr << "1";
     vector <string> userEvents = userInQ.popAll();
     handleAll <typeof(simInt)&> (userEvents, simInt);
     handleAll <typeof(simInt)&> (stateChangeMsgs, simInt);
-    // FOREACH (vector <string>, it, ignore)
-    // cerr << "\t--" << *it << endl;
-    // cerr << "2";
     vector <string> stuff(sim.move());
-    // cerr << "3";
     ta.time = game_time;
-    // cerr << "4";
 
     vector <string> output_messages = ta(stuff);
     handleAll <typeof(output)&> (output_messages, output);
-    // cerr << "5";
     vector <string> render_messages;
     render_state(state, render_messages);
     ui.render(state, render_messages);
     handleAll <typeof(r)&> (render_messages, r);
-    // cerr << "6";
     iteration++; }};
 
 void ref_handshake(string username, PlayerMap &players, string &map,
@@ -174,7 +165,6 @@ int main(int num_args, char **args) {
   int ref_address;
   ref_handshake(username, players, mapname, ref_address);
   start_time = SDL_GetTicks();
-  // cerr << "Handshake done" << endl;
 
   if (!mapname.size()) throw runtime_error("No map given");
   mapname += ".map";
@@ -201,7 +191,6 @@ int main(int num_args, char **args) {
     clients.push_back((*it).first);
 
   // IO and Pipeline
-  // cerr << "Starting Pipeline" << endl;
   MsgQueue inQ, userQ;
   Printer p;
   UserInterface ui;
@@ -221,7 +210,6 @@ int main(int num_args, char **args) {
 
   // Run everything
   lr.start();
-  // cerr << "Running event loop" << endl;
   sdl.runEventLoop();
 
   return 0; }
