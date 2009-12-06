@@ -1,6 +1,9 @@
 #include <unistd.h>
 #include <assert.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 void close_pipes(int *p, int *q) {
   close(p[0]); close(p[1]); close(q[0]); close(q[1]); }

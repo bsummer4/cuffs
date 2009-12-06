@@ -47,7 +47,7 @@ using namespace misc;
 template <typename H>
 class Dispatcher {
 public:
-  Dispatcher(Queue <string> &q, H handler) : q(q), count_(0), h(handler) {}
+  Dispatcher(Queue <string> &q, H handler) : h(handler), count_(0), q(q) {}
   void operator()() { handleQueue(); }
   unsigned long count() { return count_; }
 private:

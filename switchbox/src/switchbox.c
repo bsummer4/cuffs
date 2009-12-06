@@ -414,7 +414,7 @@ void setup_connection(Socket s) {
   Client *client = get_new_client(s);
   if (debug)
     printf("setup_connection: assigning client #%d [socket 0x%x].  \n",
-           client - clients, (unsigned) s);
+           (int) (client - clients), (unsigned) s);
   pthread_create(&(client->thread), NULL, handle_connection, client);
 }
 

@@ -62,8 +62,8 @@ namespace misc {
       : handler(handler), predicate(predicate) {}
     void handleEvent(string e) { if (predicate(e)) handler.handleEvent(e); }
   private:
-    P predicate;
-    H handler; };
+    H handler;
+    P predicate; };
 
   /// Uses a functor or function pointer to translate between two
   /// message formats.
@@ -75,8 +75,8 @@ namespace misc {
       : handler(handler), translate(translate) {}
     void handleEvent(string e) { handler.handleEvent(translate(e)); }
   private:
-    T translate;
-    H handler; };
+    H handler;
+    T translate; };
 
   /// Reads lines from a stream and sends them to a signal handler.
   /// Max line length is 1024

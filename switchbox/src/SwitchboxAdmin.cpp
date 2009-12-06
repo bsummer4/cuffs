@@ -21,7 +21,7 @@ void SwitchboxAdmin::handleAnnounceMessage(SBMessage * msg) {
   admin_message *admin = (admin_message*) msg->data;
 
   if(debug)
-    printf("0x%x, %d, %d, %d\n",
+    printf("%p, %d, %d, %d\n",
            msg, admin->task, admin->group_number, msg->size);
 
   if(admin->task == DEFINE_GROUP) {

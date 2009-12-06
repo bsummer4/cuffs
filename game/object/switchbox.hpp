@@ -53,8 +53,8 @@ namespace switchbox {
   template <typename H>
   class Connection : public Threaded {
   public:
-    const int switchbox_port;
     const string switchbox_hostname;
+    const int switchbox_port;
 
     Connection(const string switchbox_hostname, const int switchbox_port,
                H handler)
@@ -93,9 +93,9 @@ namespace switchbox {
       close_connection(_connection); }
 
   protected:
-    H handler;
-    Socket _connection;
     int _address;
+    Socket _connection;
+    H handler;
     boost::mutex sendLock;
 
     /// Whenever we get an announcement we extract our address from it
