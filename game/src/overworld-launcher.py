@@ -25,6 +25,7 @@ class LauncherFrame(wx.Frame):
     self.Bind(wx.EVT_BUTTON, self.OnNoGo, id=self.quit.GetId())
     self.Bind(wx.EVT_TEXT, self.OnChange, id=self.userBox.GetId())
     self.Bind(wx.EVT_TEXT, self.OnChange, id=self.hostBox.GetId())
+    self.Bind(wx.EVT_CHECKBOX, self.OnCheck, id=self.servercheck.GetId())
 
   def __set_properties(self):
     self.SetTitle("Fistacuffs Launcher")
@@ -57,15 +58,32 @@ class LauncherFrame(wx.Frame):
     self.Layout()
 
   def OnGo(self, event):
+    if self.servercheck.IsChecked():
+      pid = os.fork()
+      if pid == 0:
+        os.system("../../switchbox/src/switchbox 5151")
+        sys.exit(0)
+      else:
+        pid = os.fork()
+        if pid == 0:
+          os.system("./overworld-server.py")
+          sys.exit(0)
     os.system("./overworld-client.py %s %s"%(self.launcher.username, self.launcher.hostname))
     sys.exit(0)
 
   def OnNoGo(self, event):
-    sys.exit(1)
+    sys.exit(0)
 
   def OnChange(self, event):
     self.launcher.username = self.userBox.GetValue()
     self.launcher.hostname = self.hostBox.GetValue()
+
+  def OnCheck(self, event):
+    if self.servercheck.IsChecked():
+      self.hostBox.SetValue("localhost")
+      self.hostBox.SetEditable(False)
+    else:
+      self.hostBox.SetEditable(True)
 
 class Launcher(wx.App):
   def OnInit(self):
