@@ -1,5 +1,5 @@
 #AM_LDFLAGS = -lpthread -lboost_thread
-AM_LDFLAGS = @SDL_LIBS@  -lSDL_image -lSDL_draw -lSDL_mixer \
+AM_LDFLAGS = @SDL_LIBS@  -lSDL_image -lSDL_gfx -lSDL_mixer \
              -lboost_thread
 AM_CXXFLAGS = -Wall -O0 -g -I../object -I../../switchbox/src @SDL_CFLAGS@
 AM_CFLAGS = $(AM_CXXFLAGS)

@@ -2,7 +2,7 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_mixer.h>
-#include <SDL_draw.h>
+#include <SDL/SDL_gfxPrimitives.h>
 #include <string>
 #include <map>
 #include <vector>
@@ -147,14 +147,14 @@ namespace sdl {
                    int x0, int y0, int x1, int y1) {
       // cerr << "draw_line" << width << red << green << blue << x0 << y0 << x1 << y1 << endl;
       ITER (offset, -width, width + 1)
-        Draw_Line (sdl.screen, MAX(0, x0 + offset), y0,
+        lineRGBA (sdl.screen, MAX(0, x0 + offset), y0,
                    MAX(0, x1 + offset), y1,
-                   SDL_MapRGB(sdl.screen->format, red, green, blue)); }
+                   red, green, blue, 255); }
 
     void draw_circle(int radius, int red, int green, int blue,
                    int x, int y){
-      Draw_FillCircle (sdl.screen, x, y, radius,
-                 SDL_MapRGB(sdl.screen->format, red, green, blue)); }
+      filledCircleRGBA(sdl.screen, x, y, radius,
+                 red, green, blue, 255); }
 
     void handleEvent(std::string event) {
       // cerr << " [render]-> " << event << endl;

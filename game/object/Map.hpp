@@ -75,8 +75,9 @@ namespace game {
     void explosion(int center_x, int center_y, float radius) {
       if (radius <= 0) return;
       Uint32 color = SDL_MapRGB(map->format, MAP_EMPTY, MAP_EMPTY, MAP_EMPTY);
-      Draw_FillCircle(map, center_x, center_y, radius, color);
-      Draw_FillCircle(map, center_x, center_y, radius, color); }
+      /// @TODO Should there be two of these here? -John
+      filledCircleRGBA(map, center_x, center_y, radius, MAP_EMPTY, MAP_EMPTY, MAP_EMPTY, 255);
+      filledCircleRGBA(map, center_x, center_y, radius, MAP_EMPTY, MAP_EMPTY, MAP_EMPTY, 255); }
 
     const int width, height, max_pixel;
     const multimap<Team, Point> &spawn_points;
