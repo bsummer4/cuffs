@@ -70,8 +70,9 @@ class LauncherFrame(wx.Frame):
           os.system("./sixty-nine './overworld-server.py' './switchbox-connect localhost %d'"%(
                                                                       overworld_port))
           sys.exit(0)
-    os.system("./sixty-nine './overworld-client.py %s %s' './switchbox-connect localhost %d'"%(
+    os.system("./sixty-nine './overworld-client.py %s %s' './switchbox-connect %s %d'"%(
                                                                       self.launcher.username,
+                                                                      self.launcher.hostname,
                                                                       self.launcher.hostname,
                                                                       overworld_port))
     sys.exit(0)
