@@ -75,6 +75,7 @@ class Overworld(wx.App):
 def listen(OverFrame):
   while True:
     line_text = sys.stdin.readline()
+    if not line_text: break # EOF
     line = line_text.split()
     origin = line[0]
     line = line[1:]
