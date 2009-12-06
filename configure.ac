@@ -47,7 +47,7 @@ PKG_CHECK_MODULES(SDL, sdl >= 1.2)
 ## libsdl
 AC_CHECK_HEADER(SDL/SDL.h, FOUND_SDL=1, FOUND_SDL=0)
 AC_CHECK_HEADER(SDL/SDL_image.h, FOUND_SDL_IMAGE=1, FOUND_SDL_IMAGE=0)
-AC_CHECK_HEADER(SDL/SDL_gfx.h, FOUND_SDL_GFX=1, FOUND_SDL_GFX=0)
+AC_CHECK_HEADER(SDL/SDL_gfxPrimitives.h, FOUND_SDL_GFX=1, FOUND_SDL_GFX=0)
 if test $FOUND_SDL != 1; then
     AC_MSG_ERROR([SDL.h Not found but is needed.])
 fi
@@ -58,7 +58,7 @@ if test $FOUND_SDL_IMAGE != 1; then
     AC_MSG_ERROR([SDL_mixer.h Not found but is needed.])
 fi
 if test $FOUND_SDL_GFX != 1; then
-    AC_MSG_ERROR([SDL/SDL_gfx.h Not found but is needed. Please make sure it is installed.])
+    AC_MSG_ERROR([SDL_gfx Not found but is needed. Please make sure it is installed.])
 fi
 
 ## Check for Programs
