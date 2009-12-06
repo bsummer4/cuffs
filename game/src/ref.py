@@ -5,13 +5,14 @@
 
 ./ref team-A-names team-B-players
 
-example: ./ref player1 [...]
+example: ./ref player1 [...] annotation_filename
 
 The referee will:
   * Wait for all clients to "/identify $name" themselves.
   * Starts the game with '/start'
   * Place all the player objects in their initial locations:
       ("0 /new player-$name player $x $y")
+  * Record all /annotate messages
 """
 
 import sys, os, random, time
@@ -46,7 +47,8 @@ def wait_for_players(players_):
 
 if __name__ == '__main__':
     sys.stderr.write(" ".join(sys.argv))
-    go(wait_for_players(sys.argv[1:]))
+    go(wait_for_players(sys.argv[1:len(sys.argv)-1]))
+    annotation_file = open(sys.argv[-1], "w+")
 
     # TODO: We will need to send messages to keep the syncronizer
     # running.  This hack sorta works for now
@@ -54,6 +56,12 @@ if __name__ == '__main__':
     time.sleep(1)
     sys.stdout.write("100000.0 hihihi\n")
     sys.stdout.flush()
+    annotations = []
     while True:
-        sys.stderr.write(sys.stdin.readline())
+        line = sys.stdin.readline()
+        if ( line.split()[1] == "/annotate" ):
+            annotations.append(line)
+            annotation_file.write(line)
+        sys.stderr.write(line)
         sys.stderr.flush()
+    close(annotation_file)

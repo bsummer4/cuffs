@@ -31,7 +31,7 @@ def playerUpdate():
                 exit
             time.sleep(0.1) # just in case
             os.system(
-                "./sixty-nine './ref.py %s' './switchbox-connect localhost %d'"%(
+                "./sixty-nine './ref.py %s annoations.txt' './switchbox-connect localhost %d'"%(
                     ' '.join(names),
                     game_port))
         sys.stdout.flush()
