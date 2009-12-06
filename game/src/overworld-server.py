@@ -25,8 +25,7 @@ def playerUpdate():
         elif line[0] == '/list':
             sys.stdout.write("/players " + " ".join(playerlist) + "\n")
         elif line[0] == '/play':
-            firstname = line[1]
-            names = line[2:]
+            firstname = line[1:]
             pid = os.fork()
             if pid == 0:
                 os.system("../../switchbox/src/switchbox %d"%game_port)
