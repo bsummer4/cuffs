@@ -13,6 +13,8 @@
 using namespace misc;
 using namespace game;
 
+static int explosion_decrease = 4;
+
 typedef Queue <string> MsgQueue;
 typedef map <int,string> PlayerMap;
 
@@ -36,7 +38,8 @@ struct InputHandler {
 struct UserInterface {
   Point cursor;
   vector<physics::Explosion> explosion_list;
-  UserInterface() : cursor(0, 0) {}
+  bool new_explosion;
+  UserInterface() : cursor(0, 0), new_explosion(false) {}
   void handleEvent(const string &event){
     istringstream i(event);
 
@@ -47,7 +50,8 @@ struct UserInterface {
     if (game::EXPLODE == game::hashCommand(command)){
       int x,y,radius;
       i >> x >> y >> radius;
-      explosion_list.push_back(physics::Explosion(x,y,radius));}}
+      explosion_list.push_back(physics::Explosion(x,y,radius));
+      new_explosion = true;}}
 
   void render(State &state, vector <string> &output) {
     if (!state.player_alive()) return;
@@ -60,9 +64,18 @@ struct UserInterface {
       output.push_back(line.str());
       output.push_back(circle.str()); }
     // @TODO hack
-    if ( explosion_list.size() != 0 ){
+    if ( new_explosion ){
       output.push_back("play explode");
-      explosion_list.clear(); }}};
+      new_explosion=false; }
+    FORII(explosion_list.size()){
+      physics::Explosion &e = explosion_list[ii];
+      ostringstream explosion;
+      explosion << "circle " << e.radius << " 255 0 0 " << e.x << " " << e.y;
+      output.push_back(explosion.str());
+      e.radius -= explosion_decrease;
+      if ( e.radius <= 0 ) {
+        explosion_list.erase(explosion_list.begin()+ii);
+        ii--;}}}};
 
 struct MouseHandler {
   sdl::SDL &sdl;

@@ -151,6 +151,11 @@ namespace sdl {
                    MAX(0, x1 + offset), y1,
                    SDL_MapRGB(sdl.screen->format, red, green, blue)); }
 
+    void draw_circle(int radius, int red, int green, int blue,
+                   int x, int y){
+      Draw_FillCircle (sdl.screen, x, y, radius,
+                 SDL_MapRGB(sdl.screen->format, red, green, blue)); }
+
     void handleEvent(std::string event) {
       // cerr << " [render]-> " << event << endl;
       istringstream in(event);
@@ -170,6 +175,10 @@ namespace sdl {
         int width, red, green, blue, x0, y0, x1, y1;
         in >> width >> red >> green >> blue >> x0 >> y0 >> x1 >> y1;
         draw_line(width, red, green, blue, x0, y0, x1, y1); }
+      if (!command.compare("circle")) {
+        int radius, red, green, blue, x0, y0;
+        in >> radius >> red >> green >> blue >> x0 >> y0;
+        draw_circle(radius, red, green, blue, x0, y0); }
       if (!command.compare("sound")) {
         string id, filename;
         in >> id >> filename;
