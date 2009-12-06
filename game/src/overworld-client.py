@@ -76,6 +76,8 @@ def listen(OverFrame):
   while True:
     line_text = sys.stdin.readline()
     line = line_text.split()
+    origin = line[0]
+    line = line[1:]
     command, args = line[0], line[1:]
     if command == '/login':
       for arg in args:

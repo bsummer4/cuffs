@@ -67,10 +67,10 @@ class LauncherFrame(wx.Frame):
       else:
         pid = os.fork()
         if pid == 0:
-          os.system("./sixty-nine './overworld-server.py' './switchbox-cat localhost %d'"%(
+          os.system("./sixty-nine './overworld-server.py' './switchbox-connect localhost %d'"%(
                                                                       overworld_port))
           sys.exit(0)
-    os.system("./sixty-nine './overworld-client.py %s %s' './switchbox-cat localhost %d'"%(
+    os.system("./sixty-nine './overworld-client.py %s %s' './switchbox-connect localhost %d'"%(
                                                                       self.launcher.username,
                                                                       self.launcher.hostname,
                                                                       overworld_port))

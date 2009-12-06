@@ -16,6 +16,8 @@ def playerUpdate():
         line_text = sys.stdin.readline()
         if not line_text: return # EOF
         line = line_text.split()
+        origin = line[0]
+        line = line[1:]
         if line[0] == '/login':
             playerlist.append(line[1])
         elif line[0] == '/logout':
