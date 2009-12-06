@@ -3,7 +3,7 @@
 import wx, sys, threading, os
 
 underworld_port = 5151
-overworld_port = 6969
+overworld_port = 38235
 
 # Launcher GUI Frame
 class LauncherFrame(wx.Frame):
@@ -62,15 +62,15 @@ class LauncherFrame(wx.Frame):
     if self.servercheck.IsChecked():
       pid = os.fork()
       if pid == 0:
-        os.system("../../switchbox/src/switchbox 6969")
+        os.system("../../switchbox/src/switchbox %d"%overworld_port)
         sys.exit(0)
       else:
         pid = os.fork()
         if pid == 0:
-          os.system("./sixty-nine './overworld-server.py' './switchbox-connect localhost %d'"%(
+          os.system("./sixty-nine './overworld-server.py' './switchbox-cat localhost %d'"%(
                                                                       overworld_port))
           sys.exit(0)
-    os.system("./sixty-nine './overworld-client.py %s %s' './switchbox-connect localhost %d'"%(
+    os.system("./sixty-nine './overworld-client.py %s %s' './switchbox-cat localhost %d'"%(
                                                                       self.launcher.username,
                                                                       self.launcher.hostname,
                                                                       overworld_port))
