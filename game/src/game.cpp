@@ -43,7 +43,7 @@ struct UserInterface {
     // Get the command from input
     string command;
     i >> command;
-    cerr << command << endl;
+    // cerr << command << endl;
     if (!command.compare("")) return;
 
     if ( game::EXPLODE == game::hashCommand(command) ){
@@ -135,13 +135,16 @@ void ref_handshake(string username, PlayerMap &players, string &map,
     if (!cin.getline(buffer, 1024)) assert(false && "badness");
     istringstream i(buffer); int from; string command;
     i >> from >> command;
-    if (!command.compare("/identify")) {
-      string name; i >> name;
-      players[from] = name;
-      continue; }
+    if (!command.compare("/identify")) continue;
     if (!command.compare("/map")) { i >> map; continue; }
-    if (!command.compare("/start")) { ref = from; return; }
-    throw runtime_error("Bad handshake message"); }}
+    if (!command.compare("/start")) {
+      int id; char colon; string player;
+      while (i >> id >> colon >> player)
+        players[id] = player;
+      if (!i.eof()) throw runtime_error("syntax error in /start message");
+      ref = from;
+      return; } 
+   throw runtime_error("Bad handshake message"); }}
 
 Uint32 gameLoopTimer(Uint32 interval, void* param) {
   SDL_UserEvent event = {SDL_USEREVENT, 0, NULL, NULL};
