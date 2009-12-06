@@ -167,8 +167,9 @@ namespace physics {
             sim->_alive = false;
             messages.push_back(helper::msg_delete(id));
             return; }
-        if (moved)
-          messages.push_back(helper::msg_move(id, x(), y())); }};
+        if (moved) {
+          messages.push_back(helper::msg_move(id, x(), y()));
+          moved = false; }}};
 
     bool alive() {
       if (_alive) return true;
