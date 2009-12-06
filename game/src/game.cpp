@@ -43,17 +43,14 @@ struct UserInterface {
     // Get the command from input
     string command;
     i >> command;
-    // cerr << command << endl;
     if (!command.compare("")) return;
-
-    if ( game::EXPLODE == game::hashCommand(command) ){
+    if (game::EXPLODE == game::hashCommand(command)){
       int x,y,radius;
       i >> x >> y >> radius;
       explosion_list.push_back(physics::Explosion(x,y,radius));}}
+
   void render(State &state, vector <string> &output) {
-    //cerr << "ui" << endl;
     if (!state.player_alive()) return;
-    //cerr << "UI" << endl;
     game::Object &player = state.player();
     { ostringstream line, circle;
       line << "line 2 0 255 0 "
@@ -65,8 +62,7 @@ struct UserInterface {
     // @TODO hack
     if ( explosion_list.size() != 0 ){
       output.push_back("play explode");
-      explosion_list.clear();}
-    output.push_back("flip"); }};
+      explosion_list.clear(); }}};
 
 struct MouseHandler {
   sdl::SDL &sdl;
@@ -104,10 +100,7 @@ public:
     //cerr << ".";
     int new_game_time = (SDL_GetTicks() - start_time) / game_interval;
     if (new_game_time <= game_time) return;
-    // TODO If we have moved forward multiple steps, then we need to
-    // physics stuff every step in between.  Otherwise objects from
-    // someone with a slow computer could move slower than from fast
-    // computers
+    int old_time = game_time;
     game_time = new_game_time;
 
     vector <string> stateChangeMsgs = gameInQ.popAll();
@@ -116,15 +109,16 @@ public:
     vector <string> userEvents = userInQ.popAll();
     handleAll <typeof(simInt)&> (userEvents, simInt);
     handleAll <typeof(simInt)&> (stateChangeMsgs, simInt);
-    vector <string> stuff(sim.move());
-    ta.time = game_time;
-
-    vector <string> output_messages = ta(stuff);
-    handleAll <typeof(output)&> (output_messages, output);
+    ITER (time, old_time + 1, new_game_time + 1) {
+      vector <string> stuff = sim.move();
+      ta.time = time;
+      vector <string> output_messages = ta(stuff);
+      handleAll <typeof(output)&> (output_messages, output); }
     vector <string> render_messages;
     render_state(state, render_messages);
     ui.render(state, render_messages);
     handleAll <typeof(r)&> (render_messages, r);
+    r.flip();
     iteration++; }};
 
 void ref_handshake(string username, PlayerMap &players, string &map,
