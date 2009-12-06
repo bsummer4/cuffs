@@ -66,9 +66,9 @@ if __name__ == '__main__':
     annotations = []
     while True:
         line = sys.stdin.readline()
-        if ( line.split()[1] == "/annotate" ):
+        if ( line.split()[2] == "/annotate" ):
             annotations.append(line)
             annotation_file.write(line)
-        sys.stderr.write(line)
-        sys.stderr.flush()
+            sys.stderr.write(line)
+            sys.stderr.flush()
     close(annotation_file)
