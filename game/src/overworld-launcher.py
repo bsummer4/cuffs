@@ -36,11 +36,11 @@ class LauncherFrame(wx.Frame):
     vbox = wx.BoxSizer(wx.VERTICAL)
     buttonsizer = wx.BoxSizer(wx.HORIZONTAL)
 
-    vbox.Add(self.userLabel, flag = wx.ALIGN_CENTER)
+    vbox.Add(self.hostLabel, flag = wx.ALIGN_CENTER)
     vbox.Add(self.servercheck, flag = wx.ALIGN_CENTER)
 
     hbox.Add(self.userLabel, 0, wx.ALIGN_CENTER, 0)
-    hbox.Add(self.userBox, 1, 0, 1)
+    hbox.Add(self.userBox, 1, wx.ALIGN_CENTER, 1)
     hbox.Add(vbox, 0, wx.EXPAND, 2)
     hbox.Add(self.hostBox, 1, 0, 3)
 
