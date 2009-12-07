@@ -82,10 +82,21 @@ namespace sdl {
     SDL_FreeSurface(old);
     *surface = result; }
 
+  void make_white_undrawn(SDL_Surface* surface, SDL &s) {
+    const Uint32 white = SDL_MapRGB(surface->format, 255, 255, 255);
+    SDL_SetColorKey(surface, SDL_SRCCOLORKEY, white); }
+
+  SDL_Surface *load_image_(string filename, SDL &s) {
+    SDL_Surface *result = IMG_Load(filename.c_str());
+    if (!result) throw runtime_error("Couldn't load image.  ");
+    if (s.video_initialized()) optimize(&result, s);
+    return result; }
+
   SDL_Surface *load_image(string filename, SDL &s) {
     SDL_Surface *result = IMG_Load(filename.c_str());
     if (!result) throw runtime_error("Couldn't load image.  ");
     if (s.video_initialized()) optimize(&result, s);
+    make_white_undrawn(result, s);
     return result; }
 
   void applySurface(int x, int y,
@@ -129,6 +140,8 @@ namespace sdl {
         delete it->second;
         images.erase(it); }}
 
+    
+
     SDL_Surface *new_image(string id, string filename) {
       return (images[id] = load_image(filename, sdl)); }
 
@@ -136,6 +149,12 @@ namespace sdl {
       return (sounds[id] = Mix_LoadWAV(filename.c_str())); }
 
     void flip() { SDL_Flip(sdl.screen); }
+    void draw_center(string id, int x, int y) {
+      if (!images.count(id)) throw runtime_error("No such image");
+      SDL_Surface *image = images[id];
+      x -= image->w / 2;
+      y -= image->h / 2;
+      applySurface(x, y, image, sdl.screen); }
     void draw(string id, int x, int y) {
       if (!images.count(id)) throw runtime_error("No such image");
       applySurface(x, y, images[id], sdl.screen); }
@@ -143,6 +162,8 @@ namespace sdl {
       if (!sounds.count(id)) throw runtime_error("No such sound");
       if (-1 != Mix_PlayChannel(-1, sounds[id], 0)) 
           cerr << "Warning: Unable to play sound:" << id << endl; } 
+    void white() {
+      boxRGBA(sdl.screen, 0, 0, sdl.screen->w, sdl.screen->h, 255, 255, 255, 255); }
     void draw_line(int width, int red, int green, int blue,
                    int x0, int y0, int x1, int y1) {
       // cerr << "draw_line" << width << red << green << blue << x0 << y0 << x1 << y1 << endl;
@@ -166,9 +187,12 @@ namespace sdl {
         string id, filename;
         in >> id >> filename;
         new_image(id, filename); }
+      if (!command.compare("draw-center")) {
+        string id; int x, y;
+        in >> id >> x >> y;
+        draw_center(id, x, y); };
       if (!command.compare("draw")) {
-        string id;
-        int x, y;
+        string id; int x, y;
         in >> id >> x >> y;
         draw(id, x, y); };
       if (!command.compare("line")) {

@@ -21,23 +21,9 @@ typedef map <int,string> PlayerMap;
 static int start_time; // set in main
 const static int game_interval = 50;
 
-template <typename H>
-struct InputHandler {
-  H handler;
-  InputHandler(H handler) : handler(handler) {}
-  void handleEvent(string event) {
-    string keys[5] = {"space", "left", "right", "up", "down"};
-    string results[5] = {"shoot rock -10 -5",
-                         "move -5 0", "move 5 0",
-                         "move 0 -5", "move 0 5"};
-    FORII(5)
-      if (event == keys[ii])
-        return handler.handleEvent(results[ii]); }};
-
-
 struct UserInterface {
   Point cursor;
-  vector<physics::Explosion> explosion_list;
+  vector <physics::Explosion> explosion_list;
   bool new_explosion;
   bool new_shot;
   UserInterface() : cursor(0, 0), new_explosion(false) {}
@@ -57,11 +43,10 @@ struct UserInterface {
       new_explosion = true;
     break;
     case game::NEW:
-      // Ignore the event of the player starting
-      if ( event.find("player-") == string::npos ) new_shot = true;
+      if (event.find(" projectile ") != string::npos) new_shot = true;
     break;
     default:
-    break;}}
+    break; }}
 
   void render(State &state, vector <string> &output) {
     if (!state.player_alive()) return;
@@ -69,12 +54,12 @@ struct UserInterface {
     { ostringstream line, circle;
       line << "line 2 0 255 0 "
            << cursor.x << " " << cursor.y << " "
-           << player.x << " " << player.y;
-      circle << "circle 4 0 255 0 " << cursor.x << " " << cursor.y;
+           << player.x << " " << player.y - 8; // TODO an evil magic number
+      circle << "circle 7 0 255 0 " << cursor.x << " " << cursor.y;
       output.push_back(line.str());
       output.push_back(circle.str()); }
     // @TODO hack
-    if ( new_explosion ){
+    if (new_explosion) {
       output.push_back("play explode");
       new_explosion=false; }
     if ( new_shot ){
@@ -89,6 +74,30 @@ struct UserInterface {
       if ( e.radius <= 0 ) {
         explosion_list.erase(explosion_list.begin()+ii);
         ii--;}}}};
+
+template <typename H>
+struct InputHandler {
+  H handler;
+  UserInterface &ui;
+  physics::Simulation &sim;
+  InputHandler(H handler, UserInterface &ui, physics::Simulation &sim) 
+    : handler(handler), ui(ui), sim(sim) {}
+  void handleEvent(string event) {
+    if (event == "space") {
+      if (!sim.alive()) return;
+      physics::SmartProjectile *player = sim.player();
+      int dx = ui.cursor.x - player->x();
+      int dy = ui.cursor.y - player->y();
+      ostringstream o;
+      o << "shoot rock " << dx << " " << dy << endl;
+      cerr << o.str();
+      handler.handleEvent(o.str()); }
+      
+    string keys[4] = {"left", "right", "up"};
+    string results[4] = {"move -5 -5", "move 5 -5", "move 0 -20"};
+    FORII(4)
+      if (event == keys[ii])
+        handler.handleEvent(results[ii]); }};
 
 struct MouseHandler {
   sdl::SDL &sdl;
@@ -143,6 +152,7 @@ public:
     vector <string> render_messages;
     render_state(state, render_messages);
     ui.render(state, render_messages);
+    r.white();
     handleAll <typeof(r)&> (render_messages, r);
     r.flip();
     iteration++; }};
@@ -194,7 +204,7 @@ int main(int num_args, char **args) {
 
   // Game State and logic objects
   State state(mapname, username, sdl);
-  state.global->wind = 0.5;
+  state.global->wind = 0.05;
   state.global->gravity = 0.4;
   physics::Simulation sim(state);
   MsgQueue gameQ;
@@ -224,7 +234,7 @@ int main(int num_args, char **args) {
   LineReader <typeof(sync)&> lr(cin, sync);
 
   // Event handling
-  InputHandler <typeof(userQ)&> h(userQ);
+  InputHandler <typeof(userQ)&> h(userQ, ui, sim);
   sdl::KeyListener <typeof(h)&> listen(h, sdl);
   sdl.registerEventHandler(listen);
   sdl.registerEventHandler(pipeline);
@@ -237,3 +247,4 @@ int main(int num_args, char **args) {
   sdl.runEventLoop();
 
   return 0; }
+

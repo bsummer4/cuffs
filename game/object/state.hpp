@@ -48,15 +48,12 @@ namespace game {
       objects[o->id] = o; }};
 
   vector <string> render_state(game::State &s, vector <string> &output) {
-    output.push_back("draw global 0 0");
     FOREACH (State::id_objects, it, s.objects) {
       Object &object = *(it->second);
       string type = object.type;
-      if (!type.compare("global")) continue; // This goes first
+      if (!type.compare("global")) continue; // This goes last
       ostringstream o;
-      o << "draw " << type << " " << object.x << " " << object.y;
+      o << "draw-center " << type << " " << object.x << " " << object.y;
       output.push_back(o.str()); }
-    //output.push_back("flip");
-    // cerr << "drawing messages:" << endl;
-    // FOREACH (vector <string>, it, output) cerr << "    " << *it << endl;
+    output.push_back("draw global 0 0");
     return output; };};

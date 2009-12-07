@@ -13,10 +13,10 @@ namespace physics {
     bool operator!=(const Point other) {
       return x != other.x || y != other.y; }};
 
-  struct Explosion{
+  struct Explosion {
       int x, y, radius;
-      Explosion():x(0),y(0),radius(0){};
-      Explosion(int x,int y,int radius):x(x),y(y),radius(radius){};};
+      Explosion() : x(0), y(0), radius(0) {}
+      Explosion(int x,int y,int radius) : x(x), y(y), radius(radius) {}};
 
   bool on_map(game::Map &map, Point p) {
     Point min(0, 0), max(map.width - 1, map.height - 1);
@@ -114,11 +114,11 @@ namespace physics {
     float dy() { return p.dy; };
     virtual void update(game::State&, vector <string>&, bool&, vector<Explosion>&) = 0; 
     /// Returns the ammount of damage taken by the explosion.
-    int feel_explosion(Explosion &e){
-        if ( hypot(p.x-e.x,p.y-e.y) < e.radius ) {
+    int feel_explosion(Explosion &e) {
+        if (hypot(p.x - e.x, p.y - e.y) < e.radius) {
             // Right now just return the radius
-            return e.radius;}
-        return 0;}};
+            return e.radius; }
+        return 0; }};
 
   /// Maintain projectils we (a client) are responsible for.  We
   /// examine things in the state object to determine their effects on
@@ -133,15 +133,16 @@ namespace physics {
     typedef string id;
     typedef std::map <id, SmartProjectile*> Projectiles;
     game::Map &map; /// state.global.map.map
-    game::State &state; /// Read-only
     Projectiles projectiles;
   public:
+    game::State &state; /// Read-only
     bool _alive;
+    bool dead;
     vector <Explosion> explosions;
     Simulation(game::State &s)
-      : map(s.global->map), state(s), _alive(false) {}
+      : map(s.global->map), state(s), _alive(false), dead(false) {}
     ~Simulation() { FOREACH (Projectiles, it, projectiles)
-                      delete it->second; }
+                    delete it->second; }
     void add(SmartProjectile *p) { projectiles[p->id] = p; }
     bool irrelevant(SmartProjectile *p) {
       Point min(-2 * map.width, -2 * map.height);
@@ -157,10 +158,10 @@ namespace physics {
 
     class PlayerProj : public SmartProjectile {
     public:
-      bool moved;
+      bool stuck;
       PlayerProj(game::Object &player, Simulation *sim)
         : SmartProjectile (sim, player.id, player.x, player.y, 0, 0),
-          moved(false) {}
+          stuck(false) {}
       virtual void update(game::State &state, vector <string> &messages,
                           bool &erase, vector <Explosion> &explosions) {
         erase = false;
@@ -168,18 +169,36 @@ namespace physics {
           if (feel_explosion(*it)) {
             erase = true;
             sim->_alive = false;
+            sim->dead = true;
             messages.push_back(helper::msg_annotate(id));
             messages.push_back(helper::msg_delete(id));
             return; }
-        if (moved) {
-          messages.push_back(helper::msg_move(id, x(), y()));
-          moved = false; }}};
+
+        assert(sim->_alive);
+        if (stuck) return;
+        
+        Point start(x(), y());
+        p.accelerate(state.global->wind, state.global->gravity);
+        p.move();
+        Point end(x(), y());
+
+        Point hit;
+        if (find_hit(state.global->map, start, end, hit)) {
+          stuck = true;
+          p.dx = p.dy = 0;
+          end = hit; }
+        p.x = end.x; p.y = end.y;
+	if (start != end)
+          messages.push_back(helper::msg_move(id, end.x, end.y));  }};
 
     bool alive() {
+      if (dead) return false;
       if (_alive) return true;
       if (!state.player_alive()) return false;
+      assert(!dead && !_alive && state.player_alive());
       add(new PlayerProj(state.player(), this));
       _alive = true;
+      assert(!dead && _alive && state.player_alive());
       return true; }
 
     /// Update all projectiles and return a sequence of message for
@@ -187,7 +206,6 @@ namespace physics {
     vector <string> move() {
       vector <string> erase_after_loop;
       vector <string> messages;
-      alive();
       FOREACH (Projectiles, it, projectiles) {
         id id(it->first);
         SmartProjectile *p = it->second;
@@ -221,7 +239,7 @@ namespace physics {
         messages.push_back(helper::msg_delete(id));
         return; }
       FOREACH(vector<Explosion>, it, explosions){
-        if ( feel_explosion(*it) > 0 ){
+        if (feel_explosion(*it) > 0) {
           erase = true;
           messages.push_back(helper::msg_explode(p.x, p.y, 50));
           messages.push_back(helper::msg_delete(id));
@@ -265,8 +283,7 @@ namespace physics {
 
       if (!sim.alive()) return;
       Simulation::PlayerProj *player = reinterpret_cast
-        <Simulation::PlayerProj*>
-        (sim.player());
+        <Simulation::PlayerProj*> (sim.player());
 
       if (!command.compare("shoot")) {
         string type;
@@ -276,11 +293,15 @@ namespace physics {
         s_id << state.username << "-" << type << "-" << count++;
         string id = s_id.str();
         sim.add(make_projectile(&sim, type, id,
-                                player->x(), player->y(), dx, dy)); }
+                                player->x(), player->y() - 8, dx, dy)); }
 
       if (!command.compare("move")) {
-        float dx, dy;
-        i >> dx >> dy;
-        player->p.x += dx;
-        player->p.y += dy;
-        player->moved = true; }}};}
+        float dx, dy; i >> dx >> dy;
+        Point current(player->x(), player->y());
+        Point dest(current.x + dx, current.y + dy);
+        Point hit;
+        if (find_hit(sim.state.global->map, current, dest, hit))
+          dest = hit;
+        player->p.x = dest.x;
+        player->p.y = dest.y;
+        player->stuck = false; }}};}
