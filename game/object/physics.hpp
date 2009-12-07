@@ -18,6 +18,9 @@ namespace physics {
       Explosion() : x(0), y(0), radius(0) {}
       Explosion(int x,int y,int radius) : x(x), y(y), radius(radius) {}};
 
+  bool on_x_border(game::Map &map, Point p) {
+    return p.x == 0 || p.x == map.width - 1; }
+
   bool on_map(game::Map &map, Point p) {
     Point min(0, 0), max(map.width - 1, map.height - 1);
     return !(p.x > max.x || p.x < min.x || p.y > max.y || p.y < min.y); }
@@ -52,6 +55,8 @@ namespace physics {
     ystep = (y0 < y1) ? 1 : -1;
     for (int x = x0; x < x1; x++) {
       Point current = steep ? Point(y, x) : Point(x, y);
+      if (on_x_border(map,current))
+        hits.push_back(current);
       if (on_map(map,current) && map.is_solid(current.x, current.y))
         hits.push_back(current);
       error += deltaerr;
@@ -112,13 +117,18 @@ namespace physics {
     float y() { return p.y; };
     float dx() { return p.dx; };
     float dy() { return p.dy; };
-    virtual void update(game::State&, vector <string>&, bool&, vector<Explosion>&) = 0; 
+    void push(float from_x, float from_y, float power) {
+      /// @TODO Do this right...
+      p.dy -= power; }
+    virtual void update(game::State&, vector <string>&, bool&,
+                        vector<Explosion>&) = 0;
+
     /// Returns the ammount of damage taken by the explosion.
     int feel_explosion(Explosion &e) {
-        if (hypot(p.x - e.x, p.y - e.y) < e.radius) {
-            // Right now just return the radius
-            return e.radius; }
-        return 0; }};
+      int distance = hypot(p.x - e.x, p.y - e.y);
+      if (distance >= e.radius) return 0;
+      /// @TODO This is still overly simplistic
+      return e.radius - distance; }};
 
   /// Maintain projectils we (a client) are responsible for.  We
   /// examine things in the state object to determine their effects on
@@ -142,11 +152,11 @@ namespace physics {
     Simulation(game::State &s)
       : map(s.global->map), state(s), _alive(false), dead(false) {}
     ~Simulation() { FOREACH (Projectiles, it, projectiles)
-                    delete it->second; }
+        delete it->second; }
     void add(SmartProjectile *p) { projectiles[p->id] = p; }
     bool irrelevant(SmartProjectile *p) {
-      Point min(-2 * map.width, -2 * map.height);
-      Point max(3 * map.width, 3 * map.height);
+      Point min(-2 * map.width, -20 * map.height);
+      Point max(3 * map.width, 1 * map.height);
       return (p->x() > max.x || p->x() < min.x ||
               p->y() > max.y || p->y() < min.y); }
 
@@ -165,18 +175,21 @@ namespace physics {
       virtual void update(game::State &state, vector <string> &messages,
                           bool &erase, vector <Explosion> &explosions) {
         erase = false;
-        FOREACH (vector <Explosion>, it, explosions)
-          if (feel_explosion(*it)) {
+        FOREACH (vector <Explosion>, it, explosions) {
+          int damage;
+          if ((damage = feel_explosion(*it))) {
             erase = true;
             sim->_alive = false;
-            sim->dead = true;
-            messages.push_back(helper::msg_annotate(id));
-            messages.push_back(helper::msg_delete(id));
-            return; }
+            // sim->dead = true;
+            // messages.push_back(helper::msg_annotate(id));
+            // messages.push_back(helper::msg_delete(id));
+            push(it->x, it->y, damage);
+            stuck = false;
+            return; }}
 
         assert(sim->_alive);
         if (stuck) return;
-        
+
         Point start(x(), y());
         p.accelerate(state.global->wind, state.global->gravity);
         p.move();
@@ -188,7 +201,7 @@ namespace physics {
           p.dx = p.dy = 0;
           end = hit; }
         p.x = end.x; p.y = end.y;
-	if (start != end)
+        if (start != end)
           messages.push_back(helper::msg_move(id, end.x, end.y));  }};
 
     bool alive() {

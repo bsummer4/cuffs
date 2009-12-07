@@ -65,7 +65,7 @@ struct UserInterface {
     if ( new_shot ){
       output.push_back("play shot");
       new_shot = false;}
-    FORII(explosion_list.size()){
+    FORII((int)explosion_list.size()){
       physics::Explosion &e = explosion_list[ii];
       ostringstream explosion;
       explosion << "circle " << e.radius << " 255 0 0 " << e.x << " " << e.y;
@@ -80,7 +80,7 @@ struct InputHandler {
   H handler;
   UserInterface &ui;
   physics::Simulation &sim;
-  InputHandler(H handler, UserInterface &ui, physics::Simulation &sim) 
+  InputHandler(H handler, UserInterface &ui, physics::Simulation &sim)
     : handler(handler), ui(ui), sim(sim) {}
   void handleEvent(string event) {
     if (event == "space") {
@@ -92,7 +92,7 @@ struct InputHandler {
       o << "shoot rock " << dx << " " << dy << endl;
       cerr << o.str();
       handler.handleEvent(o.str()); }
-      
+
     string keys[6] = {"left", "right", "up", "a", "w", "d"};
     string results[6] = {"move -5 -5", "move 5 -5", "move 0 -20",
                          "move -5 -5", "move 5 -5", "move 0 -20"};
@@ -174,7 +174,7 @@ void ref_handshake(string username, PlayerMap &players, string &map,
         players[id] = player;
       if (!i.eof()) throw runtime_error("syntax error in /start message");
       ref = from;
-      return; } 
+      return; }
    throw runtime_error("Bad handshake message"); }}
 
 Uint32 gameLoopTimer(Uint32 interval, void* param) {
@@ -248,4 +248,3 @@ int main(int num_args, char **args) {
   sdl.runEventLoop();
 
   return 0; }
-

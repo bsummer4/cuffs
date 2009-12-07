@@ -6,7 +6,7 @@ using namespace misc;
 using namespace std;
 
 int main(int argc, char *argv[]) {
-  chdir("../data");
+  assert(chdir("../data"));
   sdl::SDL s(true, true);
   s.initVideo(800, 600, 32, "Rendering Utillity");
   s.initAudio();

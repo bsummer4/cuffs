@@ -13,7 +13,7 @@
 using namespace std;
 
 int main (int argc, char **argv) {
-  chdir("../data");
+  assert(chdir("../data"));
   sdl::SDL sdl(true);
   try {
     game::State state("example.map", "username", sdl);

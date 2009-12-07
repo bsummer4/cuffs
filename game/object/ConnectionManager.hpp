@@ -1,4 +1,4 @@
-#pragma once 
+#pragma once
 
 #include <map>
 #include <vector>
@@ -16,15 +16,15 @@ namespace sb_io{
 bool CMDEBUG=false;
 using namespace std;
 
-/** 
- * PrinterConnection takes the Connection function and 
- * just prints any message it gets to stdout instead of queuing it. 
+/**
+ * PrinterConnection takes the Connection function and
+ * just prints any message it gets to stdout instead of queuing it.
  */
 class PrinterConnection : public Connection{
     public:
-    PrinterConnection(const char * switchbox_hostname, const int switchbox_port) 
+    PrinterConnection(const char * switchbox_hostname, const int switchbox_port)
         : Connection(switchbox_hostname, switchbox_port){};
-    
+
 
     virtual void
     receiveUpdate(){
@@ -39,7 +39,7 @@ class PrinterConnection : public Connection{
                     cout << "-1 new_connection " << result->from << endl;}
                 else if ( adm->task == LOST_CONNECTION ){
                     cout << "-1 lost_connection " << result->from << endl;}}}
-        else { 
+        else {
             // Normal message, write to stdout
             cout << result->from << " " << result->data;}}
     private:
@@ -76,7 +76,7 @@ class ConnectionManager{
             return true;}
         /**
          * Remove (disconnect) a connection from the ConnectionManager
-         * 
+         *
          * This function will cause the Connection to disconnect from the switchbox.
          * The memory will also have delete called on it.
          *
@@ -92,7 +92,7 @@ class ConnectionManager{
                 Connection* con = (*it).second;
                 cout << (*it).second->getMessageCount() << endl;
                 con->stop();
-                connection_map.erase(it); 
+                connection_map.erase(it);
                 delete con;
                 return true;
             }
@@ -100,10 +100,10 @@ class ConnectionManager{
         /**
          * Send a message with the given key'd connection.
          *
-         * @param key The key of the message to send. 
+         * @param key The key of the message to send.
          * @param msg The message you wish to send.
-         * @param msgl The length of the message. 
-         * 
+         * @param msgl The length of the message.
+         *
          * @returns True if the message sent, False if failed.
          */
         virtual bool sendMessage(int key, char* msg, int msgl){
@@ -149,7 +149,7 @@ class ConnectionManager{
         unsigned int port;
 };
 
-/** 
+/**
  * Special Connection Class I need to tell me who just connected.
  * only used for the RemoteConnectionManager Object
  */
@@ -164,7 +164,7 @@ class MonitorConnection : public Connection{
                 if ( adm->task == NEW_CONNECTION ){
                     new_connections.push_back(msg->from);}
             }
-            // Now that we're done inspecting the message let the connection object do 
+            // Now that we're done inspecting the message let the connection object do
             // its real work.
             return Connection::handleAnnounceMessage(msg);}
         void resetConnectionList(){
@@ -178,9 +178,9 @@ class MonitorConnection : public Connection{
 class RemoteConnectionManager : public ConnectionManager{
     public:
         RemoteConnectionManager(std::string hostname, unsigned int port)
-            : ConnectionManager(hostname,port), remoteClients(false), 
+            : ConnectionManager(hostname,port), remoteClients(false),
             privateSwitchboxPort(3214), forwarderConnection(NULL){}
-              
+
         ~RemoteConnectionManager(){
             char buf[512];
             if (CMDEBUG) cerr << "Destructor" << endl;
@@ -198,7 +198,7 @@ class RemoteConnectionManager : public ConnectionManager{
         bool addRemoteConnection(int key, std::string remote_hostname){
             char command[2048];
             if ( !remoteClients ){
-                // I am the first, so I need to spawn a switchbox and create a connection to it. 
+                // I am the first, so I need to spawn a switchbox and create a connection to it.
                 system("./switchbox.sh start");
                 char buf[1024];
                 if ( 0 != gethostname(buf,1024)){
@@ -215,20 +215,20 @@ class RemoteConnectionManager : public ConnectionManager{
                 remoteClients = true;
                 usleep(100000);}
             forwarderConnection->resetConnectionList();
-            snprintf(command, 2048, "ssh -f %s \"%s/repeater %s %i %s %i %i\"",                 
+            snprintf(command, 2048, "ssh -f %s \"%s/repeater %s %i %s %i %i\"",
                     remote_hostname.c_str(),
                     mycwd.c_str(),
-                    hostname.c_str(),     
-                    port,        
-                    privateSwitchboxAddress.c_str(),    
-                    privateSwitchboxPort,       
-                    key);  
+                    hostname.c_str(),
+                    port,
+                    privateSwitchboxAddress.c_str(),
+                    privateSwitchboxPort,
+                    key);
             if (CMDEBUG) cerr << command << endl;
             assert(0 == system(command));
             vector<int> newConnections;
             int counter = 0;
             while ( newConnections.size() == 0 ){
-                /// @TODO This is kind of ugly just polling, if it turns out to 
+                /// @TODO This is kind of ugly just polling, if it turns out to
                 /// become wasteful make sure to change it.
                 usleep(10000);
                 newConnections = forwarderConnection->getNewConnections();
@@ -241,9 +241,9 @@ class RemoteConnectionManager : public ConnectionManager{
             std::map<int,int>::iterator it;
             it = key_to_remote_address.find(key);
             if ( it != key_to_remote_address.end() ){
-                forwarderConnection->sendMessage(msgl+4*sizeof(int), 
-                                                 UNICAST, 
-                                                 it->second, 
+                forwarderConnection->sendMessage(msgl+4*sizeof(int),
+                                                 UNICAST,
+                                                 it->second,
                                                  msg);
                 return true;}
             else{

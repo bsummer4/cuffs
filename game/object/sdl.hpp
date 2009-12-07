@@ -29,7 +29,7 @@ namespace sdl {
     SDL_Surface *screen;
 
     SDL (bool video=false, bool audio=false)
-      : _video_initialized(false), _audio_initialized(false), 
+      : _video_initialized(false), _audio_initialized(false),
         video(video), audio(audio), screen(NULL){
       Uint32 flags = 0 | SDL_INIT_TIMER;
       if (video) flags = (flags | SDL_INIT_VIDEO);
@@ -140,8 +140,6 @@ namespace sdl {
         delete it->second;
         images.erase(it); }}
 
-    
-
     SDL_Surface *new_image(string id, string filename) {
       return (images[id] = load_image(filename, sdl)); }
 
@@ -160,13 +158,13 @@ namespace sdl {
       applySurface(x, y, images[id], sdl.screen); }
     void play(string id) {
       if (!sounds.count(id)) throw runtime_error("No such sound");
-      if (-1 != Mix_PlayChannel(-1, sounds[id], 0)) 
-          cerr << "Warning: Unable to play sound:" << id << endl; } 
+      if (-1 != Mix_PlayChannel(-1, sounds[id], 0))
+          cerr << "Warning: Unable to play sound:" << id << endl; }
     void white() {
-      boxRGBA(sdl.screen, 0, 0, sdl.screen->w, sdl.screen->h, 255, 255, 255, 255); }
+      boxRGBA(sdl.screen, 0, 0, sdl.screen->w, sdl.screen->h,
+              255, 255, 255, 255); }
     void draw_line(int width, int red, int green, int blue,
                    int x0, int y0, int x1, int y1) {
-      // cerr << "draw_line" << width << red << green << blue << x0 << y0 << x1 << y1 << endl;
       ITER (offset, -width, width + 1)
         lineRGBA (sdl.screen, MAX(0, x0 + offset), y0,
                    MAX(0, x1 + offset), y1,

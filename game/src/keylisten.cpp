@@ -7,7 +7,7 @@ using namespace sdl;
 using namespace std;
 
 int main(int argc, char *argv[]) {
-  chdir("../data");
+  assert(chdir("../data"));
   SDL sdl(true);
   sdl.initVideo(800, 600, 32, "KeyListener");
   misc::Printer p;
