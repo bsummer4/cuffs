@@ -39,6 +39,7 @@ struct UserInterface {
   Point cursor;
   vector<physics::Explosion> explosion_list;
   bool new_explosion;
+  bool new_shot;
   UserInterface() : cursor(0, 0), new_explosion(false) {}
   void handleEvent(const string &event){
     istringstream i(event);
@@ -47,11 +48,20 @@ struct UserInterface {
     string command;
     i >> command;
     if (!command.compare("")) return;
-    if (game::EXPLODE == game::hashCommand(command)){
+    game::command_hash_t cmd = game::hashCommand(command);
+    switch(cmd){
+    case game::EXPLODE:
       int x,y,radius;
       i >> x >> y >> radius;
       explosion_list.push_back(physics::Explosion(x,y,radius));
-      new_explosion = true;}}
+      new_explosion = true;
+    break;
+    case game::NEW:
+      // Ignore the event of the player starting
+      if ( event.find("player-") == string::npos ) new_shot = true;
+    break;
+    default:
+    break;}}
 
   void render(State &state, vector <string> &output) {
     if (!state.player_alive()) return;
@@ -67,6 +77,9 @@ struct UserInterface {
     if ( new_explosion ){
       output.push_back("play explode");
       new_explosion=false; }
+    if ( new_shot ){
+      output.push_back("play shot");
+      new_shot = false;}
     FORII(explosion_list.size()){
       physics::Explosion &e = explosion_list[ii];
       ostringstream explosion;
@@ -190,6 +203,7 @@ int main(int num_args, char **args) {
   render.new_image("player", "player.pgm");
   render.new_image("projectile", "rock.pgm");
   render.new_sound("explode", "explosion3.wav");
+  render.new_sound("shot", "shot2.wav");
   render.draw("global", 0, 0);
   render.flip();
   game::Interpreter i(state);
