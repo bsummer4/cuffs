@@ -61,16 +61,14 @@ class LauncherFrame(wx.Frame):
   def OnGo(self, event):
     sboxconnectstr = './switchbox-connect ' + self.launcher.hostname + " " + str(overworld_port)
     if self.servercheck.IsChecked():
+      if os.system("./switchbox.sh start %d"%(overworld_port)) > 1:
+        sys.stderr.write("Unable to start switchbox\n")
+        sys.exit(1)
       pid = os.fork()
       if pid == 0:
-        os.execlp("../../switchbox/src/switchbox", "./../switchbox/src/switchbox", str(overworld_port))
+        time.sleep(0.1)
+        os.execlp("./sixty-nine", './sixty-nine', "'./overworld-server.py'",sboxconnectstr)
         sys.exit(1)
-      else:
-        pid = os.fork()
-        if pid == 0:
-          time.sleep(0.1)
-          os.execlp("./sixty-nine", './sixty-nine', "'./overworld-server.py'",sboxconnectstr)
-          sys.exit(1)
     time.sleep(0.2)
     oclientstr = './overworld-client.py %s %s'%( self.launcher.username, self.launcher.hostname)
     os.execlp("./sixty-nine", './sixty-nine', oclientstr, sboxconnectstr)
