@@ -3,18 +3,20 @@
 # Startup script to start/stop the server.
 #
 BIN_69=./sixty-nine
-server_BIN=\'./overworld-server.py\'
+server_BIN=./overworld-server.py
 
 if [ $# -ne 2 ]; then echo "Usage: $0 {start|stop|restart|status} hostname" && exit 1 ; fi
 
 HOSTNAME=$2
-CONNECT_BIN=\'"./switchbox-connect $2 5151"\'
+CONNECT_BIN="./switchbox-connect $2 5151"
 
 
 case "$1" in
   start)
         if [ ! -e .serverpid_$hostname ]; then 
-            $BIN_69 $server_BIN $CONNECT_BIN
+            
+            echo "$BIN_69 $server_BIN $CONNECT_BIN"
+            $BIN_69 $server_BIN "$CONNECT_BIN"
             echo $! > .serverpid_$HOSTNAME
         else 
             echo "Can not start server. Already running. (Or stale serverpid file)"
