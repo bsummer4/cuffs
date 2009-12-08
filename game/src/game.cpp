@@ -13,7 +13,8 @@
 using namespace misc;
 using namespace game;
 
-static int explosion_decrease = 4;
+static const int explosion_decrease = 4;
+static const float max_throw_speed = 12;
 
 typedef Queue <string> MsgQueue;
 typedef map <int,string> PlayerMap;
@@ -79,6 +80,7 @@ struct UserInterface {
       output.push_back(line.str());
       output.push_back(circle.str()); }}};
 
+
 template <typename H>
 struct InputHandler {
   H handler;
@@ -90,10 +92,18 @@ struct InputHandler {
     if (event == "space") {
       if (!sim.alive()) return;
       physics::SmartProjectile *player = sim.player();
-      int dx = ui.cursor.x - player->x();
-      int dy = ui.cursor.y - player->y();
+      physics::Vector2 vel(ui.cursor.x - player->x(),
+                           ui.cursor.y - player->y());
+      // @TODO Remove hard-coded numbers
+      cerr << vel.x << " " << vel.y << " " << vel.norm() << endl;
+      vel = vel.normalized();
+      cerr << vel.x << " " << vel.y << " " << vel.norm() << endl;
+      // if (vel.norm() > max_throw_speed)
+      vel = vel * max_throw_speed;
+      cerr << vel.x << " " << vel.y << " " << vel.norm() << endl;
       ostringstream o;
-      o << "shoot rock " << dx << " " << dy << endl;
+      o << "shoot rock " << (int) floor(vel.x) << " "
+        << (int) floor(vel.y) << endl;
       cerr << o.str();
       handler.handleEvent(o.str()); }
 

@@ -9,7 +9,11 @@ namespace physics {
   struct Vector2 {
     double x, y;
     Vector2(double x, double y) : x(x), y(y) {}
-    Vector2 operator*(int multiplier) {
+    double norm() { return hypot(x, y); }
+    Vector2 normalized() { return *this / norm(); }
+    Vector2 operator/(double divisor) {
+      return (*this) * (1 / divisor); }
+    Vector2 operator*(double multiplier) {
       return Vector2(x * multiplier, y * multiplier); }};
 
   struct Point {
@@ -19,14 +23,6 @@ namespace physics {
     Point(Vector2 v) : x((int) floor(v.x)), y((int) floor(v.y)) {};
     bool operator!=(const Point other) {
       return x != other.x || y != other.y; }};
-
-  /// Treating p as a vector, return a point with the same direction
-  /// as p, but with a magnitude of 1.
-  Vector2 normalize(Vector2 v) {
-    double magnitude = hypot(v.x, v.y);
-    double newx = v.x / magnitude;
-    double newy = v.y / magnitude;
-    return Vector2(newx, newy); }
 
   struct Explosion {
       int x, y, radius;
@@ -139,7 +135,7 @@ namespace physics {
       Vector2 translation(from.x - x(), from.y - y());
       cerr << "  -> translation: "
            << translation.x << " " << translation.y << endl;
-      Vector2 unit_translation = normalize(translation);
+      Vector2 unit_translation = translation.normalized();
       cerr << "  -> unit_translation: "
            << unit_translation.x << " " << unit_translation.y << endl;
       Vector2 effect = unit_translation * power;
