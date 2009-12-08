@@ -11,10 +11,8 @@ static int pid1 = -1;
 static int pid2 = -1;
 
 void kill_all(int signum) {
-  fprintf(stderr, "killall\n");
-  fflush(stderr);
-  if (pid1 != -1) kill(pid1, SIGINT);
-  if (pid2 != -1) kill(pid2, SIGINT); }
+  if (pid1 != -1) kill(pid1, SIGTERM);
+  if (pid2 != -1) kill(pid2, SIGTERM); }
 
 void close_pipes(int *p, int *q) {
   close(p[0]); close(p[1]); close(q[0]); close(q[1]); }
@@ -32,11 +30,7 @@ void split(char *string, char **write_to, int size) {
 
 int run (char *string) {
   char *call[20];
-  fprintf(stderr, "splitting\n");
   split(string, call, 20);
-  for (int ii = 0; ii < 20; ii++) {
-    if (!call[ii]) break;
-    fprintf(stderr, "  %s\n", call[ii]); }
   if (call[0] == NULL) exit(1);
   execvp(call[0], call);
   perror("execvp");
@@ -63,7 +57,9 @@ int main(int num_args, char **args) {
     run(args[2]); }
 
   close_pipes(inside, outside);
+  (void) signal(SIGTERM, kill_all);
   (void) signal(SIGINT, kill_all);
+  (void) signal(SIGQUIT, kill_all);
   int status1, status2, pid;
   pid = wait(&status1);
   if (pid == pid1) pid1 = -1;

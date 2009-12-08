@@ -67,7 +67,7 @@ class LauncherFrame(wx.Frame):
         raise "Unable to start overworld-server"
 
     connect = "'./switchbox-connect %s %s'"%(self.launcher.hostname,
-                                           underworld_port)
+                                             underworld_port)
     runclient = './overworld-client.py %s %s'%(
       self.launcher.username, self.launcher.hostname)
     os.system("./sixty-nine %s %s"%(connect, runclient))
