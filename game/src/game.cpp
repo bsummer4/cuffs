@@ -69,7 +69,7 @@ struct UserInterface {
       physics::Explosion &e = explosion_list[ii];
       ostringstream explosion;
       explosion << "circle " << e.radius << " 255 0 0 " << e.x << " " << e.y;
-      // output.push_back(explosion.str());
+      output.push_back(explosion.str());
       e.radius -= explosion_decrease;
       if ( e.radius <= 0 ) {
         explosion_list.erase(explosion_list.begin()+ii);
