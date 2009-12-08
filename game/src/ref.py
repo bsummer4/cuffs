@@ -36,6 +36,7 @@ def go(player_placements):
         sys.stdout.write("0.%d %s\n"%(remain, placement_message))
 
 def wait_for_players(players_, playerDict):
+    # TODO Add a timeout to wait for people to join
     players = list(players_) # Copy because we modify it
     result = []
     while True:
@@ -67,9 +68,12 @@ if __name__ == '__main__':
     while True:
         line = sys.stdin.readline()
         line_ = line.split()
-        if ( len(line_) > 2 and line_[2] == "/annotate" ):
+        if (len(line_) > 2 and line_[2] == "/annotate"):
             annotations.append(line)
             annotation_file.write(line)
             sys.stderr.write(line)
             sys.stderr.flush()
+        if (len(line_) == 3 and line_[2] == "/gameover"):
+            exit(0)
+        # TODO Handle disconnects
     close(annotation_file)

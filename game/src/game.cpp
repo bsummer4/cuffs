@@ -49,6 +49,26 @@ struct UserInterface {
     break; }}
 
   void render(State &state, vector <string> &output) {
+    // Sounds
+    if (new_explosion) {
+      output.push_back("play explode");
+      new_explosion=false; }
+    if (new_shot) {
+      output.push_back("play shot");
+      new_shot = false; }
+
+    // Explosions
+    FORII((int)explosion_list.size()){
+      physics::Explosion &e = explosion_list[ii];
+      ostringstream explosion;
+      explosion << "circle " << e.radius << " 255 0 0 " << e.x << " " << e.y;
+      output.push_back(explosion.str());
+      e.radius -= explosion_decrease;
+      if (e.radius <= 0) {
+        explosion_list.erase(explosion_list.begin()+ii);
+        ii--;}}
+
+    // HUD Contols
     if (!state.player_alive()) return;
     game::Object &player = state.player();
     { ostringstream line, circle;
@@ -57,23 +77,7 @@ struct UserInterface {
            << player.x << " " << player.y - 8; // TODO an evil magic number
       circle << "circle 7 0 255 0 " << cursor.x << " " << cursor.y;
       output.push_back(line.str());
-      output.push_back(circle.str()); }
-    // @TODO hack
-    if (new_explosion) {
-      output.push_back("play explode");
-      new_explosion=false; }
-    if (new_shot) {
-      output.push_back("play shot");
-      new_shot = false; }
-    FORII((int)explosion_list.size()){
-      physics::Explosion &e = explosion_list[ii];
-      ostringstream explosion;
-      explosion << "circle " << e.radius << " 255 0 0 " << e.x << " " << e.y;
-      output.push_back(explosion.str());
-      e.radius -= explosion_decrease;
-      if ( e.radius <= 0 ) {
-        explosion_list.erase(explosion_list.begin()+ii);
-        ii--;}}}};
+      output.push_back(circle.str()); }}};
 
 template <typename H>
 struct InputHandler {
