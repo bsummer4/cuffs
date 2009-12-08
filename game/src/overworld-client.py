@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import wx, sys, threading, os
+import wx, sys, threading, os, time
 
 underworld_port = 5151
 
@@ -94,6 +94,7 @@ def listen(OverFrame):
     elif command == '/play':
       print '/logout ' + app.username
       if app.username in args:
+        time.sleep(0.5)
         os.execlp("./sixty-nine", "./sixty-nine", './game %s'%(app.username),
                                               './switchbox-connect %s %d'%(
                                                               app.hostname,
