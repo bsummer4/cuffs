@@ -1,42 +1,39 @@
 #!/bin/sh
-#
+
 # Startup script to start/stop the server.
-#
-BIN_69=./sixty-nine
-server_BIN=./overworld-server.py
 
-if [ $# -ne 2 ]; then echo "Usage: $0 {start|stop|restart|status} hostname" && exit 1 ; fi
+usage="Usage: $0 {start|stop|restart|status}"
+[ $# -ne 1 ] && echo $usage && exit 1
+hostname=localhost
+port=38235
 
-HOSTNAME=$2
-CONNECT_BIN="./switchbox-connect $2 5151"
-
+could_not_then_die () {
+  echo "Can not $1 server.  $2."
+  exit 1
+}
 
 case "$1" in
   start)
-        if [ ! -e .serverpid_$hostname ]; then 
-            
-            #echo "$BIN_69 $server_BIN $CONNECT_BIN"
-            $BIN_69 $server_BIN "$CONNECT_BIN"
-            echo $! > .serverpid_$HOSTNAME
-        else 
-            echo "Can not start server. Already running. (Or stale serverpid file)"
-            exit 1
-        fi 
+        if [ ! -e .serverpid_$hostname ];
+        then
+            ./sixty-nine ./overworld-server.py \
+                "./switchbox-connect $hostname $port" &
+            echo $! > .serverpid_$hostname
+        else could_not_then_die start "Already running or stale pid file"
+        fi
         ;;
   stop)
-        if [ -e .serverpid_$HOSTNAME ]; then
-            kill `cat .serverpid_$HOSTNAME`
-            rm .serverpid_$HOSTNAME
-        else 
-            echo "Can not stop server. Not running. (Or serverpid file has gone missing.)"
-            exit 1
+        if [ -e .serverpid_$hostname ]
+        then
+            kill `cat .serverpid_$hostname`
+            rm .serverpid_$hostname
+        else could_not_then_die stop "Not running or deleted pid file"
         fi
         ;;
   status)
-        if [ -e .serverpid_$HOSTNAME ]; then
-            echo "server is running" 
-        else
-            echo "server is not running"
+        if [ -e .serverpid_$hostname ];
+        then echo "server is running"
+        else echo "server is not running"
         fi
         ;;
   restart)
@@ -44,8 +41,6 @@ case "$1" in
         $0 start
         ;;
   *)
-        echo "Usage: $0 {start|stop|restart|status} HOSTNAME"
+        echo $usage
         exit 1
 esac
-
-exit 0

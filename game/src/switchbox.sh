@@ -2,45 +2,44 @@
 #
 # Startup script to start/stop the switchbox.
 #
+
+usage="Usage: $0 {start|stop|restart|status} port"
 SWITCHBOX_BIN=../../switchbox/src/switchbox
-
-if [ $# -ne 2 ]; then echo "Usage: $0 {start|stop|restart|status} PORT" && exit 1 ; fi
-
-PORT=$2
-
+[ $# -ne 2 ] && echo $usage && exit 1
+port=$2
 
 case "$1" in
   start)
-        if [ ! -e .switchboxpid_$PORT ]; then 
-            $SWITCHBOX_BIN $2 2>&1 > /dev/null & 
-            echo $! > .switchboxpid_$PORT
-        else 
+        if [ ! -e .switchboxpid_$port ]; then
+            $SWITCHBOX_BIN $2 2>&1 > /dev/null &
+            echo $! > .switchboxpid_$port
+        else
             echo "Can not start switchbox. Already running. (Or stale switchboxpid file)"
             exit 1
-        fi 
+        fi
         ;;
   stop)
-        if [ -e .switchboxpid_$PORT ]; then
-            kill `cat .switchboxpid_$PORT`
-            rm .switchboxpid_$PORT
-        else 
+        if [ -e .switchboxpid_$port ]; then
+            kill `cat .switchboxpid_$port`
+            rm .switchboxpid_$port
+        else
             echo "Can not stop switchbox. Not running. (Or switchboxpid file has gone missing.)"
             exit 1
         fi
         ;;
   status)
-        if [ -e .switchboxpid_$PORT ]; then
-            echo "Switchbox is running" 
+        if [ -e .switchboxpid_$port ]; then
+            echo "Switchbox is running"
         else
             echo "Switchbox is not running"
         fi
         ;;
   restart)
-        $0 stop
-        $0 start
+        $0 stop $port
+        $0 start $port
         ;;
   *)
-        echo "Usage: $0 {start|stop|restart|status} PORT"
+        echo $usage
         exit 1
 esac
 
