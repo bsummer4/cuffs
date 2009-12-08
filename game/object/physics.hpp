@@ -6,12 +6,27 @@
 namespace physics {
   using namespace std;
 
+  struct Vector2 {
+    double x, y;
+    Vector2(double x, double y) : x(x), y(y) {}
+    Vector2 operator*(int multiplier) {
+      return Vector2(x * multiplier, y * multiplier); }};
+
   struct Point {
     int x, y;
     Point() : x(0), y(0) {};
     Point(int x, int y) : x(x), y(y) {};
+    Point(Vector2 v) : x((int) floor(v.x)), y((int) floor(v.y)) {};
     bool operator!=(const Point other) {
       return x != other.x || y != other.y; }};
+
+  /// Treating p as a vector, return a point with the same direction
+  /// as p, but with a magnitude of 1.
+  Vector2 normalize(Vector2 v) {
+    double magnitude = hypot(v.x, v.y);
+    double newx = v.x / magnitude;
+    double newy = v.y / magnitude;
+    return Vector2(newx, newy); }
 
   struct Explosion {
       int x, y, radius;
@@ -117,9 +132,25 @@ namespace physics {
     float y() { return p.y; };
     float dx() { return p.dx; };
     float dy() { return p.dy; };
-    void push(float from_x, float from_y, float power) {
-      /// @TODO Do this right...
-      p.dy -= power; }
+    void push(Point from, float power) {
+      cerr << "push " << from.x << " " << from.y << " " << power
+           << " we are at: " << p.x << " " << p.y
+           << " with vel: " << p.dx << " " << p.dy << endl;
+      Vector2 translation(from.x - x(), from.y - y());
+      cerr << "  -> translation: "
+           << translation.x << " " << translation.y << endl;
+      Vector2 unit_translation = normalize(translation);
+      cerr << "  -> unit_translation: "
+           << unit_translation.x << " " << unit_translation.y << endl;
+      Vector2 effect = unit_translation * power;
+      cerr << "  -> effect: "
+           << effect.x << " " << effect.y << endl;
+      p.dy -= effect.y;
+      p.dx -= effect.x;
+      p.y -= effect.y;
+      p.x -= effect.x;
+      cerr << "loc, vel = ((" << p.x << " " << p.y << ") "
+           << "(" << p.dx << " " << p.dy << ")" << endl; }
     virtual void update(game::State&, vector <string>&, bool&,
                         vector<Explosion>&) = 0;
 
@@ -169,26 +200,36 @@ namespace physics {
     class PlayerProj : public SmartProjectile {
     public:
       bool stuck;
+      int health;
       PlayerProj(game::Object &player, Simulation *sim)
         : SmartProjectile (sim, player.id, player.x, player.y, 0, 0),
-          stuck(false) {}
+          stuck(false), health(100) {}
+      void die(vector <string> &messages, bool &erase) {
+        erase = true;
+        sim->_alive = false;
+        sim->dead = true;
+        messages.push_back(helper::msg_annotate(id));
+        messages.push_back(helper::msg_delete(id)); }
+
       virtual void update(game::State &state, vector <string> &messages,
                           bool &erase, vector <Explosion> &explosions) {
         erase = false;
         FOREACH (vector <Explosion>, it, explosions) {
           int damage;
           if ((damage = feel_explosion(*it))) {
-            erase = true;
-            sim->_alive = false;
-            // sim->dead = true;
-            // messages.push_back(helper::msg_annotate(id));
-            // messages.push_back(helper::msg_delete(id));
-            push(it->x, it->y, damage);
-            stuck = false;
-            return; }}
+            health--;
+            if (health <= 0) {
+              die(messages, erase);
+              return; }
+            push(Point(it->x, it->y + 4), damage / 3);
+            stuck = false; }}
 
         assert(sim->_alive);
         if (stuck) return;
+
+        if (sim->irrelevant(this)) {
+          die(messages, erase);
+          return; }
 
         Point start(x(), y());
         p.accelerate(state.global->wind, state.global->gravity);
@@ -197,6 +238,7 @@ namespace physics {
 
         Point hit;
         if (find_hit(state.global->map, start, end, hit)) {
+          cerr << "we are stuck" << endl;
           stuck = true;
           p.dx = p.dy = 0;
           end = hit; }
@@ -204,6 +246,9 @@ namespace physics {
         if (start != end)
           messages.push_back(helper::msg_move(id, end.x, end.y));  }};
 
+    // Return whether or not the player is in the simulation.  If the
+    // player is in the game::State, but not in the simulation, then
+    // it is added to the simulation and we return true;
     bool alive() {
       if (dead) return false;
       if (_alive) return true;
@@ -313,8 +358,9 @@ namespace physics {
         Point current(player->x(), player->y());
         Point dest(current.x + dx, current.y + dy);
         Point hit;
-        if (find_hit(sim.state.global->map, current, dest, hit))
+        if (find_hit(sim.state.global->map, current, dest, hit)) {
           dest = hit;
+          player->stuck = true; }
+        else player->stuck = false;
         player->p.x = dest.x;
-        player->p.y = dest.y;
-        player->stuck = false; }}};}
+        player->p.y = dest.y; }}};}

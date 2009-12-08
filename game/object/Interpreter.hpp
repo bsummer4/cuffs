@@ -7,7 +7,7 @@
 namespace game {
   using namespace std;
   typedef enum { NEW, DELETE, SET, QUERY, EXPLODE, MOVE, MAP, INVALID,
-                 MESSAGE, ANNOTATE } command_hash_t;
+                 MESSAGE, ANNOTATE, GAMEOVER } command_hash_t;
   command_hash_t hashCommand(string &command) {
     if (command.at(0) != '/') return MESSAGE;
     if (!command.compare(string("/new"))) return NEW;
@@ -18,10 +18,11 @@ namespace game {
     if (!command.compare(string("/move"))) return MOVE;
     if (!command.compare(string("/map"))) return MAP;
     if (!command.compare(string("/annotate"))) return ANNOTATE;
+    if (!command.compare(string("/gameover"))) return GAMEOVER;
     return INVALID;}
 
   class Interpreter {
-  public: 
+  public:
   public:
     Interpreter(State &state) : state(state) {}
     void handleEvent(const string &event) {
@@ -71,8 +72,10 @@ namespace game {
       case MESSAGE: {
         cerr << "Message: " << event << endl; }
         break;
+      case GAMEOVER:
+        exit(0); // TODO Better way?
       case ANNOTATE:
-        // Just ignore message
+        // We don't care about these as they don't affect the state.
         break;
       case INVALID:
       default:

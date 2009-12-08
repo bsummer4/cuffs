@@ -19,7 +19,7 @@ typedef Queue <string> MsgQueue;
 typedef map <int,string> PlayerMap;
 
 static int start_time; // set in main
-const static int game_interval = 50;
+const static int game_interval = 40;
 
 struct UserInterface {
   Point cursor;
@@ -37,7 +37,7 @@ struct UserInterface {
     game::command_hash_t cmd = game::hashCommand(command);
     switch(cmd){
     case game::EXPLODE:
-      int x,y,radius;
+      int x, y, radius;
       i >> x >> y >> radius;
       explosion_list.push_back(physics::Explosion(x,y,radius));
       new_explosion = true;
@@ -62,14 +62,14 @@ struct UserInterface {
     if (new_explosion) {
       output.push_back("play explode");
       new_explosion=false; }
-    if ( new_shot ){
+    if (new_shot) {
       output.push_back("play shot");
-      new_shot = false;}
+      new_shot = false; }
     FORII((int)explosion_list.size()){
       physics::Explosion &e = explosion_list[ii];
       ostringstream explosion;
       explosion << "circle " << e.radius << " 255 0 0 " << e.x << " " << e.y;
-      output.push_back(explosion.str());
+      // output.push_back(explosion.str());
       e.radius -= explosion_decrease;
       if ( e.radius <= 0 ) {
         explosion_list.erase(explosion_list.begin()+ii);
@@ -93,9 +93,9 @@ struct InputHandler {
       cerr << o.str();
       handler.handleEvent(o.str()); }
 
-    string keys[6] = {"left", "right", "up", "a", "w", "d"};
-    string results[6] = {"move -5 -5", "move 5 -5", "move 0 -20",
-                         "move -5 -5", "move 5 -5", "move 0 -20"};
+    string keys[6] = {"left", "right", "up", "a", "d", "w"};
+    string results[6] = {"move -6 -3", "move 6 -3", "move 0 -16",
+                         "move -6 -3", "move 6 -3", "move 0 -16"};
     FORII(6)
       if (event == keys[ii])
         handler.handleEvent(results[ii]); }};
@@ -205,7 +205,7 @@ int main(int num_args, char **args) {
 
   // Game State and logic objects
   State state(mapname, username, sdl);
-  state.global->wind = 0.05;
+  state.global->wind = 0;
   state.global->gravity = 0.4;
   physics::Simulation sim(state);
   MsgQueue gameQ;
@@ -241,7 +241,7 @@ int main(int num_args, char **args) {
   sdl.registerEventHandler(pipeline);
   sdl.registerEventHandler(mh);
   SDL_TimerID timer;
-  timer = SDL_AddTimer(40, gameLoopTimer, NULL);
+  timer = SDL_AddTimer(game_interval - game_interval/5, gameLoopTimer, NULL);
 
   // Run everything
   lr.start();

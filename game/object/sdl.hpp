@@ -158,7 +158,7 @@ namespace sdl {
       applySurface(x, y, images[id], sdl.screen); }
     void play(string id) {
       if (!sounds.count(id)) throw runtime_error("No such sound");
-      if (-1 != Mix_PlayChannel(-1, sounds[id], 0))
+      if (-1 == Mix_PlayChannel(-1, sounds[id], 0))
           cerr << "Warning: Unable to play sound:" << id << endl; }
     void white() {
       boxRGBA(sdl.screen, 0, 0, sdl.screen->w, sdl.screen->h,
