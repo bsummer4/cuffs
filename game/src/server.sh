@@ -15,7 +15,7 @@ case "$1" in
   start)
         if [ ! -e .serverpid_$hostname ]; then 
             
-            echo "$BIN_69 $server_BIN $CONNECT_BIN"
+            #echo "$BIN_69 $server_BIN $CONNECT_BIN"
             $BIN_69 $server_BIN "$CONNECT_BIN"
             echo $! > .serverpid_$HOSTNAME
         else 
