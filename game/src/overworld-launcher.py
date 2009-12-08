@@ -70,7 +70,9 @@ class LauncherFrame(wx.Frame):
                                              overworld_port)
     runclient = './overworld-client.py %s %s'%(
       self.launcher.username, self.launcher.hostname)
-    os.execlp("./sixty-nine", "./sixty-nine", connect, runclient)
+    os.system("./sixty-nine '%s' '%s'"%(connect, runclient))
+    os.system("./switchbox.sh stop %d"%overworld_port)
+    exit(0)
 
   def OnNoGo(self, event):
     sys.exit(0)

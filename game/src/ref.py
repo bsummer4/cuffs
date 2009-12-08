@@ -41,7 +41,8 @@ def wait_for_players(players_, playerDict):
     result = []
     while True:
         if not players: break
-        message = sys.stdin.readline().split()
+        line = sys.stdin.readline()
+        message = line.split()
         if len(message) != 3 or message[1] != '/identify':
             raise Exception("bad /identify message")
         who, command, player = message
@@ -49,7 +50,7 @@ def wait_for_players(players_, playerDict):
             players.remove(player)
             result.append(place_player(player))
             playerDict[who] = player
-            sys.stderr.write(message + '\n')
+            sys.stderr.write(line)
             sys.stderr.flush()
     return result
 
