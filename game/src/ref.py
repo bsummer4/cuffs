@@ -49,6 +49,8 @@ def wait_for_players(players_, playerDict):
             players.remove(player)
             result.append(place_player(player))
             playerDict[who] = player
+            sys.stderr.write(message + '\n')
+            sys.stderr.flush()
     return result
 
 if __name__ == '__main__':
@@ -63,7 +65,9 @@ if __name__ == '__main__':
     sys.stdout.flush()
     time.sleep(1)
     sys.stdout.write("100000.0 hihihi\n")
+    sys.stderr.write("100000.0 hihihi\n")
     sys.stdout.flush()
+    sys.stderr.flush()
     annotations = []
     while True:
         line = sys.stdin.readline()

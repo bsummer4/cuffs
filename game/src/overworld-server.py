@@ -26,13 +26,11 @@ def playerUpdate():
             sys.stdout.write("/players " + " ".join(playerlist) + "\n")
         elif line[0] == '/play':
             names = line[1:]
-            pid = os.fork()
-            if pid == 0:
-                os.execlp("../../switchbox/src/switchbox", "../../switchbox/src/switchbox",  str(game_port))
-                exit
-            time.sleep(0.1) # just in case
-            os.execlp("./sixty-nine", "./sixty-nine", "./ref.py %s annoations.txt"%(' '.join(names)),
-                                                      "./switchbox-connect localhost %d"%(game_port))
+            system("./switchbox.sh start %d"%game_port)
+            time.sleep(0.05) # just in case
+            system("./sixty-nine './ref.py %s annoations.txt' './switchbox-connect localhost %d'"%(
+                    ' '.join(names), game_port))
+            system("./switchbox.sh stop %d"%game_port)
         sys.stdout.flush()
 
 if __name__ == '__main__':
