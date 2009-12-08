@@ -39,6 +39,9 @@ namespace physics {
   /// Find the point closest to p0 between p0 and p1 that is solid,
   /// and set result to it.  Return false if there was not such point.
   bool find_hit(game::Map &map, Point p0, Point p1, Point &result) {
+    /// @TODO HACK!!! Check to see if p0 and p1 are Really far away 
+    /// and if they are say no collision
+    if ( hypot(p0.x - p1.x, p0.y - p1.y) > map.width/2 ) return false;
     int x0 = p0.x, x1 = p1.x, y0 = p0.y, y1 = p1.y;
     vector <Point> hits;
     bool steep = abs(y1 - y0) > abs(x1 - x0);
@@ -66,8 +69,8 @@ namespace physics {
     ystep = (y0 < y1) ? 1 : -1;
     for (int x = x0; x < x1; x++) {
       Point current = steep ? Point(y, x) : Point(x, y);
-      if (on_x_border(map,current))
-        hits.push_back(current);
+      //if (on_x_border(map,current))
+      //  hits.push_back(current);
       if (on_map(map,current) && map.is_solid(current.x, current.y))
         hits.push_back(current);
       error += deltaerr;
@@ -81,6 +84,9 @@ namespace physics {
     float lowest_distance = INFINITY;
     FOREACH (vector <Point>, hit, hits) {
       float distance = hypotf(p0.x - hit->x, p0.y - hit->y);
+      // Check for wrapping
+      if ( distance > map.width/2 )
+          distance = map.width - distance;
       if (distance < lowest_distance) {
         result = *hit;
         lowest_distance = distance; }}
@@ -91,7 +97,9 @@ namespace physics {
     Projectile(float x, float y, float dx, float dy)
       : x(x), y(y), dx(dx), dy(dy) {}
     Projectile() {} // Uninitialized!!
-    void move() { x += dx; y += dy; }
+    void move(game::Map &m) { 
+        x += dx; y += dy; 
+        m.wrap_point(x,y); }
     void accelerate(float ddx, float ddy) { dx += ddx; dy += ddy; }};
 
   namespace helper {
@@ -229,7 +237,7 @@ namespace physics {
 
         Point start(x(), y());
         p.accelerate(state.global->wind, state.global->gravity);
-        p.move();
+        p.move(state.global->map);
         Point end(x(), y());
 
         Point hit;
@@ -301,7 +309,7 @@ namespace physics {
 
       // Modify ourself
       p.accelerate(state.global->wind, state.global->gravity);
-      p.move();
+      p.move(state.global->map);
 
       Point end(x(), y());
       { Point hit; // We are sure that this will be set in find_hit in
@@ -309,6 +317,11 @@ namespace physics {
         if (find_hit(state.global->map, start, end, hit)) {
           erase = true;
           messages.push_back(helper::msg_explode(hit.x, hit.y, 50));
+          // Do I need to create a second explosion for a mirror effect?
+          if ( hit.x < 25 ){
+            messages.push_back(helper::msg_explode(state.global->map.width - hit.x, hit.y, 50)); }
+          else if ( hit.x > state.global->map.width - 25 ){
+            messages.push_back(helper::msg_explode(hit.x - state.global->map.width, hit.y, 50)); }
           messages.push_back(helper::msg_delete(id));
           return; }}
       messages.push_back(helper::msg_move(id, end.x, end.y)); }};

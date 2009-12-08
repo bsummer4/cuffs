@@ -80,6 +80,9 @@ namespace game {
     const multimap <Team, Point> &spawn_points;
     bool is_solid(int p) { return p != MAP_EMPTY; }
     bool is_solid(int x, int y) { return is_solid(_(x, y)); }
+    void wrap_point(float &x, float &y){
+      // Ignore Y because we don't wrap it.
+      x = ((int)x+this->width)%this->width + (x-(int)x); y = y;}
 
   private:
     int point(int x, int y) { return width * y + x; }};
