@@ -5,6 +5,24 @@
 #include "misc.hpp"
 using namespace std;
 using namespace misc;
+using namespace switchbox;
+
+bool empty(string s) { return !s.size(); }
+bool notempty(string s) { return !empty(s); }
+
+bool logout_message(SBMessage *msg) {
+  return (msg->routing_type == ANNOUNCE &&
+          announcement_code(msg) == LOST_CONNECTION); }
+
+string translate(string s) {
+  if (not_admin_junk(s))
+    return decode_w_address(s);
+  SBMessage *msg = destringify(s);
+  if (logout_message(msg)) {
+    ostringstream o;
+    o << "-1 lost_connection " << msg->from;
+    return o.str(); }
+  return ""; }
 
 int main (int num_args, char **args) {
   assert(num_args == 3 && "usage: switchbox-cat hostname port");
@@ -12,10 +30,10 @@ int main (int num_args, char **args) {
   int port = atoi(args[2]);
 
   Printer p;
-  Translator <typeof(p)&> decoder(p, switchbox::decode_w_address);
-  Filter <typeof(decoder)&> filter(decoder, switchbox::not_admin_junk);
-  switchbox::Connection <typeof(filter)&> c(hostname, port, filter);
-  Translator <typeof(c)&> broadcast_encoder(c, switchbox::broadcast_encode);
+  Filter <typeof(p)&> filter(p, notempty);
+  Translator <typeof(filter)&> decoder(filter, translate);
+  Connection <typeof(decoder)&> c(hostname, port, decoder);
+  Translator <typeof(c)&> broadcast_encoder(c, broadcast_encode);
   LineReader <typeof(broadcast_encoder)&> lr(cin, broadcast_encoder);
   lr.start();
   c.start();
