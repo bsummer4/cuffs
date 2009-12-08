@@ -5,6 +5,8 @@ import wx, sys, threading, os, time
 underworld_port = 5151
 overworld_port = 38235
 
+def kill_window(): return 3 # This will be set in main
+
 # Launcher GUI Frame
 class LauncherFrame(wx.Frame):
   def __init__(self, launcher, *args, **kwds):
@@ -59,7 +61,8 @@ class LauncherFrame(wx.Frame):
     self.Layout()
 
   def OnGo(self, event):
-    if self.servercheck.IsChecked():
+    serving = self.servercheck.IsChecked() 
+    if serving: 
       if os.system("./switchbox.sh start %d"%overworld_port):
         raise Exception("Unable to start switchbox")
       if os.system("./server.sh start"):
@@ -68,10 +71,13 @@ class LauncherFrame(wx.Frame):
 
     connect = './switchbox-connect %s %s'%(self.launcher.hostname,
                                              overworld_port)
-    runclient = './overworld-client.py %s %s'%(
+    client = './overworld-client.py %s %s'%(
       self.launcher.username, self.launcher.hostname)
-    os.system("./sixty-nine '%s' '%s'"%(connect, runclient))
-    os.system("./switchbox.sh stop %d"%overworld_port)
+    kill_window()
+    os.system("./sixty-nine '%s' '%s'"%(connect, client))
+    if serving:
+      os.system("./switchbox.sh stop %d" % overworld_port)
+      os.system("./server.sh stop")
     exit(0)
 
   def OnNoGo(self, event):
@@ -99,4 +105,5 @@ class Launcher(wx.App):
 
 if __name__ == "__main__":
   app = Launcher()
+  kill_window = lambda: app.OverFrame.Show(False)
   app.MainLoop()

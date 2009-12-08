@@ -54,12 +54,31 @@ def wait_for_players(players_, playerDict):
             sys.stderr.flush()
     return result
 
+        
+def handle_line(line_text, logfile):
+    line = line_text.split()
+    if not len(line): raise Exception("No from field in message.  ")
+    if len(line) == 1: raise Exception("Missing timestamp.  ")
+    if len(line) == 2: return # Null Message
+    (from_, timestamp, command), args = line[0:3], line[3:]
+    if command == "/annotate":
+        annotations.append(line_text)
+        annotation_file.write(line_text)
+        sys.stderr.write(line_text)
+        sys.stderr.flush()
+    elif command == "/gameover":
+        exit(0)
+    elif from_ == "-1":
+        print '0.0 /gameover' # Hack 0.0 isn't the current time.
+        sys.stdout.flush()
+
+
 if __name__ == '__main__':
     playerDict = {}
-    sys.stderr.write(" ".join(sys.argv))
+    sys.stderr.write(" ".join(sys.argv) + '\n')
+    if len(sys.argv) == 1: raise Exception("No logfile given.  ")
     go(wait_for_players(sys.argv[1:len(sys.argv)-1],playerDict))
     annotation_file = open(sys.argv[-1], "w+")
-
 
     # TODO: We will need to send messages to keep the syncronizer
     # running.  This hack sorta works for now
@@ -72,13 +91,6 @@ if __name__ == '__main__':
     annotations = []
     while True:
         line = sys.stdin.readline()
-        line_ = line.split()
-        if (len(line_) > 2 and line_[2] == "/annotate"):
-            annotations.append(line)
-            annotation_file.write(line)
-            sys.stderr.write(line)
-            sys.stderr.flush()
-        if (len(line_) == 3 and line_[2] == "/gameover"):
-            exit(0)
-        # TODO Handle disconnects
-    close(annotation_file)
+        if not line: break
+        handle_line(line, annotation_file)
+    annotation_file.close()
