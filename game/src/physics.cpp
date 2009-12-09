@@ -22,7 +22,7 @@ struct Hack {
         p.handleEvent(*it); }}}};
 
 int main (int num_args, char **args) {
-  assert(chdir("../data"));
+  assert(0 == chdir("../data"));
   assert(num_args == 4 && "usage physics map x y");
   string map_filename = args[1];
   int x = atoi(args[2]), y = atoi(args[3]);
