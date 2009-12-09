@@ -185,17 +185,16 @@ namespace sdl {
       V2 to(x1, y1);
       V2 translation(from - to);
       double length = translation.norm();
-      V2 perp_trans = translation.perp().normalized() * (length / 4);
-      V2 base_plus = from + perp_trans;
-      V2 base_minux = from - perp_trans;
+      V2 perp_trans = translation.perp().normalized() *  4;
+      // V2 base_plus = from + perp_trans;
+      V2 base_minus = from - perp_trans;
       filledTrigonRGBA(sdl.screen,
                        to.x, to.y,
-                       base_plus.x, base_plus.y,
-                       base_minux.y, base_minux.y,
+                       from.x, from.y,
+                       base_minus.y, base_minus.y,
                        red, green, blue, 255); }
 
     void handleEvent(std::string event) {
-      // cerr << " [render]-> " << event << endl;
       istringstream in(event);
       string command;
       in >> command;

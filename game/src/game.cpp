@@ -17,7 +17,7 @@ static const int explosion_decrease = 4;
 static const float max_throw_speed = 12;
 
 typedef Queue <string> MsgQueue;
-typedef map <int,string> PlayerMap;
+typedef map <int, string> PlayerMap;
 
 static int start_time; // set in main
 const static int game_interval = 40;
