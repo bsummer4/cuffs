@@ -208,7 +208,7 @@ namespace sdl {
       filledTrigonRGBA(sdl.screen,
                        to.x, to.y,
                        from.x, from.y,
-                       base_minus.y, base_minus.y,
+                       base_minus.x, base_minus.y,
                        red, green, blue, 255); }
 
     void handleEvent(std::string event) {

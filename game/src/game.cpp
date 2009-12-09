@@ -82,13 +82,20 @@ struct UserInterface {
       output.push_back(line.str());
       output.push_back(circle.str()); }
 
-    { /// Draw Power Bar
+    { // Draw Power Bar
       ostringstream square;
       int height = 580 - (560) * sim.energy.get_energy()/sim.energy.ENERGY_MAX;
       square << "rect 255 0 0 128 "
         << " 780 580 "
         << " 790 " << height << " ";
-      output.push_back(square.str()); }}};
+      output.push_back(square.str()); }
+    { // Draw Wind Indicator 
+      ostringstream arrow;
+      int wind_size = 400 + (int)(state.global->wind * 800);
+      arrow << "arrow 0 0 255 "
+            << "400 20 "
+            << wind_size << " 20 ";
+      output.push_back(arrow.str());}}};
 
 
 template <typename H>
@@ -234,7 +241,7 @@ int main(int num_args, char **args) {
 
   // Game State and logic objects
   State state(mapname, username, sdl);
-  state.global->wind = 0;
+  state.global->wind = 0.1;
   state.global->gravity = 0.4;
   physics::Simulation sim(state);
   MsgQueue gameQ;
