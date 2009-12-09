@@ -61,7 +61,8 @@ namespace sdl {
                                 SDL_HWSURFACE|SDL_DOUBLEBUF);
       if (!screen) throw runtime_error(SDL_GetError());
       SDL_WM_SetCaption(window_caption.c_str(), NULL);
-      _video_initialized = true; }
+      _video_initialized = true; 
+      SDL_EnableKeyRepeat(30,30);}
 
     void initAudio() {
       if (!audio) throw runtime_error("SDL Wasn't initialized for audio.  ");

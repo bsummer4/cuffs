@@ -37,7 +37,7 @@ namespace sdl {
     ~KeyListener() {}
 
     void operator()(SDL_Event& event) {
-      if (event.type != SDL_KEYUP) return;
+      if (event.type != SDL_KEYDOWN) return;
       cerr << "keyevent" << endl;
       SDLKey key = event.key.keysym.sym;
       if (isModKey(key)) return;

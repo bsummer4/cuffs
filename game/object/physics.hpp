@@ -36,6 +36,7 @@ namespace physics {
     Point min(0, 0), max(map.width - 1, map.height - 1);
     return !(p.x > max.x || p.x < min.x || p.y > max.y || p.y < min.y); }
 
+
   /// Find the point closest to p0 between p0 and p1 that is solid,
   /// and set result to it.  Return false if there was not such point.
   bool find_hit(game::Map &map, Point p0, Point p1, Point &result) {
@@ -77,7 +78,6 @@ namespace physics {
       if (error >= 0.5) {
         y += ystep;
         error = error - 1.0; }}
-
     // Calculate the closest hit and return it.  Return false if there
     // was no hit
     if (!hits.size()) return false;
@@ -91,6 +91,16 @@ namespace physics {
         result = *hit;
         lowest_distance = distance; }}
     return true; }
+
+  bool find_before_hit(game::Map &map, Point p0, Point p1, Point &result) {
+    Point hit;
+    if ( !find_hit(map, p0, p1, hit) ) return false;
+    Vector2 v(p0.x - hit.x, p0.y - hit.y);
+    v.normalized();
+    result.x = hit.x + lround(v.x);
+    result.y = hit.y + lround(v.y);
+    return true; }
+
 
   struct Projectile {
     float x, y, dx, dy;
@@ -241,7 +251,7 @@ namespace physics {
         Point end(x(), y());
 
         Point hit;
-        if (find_hit(state.global->map, start, end, hit)) {
+        if (find_before_hit(state.global->map, start, end, hit)) {
           cerr << "we are stuck" << endl;
           stuck = true;
           p.dx = p.dy = 0;
@@ -367,7 +377,7 @@ namespace physics {
         Point current(player->x(), player->y());
         Point dest(current.x + dx, current.y + dy);
         Point hit;
-        if (find_hit(sim.state.global->map, current, dest, hit)) {
+        if (find_before_hit(sim.state.global->map, current, dest, hit)) {
           dest = hit;
           player->stuck = true; }
         else player->stuck = false;
