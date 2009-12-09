@@ -1,6 +1,8 @@
 #pragma once
+#include <cmath>
 
 namespace vectors {
+  using namespace std;
   template <typename T>
   struct Vector2 {
     T x, y;
@@ -24,11 +26,10 @@ namespace vectors {
 
   struct Vector2_d : public Vector2 <double> {
     double x, y;
-    Vector2_d(double x, double y) : Vector2 <double> (x, y) {};
-    Vector2_d(Vector2 <int> v) : Vector2 <double>(v.x, v.y) {}};
+    Vector2_d(double x, double y) : Vector2 <double> (x, y) {}
+    Vector2_d(Vector2 <int> v) : Vector2 <double>(v.x, v.y) {}
+    Vector2 <int> floor() {
+      int x_ = std::floor(x), y_ = std::floor(y);
+      return Vector2 <int> (x_, y_); }};
 
-  struct Point : public Vector2 <int> {
-    Point() : Vector2 <int> () {};
-    Point(int x, int y) : Vector2 <int> (x, y) {};
-    Point(Vector2 <double> v)
-      : Vector2 <int> (floor(v.x), floor(v.y)) {}};}
+  typedef Vector2 <int> Point;}

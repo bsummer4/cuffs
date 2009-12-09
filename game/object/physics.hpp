@@ -1,7 +1,7 @@
 #pragma once
 #include <algorithm>
 #include "state.hpp"
-#include "vector.hpp"
+#include "vectors.hpp"
 
 
 /// Physics for projectils
@@ -41,7 +41,7 @@ namespace physics {
   /// Find the point closest to p0 between p0 and p1 that is solid,
   /// and set result to it.  Return false if there was not such point.
   bool find_hit(game::Map &map, Point p0, Point p1, Point &result) {
-    /// @TODO HACK!!! Check to see if p0 and p1 are Really far away 
+    /// @TODO HACK!!! Check to see if p0 and p1 are Really far away
     /// and if they are say no collision
     if ( hypot(p0.x - p1.x, p0.y - p1.y) > map.width/2 ) return false;
     int x0 = p0.x, x1 = p1.x, y0 = p0.y, y1 = p1.y;

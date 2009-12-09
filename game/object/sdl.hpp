@@ -12,7 +12,7 @@
 #include <sstream>
 #include <cstdlib>
 #include "macro.h"
-#include "vector.hpp"
+#include "vectors.hpp"
 
 namespace sdl {
   using namespace std;

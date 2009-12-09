@@ -7,16 +7,13 @@
 #include <cmath>
 #include <stdexcept>
 #include "sdl.hpp"
+#include "vectors.hpp"
 
 namespace game {
   using namespace std;
+  using namespace vectors;
   typedef unsigned Team;
   enum { MAP_EMPTY=255, MAP_SOLID=0 };
-
-  class Point {
-  public:
-    int x, y;
-    Point(int x, int y) : x(x), y(y) {}};
 
   /// This handles reading a map from a file.  This is meant to be
   /// passed into the Map constructor and should not be used outside
