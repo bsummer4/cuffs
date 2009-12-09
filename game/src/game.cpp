@@ -49,7 +49,7 @@ struct UserInterface {
     default:
     break; }}
 
-  void render(State &state, vector <string> &output) {
+  void render(State &state, vector <string> &output, physics::Simulation &sim) {
     // Sounds
     if (new_explosion) {
       output.push_back("play explode");
@@ -73,13 +73,22 @@ struct UserInterface {
     game::Object &player = state.player();
 
     // HUD Contols
-    { ostringstream line, circle;
+    { // Draw Awesome Triangle that looks so great
+      ostringstream line, circle;
       line << "arrow 0 255 0 "
            << player.x << " " << player.y - 8 << " "
            << cursor.x << " " << cursor.y; // TODO an evil magic number
       circle << "circle 7 0 255 0 " << cursor.x << " " << cursor.y;
       output.push_back(line.str());
-      output.push_back(circle.str()); }}};
+      output.push_back(circle.str()); }
+
+    { /// Draw Power Bar
+      ostringstream square;
+      int height = 580 - (560) * sim.energy.get_energy()/sim.energy.ENERGY_MAX;
+      square << "rect 255 0 0 128 "
+        << " 780 580 "
+        << " 790 " << height << " ";
+      output.push_back(square.str()); }}};
 
 
 template <typename H>
@@ -93,8 +102,8 @@ struct InputHandler {
     if (event == "space" || event == "leftmousebutton") {
       if (!sim.alive()) return;
       // Check to see if we have enough energy to shoot
-      if ( sim.energy.get_energy() < physics::ROCK_COST ) return;
-      sim.energy.use_energy(physics::ROCK_COST);
+      if ( sim.energy.get_energy() < sim.energy.ROCK_COST ) return;
+      sim.energy.use_energy(sim.energy.ROCK_COST);
 
       physics::SmartProjectile *player = sim.player();
       physics::Vector2_d vel_(ui.cursor.x - player->x(),
@@ -172,7 +181,7 @@ public:
       handleAll <typeof(output)&> (output_messages, output); }
     vector <string> render_messages;
     render_state(state, render_messages);
-    ui.render(state, render_messages);
+    ui.render(state, render_messages, sim);
     r.white();
     handleAll <typeof(r)&> (render_messages, r);
     r.flip();

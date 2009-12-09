@@ -8,12 +8,12 @@
 namespace physics {
   using namespace std;
   using namespace vectors;
-  static const float ENERGY_RECHARGE_RATE = 0.05; ///< About one per second
-  static const float ENERGY_MAX = 15.0;
-  static const float ROCK_COST = 1.0;
 
   /// How much Energy the player has for shooting
   struct Energy {
+      static const float ENERGY_RECHARGE_RATE = 0.05; ///< About one per second
+      static const float ENERGY_MAX = 15.0;
+      static const float ROCK_COST = 1.0;
     public:
       float energy;
     public:

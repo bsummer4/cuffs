@@ -178,6 +178,11 @@ namespace sdl {
       filledCircleRGBA(sdl.screen, x, y, radius,
                  red, green, blue, 255); }
 
+    void draw_rect(int x0, int y0, int x1, int y1, int red, int green, 
+                  int blue, int alpha){
+      //cerr << "DRAWING A BOX YO " <<  x0 << " " << y0 << " " << x1 << " " << y1 << endl;
+      boxRGBA(sdl.screen, x0, y0, x1, y1, red, green, blue, alpha); }
+
     void draw_arrow(int red, int green, int blue,
                     int x0, int y0, int x1, int y1) {
       typedef Vector2 <double> V2;
@@ -235,6 +240,10 @@ namespace sdl {
         int radius, red, green, blue, x0, y0;
         in >> radius >> red >> green >> blue >> x0 >> y0;
         draw_circle(radius, red, green, blue, x0, y0); }
+      if (!command.compare("rect")){
+        int red, green, blue, alpha, x0, y0, x1, y1;
+        in >> red >> green >> blue >> alpha >> x0 >> y0 >> x1 >> y1;
+        draw_rect(x0,y0,x1,y1,red,green,blue, alpha);}
       if (!command.compare("sound")) {
         string id, filename;
         in >> id >> filename;
