@@ -10,7 +10,7 @@ namespace vectors {
     Vector2 <T> (T x, T y) : x(x), y(y) {}
     T norm() { return hypot(x, y); }
     Vector2 <T> normalized() { return *this / norm(); }
-    Vector2 <T> perp() { return Vector2 <T> (y, x); }
+    Vector2 <T> perp() { return Vector2 <T> (-y, x); }
     Vector2 <T>  operator-(const Vector2 <T>  other) {
       return Vector2 <T> (x - other.x, y - other.y); }
     bool operator!=(const Vector2 <T>  other) {
