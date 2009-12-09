@@ -108,8 +108,8 @@ struct InputHandler {
       handler.handleEvent(o.str()); }
 
     string keys[6] = {"left", "right", "up", "a", "d", "w"};
-    string results[6] = {"move -6 -3", "move 6 -3", "move 0 -16",
-                         "move -6 -3", "move 6 -3", "move 0 -16"};
+    string results[6] = {"move -5 -5", "move 5 -5", "move 0 -20",
+                         "move -5 -5", "move 5 -5", "move 0 -20"};
     FORII(6)
       if (event == keys[ii])
         handler.handleEvent(results[ii]); }};
