@@ -3,10 +3,27 @@
 #include "state.hpp"
 #include "vector.hpp"
 
+
 /// Physics for projectils
 namespace physics {
   using namespace std;
   using namespace vectors;
+  static const float ENERGY_RECHARGE_RATE = 0.05; ///< About one per second
+  static const float ENERGY_MAX = 15.0;
+  static const float ROCK_COST = 1.0;
+
+  /// How much Energy the player has for shooting
+  struct Energy {
+    public:
+      float energy;
+    public:
+      Energy() : energy(ENERGY_MAX) {};
+      float get_energy(){ return energy; }
+      bool use_energy(float cost) {
+        if (cost < energy){ energy -= cost; return true; }
+        else { return false; }}
+      void recharge(){
+        energy = MIN(energy + ENERGY_RECHARGE_RATE, ENERGY_MAX);}};
 
   struct Explosion {
     int x, y, radius;
@@ -178,6 +195,7 @@ namespace physics {
     bool _alive;
     bool dead;
     vector <Explosion> explosions;
+    Energy energy;
     Simulation(game::State &s)
       : map(s.global->map), state(s), _alive(false), dead(false) {}
     ~Simulation() { FOREACH (Projectiles, it, projectiles)
@@ -260,6 +278,9 @@ namespace physics {
     /// Update all projectiles and return a sequence of message for
     /// the interpreter to update the state.
     vector <string> move() {
+      // Recharge our Shooting Energy
+      energy.recharge();
+      // Move all the objects
       vector <string> erase_after_loop;
       vector <string> messages;
       FOREACH (Projectiles, it, projectiles) {

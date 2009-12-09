@@ -92,6 +92,10 @@ struct InputHandler {
   void handleEvent(string event) {
     if (event == "space") {
       if (!sim.alive()) return;
+      // Check to see if we have enough energy to shoot
+      if ( sim.energy.get_energy() < physics::ROCK_COST ) return;
+      sim.energy.use_energy(physics::ROCK_COST);
+
       physics::SmartProjectile *player = sim.player();
       physics::Vector2_d vel_(ui.cursor.x - player->x(),
                            ui.cursor.y - player->y());
