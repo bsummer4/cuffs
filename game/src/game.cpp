@@ -69,13 +69,14 @@ struct UserInterface {
         explosion_list.erase(explosion_list.begin()+ii);
         ii--;}}
 
-    // HUD Contols
     if (!state.player_alive()) return;
     game::Object &player = state.player();
+
+    // HUD Contols
     { ostringstream line, circle;
-      line << "line 2 0 255 0 "
-           << cursor.x << " " << cursor.y << " "
-           << player.x << " " << player.y - 8; // TODO an evil magic number
+      line << "arrow 0 255 0 "
+           << player.x << " " << player.y - 8 << " "
+           << cursor.x << " " << cursor.y; // TODO an evil magic number
       circle << "circle 7 0 255 0 " << cursor.x << " " << cursor.y;
       output.push_back(line.str());
       output.push_back(circle.str()); }}};
@@ -92,8 +93,9 @@ struct InputHandler {
     if (event == "space") {
       if (!sim.alive()) return;
       physics::SmartProjectile *player = sim.player();
-      physics::Vector2 vel(ui.cursor.x - player->x(),
+      physics::Vector2_d vel_(ui.cursor.x - player->x(),
                            ui.cursor.y - player->y());
+      physics::Vector2 <double> vel(vel_);
       // @TODO Remove hard-coded numbers
       cerr << vel.x << " " << vel.y << " " << vel.norm() << endl;
       vel = vel.normalized();

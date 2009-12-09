@@ -1,33 +1,17 @@
 #pragma once
 #include <algorithm>
 #include "state.hpp"
+#include "vector.hpp"
 
 /// Physics for projectils
 namespace physics {
   using namespace std;
-
-  struct Vector2 {
-    double x, y;
-    Vector2(double x, double y) : x(x), y(y) {}
-    double norm() { return hypot(x, y); }
-    Vector2 normalized() { return *this / norm(); }
-    Vector2 operator/(double divisor) {
-      return (*this) * (1 / divisor); }
-    Vector2 operator*(double multiplier) {
-      return Vector2(x * multiplier, y * multiplier); }};
-
-  struct Point {
-    int x, y;
-    Point() : x(0), y(0) {};
-    Point(int x, int y) : x(x), y(y) {};
-    Point(Vector2 v) : x((int) floor(v.x)), y((int) floor(v.y)) {};
-    bool operator!=(const Point other) {
-      return x != other.x || y != other.y; }};
+  using namespace vectors;
 
   struct Explosion {
-      int x, y, radius;
-      Explosion() : x(0), y(0), radius(0) {}
-      Explosion(int x,int y,int radius) : x(x), y(y), radius(radius) {}};
+    int x, y, radius;
+    Explosion() : x(0), y(0), radius(0) {}
+    Explosion(int x, int y, int radius) : x(x), y(y), radius(radius) {}};
 
   bool on_x_border(game::Map &map, Point p) {
     return p.x == 0 || p.x == map.width - 1; }
@@ -95,21 +79,20 @@ namespace physics {
   bool find_before_hit(game::Map &map, Point p0, Point p1, Point &result) {
     Point hit;
     if ( !find_hit(map, p0, p1, hit) ) return false;
-    Vector2 v(p0.x - hit.x, p0.y - hit.y);
+    Vector2_d v(p0.x - hit.x, p0.y - hit.y);
     v.normalized();
     result.x = hit.x + lround(v.x);
     result.y = hit.y + lround(v.y);
     return true; }
-
 
   struct Projectile {
     float x, y, dx, dy;
     Projectile(float x, float y, float dx, float dy)
       : x(x), y(y), dx(dx), dy(dy) {}
     Projectile() {} // Uninitialized!!
-    void move(game::Map &m) { 
-        x += dx; y += dy; 
-        m.wrap_point(x,y); }
+    void move(game::Map &m) {
+      x += dx; y += dy;
+      m.wrap_point(x,y); }
     void accelerate(float ddx, float ddy) { dx += ddx; dy += ddy; }};
 
   namespace helper {
@@ -147,16 +130,17 @@ namespace physics {
     float dx() { return p.dx; };
     float dy() { return p.dy; };
     void push(Point from, float power) {
+      typedef Vector2 <double> V2;
       cerr << "push " << from.x << " " << from.y << " " << power
            << " we are at: " << p.x << " " << p.y
            << " with vel: " << p.dx << " " << p.dy << endl;
-      Vector2 translation(from.x - x(), from.y - y());
+      Vector2_d translation(from.x - x(), from.y - y());
       cerr << "  -> translation: "
            << translation.x << " " << translation.y << endl;
-      Vector2 unit_translation = translation.normalized();
+      V2 unit_translation = translation.normalized();
       cerr << "  -> unit_translation: "
            << unit_translation.x << " " << unit_translation.y << endl;
-      Vector2 effect = unit_translation * power;
+      V2 effect = unit_translation * power;
       cerr << "  -> effect: "
            << effect.x << " " << effect.y << endl;
       p.dy -= effect.y;

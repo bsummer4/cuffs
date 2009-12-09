@@ -3,6 +3,7 @@
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_mixer.h>
 #include <SDL/SDL_gfxPrimitives.h>
+#include <boost/function.hpp>
 #include <string>
 #include <map>
 #include <vector>
@@ -10,11 +11,12 @@
 #include <stdexcept>
 #include <sstream>
 #include <cstdlib>
-#include <boost/function.hpp>
 #include "macro.h"
+#include "vector.hpp"
 
 namespace sdl {
   using namespace std;
+  using namespace vectors;
   typedef boost::function <void (SDL_Event&)> EventHandler;
 
   /// Although the SDL stuff is global, this is a wrapper to make it
@@ -176,6 +178,22 @@ namespace sdl {
       filledCircleRGBA(sdl.screen, x, y, radius,
                  red, green, blue, 255); }
 
+    void draw_arrow(int red, int green, int blue,
+                    int x0, int y0, int x1, int y1) {
+      typedef Vector2 <double> V2;
+      V2 from(x0, y0);
+      V2 to(x1, y1);
+      V2 translation(from - to);
+      double length = translation.norm();
+      V2 perp_trans = translation.perp().normalized() * (length / 4);
+      V2 base_plus = from + perp_trans;
+      V2 base_minux = from - perp_trans;
+      filledTrigonRGBA(sdl.screen,
+                       to.x, to.y,
+                       base_plus.x, base_plus.y,
+                       base_minux.y, base_minux.y,
+                       red, green, blue, 255); }
+
     void handleEvent(std::string event) {
       // cerr << " [render]-> " << event << endl;
       istringstream in(event);
@@ -194,6 +212,10 @@ namespace sdl {
         string id; int x, y;
         in >> id >> x >> y;
         draw(id, x, y); };
+      if (!command.compare("arrow")) {
+        int red, green, blue, x0, y0, x1, y1;
+        in >> red >> green >> blue >> x0 >> y0 >> x1 >> y1;
+        draw_arrow(red, green, blue, x0, y0, x1, y1); };
       if (!command.compare("line")) {
         int width, red, green, blue, x0, y0, x1, y1;
         in >> width >> red >> green >> blue >> x0 >> y0 >> x1 >> y1;

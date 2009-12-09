@@ -1,11 +1,36 @@
 #!/usr/bin/python
 
 import wx, sys, threading, os, time
-
+from functools import partial
 underworld_port = 5151
 overworld_port = 38235
 
-def kill_window(): return 3 # This will be set in main
+kill_window = lambda: None # Will we set to main to hide any shown windows
+
+def print_(x):
+  print x
+  sys.stdout.flush()
+  return x
+
+def launch(run_server, username, hostname):
+  connect = './switchbox-connect %s %s'%(hostname, overworld_port)
+  print_(1)
+  client = './overworld-client.py %s %s'%(username, hostname)
+  print_(1)
+  if run_server:
+    print_(1)
+    if os.system("./switchbox.sh start %d" % overworld_port):
+      raise Exception("Unable to start switchbox")
+    print_(1)
+    if os.system("./server.sh start"):
+      os.system("./switchbox.sh stop %d" % overworld_port)
+      raise Exception("Unable to start overworld-server")
+  kill_window()
+  print_(1)
+  os.system("./sixty-nine '%s' '%s'" % (connect, client))
+  if run_server:
+    os.system("./switchbox.sh stop %d" % overworld_port)
+    os.system("./server.sh stop")
 
 # Launcher GUI Frame
 class LauncherFrame(wx.Frame):
@@ -61,23 +86,8 @@ class LauncherFrame(wx.Frame):
     self.Layout()
 
   def OnGo(self, event):
-    serving = self.servercheck.IsChecked() 
-    if serving: 
-      if os.system("./switchbox.sh start %d"%overworld_port):
-        raise Exception("Unable to start switchbox")
-      if os.system("./server.sh start"):
-        os.system("./switchbox.sh stop %d"%overworld_port)
-        raise Exception("Unable to start overworld-server")
-
-    connect = './switchbox-connect %s %s'%(self.launcher.hostname,
-                                             overworld_port)
-    client = './overworld-client.py %s %s'%(
-      self.launcher.username, self.launcher.hostname)
-    kill_window()
-    os.system("./sixty-nine '%s' '%s'"%(connect, client))
-    if serving:
-      os.system("./switchbox.sh stop %d" % overworld_port)
-      os.system("./server.sh stop")
+    launch(self.servercheck.IsChecked(),
+           self.launcher.username, self.launcher.hostname)
     exit(0)
 
   def OnNoGo(self, event):
@@ -104,6 +114,13 @@ class Launcher(wx.App):
     return True
 
 if __name__ == "__main__":
-  app = Launcher()
-  kill_window = lambda: app.OverFrame.Show(False)
-  app.MainLoop()
+  num_args = len(sys.argv) - 1
+  if not num_args:
+      app = Launcher()
+      kill_window = partial(app.OverFrame.Show, False)
+      app.MainLoop()
+      print kill_window
+  elif num_args == 1:
+    launch(True, sys.argv[1], "localhost")
+  elif num_args == 2:
+    launch(False, sys.argv[1], sys.argv[2])
