@@ -90,7 +90,7 @@ struct InputHandler {
   InputHandler(H handler, UserInterface &ui, physics::Simulation &sim)
     : handler(handler), ui(ui), sim(sim) {}
   void handleEvent(string event) {
-    if (event == "space") {
+    if (event == "space" || event == "leftmousebutton") {
       if (!sim.alive()) return;
       // Check to see if we have enough energy to shoot
       if ( sim.energy.get_energy() < physics::ROCK_COST ) return;
