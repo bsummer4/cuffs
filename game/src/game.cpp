@@ -89,7 +89,8 @@ struct UserInterface {
     { // Aiming Triangle
       ostringstream line, circle;
       Vector2_d playerpos(player.x, player.y);
-      Vector2_d vel = throw_velocity(playerpos, cursor);
+      Vector2_d cursorpos(cursor.x, cursor.y);
+      Vector2_d vel = throw_velocity(playerpos, cursorpos);
       Vector2_d endpoint = Vector2_d(playerpos + vel);
       line << "arrow 0 255 0 "
            << player.x << " " << player.y << " "

@@ -28,8 +28,8 @@ namespace vectors {
   struct Vector2_d : public Vector2 <double> {
     double x, y;
     Vector2_d(double x, double y) : Vector2 <double> (x, y) {}
-    Vector2_d(Vector2 <int> v) : Vector2 <double>(v.x, v.y) {}
-    Vector2_d(Vector2 <double> v) : Vector2 <double>(v.x, v.y) {}
+    Vector2_d(const Vector2 <int> &v) : Vector2 <double>(v.x, v.y) {}
+    Vector2_d(const Vector2 <double> &v) : Vector2 <double>(v.x, v.y) {}
     Vector2 <int> floor() {
       int x_ = std::floor(x), y_ = std::floor(y);
       return Vector2 <int> (x_, y_); }};
