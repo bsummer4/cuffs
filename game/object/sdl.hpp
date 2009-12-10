@@ -186,31 +186,18 @@ namespace sdl {
     void draw_arrow(int red, int green, int blue,
                     int x0, int y0, int x1, int y1) {
       typedef Vector2 <double> V2;
-      cerr << "arrow" << endl;
       V2 from(x0, y0);
-      cerr << "from " << from.x << "x" << from.y << endl;
       V2 to(x1, y1);
-      cerr << "to " << to.x << "x" << to.y << endl;
       V2 translation(from - to);
-      cerr << "translation " << translation.x << "x" << translation.y << endl;
       double length = translation.norm();
-      cerr << "length " << length << endl;
-      V2 perp = translation.perp();
-      cerr << "perp " << perp.x << "x" << perp.y << endl;
-      V2 perp_norm = perp.normalized();
-      cerr << "perp_norm " << perp_norm.x << "x" << perp_norm.y << endl;
-      V2 shift = perp_norm * 4;
-      cerr << "shift " << shift.x << "x" << shift.y << endl;
-      V2 perp_trans = translation.perp().normalized() *  4;
-      cerr << "perp_trans " << to.x << "x" << to.y << endl;
+      V2 perp_trans = translation.perp().normalized() *  (length / 6);
       V2 base_minus = from - perp_trans;
-      cerr << "base_minus " << base_minus.x << "x" << base_minus.y << endl;
+      V2 base_plus = from + perp_trans;
       filledTrigonRGBA(sdl.screen,
                        to.x, to.y,
-                       from.x, from.y,
+                       base_plus.x, base_plus.y,
                        base_minus.x, base_minus.y,
-                       red, green, blue, 255); }
-
+                       red, green, blue, 128); }
     void handleEvent(std::string event) {
       istringstream in(event);
       string command;
