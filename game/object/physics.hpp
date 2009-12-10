@@ -94,8 +94,8 @@ namespace physics {
     return true; }
 
   bool find_before_hit(game::Map &map, Point p0, Point p1, Point &result) {
-    Point hit;
-    if ( !find_hit(map, p0, p1, hit) ) return false;
+    Point hit(0, 0);
+    if (!find_hit(map, p0, p1, hit)) return false;
     Vector2_d v(p0.x - hit.x, p0.y - hit.y);
     v.normalized();
     result.x = hit.x + lround(v.x);

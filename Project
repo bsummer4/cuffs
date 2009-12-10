@@ -1,5 +1,5 @@
 Fistacuffs
 to understand read doc/readme.rst
 to setup do ./Bootstrap && ./configure
-to build do make
+to build do make -j 6
 to clean do make distclean; ./Bootstrap clean
