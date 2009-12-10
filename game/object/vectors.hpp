@@ -25,7 +25,6 @@ namespace vectors {
       return Vector2 <T> (x * times, y * times); }};
 
   struct Vector2_d : public Vector2 <double> {
-    double x, y;
     Vector2_d(double x, double y) : Vector2 <double> (x, y) {}
     Vector2_d(const Vector2 <int> &v) : Vector2 <double> (v.x, v.y) {}
     Vector2_d(const Vector2 <double> &v) : Vector2 <double> (v.x, v.y) {}
