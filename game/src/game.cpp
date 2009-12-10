@@ -22,12 +22,11 @@ typedef map <int, string> PlayerMap;
 static int start_time; // set in main
 const static int game_interval = 40;
 
-//Vector2_d throw_velocity(game::Object &start, Point cursor) {
-  //Vector2_d vel(ui.cursor.x - player->x(),
-                //ui.cursor.y - player->y());
-  //if (vel.norm() > max_throw_speed)
-    //return vel.normalized() * max_throw_speed;
-  //return vel; }
+Vector2_d throw_velocity(Vector2_d playerpos, Vector2_d cursor) {
+  Vector2_d vel(cursor - playerpos);
+  if (vel.norm() > max_throw_speed)
+    return Vector2_d(vel.normalized() * max_throw_speed);
+  return vel; }
 
 struct UserInterface {
   Point cursor;
@@ -56,7 +55,8 @@ struct UserInterface {
     default:
     break; }}
 
-  void render(State &state, vector <string> &output, physics::Simulation &sim) {
+  void render(State &state, vector <string> &output,
+              physics::Simulation &sim) {
     // Sounds
     if (new_explosion) {
       output.push_back("play explode");
@@ -80,10 +80,11 @@ struct UserInterface {
     game::Object &player = state.player();
 
     // HUD Contols
-    { // Draw Awesome Triangle that looks so great
+    { // Aiming Triangle
       ostringstream line, circle;
-      //endpoint = player + throw_velocity(Point(player.x, player.y), cursor);
-      Point endpoint = Point(cursor.x, cursor.y);
+      Vector2_d playerpos(player.x, player.y);
+      Vector2_d vel = throw_velocity(playerpos, cursor);
+      Vector2_d endpoint = Vector2_d(playerpos + vel);
       line << "arrow 0 255 0 "
            << player.x << " " << player.y << " "
            << endpoint.x << " " << endpoint.y;
@@ -91,14 +92,15 @@ struct UserInterface {
       output.push_back(line.str());
       output.push_back(circle.str()); }
 
-    { // Draw Power Bar
+    { // Power Bar
       ostringstream square;
-      int height = 580 - (560) * sim.energy.get_energy()/sim.energy.ENERGY_MAX;
+      int height = 580 - (560) * \
+        sim.energy.get_energy() / sim.energy.ENERGY_MAX;
       square << "rect 255 0 0 128 "
-        << " 780 580 "
-        << " 790 " << height << " ";
+             << " 780 580 "
+             << " 790 " << height << " ";
       output.push_back(square.str()); }
-    { // Draw Wind Indicator 
+    { // Wind Indicator
       ostringstream arrow;
       int wind_size = 400 + (int)(state.global->wind * 800);
       arrow << "arrow 0 0 255 "
@@ -118,20 +120,12 @@ struct InputHandler {
     if (event == "space" || event == "leftmousebutton") {
       if (!sim.alive()) return;
       // Check to see if we have enough energy to shoot
-      if ( sim.energy.get_energy() < sim.energy.ROCK_COST ) return;
+      if (sim.energy.get_energy() < sim.energy.ROCK_COST) return;
       sim.energy.use_energy(sim.energy.ROCK_COST);
 
-      physics::SmartProjectile *player = sim.player();
-      physics::Vector2_d vel_(ui.cursor.x - player->x(),
-                           ui.cursor.y - player->y());
-      physics::Vector2 <double> vel(vel_);
-      // @TODO Remove hard-coded numbers
-      cerr << vel.x << " " << vel.y << " " << vel.norm() << endl;
-      vel = vel.normalized();
-      cerr << vel.x << " " << vel.y << " " << vel.norm() << endl;
-      // if (vel.norm() > max_throw_speed)
-      vel = vel * max_throw_speed;
-      cerr << vel.x << " " << vel.y << " " << vel.norm() << endl;
+      Vector2_d playerpos = Vector2_d(sim.player()->x(), sim.player()->y());
+      Vector2_d vel = throw_velocity(playerpos,
+                                     Vector2_d(ui.cursor));
       ostringstream o;
       o << "shoot rock " << (int) floor(vel.x) << " "
         << (int) floor(vel.y) << endl;
