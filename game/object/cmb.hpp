@@ -169,7 +169,9 @@ namespace cmb {
       string message;
       { istringstream i(event);
         char space;
-        i >> process >> time;
+        i >> process;
+        // if (process == -1) return; // TODO Hack to handle admin messages
+        i >> time;
         i.get(space);
         message = misc::slurp(i); }
       Event e(time, message);
