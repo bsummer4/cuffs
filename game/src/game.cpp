@@ -22,6 +22,13 @@ typedef map <int, string> PlayerMap;
 static int start_time; // set in main
 const static int game_interval = 40;
 
+//Vector2_d throw_velocity(game::Object &start, Point cursor) {
+  //Vector2_d vel(ui.cursor.x - player->x(),
+                //ui.cursor.y - player->y());
+  //if (vel.norm() > max_throw_speed)
+    //return vel.normalized() * max_throw_speed;
+  //return vel; }
+
 struct UserInterface {
   Point cursor;
   vector <physics::Explosion> explosion_list;
@@ -75,9 +82,11 @@ struct UserInterface {
     // HUD Contols
     { // Draw Awesome Triangle that looks so great
       ostringstream line, circle;
+      //endpoint = player + throw_velocity(Point(player.x, player.y), cursor);
+      Point endpoint = Point(cursor.x, cursor.y);
       line << "arrow 0 255 0 "
-           << player.x << " " << player.y - 8 << " "
-           << cursor.x << " " << cursor.y; // TODO an evil magic number
+           << player.x << " " << player.y << " "
+           << endpoint.x << " " << endpoint.y;
       circle << "circle 7 0 255 0 " << cursor.x << " " << cursor.y;
       output.push_back(line.str());
       output.push_back(circle.str()); }
