@@ -22,11 +22,11 @@ typedef map <int, string> PlayerMap;
 static int start_time; // set in main
 const static int game_interval = 40;
 
-Vector2_d throw_velocity(Vector2_d playerpos, Vector2_d cursor) {
+Vector2_d throw_velocity(Vector2_d player, Vector2_d cursor) {
   cerr << "t_w" << endl;
   cerr << "  . " << cursor.x << " " << cursor.y << "\n"
-       << "  . " << playerpos.x << " " << playerpos.y << endl;
-  Vector2_d vel(cursor - playerpos);
+       << "  . " << player.x << " " << player.y << endl;
+  Vector2_d vel(cursor - player);
   cerr << "  . " << vel.x << " " << vel.y << endl;
   if (vel.norm() > max_throw_speed) {
     vel = Vector2_d(vel.normalized() * max_throw_speed);
@@ -89,13 +89,14 @@ struct UserInterface {
     { // Aiming Triangle
       ostringstream line, circle;
       Vector2_d playerpos(player.x, player.y);
-      playerpos.x = player.x; playerpos.y = player.y;
       Vector2_d cursorpos(cursor.x, cursor.y);
       Vector2_d vel = throw_velocity(playerpos, cursorpos);
-      Vector2_d endpoint = Vector2_d(playerpos + vel);
+      cerr << "arrow throw_vel: " << vel.x << " " << vel.y << endl;
+      Vector2_d endpoint = playerpos + vel;
+      cerr << "arrow endpoint: " << endpoint.x << " " << endpoint.y << endl;
       line << "arrow 0 255 0 "
            << player.x << " " << player.y << " "
-           << endpoint.x << " " << endpoint.y;
+           << (int)floor(endpoint.x) << " " << (int)floor(endpoint.y);
       circle << "circle 7 0 255 0 " << cursor.x << " " << cursor.y;
       output.push_back(line.str());
       output.push_back(circle.str()); }
