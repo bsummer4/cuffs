@@ -23,9 +23,15 @@ static int start_time; // set in main
 const static int game_interval = 40;
 
 Vector2_d throw_velocity(Vector2_d playerpos, Vector2_d cursor) {
+  cerr << "t_w" << endl;
+  cerr << "  . " << cursor.x << " " << cursor.y << "\n"
+       << "  . " << playerpos.x << " " << playerpos.y << endl;
   Vector2_d vel(cursor - playerpos);
-  if (vel.norm() > max_throw_speed)
-    return Vector2_d(vel.normalized() * max_throw_speed);
+  cerr << "  . " << vel.x << " " << vel.y << endl;
+  if (vel.norm() > max_throw_speed) {
+    vel = Vector2_d(vel.normalized() * max_throw_speed);
+    cerr << "  . " << vel.x << " " << vel.y << endl;
+    return vel; }
   return vel; }
 
 struct UserInterface {

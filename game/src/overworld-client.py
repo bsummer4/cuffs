@@ -74,12 +74,15 @@ class Overworld(wx.App):
 
 def listen(OverFrame):
   while True:
+    sys.stderr.write('-- ');
+    sys.stderr.flush()
     line_text = sys.stdin.readline()
+    sys.stderr.write("got line: " + line_text)
+    sys.stderr.flush()
     if not line_text: break # EOF
     line = line_text.split()
-    origin = line[0]
-    line = line[1:]
-    command, args = line[0], line[1:]
+    if len(line) == 0 or len(line) == 1: continue # empty input
+    sender, command, args = line[0], line[1], line[2:]
     if command == '/login':
       for arg in args:
         app.OverFrame.PlayerList.Append(arg)
@@ -96,13 +99,11 @@ def listen(OverFrame):
       if app.username in args:
         time.sleep(0.5)
         os.execlp("./sixty-nine", "./sixty-nine", './game %s'%(app.username),
-                                              './switchbox-connect %s %d'%(
-                                                              app.hostname,
-                                                          underworld_port))
+                  './switchbox-connect %s %d'%(app.hostname, underworld_port))
 
 if __name__ == "__main__":
   program, username, hostname = sys.argv
-  app = Overworld(username,hostname)
+  app = Overworld(username, hostname)
   t = threading.Thread(target=listen, name="MainThread", args=(app,))
   t.start()
   app.MainLoop()
