@@ -242,7 +242,7 @@ namespace physics {
             if (health <= 0) {
               die(messages, erase);
               return; }
-            push(Point(it->x, it->y + 4), damage / 3);
+            push(Point(it->x, it->y), damage / 3);
             stuck = false; }}
 
         assert(sim->_alive);
@@ -388,13 +388,16 @@ namespace physics {
 
       if (!command.compare("shoot")) {
         string type;
-        float dx, dy;
-        if (!(i >> type >> dx >> dy)) return;
+        Vector2_d vel;
+        if (!(i >> type >> vel.x >> vel.y)) return;
         ostringstream s_id;
         s_id << state.username << "-" << type << "-" << count++;
         string id = s_id.str();
+        Point start(player->x(), player->y());
+        // Some bullshiting to try to avoid extraneous collisions
+        start = Vector2_d(Vector2_d(start) + vel*2).floor();
         sim.add(make_projectile(&sim, type, id,
-                                player->x(), player->y(), dx, dy)); }
+                                start.x, start.y, vel.x, vel.y)); }
 
       if (!command.compare("move")) {
         float dx, dy; i >> dx >> dy;

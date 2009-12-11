@@ -30,6 +30,7 @@ namespace vectors {
   int _lround(double x) { return lround(x); }
 
   struct Vector2_d : public Vector2 <double> {
+    Vector2_d() : Vector2 <double> () {}
     Vector2_d(double x, double y) : Vector2 <double> (x, y) {}
     Vector2_d(const Vector2 <int> &v) : Vector2 <double> (v.x, v.y) {}
     Vector2_d(const Vector2 <double> &v) : Vector2 <double> (v.x, v.y) {}

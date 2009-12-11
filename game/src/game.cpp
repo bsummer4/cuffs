@@ -118,10 +118,12 @@ struct UserInterface {
 
     { // Wind Indicator
       ostringstream arrow;
-      int wind_size = 400 + (int)(state.global->wind * 800);
+      Vector2_d start(400, 50);
+      Vector2_d acceleration(state.global->wind, state.global->gravity);
+      Point end = Vector2_d(start + acceleration * 400).floor();
       arrow << "arrow 0 0 255 "
-            << "400 20 "
-            << wind_size << " 20 ";
+            << start.x << " " << start.y << " "
+            << end.x << " " << end.y;
       output.push_back(arrow.str());}}};
 
 
@@ -160,7 +162,7 @@ struct InputHandler {
       string movement_key[] = \
         {"left", "right", "up", "down", "a", "d", "w", "s"};
       string move_messages[] = \
-        {"move -5 -5", "move 5 -5", "move 0 -20", "move 0 20"};
+        {"move -3 0", "move 3 0", "move 0 -14", "move 0 14"};
       FORII(8)
         if (keyname == movement_key[ii])
           handler.handleEvent(move_messages[ii % 4]); }}};
