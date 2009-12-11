@@ -18,7 +18,7 @@ namespace game {
   public:
     string mapname;
     Map map;
-    float wind, gravity;
+    double wind, gravity;
     GlobalObject (const string &map_filename, sdl::SDL &sdl)
       : Object("global", "global", 0, 0),
         mapname(map_filename),
@@ -26,8 +26,9 @@ namespace game {
         wind(0), gravity(0) {}
 
     virtual void setProperty(const string &property, const string &value) {
-      if (property == "wind") wind = atoi(value.c_str());
-      else if (property == "gravity") gravity = atoi(value.c_str());
+      istringstream i(value);
+      if (property == "wind") { i >> wind; }
+      else if (property == "gravity") { i >> gravity; }
       else this->Object::setProperty(property, value); }
 
     virtual string getProperty(const string &property) {

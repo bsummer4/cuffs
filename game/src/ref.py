@@ -30,10 +30,12 @@ def go(player_placements):
         startstr += str(i) + ":" + str(n) + " "
     startstr += "\n"
     sys.stdout.write(startstr)
-    remain = len(player_placements)
-    for placement_message in player_placements:
+    messages = player_placements + ["/set global wind 0.02",
+                                    "/set global gravity 0.4"]
+    remain = len(messages)
+    for message in messages:
         remain -= 1
-        sys.stdout.write("0.%d %s\n"%(remain, placement_message))
+        sys.stdout.write("0.%d %s\n"%(remain, message))
 
 def wait_for_players(players_, playerDict):
     # TODO Add a timeout to wait for people to join
@@ -54,7 +56,6 @@ def wait_for_players(players_, playerDict):
             sys.stderr.flush()
     return result
 
-        
 def handle_line(line_text, logfile):
     line = line_text.split()
     if not len(line): raise Exception("No from field in message.  ")
@@ -81,13 +82,11 @@ if __name__ == '__main__':
     annotation_file = open(sys.argv[-1], "w+")
 
     # TODO: We will need to send messages to keep the syncronizer
-    # running.  This hack sorta works for now
+    # running.  This large number hack works fine for now.
     sys.stdout.flush()
     time.sleep(1)
-    sys.stdout.write("100000.0 hihihi\n")
-    sys.stderr.write("100000.0 hihihi\n")
+    sys.stdout.write("1000000.0 hihihi\n")
     sys.stdout.flush()
-    sys.stderr.flush()
     annotations = []
     while True:
         line = sys.stdin.readline()

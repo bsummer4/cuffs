@@ -273,8 +273,6 @@ int main(int num_args, char **args) {
 
   // Game State and logic objects
   State state(mapname, username, sdl);
-  state.global->wind = 0.01;
-  state.global->gravity = 0.4;
   physics::Simulation sim(state);
   MsgQueue gameQ;
   sdl::Renderer render(sdl);
