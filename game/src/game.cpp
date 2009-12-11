@@ -142,8 +142,9 @@ struct InputHandler {
 
       // Quiting
       if (keyname == "escape") {
-        SDL_UserEvent event = {SDL_QUIT, 0, NULL, NULL};
-        SDL_PushEvent((SDL_Event*) &event); }
+        cout << "0.0 /gameover" << endl;
+        //        SDL_UserEvent event = {SDL_QUIT, 0, NULL, NULL};
+        /*SDL_PushEvent((SDL_Event*) &event);*/ }
 
       // Shooting
       if (keyname == "space" || keyname == "leftmousebutton") {
@@ -162,7 +163,7 @@ struct InputHandler {
       string movement_key[] = \
         {"left", "right", "up", "down", "a", "d", "w", "s"};
       string move_messages[] = \
-        {"move -3 0", "move 3 0", "move 0 -14", "move 0 14"};
+        {"move -7 1", "move 7 -1", "move 0 -17", "move 0 17"};
       FORII(8)
         if (keyname == movement_key[ii])
           handler.handleEvent(move_messages[ii % 4]); }}};

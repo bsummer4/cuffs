@@ -7,11 +7,11 @@ spawn 550 50
 spawn 650 50
 spawn 750 50
 spawn 50 750
-spawn 150 750
-spawn 250 750
-spawn 350 750
-spawn 450 750
-spawn 550 750
-spawn 650 750
-spawn 750 750
+spawn 150 550
+spawn 250 550
+spawn 350 550
+spawn 450 550
+spawn 550 550
+spawn 650 550
+spawn 750 550
 map empty.gif

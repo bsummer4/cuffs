@@ -220,7 +220,7 @@ namespace physics {
 
     class PlayerProj : public SmartProjectile {
     public:
-      bool stuck;
+      bool stuck, bump;
       int health;
       PlayerProj(game::Object &player, Simulation *sim)
         : SmartProjectile (sim, player.id, player.x, player.y, 0, 0),
@@ -263,8 +263,9 @@ namespace physics {
           p.dx = p.dy = 0;
           end = hit; }
         p.x = end.x; p.y = end.y;
-        if (start != end)
-          messages.push_back(helper::msg_move(id, end.x, end.y));  }};
+        if (bump || start != end) {
+          bump = false;
+          messages.push_back(helper::msg_move(id, end.x, end.y));  }}};
 
     bool collision(SmartProjectile &p) {
       const static double collide_distance = 30;
@@ -400,13 +401,23 @@ namespace physics {
                                 start.x, start.y, vel.x, vel.y)); }
 
       if (!command.compare("move")) {
-        float dx, dy; i >> dx >> dy;
-        Point current(player->x(), player->y());
-        Point dest(current.x + dx, current.y + dy);
+        cerr << "move" << endl;
+        Vector2_d diff; i >> diff.x >> diff.y;
+        Vector2_d vel(player->p.dx, player->p.dy);
+        Vector2_d current(player->x(), player->y());
+        Vector2_d dest(current + diff - vel);
+        cerr << current.x << "x" << current.y << endl;
+        cerr << dest.x << "x" << dest.y << endl;
         Point hit;
-        if (find_before_hit(sim.state.global->map, current, dest, hit)) {
+        if (find_before_hit(state.global->map,
+                            current.floor(), dest.floor(), hit)) {
           dest = hit;
-          player->stuck = true; }
-        else player->stuck = false;
+          player->stuck = true;
+          player->p.dy = player->p.dx = 0; }
+        else
+          player->stuck = false;
+        cerr << dest.x << "x" << dest.y << endl;
         player->p.x = dest.x;
-        player->p.y = dest.y; }}};}
+        player->p.y = dest.y;
+        player->bump = true;
+        state.global->map.wrap_point(player->p.x, player->p.y); }}};}
