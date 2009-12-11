@@ -6,12 +6,18 @@
 Hello, and welcome to the Doxygen page for the Fistacuffs
 project. Please refer to the left frame for how to get around.
 
-A good idea is to look at the "Modules" Tree, as it will show you
-different "Modules" that breaks up our code into more logical blocks
-for ease of navigation through documentation.
+Our game has a set of namespaces, the best way to navigate through
+is to probably look at each namespace.
 
-This main page is mostly a placeholder of sorts for now. I'm sure it
-will be improved in the future.
+The Noteable namespaces that our game uses in no particular order is:
+  -# @ref game
+  -# @ref physics
+  -# @ref vectors
+  -# @ref sdl
+  -# @ref cmb
+
+The code is very modular, so to understand the ordering of how everything
+goes together, look at @ref Pipeline
 
 @section Tests
 
