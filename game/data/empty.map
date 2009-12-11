@@ -1,0 +1,17 @@
+spawn 50 50
+spawn 150 50
+spawn 250 50
+spawn 350 50
+spawn 450 50
+spawn 550 50
+spawn 650 50
+spawn 750 50
+spawn 50 750
+spawn 150 750
+spawn 250 750
+spawn 350 750
+spawn 450 750
+spawn 550 750
+spawn 650 750
+spawn 750 750
+map empty.gif
