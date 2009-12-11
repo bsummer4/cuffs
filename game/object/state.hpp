@@ -14,6 +14,11 @@ namespace game {
   /// All the types we use in the state;
   const char *types[10] = {"map", "player", "rock", NULL};
 
+  /// This is a special object of which there will only be one in the
+  /// State.  It lets us talk about global state information with the
+  /// same interface as we talk about non-global information:
+  ///     /set player-ben x 3
+  ///     /set global wind 0.3
   class GlobalObject : public Object {
   public:
     string mapname;
@@ -37,6 +42,8 @@ namespace game {
       else if (property == "gravity") { o << gravity; return o.str(); }
       return this->Object::getProperty(property); }};
 
+  /// This maintains a map of map of object_ids to objects, and knows
+  /// how to generate render messages for sdl::render.
   class State {
   public:
     typedef map <string, Object*> id_objects;

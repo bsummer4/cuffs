@@ -1,3 +1,10 @@
+/// This is like switchbox-cat except it prepends the
+/// switchbox-address of the user who sent it to every message.  It
+/// also prints messages of the form:
+///
+///     -1 lost_connection #
+///     -1 new_connection #
+
 #include <unistd.h>
 #include <iostream>
 #include <assert.h>

@@ -57,6 +57,8 @@ namespace game {
         return true; }
       throw runtime_error("Invalid command in file"); }};
 
+  // This represents a game map and provieds some game-specific
+  // functionallity such as explosions and point wrapping.
   // TODO We assume that pixels in the SDL_Surface are always ints.
   // This is not always true.  Make this more robust
   class Map {

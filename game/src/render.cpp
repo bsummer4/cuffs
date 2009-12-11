@@ -1,3 +1,6 @@
+/// Open an SDL window and draw things on it as drawing commands come
+/// in from stdin.
+
 #include <unistd.h>
 #include <iostream>
 #include "sdl.hpp"

@@ -1,3 +1,6 @@
+/// Simply print out the names off the keys that are pressed in the
+/// opened SDL window.  stdin is ignored.
+
 #include <unistd.h>
 #include <iostream>
 #include "keyListen.hpp"

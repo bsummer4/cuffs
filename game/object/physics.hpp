@@ -218,6 +218,8 @@ namespace physics {
           ("Trying to get at player object before it is created");
       return projectiles["player-" + state.username]; }
 
+    /// The physics::Simulation object for the player.  We have some
+    /// nasty internals-sharing with the simulation here.
     class PlayerProj : public SmartProjectile {
     public:
       bool stuck, bump;

@@ -10,6 +10,9 @@
 #include "lib.h"
 #include "misc.hpp"
 
+/// This is a bunch of classes for syncronizing output from various
+/// simulations.  The classes you should care about are
+/// cmb::Synchronizer, and cmb::TimestampAdder
 namespace cmb {
   using namespace std;
   class Event;
@@ -17,6 +20,8 @@ namespace cmb {
   typedef priority_queue<Event> pqueue;
   typedef map<int, pqueue> processes;
 
+  /// Just the time and an ordering within the time.  Also includes
+  /// methods for sorting withing a CMBQueue
   class Timestamp {
   public:
     int time;
@@ -44,6 +49,9 @@ namespace cmb {
         throw runtime_error("Invalid Timestamp");
       return in; }};
 
+  /// This is a utllity class that prepends a timestamp to the front
+  /// of all messages.  Time is mutable, and we expect you to change
+  /// it to reflect the current time.
   class TimestampAdder {
   public:
     int time;
@@ -155,6 +163,13 @@ namespace cmb {
         return Timestamp(-1, 0);
       return lowest; }};
 
+  /// Syncronizes all input based on the first two numbers in a
+  /// message which are the id of the process sending it and the
+  /// timestamp.  An example messages would be:
+  ///    0 0.0 hi
+  ///
+  ///  And the result passed to the eventHandler would be
+  ///      hi
   template <typename H>
   class Synchronizer {
     Queue cmb;

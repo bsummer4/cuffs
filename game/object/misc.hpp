@@ -130,6 +130,8 @@ namespace misc {
     pthread_mutex_t lock;
     T thunk; };
 
+  /// This is a class you can simpliy initialize in a function, and it
+  /// will print timing information when it goes out of scope.
   class Timer {
   public:
     Timer(unsigned long interval) : interval(interval) {

@@ -1,3 +1,8 @@
+/// Simply prints to stdout all messages received from the switchbox,
+/// and broadcasts all messages from stdin.  Very useful for
+/// debugging, and tying various unixy programs together over a
+/// switchbox
+
 #include <unistd.h>
 #include <iostream>
 #include <assert.h>

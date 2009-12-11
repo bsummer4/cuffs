@@ -1,7 +1,7 @@
 /*
   # Dispatcher2
 
-  Usage: dispatcher [interval in ms]
+  Usage: dispatcher2 [interval in ms]
   where interval must be less than 1000
 
   Reads lines from stdin.  Every 'interval' ms, send all the lines
@@ -15,9 +15,12 @@
   number of times we have printed lines is outputed to standard
   output.
 
+  This is different from 'dispatcher' in that is uses SDL timers
+  instead of signals
+
   ## Example
 
-      $ ./dispatcher 999
+      $ ./dispatcher2 999
       hi
       0 hi
       there

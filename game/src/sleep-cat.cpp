@@ -1,5 +1,12 @@
-/// Simple implementation of the unix utillity 'cat' using the event
-/// handler architecture.
+/// Just like normal cat except when it sees a line that looks like
+/// one of:
+///    sleep #
+///    usleep #
+/// It sleeps for that ammount of time and then doesn't print that
+/// line
+///
+/// This is useful for testing time-sensitive code.
+
 #include <assert.h>
 #include "misc.hpp"
 using namespace misc;

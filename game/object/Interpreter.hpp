@@ -21,6 +21,9 @@ namespace game {
     if (!command.compare(string("/gameover"))) return GAMEOVER;
     return INVALID;}
 
+  /// This parses state-change messages for the game::State object,
+  /// and, for each command, calls the coresponing methods on the
+  /// state object;.
   class Interpreter {
   public:
   public:

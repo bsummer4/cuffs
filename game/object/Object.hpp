@@ -10,6 +10,10 @@
 namespace game {
   using namespace std;
 
+  /// The superclass for everything in the State object.  The idea was
+  /// to make this look like a map <string, string> but have it's
+  /// slots directly accesible (without a lookup) to other objects in
+  /// the same process.
   class Object {
   public:
     // These are important enough to have their own public slots for

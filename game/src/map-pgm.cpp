@@ -1,4 +1,5 @@
-/// Copies an arbitrary image and writes it to stdout as a pgm image
+/// Copies an arbitrary image and writes it to stdout as a pgm image.
+/// Uses SDL for this.  Mostly for testing game::Map, and sdl::SDL.
 
 #include <string>
 #include "Map.hpp"

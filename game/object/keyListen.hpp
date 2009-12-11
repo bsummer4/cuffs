@@ -24,7 +24,7 @@ namespace sdl {
     SDLK_RALT, SDLK_LALT, SDLK_RMETA, SDLK_LMETA, SDLK_RSUPER, SDLK_LSUPER };
 
   /// When given SDL Keypres events, sends the name of the key to the
-  /// event handler.
+  /// event handler, supports mouse movement and mouse button-presses.
   /// @TODO Describe the relationship between keys and their string
   /// names.  Probably just a reference to some SDL docs.
   template <typename H>

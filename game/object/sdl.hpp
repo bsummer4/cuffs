@@ -14,13 +14,16 @@
 #include "macro.h"
 #include "vectors.hpp"
 
+/// Anything that uses sdl directly goes here.  Some classes use sdl a
+/// little bit (Map) but are in different namespaces
 namespace sdl {
   using namespace std;
   using namespace vectors;
   typedef boost::function <void (SDL_Event&)> EventHandler;
 
   /// Although the SDL stuff is global, this is a wrapper to make it
-  /// look like an object
+  /// look like an object.  You should do all your sdl stuff through
+  /// this object.
   class SDL {
     vector <EventHandler> _event_handlers;
     bool _video_initialized;
@@ -135,8 +138,8 @@ namespace sdl {
     /// just pick an arbitrary one
     return red; }
 
-  /// A simple rendering object.  We initialize and quit sdl in our
-  /// constructor and destructor.
+  /// A simple rendering object.  This lets us draw various primitives
+  /// on the screen with a text-based interface.
   class Renderer {
   public:
     /// We expect that sdl.initVideo() has already been called.

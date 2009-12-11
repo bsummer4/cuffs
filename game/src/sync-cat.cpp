@@ -1,10 +1,23 @@
 /*
   # Sync_cat
 
-  usage: ./sync_cat server port
+  usage: ./sync_cat [ids-to-synchronize-from]
 
   This listens to all addresses on the switchbox that actually send
   stuff, synchronizes their outputs, and print the resulting messages.
+  This is very useful for testing the syncronizer, but also for doing
+  synchronization on programs that weren't designed for it.
+
+  Timestamp and sender information is expected on input an is not
+  printed on output.  Example usage:
+
+      ./sync_cat 0 1
+      0 0.0 hi
+      1 0.0 there
+      hi # output
+      there # output
+      0 0.1 hihihi
+      ^D
 */
 
 #include <assert.h>

@@ -1,5 +1,7 @@
-/// This takes game messages from stdin, interprets them and sends
-/// render messages to stdout.
+/// This is the game itself stdin messages are passed to the state
+/// interpreted, and state change messages are sent to stdout.
+
+/// TODO This needs a big comment describing architecture
 
 #include <sstream>
 #include "state.hpp"
@@ -179,6 +181,8 @@ struct MouseHandler {
     int x = e.motion.x, y = e.motion.y;
     ui.cursor = Point(x, y); }};
 
+/// This calls all the different components of the game in a certain
+/// order.  Most of the things called access the game::State object.
 template <typename O>
 class Pipeline {
   MsgQueue &gameInQ, &userInQ;

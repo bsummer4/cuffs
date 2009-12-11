@@ -4,6 +4,9 @@
 #include <boost/thread/mutex.hpp>
 #include <boost/shared_ptr.hpp>
 
+/// Inherit from this to get threading.  The usage is:
+///     threaded.start()
+///     threaded.join()
 class Threaded {
 public:
   Threaded() : stopRequested(false), runThread() {}
