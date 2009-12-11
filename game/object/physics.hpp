@@ -4,7 +4,7 @@
 #include "vectors.hpp"
 
 
-/// Physics for projectils
+/// Physics for projectiles
 namespace physics {
   using namespace std;
   using namespace vectors;
@@ -152,24 +152,13 @@ namespace physics {
     float dy() { return p.dy; };
     void push(Point from, float power) {
       typedef Vector2 <double> V2;
-      cerr << "push " << from.x << " " << from.y << " " << power
-           << " we are at: " << p.x << " " << p.y
-           << " with vel: " << p.dx << " " << p.dy << endl;
       Vector2_d translation(from.x - x(), from.y - y());
-      cerr << "  -> translation: "
-           << translation.x << " " << translation.y << endl;
       V2 unit_translation = translation.normalized();
-      cerr << "  -> unit_translation: "
-           << unit_translation.x << " " << unit_translation.y << endl;
       V2 effect = unit_translation * power;
-      cerr << "  -> effect: "
-           << effect.x << " " << effect.y << endl;
       p.dy -= effect.y;
       p.dx -= effect.x;
       p.y -= effect.y;
-      p.x -= effect.x;
-      cerr << "loc, vel = ((" << p.x << " " << p.y << ") "
-           << "(" << p.dx << " " << p.dy << ")" << endl; }
+      p.x -= effect.x; }
 
     virtual void update(game::State&, vector <string>&, bool&,
                         vector<Explosion>&) = 0;
@@ -259,7 +248,6 @@ namespace physics {
 
         Point hit;
         if (find_before_hit(state.global->map, start, end, hit)) {
-          cerr << "we are stuck" << endl;
           stuck = true;
           p.dx = p.dy = 0;
           end = hit; }

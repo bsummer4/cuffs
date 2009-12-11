@@ -23,15 +23,10 @@ static int start_time; // set in main
 const static int game_interval = 40;
 
 Vector2_d throw_velocity(Vector2_d player, Vector2_d cursor) {
-  cerr << "t_w" << endl;
-  cerr << "  . " << cursor.x << " " << cursor.y << "\n"
-       << "  . " << player.x << " " << player.y << endl;
   Vector2_d vel(cursor - player);
-  cerr << "  . " << vel.x << " " << vel.y << endl;
   vel = vel/10;
   if (vel.norm() > max_throw_speed) {
     vel = Vector2_d(vel.normalized() * max_throw_speed);
-    cerr << "  . " << vel.x << " " << vel.y << endl;
     return vel; }
   return vel; }
 
@@ -118,7 +113,6 @@ struct UserInterface {
                            sim.energy.ENERGY_MAX));
 
     // Health
-    cerr << "health: " << player_proj->health << endl;
     output.push_back(meter(0, 0, 255, 770,
                            (double) player_proj->health / 100));
 
@@ -204,7 +198,6 @@ public:
       simInt(sim, state), iteration(0), output(output), ta(0), game_time(0),
       ui(ui) {}
   void operator()(SDL_Event& e) {
-    //cerr << ".";
     int new_game_time = (SDL_GetTicks() - start_time) / game_interval;
     if (new_game_time <= game_time) return;
     int old_time = game_time;

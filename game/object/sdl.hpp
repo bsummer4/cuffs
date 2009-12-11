@@ -66,7 +66,7 @@ namespace sdl {
       if (!screen) throw runtime_error(SDL_GetError());
       SDL_WM_SetCaption(window_caption.c_str(), NULL);
       _video_initialized = true;
-      SDL_EnableKeyRepeat(30,80);}
+      SDL_EnableKeyRepeat(30,60);}
 
     void initAudio() {
       if (!audio) throw runtime_error("SDL Wasn't initialized for audio.  ");
@@ -237,13 +237,11 @@ namespace sdl {
       if (!command.compare("sound")) {
         string id, filename;
         in >> id >> filename;
-        new_sound(id, filename);
-        /* cerr << "loaded sound: " << id << endl; */ }
+        new_sound(id, filename); }
       if (!command.compare("play")) {
         string id;
         in >> id;
-        play(id);
-        /* cerr << "Played: " << id << endl; */ }}
+        play(id); }}
 
     /// TODO This is a hack.  Don't use this unless you really know
     /// what's up

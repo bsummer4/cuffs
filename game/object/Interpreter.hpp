@@ -26,7 +26,7 @@ namespace game {
   public:
     Interpreter(State &state) : state(state) {}
     void handleEvent(const string &event) {
-      cerr << "-> " << event << endl;
+      // cerr << "-> " << event << endl;
       istringstream i(event);
 
       // Get the command from input
