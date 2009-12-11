@@ -1,52 +1,3 @@
-Design
-======
-
-Designed to be awesome.
-
-
-Switchbox
----------
-
-A program for handling routing between programs.  There is a client
-library for connecting to and creating messages to be sent through the
-switchbox.  This library is available in python, c, and c++.
-
-Running
-^^^^^^^
-
-usage: switchbox [port]
-
-If you pass a port of 0 or you don't pass a port, it will just use
-some available port.
-
-Status Updates
-^^^^^^^^^^^^^^
-
-- listening:  We opened a port and are accepting connections
-- port number: We are listening on port 'number'
-
-We might eventually add status updates for other events, like
-connections and disconnections.  For now, there is no need.
-
-Client Library
-^^^^^^^^^^^^^^
-
-Basically, when you want to do things with the switchbox, you:
-
-- Open a socket with 'open_connection' (from message.h)
-- Create a message with one of the functions: (maybe
-  'string_to_message')
-- Send the message with 'switchbox_send'
-- Receive with 'switchbox_receive'
-
-Messages have a binary header, and then a payload.  The switchbox does
-different routing based on the information in the header.  There are
-special "routing types" for actually controlling the switchbox.  These
-let you create, and remove groups.
-
-See 'src/switchbox/switchbox_client.h' for details.
-
-
 General Game Design
 -------------------
 
@@ -175,4 +126,3 @@ Event Interpreter (interfaces)
   - Real version – Calls proper API call for the given message.
 
 State Object – Mutators and accessors for specific state of game.
-

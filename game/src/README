@@ -1,7 +1,8 @@
-This is a bunch of small programs that use various internal libraries.
-This provieds a set of entry points for manually testing code, and
-serves as light ad-hock documentation for the libraries themselves.
-Most of this code is very simple and readable.
+This directory contains the game and a bunch of small programs that
+use various internal libraries.  This provieds a set of entry points
+for manually testing code, and serves as light ad-hock documentation
+for the libraries themselves.  Most of this code is very simple and
+readable (game.cpp is *not*).
 
 Most of these utilities take their input from stdin and output to
 stdout so you can set up automatic testing very easily by recording a
@@ -21,26 +22,23 @@ example:
     $ diff output test_output
     $ rm output input test_output
 
-
 # Testing
-
-There are a couple of utillities for running tests.  ./test and
+There are a couple of utillities for running tests utils/.  ./test and
 ./run-tests.  ./run-tests uses the file test_data/tests to get a list
 of programs to test, then calls ./test on all of them, ./test runs
 test_data/$program_in and compares the output to
 test_data/$program_out.  Some of the programs tested don't have any
 output.  The point of theses is to make sure the program doesn't fail
 with the given output, or for the test-runner to manually verify the
-on-screen output (render).
+on-screen output (render).  This is all run if you do 'make check' in
+or above this directory.
 
 # Running
-
 To run the game do:
 
-    xterm0> cd $SBDIR; ./switchbox 38235
-    xterm1> ./sixty-nine './ref.py ben john annotations.txt' './switchbox-connect localhost 38235'
-    xterm2> ./sixty-nine './game ben' './switchbox-connect localhost 38235'
-    xterm3> ./sixty-nine './game john' './switchbox-connect localhost 38235'
+   xterm1> ./overworld-launcher.py $username1
+   xterm2> ./overworld-launcher.py $username2 localhost
+   xterm3> ./overworld-launcher.py $username3 localhost
 
-This should open two SDL windows.  You can press SPACE in either
-window to drop a rock from the position of the associated player.
+Then, in one of the windows, select all three players and push the
+play button.
