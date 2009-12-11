@@ -37,17 +37,21 @@ namespace sdl {
     ~KeyListener() {}
 
     void operator()(SDL_Event& event) {
-      if (event.type == SDL_KEYDOWN){
-        cerr << "keyevent" << endl;
+      switch (event.type) {
+      case SDL_KEYDOWN: {
         SDLKey key = event.key.keysym.sym;
         if (isModKey(key)) return;
         handler.handleEvent(getModifiers(SDL_GetModState()) +
-                            SDL_GetKeyName(key)); 
-      }else if (event.type == SDL_MOUSEBUTTONDOWN ){
-        /// @TODO is there an SDL function that does this for me? 
-        //int foo = event.button.button;
-        if ( event.button.button == SDL_BUTTON_LEFT )
-          handler.handleEvent("leftmousebutton"); }}
+                            SDL_GetKeyName(key)); }
+        break;
+      case SDL_MOUSEBUTTONDOWN:
+        if (event.button.button == SDL_BUTTON_LEFT)
+          handler.handleEvent("leftmousebutton");
+        break;
+      case SDL_MOUSEMOTION: {
+          ostringstream o;
+          o << "mouse " << event.motion.x << " " << event.motion.y;
+          handler.handleEvent(o.str()); }}}
 
   private:
     string getModifiers(SDLMod mod) {

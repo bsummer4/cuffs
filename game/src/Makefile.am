@@ -7,9 +7,10 @@ AM_CFLAGS = $(AM_CXXFLAGS)
 bin_PROGRAMS = sync-cat delayed-cat interpret cat render switchbox-cat \
                game keylisten sleep-cat map-pgm sixty-nine \
                switchbox-connect physics dispatcher2 dispatcher repeater \
-               sb_io keystate
+               sb_io keystate paint_window
 
 cat_SOURCES = cat.cpp
+paint_window_SOURCES = paint_window.cpp
 delayed_cat_SOURCES = delayed-cat.cpp
 dispatcher2_SOURCES = dispatcher2.cpp ../object/lib.c
 dispatcher_SOURCES = dispatcher.cpp ../object/lib.c

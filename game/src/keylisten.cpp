@@ -12,7 +12,6 @@ int main(int argc, char *argv[]) {
   sdl.initVideo(800, 600, 32, "KeyListener");
   misc::Printer p;
   KeyListener <typeof(p)&> listen(p, sdl);
-  // TODO Are we copying listen here?
   sdl.registerEventHandler(listen);
   sdl.runEventLoop();
   return 0; }
