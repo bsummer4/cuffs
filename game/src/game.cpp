@@ -28,6 +28,7 @@ Vector2_d throw_velocity(Vector2_d player, Vector2_d cursor) {
        << "  . " << player.x << " " << player.y << endl;
   Vector2_d vel(cursor - player);
   cerr << "  . " << vel.x << " " << vel.y << endl;
+  vel = vel/10;
   if (vel.norm() > max_throw_speed) {
     vel = Vector2_d(vel.normalized() * max_throw_speed);
     cerr << "  . " << vel.x << " " << vel.y << endl;
@@ -91,6 +92,7 @@ struct UserInterface {
       Vector2_d playerpos(player.x, player.y);
       Vector2_d cursorpos(cursor.x, cursor.y);
       Vector2_d vel = throw_velocity(playerpos, cursorpos);
+      vel = vel * 5;
       cerr << "arrow throw_vel: " << vel.x << " " << vel.y << endl;
       Vector2_d endpoint = playerpos + vel;
       cerr << "arrow endpoint: " << endpoint.x << " " << endpoint.y << endl;
@@ -126,6 +128,9 @@ struct InputHandler {
   InputHandler(H handler, UserInterface &ui, physics::Simulation &sim)
     : handler(handler), ui(ui), sim(sim) {}
   void handleEvent(string event) {
+    if (event == "escape") {
+      SDL_UserEvent event = {SDL_QUIT, 0, NULL, NULL};
+      SDL_PushEvent((SDL_Event*) &event); }
     if (event == "space" || event == "leftmousebutton") {
       if (!sim.alive()) return;
       // Check to see if we have enough energy to shoot
@@ -133,8 +138,7 @@ struct InputHandler {
       sim.energy.use_energy(sim.energy.ROCK_COST);
 
       Vector2_d playerpos = Vector2_d(sim.player()->x(), sim.player()->y());
-      Vector2_d vel = throw_velocity(playerpos,
-                                     Vector2_d(ui.cursor));
+      Vector2_d vel = throw_velocity(playerpos, Vector2_d(ui.cursor));
       ostringstream o;
       o << "shoot rock " << (int) floor(vel.x) << " "
         << (int) floor(vel.y) << endl;
@@ -225,6 +229,7 @@ void ref_handshake(string username, PlayerMap &players, string &map,
       return; }
    throw runtime_error("Bad handshake message"); }}
 
+
 Uint32 gameLoopTimer(Uint32 interval, void* param) {
   SDL_UserEvent event = {SDL_USEREVENT, 0, NULL, NULL};
   SDL_PushEvent((SDL_Event*)&event);
@@ -238,6 +243,7 @@ int main(int num_args, char **args) {
   // SDL
   assert(0 == chdir("../data"));
   sdl::SDL sdl(true, true);
+  sdl.hide_cursor();
   sdl.initVideo(800, 600, 32, "Rock-Throwing Game");
   sdl.initAudio();
 
@@ -294,5 +300,5 @@ int main(int num_args, char **args) {
   // Run everything
   lr.start();
   sdl.runEventLoop();
-
+  SDL_RemoveTimer(timer);
   return 0; }
