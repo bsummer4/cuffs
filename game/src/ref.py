@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+
 """
 # Usage
 
@@ -22,7 +23,7 @@ def randX(): return random.randint(0, 800)
 def randY(): return random.randint(40, 120)
 
 def log(obj):
-    sys.stderr.write(str(obj))
+    sys.stderr.write(str(obj) + "\n")
     sys.stderr.flush()
     return obj
 
@@ -36,16 +37,16 @@ def place_player(player, gamemap):
     return log('/new player-%s player %d %d'%(player, point[0], point[1]))
 
 def go(address_player, gamemap):
-    print '/map %s' % gamemap.mapname
-    print ("/start %s" % " ".join(["%s:%s"%(i, n)
-                                   for i, n in address_player.iteritems()]))
+    print log('/map %s' % gamemap.mapname)
+    print log(("/start %s" % " ".join(["%s:%s"%(i, n)
+                                       for i, n in address_player.iteritems()])))
     messages = ([place_player(player, gamemap)
                  for player in address_player.values()]
                 + list(change_gravity_wind(gamemap)))
     remain = len(messages)
     for message in messages:
         remain -= 1
-        sys.stdout.write("0.%d %s\n"%(remain, message))
+        print log("0.%d %s"%(remain, message))
 
 # Return a dict of addresses -> playernames
 def wait_for_players(players):
@@ -68,9 +69,10 @@ count = 1
 def handle_line(line_text, logfile, gamemap):
     global count
     count += 1
-    if not count % 1000:
+    if count % 1000 == 0:
+        log("changing it up with wind/gravity")
         for line in change_gravity_wind(gamemap):
-            print "0.0 %s" % line
+            print log("0.0 %s" % line)
         sys.stdout.flush()
     line = line_text.split()
     if len(line) <= 3: return
@@ -83,7 +85,7 @@ def handle_line(line_text, logfile, gamemap):
     elif command == "/gameover":
         exit(0)
     elif from_ == "-1":
-        print '0.0 /gameover' # Hack 0.0 isn't the current time.
+        print log('0.0 /gameover') # Hack 0.0 isn't the current time.
         sys.stdout.flush()
 
 

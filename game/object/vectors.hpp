@@ -24,12 +24,20 @@ namespace vectors {
     Vector2 <T> operator* (T times) {
       return Vector2 <T> (x * times, y * times); }};
 
+  /// Hack to get around the fact that lround isn't in std.  This is
+  /// the only way I could find to call this funciton in a method
+  /// called 'lround'.
+  int _lround(double x) { return lround(x); }
+
   struct Vector2_d : public Vector2 <double> {
     Vector2_d(double x, double y) : Vector2 <double> (x, y) {}
     Vector2_d(const Vector2 <int> &v) : Vector2 <double> (v.x, v.y) {}
     Vector2_d(const Vector2 <double> &v) : Vector2 <double> (v.x, v.y) {}
     Vector2 <int> floor() {
       int x_ = std::floor(x), y_ = std::floor(y);
+      return Vector2 <int> (x_, y_); }
+    Vector2 <int> lround() {
+      int x_ = _lround(x), y_ = _lround(y);
       return Vector2 <int> (x_, y_); }};
 
   typedef Vector2 <int> Point; }

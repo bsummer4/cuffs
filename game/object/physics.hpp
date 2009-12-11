@@ -90,10 +90,15 @@ namespace physics {
   bool find_before_hit(game::Map &map, Point p0, Point p1, Point &result) {
     Point hit(0, 0);
     if (!find_hit(map, p0, p1, hit)) return false;
-    Vector2_d v(p0.x - hit.x, p0.y - hit.y);
-    v.normalized();
-    result.x = hit.x + lround(v.x);
-    result.y = hit.y + lround(v.y);
+    cerr << "hit at: " << hit.x << "x" << hit.y << endl;
+    Vector2_d v(p0 - hit);
+    if (!v.norm()) { result = hit; return true; }
+    cerr << "translation: " << v.x << "x" << v.y << endl;
+    Vector2_d bullshit = v.normalized();
+    Point _bullshit = bullshit.lround();
+    cerr << "bullshitting: " << bullshit.x << "x" << bullshit.y << endl;
+    result = hit + _bullshit;
+    cerr << "result: " << result.x << "x" << result.y << endl;
     return true; }
 
   struct Projectile {
