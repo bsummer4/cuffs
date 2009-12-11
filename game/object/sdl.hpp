@@ -39,6 +39,8 @@ namespace sdl {
       if (SDL_Init(flags) == -1)
         throw runtime_error("Unable to initialize SDL"); }
 
+    void hide_cursor() { SDL_ShowCursor(SDL_DISABLE); }
+
     void registerEventHandler(EventHandler h) {
       _event_handlers.push_back(h); }
 
@@ -63,7 +65,7 @@ namespace sdl {
                                 SDL_HWSURFACE|SDL_DOUBLEBUF);
       if (!screen) throw runtime_error(SDL_GetError());
       SDL_WM_SetCaption(window_caption.c_str(), NULL);
-      _video_initialized = true; 
+      _video_initialized = true;
       SDL_EnableKeyRepeat(30,60);}
 
     void initAudio() {

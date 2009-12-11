@@ -56,6 +56,10 @@ namespace switchbox {
     const string switchbox_hostname;
     const int switchbox_port;
 
+    virtual void stop() {
+      close_connection(_connection);
+      this->Threaded::stop(); }
+
     Connection(const string switchbox_hostname, const int switchbox_port,
                H handler)
       : switchbox_hostname(switchbox_hostname),

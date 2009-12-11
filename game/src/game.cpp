@@ -145,10 +145,11 @@ struct InputHandler {
       cerr << o.str();
       handler.handleEvent(o.str()); }
 
-    string keys[6] = {"left", "right", "up", "a", "d", "w"};
-    string results[6] = {"move -5 -5", "move 5 -5", "move 0 -20",
-                         "move -5 -5", "move 5 -5", "move 0 -20"};
-    FORII(6)
+    string keys[] = {"left", "right", "up", "down", "a", "d", "w", "s"};
+    string results[] = {
+      "move -5 -5", "move 5 -5", "move 0 -20", "move 0 20",
+      "move -5 -5", "move 5 -5", "move 0 -20", "move 0 20"};
+    FORII(8)
       if (event == keys[ii])
         handler.handleEvent(results[ii]); }};
 
@@ -259,7 +260,7 @@ int main(int num_args, char **args) {
 
   // Game State and logic objects
   State state(mapname, username, sdl);
-  state.global->wind = 0.1;
+  state.global->wind = 0.01;
   state.global->gravity = 0.4;
   physics::Simulation sim(state);
   MsgQueue gameQ;

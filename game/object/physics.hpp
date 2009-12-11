@@ -11,39 +11,35 @@ namespace physics {
 
   /// How much Energy the player has for shooting
   struct Energy {
-      static const float ENERGY_RECHARGE_RATE = 0.05; ///< About one per second
-      static const float ENERGY_MAX = 15.0;
-      static const float ROCK_COST = 1.0;
-    public:
-      float energy;
-    public:
-      Energy() : energy(ENERGY_MAX) {};
-      float get_energy(){ return energy; }
-      bool use_energy(float cost) {
-        if (cost < energy){ energy -= cost; return true; }
-        else { return false; }}
-      void recharge(){
-        energy = MIN(energy + ENERGY_RECHARGE_RATE, ENERGY_MAX);}};
+    static const float ENERGY_RECHARGE_RATE = 0.05; ///< About 1 shot/second
+    static const float ENERGY_MAX = 15.0;
+    static const float ROCK_COST = 1.0;
+  public:
+    float energy;
+  public:
+    Energy() : energy(ENERGY_MAX) {};
+    float get_energy(){ return energy; }
+    bool use_energy(float cost) {
+      if (cost < energy){ energy -= cost; return true; }
+      else { return false; }}
+    void recharge(){
+      energy = MIN(energy + ENERGY_RECHARGE_RATE, ENERGY_MAX); }};
 
   struct Explosion {
     int x, y, radius;
     Explosion() : x(0), y(0), radius(0) {}
     Explosion(int x, int y, int radius) : x(x), y(y), radius(radius) {}};
 
-  bool on_x_border(game::Map &map, Point p) {
-    return p.x == 0 || p.x == map.width - 1; }
-
   bool on_map(game::Map &map, Point p) {
     Point min(0, 0), max(map.width - 1, map.height - 1);
     return !(p.x > max.x || p.x < min.x || p.y > max.y || p.y < min.y); }
-
 
   /// Find the point closest to p0 between p0 and p1 that is solid,
   /// and set result to it.  Return false if there was not such point.
   bool find_hit(game::Map &map, Point p0, Point p1, Point &result) {
     /// @TODO HACK!!! Check to see if p0 and p1 are Really far away
-    /// and if they are say no collision
-    if ( hypot(p0.x - p1.x, p0.y - p1.y) > map.width/2 ) return false;
+    /// and if they are say no collision.  This lets us do wrapping easier.
+    if (hypot(p0.x - p1.x, p0.y - p1.y) > map.width/2) return false;
     int x0 = p0.x, x1 = p1.x, y0 = p0.y, y1 = p1.y;
     vector <Point> hits;
     bool steep = abs(y1 - y0) > abs(x1 - x0);
@@ -71,8 +67,6 @@ namespace physics {
     ystep = (y0 < y1) ? 1 : -1;
     for (int x = x0; x < x1; x++) {
       Point current = steep ? Point(y, x) : Point(x, y);
-      //if (on_x_border(map,current))
-      //  hits.push_back(current);
       if (on_map(map,current) && map.is_solid(current.x, current.y))
         hits.push_back(current);
       error += deltaerr;
@@ -128,7 +122,17 @@ namespace physics {
       return o.str(); }
     string msg_annotate(string msg) {
       ostringstream o; o << "/annotate " << msg;
-      return o.str(); }}
+      return o.str(); }
+    void explosion_messages(Point hit, vector <string> &messages,
+                            int map_width) {
+      messages.push_back(helper::msg_explode(hit.x, hit.y, 50));
+      if (hit.x < 25)
+        messages.push_back
+          (helper::msg_explode(map_width - hit.x, hit.y, 50));
+      else if (hit.x > map_width - 25) {
+        messages.push_back
+          (helper::msg_explode(hit.x - map_width,
+                               hit.y, 50)); }}}
 
   class Simulation;
 
@@ -166,6 +170,7 @@ namespace physics {
       p.x -= effect.x;
       cerr << "loc, vel = ((" << p.x << " " << p.y << ") "
            << "(" << p.dx << " " << p.dy << ")" << endl; }
+
     virtual void update(game::State&, vector <string>&, bool&,
                         vector<Explosion>&) = 0;
 
@@ -262,6 +267,16 @@ namespace physics {
         if (start != end)
           messages.push_back(helper::msg_move(id, end.x, end.y));  }};
 
+    bool collision(SmartProjectile &p) {
+      const static double collide_distance = 8;
+      FOREACH(game::State::id_objects, it, state.objects) {
+        string id = it->first;
+        game::Object &obj = *it->second;
+        if (projectiles.count(id)) continue;
+        double distance = hypot(p.x() - obj.x, p.y() - obj.y);
+        if (distance < collide_distance) return true; }
+      return false; }
+
     // Return whether or not the player is in the simulation.  If the
     // player is in the game::State, but not in the simulation, then
     // it is added to the simulation and we return true;
@@ -315,28 +330,31 @@ namespace physics {
         erase = true;
         messages.push_back(helper::msg_delete(id));
         return; }
-      FOREACH(vector<Explosion>, it, explosions){
+
+      FOREACH (vector<Explosion>, it, explosions) {
         if (feel_explosion(*it) > 0) {
           erase = true;
-          messages.push_back(helper::msg_explode(p.x, p.y, 50));
+          helper::explosion_messages(start, messages,
+                                     state.global->map.width);
           messages.push_back(helper::msg_delete(id));
           return; }}
+
+      // Collisions with other objects
+      if (sim->collision(*this)) {
+        erase = true;
+        helper::explosion_messages(start, messages, state.global->map.width);
+        messages.push_back(helper::msg_delete(id));
+        return; }
 
       // Modify ourself
       p.accelerate(state.global->wind, state.global->gravity);
       p.move(state.global->map);
-
       Point end(x(), y());
-      { Point hit; // We are sure that this will be set in find_hit in
-                   // all cases where we use it.
+
+      { Point hit(end);;
         if (find_hit(state.global->map, start, end, hit)) {
           erase = true;
-          messages.push_back(helper::msg_explode(hit.x, hit.y, 50));
-          // Do I need to create a second explosion for a mirror effect?
-          if ( hit.x < 25 ){
-            messages.push_back(helper::msg_explode(state.global->map.width - hit.x, hit.y, 50)); }
-          else if ( hit.x > state.global->map.width - 25 ){
-            messages.push_back(helper::msg_explode(hit.x - state.global->map.width, hit.y, 50)); }
+          helper::explosion_messages(hit, messages, state.global->map.width);
           messages.push_back(helper::msg_delete(id));
           return; }}
       messages.push_back(helper::msg_move(id, end.x, end.y)); }};

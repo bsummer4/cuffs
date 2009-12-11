@@ -38,4 +38,5 @@ int main (int num_args, char **args) {
   lr.start();
   c.start();
   lr.join();
+  c.stop();
   return 0; }
