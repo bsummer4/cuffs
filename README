@@ -10,20 +10,26 @@ already.
 
 # Directories
 - /doc -- All Documentation; Formatted in ReStructured Text.
-- /Bootstrap -- Shell script for generating the build.
+- /Bootstrap -- Shell script for generating the autotools build.
 - /switchbox -- A tool for group communication over the network.
-- /game -- The game itself.
+- /game -- The game itself uses switchbox for networking.
 
 # Prerequisites
-libsdl1.2debian
-libsdl1.2-dev
-libsdl-image1.2
-libsdl-image1.2-dev
-libsdl-mixer1.2
-libsdl-mixer1.2-dev
-libsdl-gfx1.2-4
-libsdl-gfx1.2-dev
-libboost-dev
+
+Here are the Ubuntu packages we are using:
+
+- libsdl1.2debian
+- libsdl1.2-dev
+- libsdl-image1.2
+- libsdl-image1.2-dev
+- libsdl-mixer1.2
+- libsdl-mixer1.2-dev
+- libsdl-gfx1.2-4
+- libsdl-gfx1.2-dev
+- libboost-dev
+- libboost-thread1.37.0
+- python-wxgtk2.8
+- swig
 
 ## Building Doxygen Documentation
 The output is generated in ./doc/doxygen, and the docs are available
@@ -38,3 +44,12 @@ Here are the options we use:
 
     astyle -Uas4 # for c++ code
     indent -npsl -i4 -npcs -bli0 -brs -brf -br -nut # for pure c code
+
+We've actually drifted away from this a bit.  We've been using this
+coding style (Horrors!):
+
+    int main(int num_args, char **args) {
+       FORII (num_args) {
+         cerr << args[ii];
+         if (string(args[ii]) == "omgomgomg")
+           throw runtime_error("omgomgomg"); }}
