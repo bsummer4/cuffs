@@ -11,15 +11,15 @@ namespace physics {
 
   /// How much Energy the player has for shooting
   struct Energy {
-    static const float ENERGY_RECHARGE_RATE = 0.05; ///< About 1 shot/second
-    static const float ENERGY_MAX = 15.0;
-    static const float ROCK_COST = 1.0;
+    static const double ENERGY_RECHARGE_RATE = 0.05; ///< About 1 shot/second
+    static const double ENERGY_MAX = 15.0;
+    static const double ROCK_COST = 1.0;
   public:
-    float energy;
+    double energy;
   public:
     Energy() : energy(ENERGY_MAX) {};
-    float get_energy(){ return energy; }
-    bool use_energy(float cost) {
+    double get_energy(){ return energy; }
+    bool use_energy(double cost) {
       if (cost < energy){ energy -= cost; return true; }
       else { return false; }}
     void recharge(){
@@ -63,8 +63,8 @@ namespace physics {
         y1 = temp; }}
     int deltax = x1 - x0;
     int deltay = abs(y1 - y0);
-    float error = 0;
-    float deltaerr = ((float)deltay)/((float)deltax);
+    double error = 0;
+    double deltaerr = ((double)deltay)/((double)deltax);
     int ystep;
     int y = y0;
     ystep = (y0 < y1) ? 1 : -1;
@@ -80,9 +80,9 @@ namespace physics {
     // Calculate the closest hit and return it.  Return false if there
     // was no hit
     if (!hits.size()) return false;
-    float lowest_distance = INFINITY;
+    double lowest_distance = INFINITY;
     FOREACH (vector <Point>, hit, hits) {
-      float distance = hypotf(p0.x - hit->x, p0.y - hit->y);
+      double distance = hypotf(p0.x - hit->x, p0.y - hit->y);
       cerr << "  hit w/distance=" << distance << " @"
            << hit->x << "x" << hit->y << endl;
       // Check for wrapping
@@ -108,14 +108,14 @@ namespace physics {
     return true; }
 
   struct Projectile {
-    float x, y, dx, dy;
-    Projectile(float x, float y, float dx, float dy)
+    double x, y, dx, dy;
+    Projectile(double x, double y, double dx, double dy)
       : x(x), y(y), dx(dx), dy(dy) {}
     Projectile() {} // Uninitialized!!
     void move(game::Map &m) {
       x += dx; y += dy;
       m.wrap_point(x,y); }
-    void accelerate(float ddx, float ddy) { dx += ddx; dy += ddy; }};
+    void accelerate(double ddx, double ddy) { dx += ddx; dy += ddy; }};
 
   namespace helper {
     string msg_new(string id, int x, int y) {
@@ -155,13 +155,13 @@ namespace physics {
     string id;
     Projectile p;
     SmartProjectile (Simulation *sim, string id,
-                     float x, float y, float dx, float dy)
+                     double x, double y, double dx, double dy)
       : sim(sim), is_new(true), id(id), p(x, y, dx, dy) {}
-    float x() { return p.x; };
-    float y() { return p.y; };
-    float dx() { return p.dx; };
-    float dy() { return p.dy; };
-    void push(Point from, float power) {
+    double x() { return p.x; };
+    double y() { return p.y; };
+    double dx() { return p.dx; };
+    double dy() { return p.dy; };
+    void push(Point from, double power) {
       typedef Vector2 <double> V2;
       Vector2_d translation(from.x - x(), from.y - y());
       V2 unit_translation = translation.normalized();
@@ -312,7 +312,7 @@ namespace physics {
 
   struct Rock : public SmartProjectile {
     Rock (Simulation *sim, string id,
-          float x, float y, float dx, float dy)
+          double x, double y, double dx, double dy)
       : SmartProjectile(sim, id, x, y, dx, dy) {};
 
     /// Add whatever messages are needed to communicate our state
@@ -363,7 +363,7 @@ namespace physics {
 
   SmartProjectile *make_projectile(Simulation *sim,
                                    const string type, const string id,
-                                   float x, float y, float dx, float dy) {
+                                   double x, double y, double dx, double dy) {
     return new Rock(sim, id, x, y, dx, dy); }
 
   struct Interpreter {

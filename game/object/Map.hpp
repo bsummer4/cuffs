@@ -77,13 +77,22 @@ namespace game {
     const int width, height, max_pixel;
     const set <pair <int, int> > spawn_points;
     bool is_solid(int p) { return p != MAP_EMPTY; }
-    bool is_solid(int x, int y) { return is_solid(_(x, y)); }
-    void wrap_point(float &x, float &y){
+    bool is_solid(int x, int y) {
+      if (y < 0 || y > height) return false;
+      return is_solid(_(x, y)); }
+    void wrap_point(int &x, int &y) {
       // Ignore Y because we don't wrap it.
-      x = ((int)x+this->width)%this->width + (x-(int)x); y = y;}
+      while (x < 0) x += width;
+      x = (x % this->width); }
+    void wrap_point(double &x, double &y) {
+      // Ignore Y because we don't wrap it.
+      while (x < 0) x += width;
+      x = ((int)x % this->width) + (x - floor(x)); }
 
   private:
-    int point(int x, int y) { return width * y + x; }};
+    int point(int x, int y) {
+      wrap_point(x, y);
+      return width * y + x; }};
 
   /// For testing
   void map_to_pgm(Map &map, ostream &out) {
