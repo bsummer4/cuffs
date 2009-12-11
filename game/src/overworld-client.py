@@ -14,30 +14,40 @@ class OverworldFrame(wx.Frame):
     kwds["style"] = wx.DEFAULT_FRAME_STYLE
     wx.Frame.__init__(self, *args, **kwds)
     self.world = oworld
-    self.PlayerList = wx.ListBox(self, -1, choices=[],
-                                 style=wx.LB_MULTIPLE|wx.LB_EXTENDED|wx.LB_NEEDED_SB,
-                                 size=(150,400))
+    self.PlayerList = wx.ListBox (
+        self, -1, choices=[],
+        style=wx.LB_MULTIPLE|wx.LB_EXTENDED|wx.LB_NEEDED_SB,
+        size=(150,400))
     self.Play = wx.Button(self, -1, "Play", style=wx.BU_EXACTFIT)
     self.Logout = wx.Button(self, -1, "Logout")
+    self.Send = wx.Button(self, -1, "Send")
+    self.ChatInput = wx.TextCtrl(self, 1)
+    self.ChatBox = wx.TextCtrl(self, 1, style=wx.TE_MULTILINE|wx.TE_READONLY)
 
     self.__set_properties()
     self.__do_layout()
     self.Bind(wx.EVT_BUTTON, self.OnPlay, id=self.Play.GetId())
     self.Bind(wx.EVT_BUTTON, self.OnLogout, id=self.Logout.GetId())
+    self.Bind(wx.EVT_BUTTON, self.OnSend, id=self.Send.GetId())
     self.Bind(wx.EVT_CLOSE, self.OnLogout)
 
   def __set_properties(self):
     self.SetTitle("Fistacuffs Lobby")
 
   def __do_layout(self):
-    OverFrameSizer = wx.FlexGridSizer(2, 1, 5, 5)
-    ButtonBox = wx.BoxSizer(wx.HORIZONTAL)
+    OverFrameSizer = wx.FlexGridSizer(4, 1, 5, 5)
     OverFrameSizer.Add(self.PlayerList, 0,
                        wx.EXPAND|wx.ALIGN_CENTER_HORIZONTAL, 0)
+    ButtonBox = wx.BoxSizer(wx.HORIZONTAL)
     ButtonBox.Add((0, 0), 1, wx.EXPAND, 0)
     ButtonBox.Add(self.Play, 1, wx.EXPAND, 0)
     ButtonBox.Add(self.Logout, 1, wx.EXPAND, 0)
+    ButtonBox.Add(self.Send, 1, wx.EXPAND, 0)
     ButtonBox.Add((0, 0), 1, wx.EXPAND, 0)
+    OverFrameSizer.Add(self.ChatBox, 1,
+                       wx.EXPAND|wx.ALIGN_CENTER_HORIZONTAL, 0)
+    OverFrameSizer.Add(self.ChatInput, 1,
+                       wx.EXPAND|wx.ALIGN_CENTER_HORIZONTAL, 0)
     OverFrameSizer.Add(ButtonBox, 1, wx.EXPAND|wx.ALIGN_CENTER_HORIZONTAL, 0)
     self.SetSizer(OverFrameSizer)
     OverFrameSizer.Fit(self)
@@ -48,8 +58,13 @@ class OverworldFrame(wx.Frame):
   def SelectedPlayers(self):
     return map(self.PlayerList.GetString, self.PlayerList.GetSelections())
 
+  def OnSend(self, event):
+      print self.ChatInput.GetValue()
+      sys.stdout.flush()
+
   def OnPlay(self, event):
-    print "/play", " ".join(add_new(self.world.username, self.SelectedPlayers()))
+    print "/play", " ".join(add_new(self.world.username,
+                                    self.SelectedPlayers()))
     sys.stdout.flush()
 
   def OnLogout(self, event):
@@ -61,6 +76,7 @@ class Overworld(wx.App):
     self.username = username
     self.hostname = hostname
     wx.App.__init__(self)
+
   def OnInit(self):
     self.OverFrame = OverworldFrame(self, None, -1, "")
     self.OverFrame.Show(True)
@@ -80,6 +96,7 @@ def listen(OverFrame):
     sys.stderr.write("got line: " + line_text)
     sys.stderr.flush()
     if not line_text: break # EOF
+    OverFrame.OverFrame.ChatBox.AppendText(line_text)
     line = line_text.split()
     if len(line) == 0 or len(line) == 1: continue # empty input
     sender, command, args = line[0], line[1], line[2:]
@@ -91,8 +108,6 @@ def listen(OverFrame):
         app.OverFrame.PlayerList.Delete (
             app.OverFrame.PlayerList.FindString(arg))
     elif command == '/players':
-      if username in args:
-        args.remove(username)
       app.OverFrame.PlayerList.Set(args)
     elif command == '/play':
       print '/logout ' + app.username
