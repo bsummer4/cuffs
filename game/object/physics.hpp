@@ -413,11 +413,29 @@ namespace physics {
         Point hit;
         if (find_before_hit(state.global->map,
                             current.floor(), dest.floor(), hit)) {
+
+          // Can we fudge it?
+          if (hit == current.floor()) {
+            Point fudge_factor(Vector2_d(diff.normalized()).lround());
+            cerr << "fudge_factor "
+                 << fudge_factor.x << "x" << fudge_factor.y << endl;
+            Point fudge_start(current.floor() + fudge_factor);
+            cerr << "fudge_start "
+                 << fudge_start.x << "x" << fudge_start.y << endl;
+            Point ignore;
+            if (!find_before_hit(state.global->map,
+                                 fudge_start, dest.floor(), ignore)) {
+              cerr << "Fudged!" << endl;
+              goto fudge; }
+              else { cerr << "No fudge..." << endl; }}
+
           dest = hit;
           player->stuck = true;
           player->p.dy = player->p.dx = 0; }
-        else
-          player->stuck = false;
+
+        else {
+        fudge:
+          player->stuck = false; }
         cerr << dest.x << "x" << dest.y << endl;
         player->p.x = dest.x;
         player->p.y = dest.y;
