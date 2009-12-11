@@ -30,8 +30,8 @@ def playerUpdate():
             os.system("./switchbox.sh start %d > /dev/stderr" % game_port)
             time.sleep(0.05) # just in case
             os.system (
-                "./sixty-nine './ref.py %s annoations.txt' './switchbox-connect localhost %d'" %
-                ' '.join(names), game_port)
+                "./sixty-nine './ref.py %s annoations.txt' './switchbox-connect localhost %d'" \
+                    % (' '.join(names), game_port))
             os.system("./switchbox.sh stop %d > /dev/stderr" % game_port)
         sys.stdout.flush()
 
