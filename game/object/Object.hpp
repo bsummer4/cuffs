@@ -27,27 +27,29 @@ namespace game {
       setProperty("x", x);
       setProperty("y", y); }
 
-    string &getProperty(const string &property) {
+    virtual string getProperty(const string &property) {
       if (!property.compare("x")) {
         ostringstream o;
         o << x;
-        return *new string(o.str()); }
+        return string(o.str()); }
       if (!property.compare("y")) {
         ostringstream o;
         o << y;
-        return *new string(o.str()); }
+        return string(o.str()); }
       if (!property.compare("id")) return id;
       if (!property.compare("type")) return type;
       throw runtime_error("Invalid ID for getting.  "); }
 
-    void setProperty(const string &property, const string &value) {
+    virtual void setProperty(const string &property, const string &value) {
       if (!property.compare("x")) x = atoi(value.c_str());
       else if (!property.compare("y")) y = atoi(value.c_str());
       else throw runtime_error("Invalid ID for setting.  "); }
 
-    friend bool operator< (const Object &x, const Object &y);
+    friend bool operator< (const Object &x, const Object &y) {
+      return x.id < y.id; }
 
     string &operator[] (const string &prop) {
-      return this->getProperty(prop);}};
-
-  bool operator< (const Object &x, const Object &y) { return x.id < y.id; }}
+      // TODO This is a memory leak and bad...  Rework this
+      string *result = new string;
+      *result = getProperty(prop);
+      return *result; }};}

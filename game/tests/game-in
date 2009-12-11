@@ -8,8 +8,9 @@
 sleep 1
 1 1.0 /explode 400 400 160
 2 1.0 /move player-fred 30 30
+-1 new_connection 5
 5 1.0 /new SHOULD BE IGNORED BY CMB!!!!!
+-1 lost_connection 5
 1 2.0 hello
 sleep 1
-0 2.0 The next line is invalid to cause the game to fuck up.
-fuck up!
+0 2.0 gameover

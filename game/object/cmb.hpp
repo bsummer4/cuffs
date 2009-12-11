@@ -104,7 +104,9 @@ namespace cmb {
     /// Pass the constructor a vector of client addresses. Any messages
     /// received by clients not in this initial list are ignored.
     Queue(std::vector<int> &clients) : strictClients(true) {
-      FORII ((int)clients.size()){ cmbQueue[clients[ii]]; cerr << clients[ii] << endl; }
+      if (!clients.size()) strictClients = false;
+      FORII ((int)clients.size()) {
+        cmbQueue[clients[ii]]; cerr << clients[ii] << endl; }
       assert(cmbQueue.size() == clients.size()); }
 
     /// Place the given Event message onto the queue associated with
@@ -114,6 +116,10 @@ namespace cmb {
         return false; // Ignore invalid messages
       cmbQueue[processId].push(event);
       return true; }
+
+    void remove(int process) {
+      if (cmbQueue.count(process))
+        cmbQueue.erase(process); }
 
     /// All events before @ref time
     pqueue getEvents(Timestamp time) {
@@ -163,6 +169,15 @@ namespace cmb {
       : cmb(), handler(handler), current_time(-1) {}
     Synchronizer(H handler, vector <int> clients)
       : cmb(clients), handler(handler), current_time(-1) {}
+    void handleAdmin(string message) {
+      istringstream i(message);
+      int from, about;
+      string payload;
+      i >> from >> payload >> about;
+      assert(from == -1 && "Not an admin message!");
+      if (payload == "lost_connection") {
+        cmb.remove(about); }}
+
     void handleEvent(string event) {
       int process;
       Timestamp time(0, -1);
@@ -170,15 +185,13 @@ namespace cmb {
       { istringstream i(event);
         char space;
         i >> process;
-        // if (process == -1) return; // TODO Hack to handle admin messages
+        if (process == -1) {
+          handleAdmin(event);
+          return; };
         i >> time;
         i.get(space);
         message = misc::slurp(i); }
       Event e(time, message);
-      //      cerr << "(Event :time " << e.eventOccurs.time << " :ordering "
-      //           << e.eventOccurs.order
-      //           << " :message \"" << e.eventString << "\""
-      //           << ")" << endl;
       cmb.queueMessage(process, Event(time, message));
 
       // Check to see if we can run any events If cmb.getLowestTime

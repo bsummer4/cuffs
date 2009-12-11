@@ -16,14 +16,25 @@ namespace game {
 
   class GlobalObject : public Object {
   public:
+    string mapname;
+    Map map;
+    float wind, gravity;
     GlobalObject (const string &map_filename, sdl::SDL &sdl)
       : Object("global", "global", 0, 0),
         mapname(map_filename),
         map(MapLoader(map_filename, sdl)),
         wind(0), gravity(0) {}
-    string mapname;
-    Map map;
-    float wind, gravity; };
+
+    virtual void setProperty(const string &property, const string &value) {
+      if (property == "wind") wind = atoi(value.c_str());
+      else if (property == "gravity") gravity = atoi(value.c_str());
+      else this->Object::setProperty(property, value); }
+
+    virtual string getProperty(const string &property) {
+      ostringstream o;
+      if (property == "wind") { o << wind; return o.str(); }
+      else if (property == "gravity") { o << gravity; return o.str(); }
+      return this->Object::getProperty(property); }};
 
   class State {
   public:
