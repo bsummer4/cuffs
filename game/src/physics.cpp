@@ -22,13 +22,14 @@ struct Hack {
         p.handleEvent(*it); }}}};
 
 int main (int num_args, char **args) {
-  assert(0 == chdir("../data"));
-  assert(num_args == 4 && "usage physics map x y");
+  assert(!chdir("../data"));
+  assert(num_args == 4 && "usage physics mapname x y");
   string map_filename = args[1];
+  map_filename = map_filename + ".map";
   int x = atoi(args[2]), y = atoi(args[3]);
   sdl::SDL sdl(true);
   sdl.initVideo(1, 1, 32, "wtf");
-  game::State s(args[1], "username", sdl);
+  game::State s(map_filename.c_str(), "username", sdl);
   s.add(new game::Object("player-username", "player", x, y));
   physics::Simulation sim(s);
   physics::Interpreter simInt(sim, s);

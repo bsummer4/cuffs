@@ -2,7 +2,7 @@ delayed-cat
 map-pgm example
 sync-cat 0 1
 interpret
-physics example.map 1 1
+physics example 1 1
 cat
 render
 game ben

@@ -206,39 +206,40 @@ namespace sdl {
       string command;
       in >> command;
       if (!command.compare("flip")) flip();
-      if (!command.compare("image")) {
+      else if (!command.compare("image")) {
         string id, filename;
         in >> id >> filename;
         new_image(id, filename); }
-      if (!command.compare("draw-center")) {
+      else if (!command.compare("draw-center")) {
         string id; int x, y;
         in >> id >> x >> y;
-        draw_center(id, x, y); };
-      if (!command.compare("draw")) {
+        draw_center(id, x, y); }
+      else if (!command.compare("draw")) {
         string id; int x, y;
         in >> id >> x >> y;
-        draw(id, x, y); };
-      if (!command.compare("arrow")) {
+        draw(id, x, y); }
+      else if (!command.compare("arrow")) {
         int red, green, blue, x0, y0, x1, y1;
         in >> red >> green >> blue >> x0 >> y0 >> x1 >> y1;
-        draw_arrow(red, green, blue, x0, y0, x1, y1); };
-      if (!command.compare("line")) {
+        draw_arrow(red, green, blue, x0, y0, x1, y1); }
+      else if (!command.compare("line")) {
         int width, red, green, blue, x0, y0, x1, y1;
         in >> width >> red >> green >> blue >> x0 >> y0 >> x1 >> y1;
         draw_line(width, red, green, blue, x0, y0, x1, y1); }
-      if (!command.compare("circle")) {
+      else if (!command.compare("circle")) {
         int radius, red, green, blue, x0, y0;
         in >> radius >> red >> green >> blue >> x0 >> y0;
         draw_circle(radius, red, green, blue, x0, y0); }
-      if (!command.compare("rect")){
+      else if (!command.compare("rect")){
         int red, green, blue, alpha, x0, y0, x1, y1;
         in >> red >> green >> blue >> alpha >> x0 >> y0 >> x1 >> y1;
         draw_rect(x0,y0,x1,y1,red,green,blue, alpha);}
-      if (!command.compare("sound")) {
+      else if (!command.compare("sound")) {
         string id, filename;
         in >> id >> filename;
         new_sound(id, filename); }
-      if (!command.compare("play")) {
+      else if (!command.compare("white")) white();
+      else if (!command.compare("play")) {
         string id;
         in >> id;
         play(id); }}

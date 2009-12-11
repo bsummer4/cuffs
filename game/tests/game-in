@@ -11,6 +11,6 @@ sleep 1
 -1 new_connection 5
 5 1.0 /new SHOULD BE IGNORED BY CMB!!!!!
 -1 lost_connection 5
-1 2.0 hello
+-1 lost_connection 1
 sleep 1
-0 2.0 gameover
+2 2.0 /gameover

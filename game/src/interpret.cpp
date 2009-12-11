@@ -15,13 +15,9 @@ using namespace std;
 int main (int argc, char **argv) {
   assert(!chdir("../data"));
   sdl::SDL sdl(true);
-  try {
-    game::State state("example.map", "username", sdl);
-    game::Interpreter i(state);
-    misc::LineReader <game::Interpreter> r(cin, i);
-    r.start();
-    r.join();
-    return 0; }
-  catch (runtime_error &e) {
-    cerr << "error: " << e.what() << endl;
-    return -1; }}
+  game::State state("example.map", "username", sdl);
+  game::Interpreter i(state);
+  misc::LineReader <game::Interpreter> r(cin, i);
+  r.start();
+  r.join();
+  return 0; }

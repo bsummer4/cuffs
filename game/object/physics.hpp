@@ -265,6 +265,7 @@ namespace physics {
       FOREACH(game::State::id_objects, it, state.objects) {
         string id = it->first;
         game::Object &obj = *it->second;
+        if (id == "global") continue;
         if (projectiles.count(id)) continue;
         double distance = hypot(p.x() - obj.x, p.y() - obj.y);
         if (distance < collide_distance) return true; }
@@ -311,7 +312,7 @@ namespace physics {
     /// changes.  if (erase) then we should be removed from the
     /// simulation.
     virtual void update(game::State &state, vector <string> &messages,
-                        bool &erase, vector<Explosion> &explosions) {
+                        bool &erase, vector <Explosion> &explosions) {
       erase = false;
       Point start(x(), y());
 
@@ -347,6 +348,7 @@ namespace physics {
       { Point hit(end);;
         if (find_hit(state.global->map, start, end, hit)) {
           erase = true;
+          cerr << "hit @" << hit.x << "x" << hit.y << endl;
           helper::explosion_messages(hit, messages, state.global->map.width);
           messages.push_back(helper::msg_delete(id));
           return; }}
@@ -386,7 +388,7 @@ namespace physics {
         s_id << state.username << "-" << type << "-" << count++;
         string id = s_id.str();
         sim.add(make_projectile(&sim, type, id,
-                                player->x(), player->y() - 8, dx, dy)); }
+                                player->x(), player->y(), dx, dy)); }
 
       if (!command.compare("move")) {
         float dx, dy; i >> dx >> dy;
