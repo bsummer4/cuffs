@@ -2,6 +2,7 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <set>
 #include <iostream>
 #include <fstream>
 #include <cmath>
@@ -29,7 +30,7 @@ namespace game {
     sdl::SDL &sdl;
   public:
     SDL_Surface* map;
-    multimap<Team, Point> spawn_points;
+    set <pair <int, int> > spawn_points;
 
     MapLoader(const string &filename, sdl::SDL &sdl)
       : sdl(sdl) {
@@ -44,9 +45,9 @@ namespace game {
       string command;
       if (!(in >> command)) return false;
       if (!command.compare("spawn")) {
-        int team, x, y;
-        if (!(in >> team >> x >> y)) throw runtime_error("Invalid file");
-        spawn_points.insert(make_pair(team, Point(x,y)));
+        int x, y;
+        if (!(in >> x >> y)) throw runtime_error("Invalid file");
+        spawn_points.insert(make_pair<int, int>(x, y));
         return true; }
       if (!command.compare("map")) {
         string filename;
@@ -70,10 +71,11 @@ namespace game {
 
     void explosion(int center_x, int center_y, float radius) {
       if (radius <= 0) return;
-      filledCircleRGBA(map, center_x, center_y, radius, MAP_EMPTY, MAP_EMPTY, MAP_EMPTY, 255); }
+      filledCircleRGBA(map, center_x, center_y, radius,
+                       MAP_EMPTY, MAP_EMPTY, MAP_EMPTY, 255); }
 
     const int width, height, max_pixel;
-    const multimap <Team, Point> &spawn_points;
+    const set <pair <int, int> > spawn_points;
     bool is_solid(int p) { return p != MAP_EMPTY; }
     bool is_solid(int x, int y) { return is_solid(_(x, y)); }
     void wrap_point(float &x, float &y){
