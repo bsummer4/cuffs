@@ -1,2 +1,4 @@
-big 0.4:0.01
+big 0.4:0.02
 constricted 0.4:0.01 -0.4:-0.05 0:-0.2
+empty 0:0
+obstacles 0.4:0
