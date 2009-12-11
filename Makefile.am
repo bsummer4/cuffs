@@ -1,4 +1,4 @@
-SUBDIRS=switchbox game
+DIST_SUBDIRS=switchbox game
 
 # Doxygen
 include $(top_srcdir)/aminclude.am
