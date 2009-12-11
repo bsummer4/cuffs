@@ -248,19 +248,19 @@ namespace physics {
             stuck = false; }}
 
         assert(sim->_alive);
-        if (stuck) return;
 
         if (sim->irrelevant(this)) {
           die(messages, erase);
           return; }
 
         Point start(x(), y());
-        p.accelerate(state.global->wind, state.global->gravity);
-        p.move(state.global->map);
+        if (!stuck) {
+          p.accelerate(state.global->wind, state.global->gravity);
+          p.move(state.global->map); }
         Point end(x(), y());
 
         Point hit;
-        if (find_before_hit(state.global->map, start, end, hit)) {
+        if (!stuck && find_before_hit(state.global->map, start, end, hit)) {
           stuck = true;
           p.dx = p.dy = 0;
           end = hit; }
