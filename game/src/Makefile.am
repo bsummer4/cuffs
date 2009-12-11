@@ -7,7 +7,7 @@ AM_CFLAGS = $(AM_CXXFLAGS)
 bin_PROGRAMS = sync-cat delayed-cat interpret cat render switchbox-cat \
                game keylisten sleep-cat map-pgm sixty-nine \
                switchbox-connect physics dispatcher2 dispatcher repeater \
-               sb_io
+               sb_io keystate
 
 cat_SOURCES = cat.cpp
 delayed_cat_SOURCES = delayed-cat.cpp
@@ -16,6 +16,7 @@ dispatcher_SOURCES = dispatcher.cpp ../object/lib.c
 game_SOURCES = game.cpp
 interpret_SOURCES = interpret.cpp
 keylisten_SOURCES = keylisten.cpp
+keystate_SOURCES = keystate.cpp
 repeater_SOURCES = repeater.cpp
 repeater_LDADD = ../../switchbox/src/libmessaging.la
 map_pgm_SOURCES = map-pgm.cpp
