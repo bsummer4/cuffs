@@ -62,6 +62,14 @@ struct UserInterface {
     default:
     break; }}
 
+  string meter(int red, int green, int blue, int x_pos, double percent) {
+    ostringstream output;
+    int height = 580 - (560) * percent;
+    output << "rect " << red << " " << green << " " << blue << " 128 "
+           << x_pos << " 580 "
+           << x_pos + 10 << " " << height;
+    return output.str(); }
+
   void render(State &state, vector <string> &output,
               physics::Simulation &sim) {
     // Sounds
@@ -84,7 +92,10 @@ struct UserInterface {
         ii--;}}
 
     if (!state.player_alive()) return;
+    if (!sim.alive()) return;
     game::Object &player = state.player();
+    physics::Simulation::PlayerProj *player_proj = \
+      (physics::Simulation::PlayerProj*) sim.player();
 
     // HUD Contols
     { // Aiming Triangle
@@ -93,9 +104,7 @@ struct UserInterface {
       Vector2_d cursorpos(cursor.x, cursor.y);
       Vector2_d vel = throw_velocity(playerpos, cursorpos);
       vel = vel * 5;
-      cerr << "arrow throw_vel: " << vel.x << " " << vel.y << endl;
       Vector2_d endpoint = playerpos + vel;
-      cerr << "arrow endpoint: " << endpoint.x << " " << endpoint.y << endl;
       line << "arrow 0 255 0 "
            << player.x << " " << player.y << " "
            << (int)floor(endpoint.x) << " " << (int)floor(endpoint.y);
@@ -103,14 +112,16 @@ struct UserInterface {
       output.push_back(line.str());
       output.push_back(circle.str()); }
 
-    { // Power Bar
-      ostringstream square;
-      int height = 580 - (560) * \
-        sim.energy.get_energy() / sim.energy.ENERGY_MAX;
-      square << "rect 255 0 0 128 "
-             << " 780 580 "
-             << " 790 " << height << " ";
-      output.push_back(square.str()); }
+    // Power Bar
+    output.push_back(meter(255, 0, 0, 780,
+                           sim.energy.get_energy() /
+                           sim.energy.ENERGY_MAX));
+
+    // Health
+    cerr << "health: " << player_proj->health << endl;
+    output.push_back(meter(0, 0, 255, 770,
+                           (double) player_proj->health / 100));
+
     { // Wind Indicator
       ostringstream arrow;
       int wind_size = 400 + (int)(state.global->wind * 800);
@@ -149,7 +160,6 @@ struct InputHandler {
         ostringstream o;
         o << "shoot rock " << (int) floor(vel.x) << " "
           << (int) floor(vel.y) << endl;
-        cerr << o.str();
         handler.handleEvent(o.str()); }
 
       // Movement

@@ -75,7 +75,9 @@ namespace sdl {
       Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096);
       _audio_initialized = true; }
 
-    ~SDL() { SDL_Quit(); Mix_CloseAudio(); }};
+    ~SDL() {
+      SDL_Quit();
+      if (audio) Mix_CloseAudio(); }};
 
 
   // Frees the old surface and replaces it with an optimized version
@@ -182,7 +184,6 @@ namespace sdl {
 
     void draw_rect(int x0, int y0, int x1, int y1, int red, int green,
                   int blue, int alpha){
-      //cerr << "DRAWING A BOX YO " <<  x0 << " " << y0 << " " << x1 << " " << y1 << endl;
       boxRGBA(sdl.screen, x0, y0, x1, y1, red, green, blue, alpha); }
 
     void draw_arrow(int red, int green, int blue,
