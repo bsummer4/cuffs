@@ -88,6 +88,5 @@ AC_CONFIG_FILES([Makefile
                  game/src/Makefile
                  game/object/Makefile
                  game/object/test/Makefile
-                 game/utils/Makefile
-                 ])
+                 game/utils/Makefile])
 AC_OUTPUT
