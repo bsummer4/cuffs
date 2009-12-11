@@ -66,7 +66,7 @@ namespace sdl {
       if (!screen) throw runtime_error(SDL_GetError());
       SDL_WM_SetCaption(window_caption.c_str(), NULL);
       _video_initialized = true;
-      SDL_EnableKeyRepeat(30,60);}
+      SDL_EnableKeyRepeat(30,80);}
 
     void initAudio() {
       if (!audio) throw runtime_error("SDL Wasn't initialized for audio.  ");
@@ -180,7 +180,7 @@ namespace sdl {
       filledCircleRGBA(sdl.screen, x, y, radius,
                  red, green, blue, 255); }
 
-    void draw_rect(int x0, int y0, int x1, int y1, int red, int green, 
+    void draw_rect(int x0, int y0, int x1, int y1, int red, int green,
                   int blue, int alpha){
       //cerr << "DRAWING A BOX YO " <<  x0 << " " << y0 << " " << x1 << " " << y1 << endl;
       boxRGBA(sdl.screen, x0, y0, x1, y1, red, green, blue, alpha); }

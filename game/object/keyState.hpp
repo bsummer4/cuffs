@@ -23,6 +23,7 @@ namespace sdl {
     SDL &sdl;
 
   public:
+    typedef map <string, bool> StringBool;
     map <string, bool> keys_down; // Read only plz
 
     ~KeyState() {}
@@ -55,8 +56,7 @@ namespace sdl {
         throw runtime_error("Invalid key event"); }
 
     ostream &pprint(ostream& o) {
-      typedef map <string, bool> DownKeys;
-      FOREACH (DownKeys, key, keys_down)
+      FOREACH (StringBool, key, keys_down)
         if (key->second)
           o << key->first << " ";
       o << endl;

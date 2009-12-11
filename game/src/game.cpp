@@ -7,7 +7,7 @@
 #include "misc.hpp"
 #include "cmb.hpp"
 #include "Interpreter.hpp"
-#include "keyListen.hpp"
+#include "keyState.hpp"
 #include "physics.hpp"
 #include "macro.h"
 using namespace misc;
@@ -127,31 +127,39 @@ struct InputHandler {
   physics::Simulation &sim;
   InputHandler(H handler, UserInterface &ui, physics::Simulation &sim)
     : handler(handler), ui(ui), sim(sim) {}
-  void handleEvent(string event) {
-    if (event == "escape") {
-      SDL_UserEvent event = {SDL_QUIT, 0, NULL, NULL};
-      SDL_PushEvent((SDL_Event*) &event); }
-    if (event == "space" || event == "leftmousebutton") {
-      if (!sim.alive()) return;
-      // Check to see if we have enough energy to shoot
-      if (sim.energy.get_energy() < sim.energy.ROCK_COST) return;
-      sim.energy.use_energy(sim.energy.ROCK_COST);
+  void operator() (sdl::KeyState &keystate) {
+    FOREACH(sdl::KeyState::StringBool, downkey, keystate.keys_down) {
+      bool keydown = downkey->second;
+      string keyname = downkey->first;
+      if (!keydown) continue;
 
-      Vector2_d playerpos = Vector2_d(sim.player()->x(), sim.player()->y());
-      Vector2_d vel = throw_velocity(playerpos, Vector2_d(ui.cursor));
-      ostringstream o;
-      o << "shoot rock " << (int) floor(vel.x) << " "
-        << (int) floor(vel.y) << endl;
-      cerr << o.str();
-      handler.handleEvent(o.str()); }
+      // Quiting
+      if (keyname == "escape") {
+        SDL_UserEvent event = {SDL_QUIT, 0, NULL, NULL};
+        SDL_PushEvent((SDL_Event*) &event); }
 
-    string keys[] = {"left", "right", "up", "down", "a", "d", "w", "s"};
-    string results[] = {
-      "move -5 -5", "move 5 -5", "move 0 -20", "move 0 20",
-      "move -5 -5", "move 5 -5", "move 0 -20", "move 0 20"};
-    FORII(8)
-      if (event == keys[ii])
-        handler.handleEvent(results[ii]); }};
+      // Shooting
+      if (keyname == "space" || keyname == "leftmousebutton") {
+        if (!sim.alive()) return;
+        // Check to see if we have enough energy to shoot
+        if (sim.energy.get_energy() < sim.energy.ROCK_COST) return;
+        sim.energy.use_energy(sim.energy.ROCK_COST);
+        Vector2_d playerpos = Vector2_d(sim.player()->x(), sim.player()->y());
+        Vector2_d vel = throw_velocity(playerpos, Vector2_d(ui.cursor));
+        ostringstream o;
+        o << "shoot rock " << (int) floor(vel.x) << " "
+          << (int) floor(vel.y) << endl;
+        cerr << o.str();
+        handler.handleEvent(o.str()); }
+
+      // Movement
+      string movement_key[] = \
+        {"left", "right", "up", "down", "a", "d", "w", "s"};
+      string move_messages[] = \
+        {"move -5 -5", "move 5 -5", "move 0 -20", "move 0 20"};
+      FORII(8)
+        if (keyname == movement_key[ii])
+          handler.handleEvent(move_messages[ii % 4]); }}};
 
 struct MouseHandler {
   sdl::SDL &sdl;
@@ -216,7 +224,9 @@ void ref_handshake(string username, PlayerMap &players, string &map,
   cout << "/identify " << username << endl;
   LOOP {
     char buffer[1024];
-    if (!cin.getline(buffer, 1024)) assert(false && "badness");
+    if (!cin.getline(buffer, 1024))
+      throw runtime_error
+        ("handshake ended prematurly.  Maybe no connection?  ");
     istringstream i(buffer); int from; string command;
     i >> from >> command;
     if (!command.compare("/identify")) continue;
@@ -291,8 +301,13 @@ int main(int num_args, char **args) {
 
   // Event handling
   InputHandler <typeof(userQ)&> h(userQ, ui, sim);
-  sdl::KeyListener <typeof(h)&> listen(h, sdl);
-  sdl.registerEventHandler(listen);
+  string important_keys[] = \
+    {"left", "right", "up", "down",
+     "w", "a", "s", "d",
+     "space", "escape", "leftmousebutton"};
+  sdl::KeyState keystate(sdl, h, set <string> (important_keys,
+                                               important_keys + 11));
+  sdl.registerEventHandler(keystate);
   sdl.registerEventHandler(pipeline);
   sdl.registerEventHandler(mh);
   SDL_TimerID timer;
