@@ -37,8 +37,11 @@ namespace physics {
   /// Find the point closest to p0 between p0 and p1 that is solid,
   /// and set result to it.  Return false if there was not such point.
   bool find_hit(game::Map &map, Point p0, Point p1, Point &result) {
+    if (p0 == p1) return false;
     /// @TODO HACK!!! Check to see if p0 and p1 are Really far away
     /// and if they are say no collision.  This lets us do wrapping easier.
+    cerr << "find_hit" << p0.x << "x" << p0.y << " "
+         << p1.x << "x" << p1.y << endl;
     if (hypot(p0.x - p1.x, p0.y - p1.y) > map.width/2) return false;
     int x0 = p0.x, x1 = p1.x, y0 = p0.y, y1 = p1.y;
     vector <Point> hits;
@@ -65,8 +68,9 @@ namespace physics {
     int ystep;
     int y = y0;
     ystep = (y0 < y1) ? 1 : -1;
-    for (int x = x0; x < x1; x++) {
+    for (int x = x0; x <= x1; x++) {
       Point current = steep ? Point(y, x) : Point(x, y);
+      cerr << "  checking: " << current.x << "x" << current.y << endl;
       if (on_map(map,current) && map.is_solid(current.x, current.y))
         hits.push_back(current);
       error += deltaerr;
@@ -79,8 +83,10 @@ namespace physics {
     float lowest_distance = INFINITY;
     FOREACH (vector <Point>, hit, hits) {
       float distance = hypotf(p0.x - hit->x, p0.y - hit->y);
+      cerr << "  hit w/distance=" << distance << " @"
+           << hit->x << "x" << hit->y << endl;
       // Check for wrapping
-      if ( distance > map.width/2 )
+      if (distance > map.width/2)
           distance = map.width - distance;
       if (distance < lowest_distance) {
         result = *hit;

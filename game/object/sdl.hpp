@@ -48,7 +48,7 @@ namespace sdl {
     void runEventLoop() {
       SDL_Event event;
       LOOP {
-        while (SDL_PollEvent (&event))
+        while (SDL_WaitEvent (&event))
           if (event.type == SDL_QUIT) return;
           else
             FOREACH (vector <EventHandler>, handler, _event_handlers)
