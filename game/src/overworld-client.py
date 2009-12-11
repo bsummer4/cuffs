@@ -21,7 +21,7 @@ class OverworldFrame(wx.Frame):
     self.Play = wx.Button(self, -1, "Play", style=wx.BU_EXACTFIT)
     self.Logout = wx.Button(self, -1, "Logout")
     self.Send = wx.Button(self, -1, "Send")
-    self.ChatInput = wx.TextCtrl(self, 1)
+    self.ChatInput = wx.TextCtrl(self, 1, style=wx.TE_PROCESS_ENTER)
     self.ChatBox = wx.TextCtrl(self, 1, style=wx.TE_MULTILINE|wx.TE_READONLY)
 
     self.__set_properties()
@@ -30,6 +30,7 @@ class OverworldFrame(wx.Frame):
     self.Bind(wx.EVT_BUTTON, self.OnLogout, id=self.Logout.GetId())
     self.Bind(wx.EVT_BUTTON, self.OnSend, id=self.Send.GetId())
     self.Bind(wx.EVT_CLOSE, self.OnLogout)
+    self.Bind(wx.EVT_TEXT_ENTER, self.OnSend, id=self.ChatInput.GetId())
 
   def __set_properties(self):
     self.SetTitle("Fistacuffs Lobby")
@@ -61,6 +62,7 @@ class OverworldFrame(wx.Frame):
   def OnSend(self, event):
       print self.ChatInput.GetValue()
       sys.stdout.flush()
+      self.ChatInput.Clear()
 
   def OnPlay(self, event):
     print "/play", " ".join(add_new(self.world.username,
