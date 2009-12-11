@@ -1,4 +1,4 @@
-doc_DATA = doc.html
+doc_DATA = test.html doc.html
 
 html: readme.html changes.html design.html news.html doc.html
 latex: readme.tex changes.tex design.tex news.tex 
