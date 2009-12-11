@@ -56,11 +56,17 @@ def wait_for_players(players_, playerDict):
             sys.stderr.flush()
     return result
 
+def change_wind():
+    print "0.0 /set global wind 3"
+    sys.stdout.flush()
+
+count = 1
 def handle_line(line_text, logfile):
+    global count
+    count += 1
+    if not count % 1000: change_wind()
     line = line_text.split()
-    if not len(line): raise Exception("No from field in message.  ")
-    if len(line) == 1: raise Exception("Missing timestamp.  ")
-    if len(line) == 2: return # Null Message
+    if len(line) <= 3: return
     (from_, timestamp, command), args = line[0:3], line[3:]
     if command == "/annotate":
         annotations.append(line_text)
