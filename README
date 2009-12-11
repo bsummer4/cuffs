@@ -15,7 +15,15 @@ already.
 - /game -- The game itself.
 
 # Prerequisites
-TODO
+libsdl1.2debian
+libsdl1.2-dev
+libsdl-image1.2
+libsdl-image1.2-dev
+libsdl-mixer1.2
+libsdl-mixer1.2-dev
+libsdl-gfx1.2-4
+libsdl-gfx1.2-dev
+libboost-dev
 
 ## Building Doxygen Documentation
 The output is generated in ./doc/doxygen, and the docs are available
