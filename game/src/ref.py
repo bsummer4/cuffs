@@ -75,8 +75,9 @@ def handle_line(line_text, logfile, gamemap):
             print log("0.0 %s" % line)
         sys.stdout.flush()
     line = line_text.split()
-    if len(line) <= 3: return
+    if len(line) <= 2: return
     (from_, timestamp, command), args = line[0:3], line[3:]
+    log((from_, timestamp, command))
     if command == "/annotate":
         annotations.append(line_text)
         annotation_file.write(line_text)
@@ -112,5 +113,5 @@ if __name__ == '__main__':
     while True:
         line = sys.stdin.readline()
         if not line: break
-        handle_line(line, annotation_file, gamemap)
+        handle_line(log(line), annotation_file, gamemap)
     annotation_file.close()
