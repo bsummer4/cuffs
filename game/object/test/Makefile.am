@@ -1,6 +1,6 @@
 AM_CPPFLAGS = -I.. \
               -I$(top_srcdir)/switchbox/src 
-AM_LDFLAGS = @SDL_LIBS@  -lSDL_image -lSDL_draw -lSDL_mixer \
+AM_LDFLAGS = @SDL_LIBS@  -lSDL_image -lSDL_mixer \
              -lboost_thread
 
 TESTS=CMBEvent_tests CMBQueue_tests 
