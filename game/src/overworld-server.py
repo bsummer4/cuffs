@@ -17,21 +17,20 @@ def playerUpdate():
         if not line_text: return # EOF
         if not line_text.strip(): continue
         line = line_text.split()
-        command = line[0]
-        args = line[1:]
+        if len(line) <= 1: continue
+        (sender, command), args = line[0:2], line[2:]
         if command == '/login':
-            playerlist.append(args)
+            playerlist.append(args[0])
         elif command == '/logout':
-            playerlist.remove(args)
+            playerlist.remove(args[0])
         elif command == '/list':
             sys.stdout.write("/players " + " ".join(playerlist) + "\n")
         elif command == '/play':
-            names = args
             os.system("./switchbox.sh start %d > /dev/stderr" % game_port)
             time.sleep(0.05) # just in case
             os.system (
                 "./sixty-nine './ref.py %s annoations.txt' './switchbox-connect localhost %d'" \
-                    % (' '.join(names), game_port))
+                    % (' '.join(args), game_port))
             os.system("./switchbox.sh stop %d > /dev/stderr" % game_port)
         sys.stdout.flush()
 
