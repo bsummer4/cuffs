@@ -137,3 +137,11 @@ and stdout of two programs together we use 'sixty-nine'.  For example:
 
     ./switchbox.sh start 5555
     ./sixty-nine './keylistener' './switchbox-cat localhost 5555'
+
+# Maps
+Maps consist of a set of spawn points (x, y), and an 800x600 image.
+Here is an example file:
+
+    spawn 0 0
+    spawn 100 100
+    map foo.png
