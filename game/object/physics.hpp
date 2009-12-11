@@ -40,8 +40,8 @@ namespace physics {
     if (p0 == p1) return false;
     /// @TODO HACK!!! Check to see if p0 and p1 are Really far away
     /// and if they are say no collision.  This lets us do wrapping easier.
-    cerr << "find_hit" << p0.x << "x" << p0.y << " "
-         << p1.x << "x" << p1.y << endl;
+    //cerr << "find_hit" << p0.x << "x" << p0.y << " "
+    //<< p1.x << "x" << p1.y << endl;
     if (hypot(p0.x - p1.x, p0.y - p1.y) > map.width/2) return false;
     int x0 = p0.x, x1 = p1.x, y0 = p0.y, y1 = p1.y;
     vector <Point> hits;
@@ -70,7 +70,7 @@ namespace physics {
     ystep = (y0 < y1) ? 1 : -1;
     for (int x = x0; x <= x1; x++) {
       Point current = steep ? Point(y, x) : Point(x, y);
-      cerr << "  checking: " << current.x << "x" << current.y << endl;
+      //cerr << "  checking: " << current.x << "x" << current.y << endl;
       if (on_map(map,current) && map.is_solid(current.x, current.y))
         hits.push_back(current);
       error += deltaerr;
@@ -83,8 +83,8 @@ namespace physics {
     double lowest_distance = INFINITY;
     FOREACH (vector <Point>, hit, hits) {
       double distance = hypotf(p0.x - hit->x, p0.y - hit->y);
-      cerr << "  hit w/distance=" << distance << " @"
-           << hit->x << "x" << hit->y << endl;
+      //cerr << "  hit w/distance=" << distance << " @"
+      //<< hit->x << "x" << hit->y << endl;
       // Check for wrapping
       if (distance > map.width/2)
           distance = map.width - distance;
@@ -96,15 +96,15 @@ namespace physics {
   bool find_before_hit(game::Map &map, Point p0, Point p1, Point &result) {
     Point hit(0, 0);
     if (!find_hit(map, p0, p1, hit)) return false;
-    cerr << "hit at: " << hit.x << "x" << hit.y << endl;
+    //cerr << "hit at: " << hit.x << "x" << hit.y << endl;
     Vector2_d v(p0 - hit);
     if (!v.norm()) { result = hit; return true; }
-    cerr << "translation: " << v.x << "x" << v.y << endl;
+    //cerr << "translation: " << v.x << "x" << v.y << endl;
     Vector2_d bullshit = v.normalized();
     Point _bullshit = bullshit.lround();
-    cerr << "bullshitting: " << bullshit.x << "x" << bullshit.y << endl;
+    //cerr << "bullshitting: " << bullshit.x << "x" << bullshit.y << endl;
     result = hit + _bullshit;
-    cerr << "result: " << result.x << "x" << result.y << endl;
+    //cerr << "result: " << result.x << "x" << result.y << endl;
     return true; }
 
   struct Projectile {
@@ -357,7 +357,7 @@ namespace physics {
       { Point hit(end);;
         if (find_hit(state.global->map, start, end, hit)) {
           erase = true;
-          cerr << "hit @" << hit.x << "x" << hit.y << endl;
+          //cerr << "hit @" << hit.x << "x" << hit.y << endl;
           helper::explosion_messages(hit, messages, state.global->map.width);
           messages.push_back(helper::msg_delete(id));
           return; }}
@@ -403,13 +403,13 @@ namespace physics {
                                 start.x, start.y, vel.x, vel.y)); }
 
       if (!command.compare("move")) {
-        cerr << "move" << endl;
+        //cerr << "move" << endl;
         Vector2_d diff; i >> diff.x >> diff.y;
         Vector2_d vel(player->p.dx, player->p.dy);
         Vector2_d current(player->x(), player->y());
         Vector2_d dest(current + diff - vel);
-        cerr << current.x << "x" << current.y << endl;
-        cerr << dest.x << "x" << dest.y << endl;
+        //cerr << current.x << "x" << current.y << endl;
+        //cerr << dest.x << "x" << dest.y << endl;
         Point hit;
         if (find_before_hit(state.global->map,
                             current.floor(), dest.floor(), hit)) {
@@ -417,17 +417,16 @@ namespace physics {
           // Can we fudge it?
           if (hit == current.floor()) {
             Point fudge_factor(Vector2_d(diff.normalized()).lround());
-            cerr << "fudge_factor "
-                 << fudge_factor.x << "x" << fudge_factor.y << endl;
+            //cerr << "fudge_factor "
+            //<< fudge_factor.x << "x" << fudge_factor.y << endl;
             Point fudge_start(current.floor() + fudge_factor);
-            cerr << "fudge_start "
-                 << fudge_start.x << "x" << fudge_start.y << endl;
+            //cerr << "fudge_start "
+            //<< fudge_start.x << "x" << fudge_start.y << endl;
             Point ignore;
             if (!find_before_hit(state.global->map,
                                  fudge_start, dest.floor(), ignore)) {
-              cerr << "Fudged!" << endl;
-              goto fudge; }
-              else { cerr << "No fudge..." << endl; }}
+              //cerr << "Fudged!" << endl;
+              goto fudge; }}
 
           dest = hit;
           player->stuck = true;
@@ -436,7 +435,7 @@ namespace physics {
         else {
         fudge:
           player->stuck = false; }
-        cerr << dest.x << "x" << dest.y << endl;
+        //cerr << dest.x << "x" << dest.y << endl;
         player->p.x = dest.x;
         player->p.y = dest.y;
         player->bump = true;
