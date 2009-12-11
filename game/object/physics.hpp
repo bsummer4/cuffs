@@ -268,7 +268,7 @@ namespace physics {
           messages.push_back(helper::msg_move(id, end.x, end.y));  }};
 
     bool collision(SmartProjectile &p) {
-      const static double collide_distance = 8;
+      const static double collide_distance = 30;
       FOREACH(game::State::id_objects, it, state.objects) {
         string id = it->first;
         game::Object &obj = *it->second;
