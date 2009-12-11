@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
   Painter paint(render);
   LineReader <typeof(paint)&> read(cin, paint);
   read.start();
-  rdl.registerEventHandler(listen);
+  sdl.registerEventHandler(listen);
   sdl.runEventLoop();
   read.join();
   return 0; }
