@@ -1,5 +1,6 @@
 /**
-  # Some pointers for reading this:
+@addtogroup Switchbox
+@section Some pointers for reading this:
   - We use the switchbox_client, and message libraries, read those
     first.
   - Each client has its own thread: This is somewhat inefficient, but
@@ -11,20 +12,18 @@
   - Messages can be any size are are stored on the heap.  This is
     simple and flexible (no limit on message size).
 
-  # Possible preformance enhancements:
+@section Possible preformance enhancements:
   - Use select() instead of threads.
   - Use a message buffer on the stack and only malloc/free if the
     message is too big for the buffer.
 
   These are all complicated and probably not worth doing.
 
-  # TODO
-
-  @TODO What if a member of a group dissconnects?  Should the group be
-        removed?  Maybe that member should be removed from the group.
-        For now sending to the group sends to a subset of the members
-        and then an error is send to the sender.  This is not a very
-        good solution.
+@TODO What if a member of a group dissconnects?  Should the group be
+    removed?  Maybe that member should be removed from the group.
+    For now sending to the group sends to a subset of the members
+    and then an error is send to the sender.  This is not a very
+    good solution.
 */
 
 #include "switchbox_client.h"
@@ -43,6 +42,7 @@ void init();
 void announce(SBMessage * admin_message);
 bool locking_send(SBMessage * m);
 void print_message(SBMessage * m);
+void handler(int SIGNUM);
 
 // Implementation
 // ==============
@@ -53,6 +53,10 @@ int main(int argc, char **argv) {
   // A broken pipe should just cause read() and write() to fail insead
   // of stopping the program
   signal(SIGPIPE, SIG_IGN);
+  signal(SIGINT, handler);
+  // Catch Ctrl+c and "kill"
+  signal(SIGINT, handler);
+  signal(SIGTERM, handler);
 
   init();
   run(port);
@@ -97,6 +101,7 @@ typedef struct group {
 /// index in this array.
 Client clients[MAX_CLIENTS];
 Group groups[MAX_GROUPS];
+Socket s; ///< Global Socket so the signal handler can access the socket
 
 /// The index of the first unused and last used slot in the 'clients'
 /// array.  We use this so we can efficiently find a empty slot when
@@ -428,7 +433,6 @@ void run(int port) {
   printf("listening\n");
   printf("port %d\n", listener_port(l));
 
-  Socket s;
   while (valid_socket(s = accept_connection(l)))
     setup_connection(s);
 }
@@ -443,4 +447,15 @@ void print_message(SBMessage * m) {
   int data_size = m->size - SBMESSAGE_HEADER_SIZE;
   iter(ii, 0, data_size) printf("%x ", (unsigned) m->data[ii]);
   printf("]}\n");
+}
+
+
+/// Signal handler to cleanly shutdown.
+void handler(int SIGNUM) {
+  // Close main socket
+  close(s);
+  // Close all the connections
+  for (int i = 0; i < MAX_CLIENTS; i++)
+    remove_client(&clients[i]);
+  exit(0);
 }
