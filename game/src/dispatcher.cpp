@@ -1,8 +1,12 @@
-/*
-  # Dispatcher
+/**
+  @addtogroup Dispatcher
+  @ingroup Game
+  @section Dispatcher
 
+  @verbatim
   Usage: dispatcher [interval in ms]
   where interval must be less than 1000
+  @endverbatim
 
   Reads lines from stdin.  Every 'interval' ms, send all the lines
   that we have recieved with a interval counter at the beginning.  If no
@@ -13,8 +17,8 @@
   number of times we have printed lines is outputed to standard
   output.
 
-  ## Example
-
+  @subsection Example
+  @verbatim
       $ ./dispatcher 999
       hi
       0 hi
@@ -22,7 +26,8 @@
       1 there
       ^D
       timing error: 2 vs 2
-*/
+  @endverbatim
+**/
 
 
 #include <unistd.h>

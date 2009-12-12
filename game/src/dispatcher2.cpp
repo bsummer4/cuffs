@@ -1,8 +1,13 @@
-/*
-  # Dispatcher2
+/**
+  @addtogroup Dispatcher2
+  @ingroup Game 
 
+  @section Dispatcher2
+
+  @verbatim
   Usage: dispatcher2 [interval in ms]
   where interval must be less than 1000
+  @endverbatim
 
   Reads lines from stdin.  Every 'interval' ms, send all the lines
   that we have recieved with a interval count at the beginning.  If no
@@ -18,8 +23,9 @@
   This is different from 'dispatcher' in that is uses SDL timers
   instead of signals
 
-  ## Example
+  @subsection Example
 
+  @verbatim
       $ ./dispatcher2 999
       hi
       0 hi
@@ -27,7 +33,8 @@
       1 there
       ^D
       timing error: 2 vs 2
-*/
+  @endverbatim
+**/
 
 #include <unistd.h>
 #include <signal.h>

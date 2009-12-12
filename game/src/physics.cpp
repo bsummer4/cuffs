@@ -1,3 +1,10 @@
+/// @addtogroup physics_bin physics
+/// @ingroup Game
+/// @section Description
+/// Reads messages from stdin and creates appropriate physics messages which
+/// are sent to stdout. 
+
+
 #include "state.hpp"
 #include "sdl.hpp"
 #include "misc.hpp"

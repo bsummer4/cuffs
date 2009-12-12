@@ -4,7 +4,8 @@
 #include "vectors.hpp"
 
 
-/// Physics for projectiles
+/// @brief Handles the physics for projectiles as well as the "local state" 
+/// simulation.
 namespace physics {
   using namespace std;
   using namespace vectors;

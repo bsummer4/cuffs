@@ -1,3 +1,13 @@
+/**
+@addtogroup sixty_nine sixty-nine
+@ingroup Game
+
+@section Description
+Runs to processes with process one's stdin hooked to process two's stdout,
+and visa versa. 
+**/
+
+
 #include <unistd.h>
 #include <assert.h>
 #include <stdio.h>

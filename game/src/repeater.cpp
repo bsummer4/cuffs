@@ -1,7 +1,13 @@
+/// @addtogroup repeater 
+/// @ingroup Game
+/// @section Description
 /// This opens a connection to two switchboxes and repeats things it
 /// hears from the private switchbox onto the public one.  This goes
 /// on until it receives a message with 'lost_connection' somewhere in
 /// a message.
+/// @warning This was not meant to be used on its own, but in conjunction
+/// with the @ref sb_io program. 
+/// @sa sb_io 
 
 #include <iostream>
 #include <assert.h>

@@ -1,25 +1,29 @@
-# Sub-directories
-## utils/
+/**
+@addtogroup Game 
+@brief Overall Game description.
+
+@section Directories
+@subsection utils
 Utilities that are not part of the game itself.  The testing framework
 for example.
 
-## data/
+@subsection data
 Data used in the game.  All programs change directory to this
 directory on startup.
 
-## object/
+@subsection object
 Source code that is not directoy linked to an executable.  Mostly a
 collection of objects in header files.
 
-## src/
+@subsection src
 All source code that results in executables.  This includes Python
 code which is itself executable.
 
-## tests/
+@subsection tests
 Input and output files for tests.  Much of these are for the
 input-file-based testing framework in utils/
 
-# Overall Architecture
+@section overalArchitecture Overall Architecture
 The game was originally going to be two games, where one was a subgame
 of the other.  However, over time, focus shifted to the subgame.  The
 supergame (overworld), is currently just a launcher for the subgame
@@ -29,7 +33,7 @@ All the game code is based on line-length human-readable string
 messages.  There is a large number of different message mini-formats
 for comunicating with the various modules.
 
-# Underworld Game Design
+@section UnderworldGame Underworld Game Design
 There is a one-to-one correspondence between a given objects in the
 game and which client controls its state.  This is usually the client
 that created it, but there is an exception for the player objects
@@ -55,8 +59,8 @@ of the world.  This is a little complicated, and it causes the
 behavior of the game to be slightly effected by lag.  Still, this
 doesn't seem to be a big problem in practice.
 
-# Message formats
-## State/Interpreter
+@section MessageFormats Message Formats
+@subsection stateInt "State/Interpreter"
 The game state is designed to behave like a
 map<string,map<string,string>>.  This is so you can have commands like
 
@@ -72,7 +76,7 @@ call it.
     object["global"].set("wind", "-0.33")
     cerr << object.global.wind;
 
-### Commands
+@subsubsection Commands
 - /new object type x y
 - /delete object
 - /set object property value
@@ -81,14 +85,14 @@ call it.
 - /move id x y
 - /map filename
 
-### Properties
+@subsubsection Properties
 All objects have these properties:
 
 - x
 - y
 - type -- The name of the sprite used to render the object
 
-### The 'global' Object
+@subsubsection globalObject The 'global' Object
 There is a special object 'global' (type 'global') which has the
 following additional properties:
 
@@ -97,26 +101,26 @@ following additional properties:
 - mapname
 - map
 
-## Renderer
+@subsection Renderer
 - flip # update the screen
 - white # white-out the screen
 
-### Loading data files
+@subsubsection dataFiles Loading data files
 - image id filename
 - sound id filename
 
-### Play/draw data-files
+@subsubsection playdrawdata Play/draw data-files
 - play id
 - draw id x y
 - draw-center id x y
 
-### Drawing primitives
+@subsubsection DrawPrimitives Drawing Primitives
 - arrow red green blue x0 y0 x1 y1
 - line width red green blue x0 y0 x1 y1
 - circle radius red green blue x0 y0
 - rect red green blue alpha x0 y0 x1 y1
 
-## Keys
+@subsection Keys
 There are too many to list, however we use SDL_GetKeyName plus a
 couple of specials ones:
 
@@ -129,19 +133,25 @@ couple of specials ones:
 You can run ./keylistener and type keys into the blank window to see
 their names.
 
-# Connecting to the Switchbox
+@section conToSwitchbox Connecting to the Switchbox
 None of our programs know about the switchbox at all.  We just use
 stdin and stdout to send messages.  Then we tie these programs to
 'switchbox-connect' or 'switchbox-cat' with pipes.  To tie both stdin
 and stdout of two programs together we use 'sixty-nine'.  For example:
 
+@verbatim
     ./switchbox.sh start 5555
     ./sixty-nine './keylistener' './switchbox-cat localhost 5555'
+@endverbatim
 
-# Maps
+@section Maps
 Maps consist of a set of spawn points (x, y), and an 800x600 image.
 Here is an example file:
 
+@verbatim
     spawn 0 0
     spawn 100 100
     map foo.png
+@endverbatim
+
+**/

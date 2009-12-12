@@ -1,3 +1,6 @@
+/// @addtogroup render
+/// @ingroup Game
+/// @section Description
 /// Open an SDL window and draw things on it as drawing commands come
 /// in from stdin.
 

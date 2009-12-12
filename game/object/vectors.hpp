@@ -1,6 +1,7 @@
 #pragma once
 #include <cmath>
 
+/// Vectors to use for vector math.
 namespace vectors {
   using namespace std;
   template <typename T>

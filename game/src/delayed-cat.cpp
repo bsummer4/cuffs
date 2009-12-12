@@ -1,6 +1,12 @@
-/// This just reads all lines from stdin, and then, after standard
-/// input is closed, prints them all out.  This is a test-utillity for
-/// Queue and LineReader
+/**
+@defgroup delayed_cat delayed-cat
+@ingroup Game
+@section Description
+This just reads all lines from stdin, and then, after standard
+input is closed, prints them all out.  This is a test-utillity for
+Queue and LineReader
+@sa cat
+**/
 
 #include <unistd.h>
 #include <iostream>

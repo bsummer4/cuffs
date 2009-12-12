@@ -1,5 +1,11 @@
-/// Simple implementation of the unix utillity 'cat' using the event
-/// handler architecture.
+/**
+@addtogroup cat
+@ingroup Game 
+@section Description
+Simple implementation of the unix utillity 'cat' using the event
+handler architecture.
+@sa delayed_cat
+**/
 #include <assert.h>
 #include "misc.hpp"
 using namespace misc;

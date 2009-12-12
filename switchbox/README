@@ -1,36 +1,43 @@
-# Switchbox
+/**
+@addtogroup Switchbox
+
+@par Switchbox
 
 A program for handling routing between programs.  There is a client
 library for connecting to and creating messages to be sent through the
 switchbox.  This library is in c and has bindings for python, and c++.
 
-## Running
+@par Running
 
+@verbatim
 usage: switchbox [port]
+@endverbatim
 
 If you pass a port of 0 or you don't pass a port, it will just use
 some available port.
 
-## Standard Output
+@par Standard Output
 
 We output when we start listening, and we the port we ended up using.
 
+@verbatim
     $ ./switchbox
     listening
     port 532992
+@endverbatim
 
 We might eventually add status updates for other events, like
 connections and disconnections.  For now, there is no need.
 
-## Client Library
+@par Client Library
 
 Basically, when you want to do things with the switchbox, you:
 
-- Open a socket with 'open_connection' (from message.h)
-- Create a message with one of the functions: (maybe
-  'string_to_message')
-- Send the message with 'switchbox_send'
-- Receive with 'switchbox_receive'
+  - Open a socket with @ref open_connection (from message.h)
+  - Create a message with one of the functions: (maybe
+    @ref string_to_message)
+  - Send the message with @ref switchbox_send
+  - Receive with @ref switchbox_receive
 
 Messages have a 16 byte binary header, and then a payload.  The
 switchbox does different routing based on the information in the
@@ -40,3 +47,5 @@ the switchbox.  These let you create and remove groups, etc.
 The library headers file 'src/switchbox_client.h' and 'src/message.h'
 are designed to be human readable.  See them for more specific
 information.
+
+**/

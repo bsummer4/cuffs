@@ -14,11 +14,14 @@ extern "C" {
 # include "switchbox_client.h"
 }
 
+/// Switchbox namespace that contains our game specifice switchbox functions
+/// as well as wrappers to some of the switchbox_client.h code. 
+/// @sa Switchbox
 namespace switchbox {
   using namespace std;
 
   /// We can't just pass it to the string constructor because it might
-  /// see a '\0' in the message header and stop copying prematurly.
+  /// see a '\\0' in the message header and stop copying prematurly.
   string stringify(SBMessage *message) {
     string result;
     char *bytes = (char*) message;

@@ -1,23 +1,30 @@
 /*
-  # Sync_cat
+@addtogroup sync_cat sync-cat
+@ingroup Game
 
-  usage: ./sync_cat [ids-to-synchronize-from]
+@section Sync_cat
 
-  This listens to all addresses on the switchbox that actually send
-  stuff, synchronizes their outputs, and print the resulting messages.
-  This is very useful for testing the syncronizer, but also for doing
-  synchronization on programs that weren't designed for it.
+@verbatim
+usage: ./sync_cat [ids-to-synchronize-from]
+@endverbatim
 
-  Timestamp and sender information is expected on input an is not
-  printed on output.  Example usage:
+This listens to all addresses on the switchbox that actually send
+stuff, synchronizes their outputs, and print the resulting messages.
+This is very useful for testing the syncronizer, but also for doing
+synchronization on programs that weren't designed for it.
 
-      ./sync_cat 0 1
-      0 0.0 hi
-      1 0.0 there
-      hi # output
-      there # output
-      0 0.1 hihihi
-      ^D
+Timestamp and sender information is expected on input an is not
+printed on output.  Example usage:
+
+@verbatim
+  ./sync_cat 0 1
+  0 0.0 hi
+  1 0.0 there
+  hi # output
+  there # output
+  0 0.1 hihihi
+  ^D
+@endverbatim
 */
 
 #include <assert.h>

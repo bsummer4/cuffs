@@ -1,4 +1,8 @@
-This directory contains the game and a bunch of small programs that
+/**
+@addtogroup Game
+
+@section gameSrcDir Source Directory Description
+The game/src directory contains the game and a bunch of small programs that
 use various internal libraries.  This provieds a set of entry points
 for manually testing code, and serves as light ad-hock documentation
 for the libraries themselves.  Most of this code is very simple and
@@ -10,6 +14,7 @@ manual testing session (with the unix command 'tee') to two files, and
 then replaying the session back to see if the results match.  For
 example:
 
+@verbatim
     $ tee input | ./delayed_cat | tee output
     hi
     there
@@ -21,8 +26,9 @@ example:
     $ ./delayed_cat < input > test_output
     $ diff output test_output
     $ rm output input test_output
+@endverbatim
 
-# Testing
+@subsection Testing
 There are a couple of utillities for running tests utils/.  ./test and
 ./run-tests.  ./run-tests uses the file test_data/tests to get a list
 of programs to test, then calls ./test on all of them, ./test runs
@@ -33,12 +39,15 @@ with the given output, or for the test-runner to manually verify the
 on-screen output (render).  This is all run if you do 'make check' in
 or above this directory.
 
-# Running
+@subsection Running
 To run the game do:
 
+@verbatim
    xterm1> ./overworld-launcher.py $username1
    xterm2> ./overworld-launcher.py $username2 localhost
    xterm3> ./overworld-launcher.py $username3 localhost
+@endverbatim
 
 Then, in one of the windows, select all three players and push the
 play button.
+**/

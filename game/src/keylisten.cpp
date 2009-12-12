@@ -1,3 +1,6 @@
+/// @addtogroup keylisten
+/// @ingroup Game
+/// @section Description
 /// Simply print out the names off the keys that are pressed in the
 /// opened SDL window.  stdin is ignored.
 

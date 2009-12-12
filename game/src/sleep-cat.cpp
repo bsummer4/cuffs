@@ -1,11 +1,18 @@
-/// Just like normal cat except when it sees a line that looks like
-/// one of:
-///    sleep #
-///    usleep #
-/// It sleeps for that ammount of time and then doesn't print that
-/// line
-///
-/// This is useful for testing time-sensitive code.
+/**
+@addtogroup sleep_cat sleep-cat
+@ingroup Game
+
+@section Description
+
+Just like normal cat except when it sees a line that looks like
+one of:
+   sleep #
+   usleep #
+It sleeps for that ammount of time and then doesn't print that
+line
+
+This is useful for testing time-sensitive code.
+**/
 
 #include <assert.h>
 #include "misc.hpp"

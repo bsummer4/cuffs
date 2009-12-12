@@ -1,3 +1,6 @@
+/// @addtogroup Interpret
+/// @ingroup Game
+/// @section Description
 /// Reads messages from stdin an sends them to the Interpreter.  We
 /// try to open a map 'example.map' in the working directory, so make
 /// sure there's one there.

@@ -204,25 +204,40 @@ public:
     : gameInQ(gameInQ), userInQ(userInQ), r(r), i(i), state(state), sim(sim_),
       simInt(sim, state), iteration(0), output(output), ta(0), game_time(0),
       ui(ui) {}
+  /// The overloaded () operator is where the pipeline occurs, and where 
+  /// each event in the pipeline gets called in order. 
+  /// 
+  /// The order call list is as follows:
   void operator()(SDL_Event& e) {
     int new_game_time = (SDL_GetTicks() - start_time) / game_interval;
     if (new_game_time <= game_time) return;
     int old_time = game_time;
     game_time = new_game_time;
 
+    /// - Get all the messages from the GameInQ (From the CMB Synchronizer)
     vector <string> stateChangeMsgs = gameInQ.popAll();
+    /// - Handle all the messages from GameInQ by the Interpreter
     handleAll <typeof(i)&> (stateChangeMsgs, i);
+    /// - Ditto for the UserInterface (Special Effects)
     handleAll <typeof(ui)&>(stateChangeMsgs, ui);
+    /// - Get all the User generate events (move, shoot, etc)
     vector <string> userEvents = userInQ.popAll();
+    /// - Handle these user events with the Physics Simulator
     handleAll <typeof(simInt)&> (userEvents, simInt);
+    /// - Generate the new state change messages from the user Input
     handleAll <typeof(simInt)&> (stateChangeMsgs, simInt);
+    /// - Timestamp and send out all the events to all the clients
+    /// move messages and new messages for shot objects
     ITER (time, old_time + 1, new_game_time + 1) {
       vector <string> stuff = sim.move();
       ta.time = time;
       vector <string> output_messages = ta(stuff);
       handleAll <typeof(output)&> (output_messages, output); }
     vector <string> render_messages;
+    /// - From the current global state generate all the draw messages
     render_state(state, render_messages);
+    /// - Send the draw messages on to the renderer, which draw them on 
+    /// the screen
     ui.render(state, render_messages, sim);
     r.white();
     handleAll <typeof(r)&> (render_messages, r);

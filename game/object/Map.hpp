@@ -10,6 +10,7 @@
 #include "sdl.hpp"
 #include "vectors.hpp"
 
+/// @brief Contains all the main, general elements of the game.
 namespace game {
   using namespace std;
   using namespace vectors;
@@ -20,12 +21,14 @@ namespace game {
   /// passed into the Map constructor and should not be used outside
   /// of that.
   ///
-  /// WARNING: Because we want Map to reuse our data, heap-allocated
+  /// @warning Because we want Map to reuse our data, heap-allocated
   /// data is *NOT FREED* in the destructor!!
   ///
+  /// @verbatim
   /// Example use:
   ///     Map m(MapLoader("example.map"));
   ///     cout << m.width << " " << m.map[m.width * m.height - 1] << endl;
+  /// @endverbatim
   class MapLoader {
     sdl::SDL &sdl;
   public:
@@ -57,10 +60,10 @@ namespace game {
         return true; }
       throw runtime_error("Invalid command in file"); }};
 
-  // This represents a game map and provieds some game-specific
-  // functionallity such as explosions and point wrapping.
-  // TODO We assume that pixels in the SDL_Surface are always ints.
-  // This is not always true.  Make this more robust
+  /// This represents a game map and provieds some game-specific
+  /// functionallity such as explosions and point wrapping.
+  /// @TODO We assume that pixels in the SDL_Surface are always ints.
+  /// This is not always true.  Make this more robust
   class Map {
   public:
     SDL_Surface* const map;

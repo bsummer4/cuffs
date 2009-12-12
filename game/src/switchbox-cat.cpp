@@ -1,7 +1,16 @@
-/// Simply prints to stdout all messages received from the switchbox,
-/// and broadcasts all messages from stdin.  Very useful for
-/// debugging, and tying various unixy programs together over a
-/// switchbox
+/**
+@addtogroup switchbox_cat switchbox-cat
+@ingroup Game
+
+@section Description
+
+Simply prints to stdout all messages received from the switchbox,
+and broadcasts all messages from stdin.  Very useful for
+debugging, and tying various unixy programs together over a
+switchbox
+
+@sa switchbox_connect
+**/
 
 #include <unistd.h>
 #include <iostream>

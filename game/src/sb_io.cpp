@@ -1,3 +1,50 @@
+/**
+@addtogroup sb_io sb_io
+@ingroup Game
+
+@section Description
+Creates a connection to the switchbox at the given port and sends the messages
+as various different clients to the switchbox to facilitate testing of multiple
+clients despite having fewer then that. Likewise, it will print everything it 
+receives from the switchbox to its stdout. 
+
+It is usually safe to assume, that the input should match the output over the 
+switchbox.
+
+@section Usage
+@verbatim
+    usage: sb_io switchbox_hostname switchbox_port [script_file]
+@endverbatim
+If the script_file is given, then it will use that, otherwise it will read its
+input from stdin.
+
+@section sfile Script File
+The script file will look as follows
+@verbatim
+-1 new_connection 0
+-1 new_connection 1
+-1 new_connection 2
+1 hi
+2 whatever
+1 That's not very nice!
+2 no you!
+1 I'm telling the chanOp!
+-1 new_connection 3
+3 op:  You are mean: *kick*
+-1 lost_connection 2
+1 yay
+3 yay
+-1 new_connection 2
+2 sup dog?  I like pizza.
+-1 lost_connection 1
+-1 lost_connection 3
+2 whatever...
+-1 lost_connection 2
+@endverbatim
+
+Where the first "field" is the user to send the message as, and user -1
+represents a special message to sb_io to add or remove a virtual client. 
+**/
 #include "ConnectionManager.hpp"
 #include <iostream>
 #include <string>

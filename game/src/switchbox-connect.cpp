@@ -1,9 +1,19 @@
-/// This is like switchbox-cat except it prepends the
-/// switchbox-address of the user who sent it to every message.  It
-/// also prints messages of the form:
-///
-///     -1 lost_connection #
-///     -1 new_connection #
+/**
+@addtogroup switchbox_connect switchbox-connect
+@ingroup Game
+
+@section Description
+This is like switchbox-cat except it prepends the
+switchbox-address of the user who sent it to every message.  It
+also prints messages of the form:
+
+@verbatim
+    -1 lost_connection #
+    -1 new_connection #
+@endverbatim
+
+@sa switchbox_cat
+**/
 
 #include <unistd.h>
 #include <iostream>

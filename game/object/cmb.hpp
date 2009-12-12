@@ -10,9 +10,13 @@
 #include "lib.h"
 #include "misc.hpp"
 
+/// @brief Contains everything for the "Synchronizer" element of the 
+/// CMB algorithm. 
+///
 /// This is a bunch of classes for syncronizing output from various
 /// simulations.  The classes you should care about are
-/// cmb::Synchronizer, and cmb::TimestampAdder
+/// cmb::Synchronizer, and cmb::TimestampAdder Everything else
+/// function as more of helper classes. 
 namespace cmb {
   using namespace std;
   class Event;
@@ -129,7 +133,7 @@ namespace cmb {
       if (cmbQueue.count(process))
         cmbQueue.erase(process); }
 
-    /// All events before @ref time
+    /// All events before time
     pqueue getEvents(Timestamp time) {
       pqueue result;
       if (getLowestTime() < time) return result;

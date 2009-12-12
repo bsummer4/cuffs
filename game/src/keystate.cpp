@@ -1,3 +1,6 @@
+/// @addtogroup keystate 
+/// @ingroup Game
+/// @section Description
 /// Every time a key is pressed or released, print a line which is a
 /// whitespace-delimited list of all the currently held keys.
 

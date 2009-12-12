@@ -14,8 +14,9 @@
 #include "macro.h"
 #include "vectors.hpp"
 
-/// Anything that uses sdl directly goes here.  Some classes use sdl a
-/// little bit (Map) but are in different namespaces
+/// @brief Anything that uses sdl directly goes here.  
+///
+/// Some classes use sdl a little bit (Map) but are in different namespaces
 namespace sdl {
   using namespace std;
   using namespace vectors;

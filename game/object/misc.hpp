@@ -1,5 +1,3 @@
-/// Reads lines from a stream and passes them to something that
-/// implements a handleEvent method.
 #pragma once
 #include <queue>
 #include <iostream>
@@ -9,6 +7,8 @@
 #include "macro.h"
 #include "lib.h"
 
+/// Contains everything that we use for the game but is not specific 
+/// to the game or for gameplay. 
 namespace misc {
   using namespace std;
 
