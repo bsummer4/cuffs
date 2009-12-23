@@ -1,0 +1,6 @@
+author: ben
+summary: Ticket Management System
+
+Write a ticket-manipulation suite similar to the "mh" email system.
+In fact, it might be possible to just hack mh itself to work with my
+ticket system.
