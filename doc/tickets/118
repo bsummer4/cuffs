@@ -3,4 +3,23 @@ summary: Ticket Management System
 
 Write a ticket-manipulation suite similar to the "mh" email system.
 In fact, it might be possible to just hack mh itself to work with my
-ticket system.
+ticket system.  A session might look like this:
+
+    $ scan `pick -author ben`
+    117 12/09 ben installation<<Get "make install" to work.>>
+    118 12/09 ben Ticket Management System<<Write a ticket-manipulation suite
+    $ close 118 -m "It's in place!  Enjoy!" -git
+    $ scan `pick -author ben`
+    117 12/09 ben installation<<Get "make install" to work.>>
+    $ head 118 | egrep "status|place"
+    status: resolved
+    resolution: It's in place!  Enjoy!
+    $ git log 118
+    commit 5555555555555555555555555555555555555555
+    Author: Benjamin Summers <ben@benjaminsummers.net>
+    Date:   Fri ...
+
+        Closed ticket #118 <Ticket Management System>
+        It's in place!  Enjoy!
+    $ echo 'yayayayaaayyy!!'
+    yayayayaaayyy!!
