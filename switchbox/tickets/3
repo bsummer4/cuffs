@@ -1,0 +1,4 @@
+author: bsummer4
+title: Clean up Build
+
+Eliminate warnings and add an 'uninstall' rule to Makefile.
