@@ -10,16 +10,9 @@ autotools_stuff="aclocal.m4 autom4te.cache configure missing install-sh
                  m4/ltsugar.m4 m4/libtool.m4 m4/ltversion.m4 m4/lt~obsolete.m4
                  m4/ltoptions.m4"
 
-symbolic_links="DESIGN COPYING NEWS AUTHORS INSTALL ChangeLog"
-
 if [ $1 ] # If there are arguments
 then
     if [ $1 != clean ]; then echo invalid command; exit; fi
-
-    echo "Cleaning up symbolic links:"
-    echo "$PROMPT" rm -f $symbolic_links
-    rm -f $symbolic_links
-    echo
 
     echo "Cleaning up autotools temporary files:"
     echo "$PROMPT" rm -rf $autotools_stuff
@@ -27,14 +20,6 @@ then
 
 else
     echo "Generating autotools stuff:"
-    echo "$PROMPT" generating README DESIGN COPYING NEWS ChangeLog and AUTHORS
-    if [ ! -e README ]; then ln -s doc/readme.rst README; fi
-    if [ ! -e DESIGN ]; then ln -s doc/design.rst DESIGN; fi
-    if [ ! -e COPYING ]; then ln -s doc/copyright.rst COPYING; fi
-    if [ ! -e AUTHORS ]; then ln -s doc/authors AUTHORS; fi
-    if [ ! -e NEWS ]; then ln -s doc/news.rst NEWS; fi
-    if [ ! -e ChangeLog ]; then ln -s doc/changes.rst ChangeLog; fi
-
     echo "$PROMPT" autoreconf -I m4 --install
     autoreconf -I m4 --install
 fi

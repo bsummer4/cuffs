@@ -11,7 +11,7 @@ AC_PROG_CXX
 AC_PROG_LIBTOOL
 
 # Automake initialization including a check for automake API version >= 1.9
-AM_INIT_AUTOMAKE([1.9])
+AM_INIT_AUTOMAKE([foreign 1.9])
 
 # Use the C++ compiler for the following checks
 AC_LANG([C++])
@@ -81,9 +81,6 @@ DX_INIT_DOXYGEN([$PACKAGE_NAME],[doxygen.cfg],[doc/doxygen])
 
 # Files to generate from .am or .in files
 AC_CONFIG_FILES([Makefile
-                 switchbox/Makefile
-                 switchbox/src/Makefile
-                 switchbox/test/Makefile
                  game/Makefile
                  game/src/Makefile
                  game/object/Makefile
