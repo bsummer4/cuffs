@@ -1,0 +1,6 @@
+author: bsummer4
+title: Testing
+
+Bring back any relevant testing that was removed in the restructuring,
+and add new tests.  Especially make sure the performance tests are
+through and indicitive before work begins on ticket #2.
