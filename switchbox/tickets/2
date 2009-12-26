@@ -1,0 +1,7 @@
+author: bsummer4
+title: Remove Dependencies and Increase Performance
+
+Rework the code so that we don't use thread, change the header
+format so that all fields are bytes, limit the total message size
+and number of users to 255, and take advantage of it by statically
+allocating all memory.
