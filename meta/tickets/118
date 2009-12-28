@@ -23,3 +23,14 @@ ticket system.  A session might look like this:
         It's in place!  Enjoy!
     $ echo 'yayayayaaayyy!!'
     yayayayaaayyy!!
+
+%%
+author: ben
+
+I've made some progress on this.  I'm going to have it work with the
+project utils stuff.  I've got this working so far:
+
+    $ p ticket scan
+      111+ MONTH accepted bsummer4 Sometimes<<Sometimes the sockets don't ge>>
+      118  MONTH open ben <<Write a ticket-manipulation suite similar to the>>
+      119  MONTH open ben <<Get "make install" to work.>>
