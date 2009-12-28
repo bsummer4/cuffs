@@ -1,0 +1,16 @@
+author: bsummer4
+title: Write scripts to take emails and post them here
+date: 2009-09-18T23:19:48Z
+status: closed
+
+They should go in as comments on the email log message.  The scripts
+should go in /utils.  Please note that whoever finishes this
+neigh-impossible task should automatically get an A in the class.
+
+
+%%
+author: bsummer4
+
+resolved: fixed
+
+Revision 57 closes this.

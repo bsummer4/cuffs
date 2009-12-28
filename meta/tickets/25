@@ -1,0 +1,21 @@
+author: jhoare
+title: Memory Leak in Latency Test
+date: 2009-09-29T03:30:34Z
+status: closed
+
+
+Cool.  When I was reading the code, I wondered why you didn't do it
+that way.  One remark: Is this code snippet a bug?:
+
+[latency_test.cpp]
+> > SBMessage * msg = (SBMessage*) malloc(size);
+> > msg = r->getMessage();
+
+
+%%
+author: jhoare
+
+resolved: fixed
+
+Yes, that's a bug. The message should also get freed, which never
+happens. I've fixed this and committed it.

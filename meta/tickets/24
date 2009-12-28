@@ -1,0 +1,32 @@
+author: bsummer4
+title: Make SwitchboxAdmin keep track of all groups
+date: 2009-09-29T03:07:35Z
+status: closed
+
+It should hold a data structure of all the groups it has defined.  It
+should also implement a more abstract view of the group changing
+process.  It should have methods for adding people to groups, removing
+them, etc.
+
+
+%%
+author: codeman655
+date: 2009-10-01T13:09:11Z
+
+I created a new file called SwitchboxGroupControl.cpp to handle this
+stuff, but I noticed there's some commented code in SwitchboxAdmin.cpp
+that has similar methods. Can anyone explain?
+
+%%
+author: codeman655
+date: 2009-10-04T23:20:09Z
+
+It was decided that this functionality would be included in the "game"
+portion of the code. So putting it off for now.
+
+%%
+author: bsummer4
+
+resolved: fixed
+
+Works

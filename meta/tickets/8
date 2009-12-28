@@ -1,0 +1,17 @@
+author: jhoare
+title: Have configure check for ogre libraries.
+date: 2009-09-01T16:20:37Z
+status: closed
+
+%%
+author: bsummer4
+date: 2009-09-02T12:58:41Z
+
+Let's put this off until we actually start using the library.
+
+%%
+author: jhoare
+
+resolved: invalid
+
+We will not be using ogre.

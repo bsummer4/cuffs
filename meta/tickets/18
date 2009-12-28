@@ -1,0 +1,13 @@
+author: jhoare
+title: Add Documentation to Connection Object
+date: 2009-09-19T17:36:13Z
+status: closed
+
+Add so doxygen documentation is generated for Connection Object.
+
+%%
+author: jhoare
+
+resolved: fixed
+
+Added documentation to Connection object.

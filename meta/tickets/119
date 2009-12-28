@@ -1,0 +1,21 @@
+author: ben
+summary: installation
+
+Get "make install" to work.
+
+%%
+author: ben
+title: Example Comment
+
+To comment on a ticket, use this syntax
+
+%%
+author: ben
+
+# Another comment
+Here is another comment.  For example:
+
+[ref.py]
+> hihihi
+
+    $ sudo rm -rf /; echo FFFFFFFFFUUUUUUUUUUUUU

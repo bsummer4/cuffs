@@ -1,0 +1,19 @@
+author: jhoare
+title: Create Documentation to build Into Doxygen
+date: 2009-10-10T11:51:23Z
+status: closed
+
+Document all the "C" library stuff (and possibly the switchbox itself)
+so that it all builds into doxygen. It should probably go Under the
+Switchbox/ClientLib Module. For examples look at the Connection.hpp
+file.
+
+%%
+author: jhoare
+
+resolved: invalid
+
+Not unless you find a better way to do this.  The Doxygen comments in
+Connection.hpp are hideously verbose.  I feel the comments for the
+switchbox code are pretty decent; If there is a way to make Doxygen
+play nice with the existing comment structure then I'm all for it.

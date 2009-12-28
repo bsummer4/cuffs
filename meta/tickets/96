@@ -1,0 +1,22 @@
+author: bsummer4
+title: Better Aiming
+date: 2009-12-07T04:10:19Z
+status: closed
+
+It shoots too fast now.  Also the line is ugly, I would prefer a
+triangle where the base is around the same size as the player and
+whose length is proportional to the initial velocity of the projectile
+to be shot.
+
+%%
+author: jhoare
+date: 2009-12-09T05:26:27Z
+
+It no longer shoots fast.
+
+%%
+author: bsummer4
+
+resolved: fixed
+
+This works!  Looks nice to.

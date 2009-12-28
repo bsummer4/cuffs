@@ -1,0 +1,21 @@
+author: bsummer4
+title: Collisions between objects
+date: 2009-12-11T00:48:02Z
+status: closed
+
+Just look at the distance between two objects.  Collisions between two
+of your objects should not cause an explosions (Would make shooting
+bursts a pain.  )
+
+%%
+author: bsummer4
+date: 2009-12-11T01:44:01Z
+
+Works!
+
+%%
+author: bsummer4
+
+resolved: fixed
+
+Works!

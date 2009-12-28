@@ -1,21 +1,17 @@
-author: ben
-summary: installation
+author: codeman655
+title: svn propset issues
+date: 2009-12-11T17:57:11Z
+status: closed
 
-Get "make install" to work.
-
-%%
-author: ben
-title: Example Comment
-
-To comment on a ticket, use this syntax
+It doesn't work, and it needs to.
 
 %%
-author: ben
+author: codeman655
+date: 2009-12-11T18:30:23Z
 
-# Another comment
-Here is another comment.  For example:
+Fixed for now. *Magic solutions FTW*
 
-[ref.py]
-> hihihi
+%%
+author: codeman655
 
-    $ sudo rm -rf /; echo FFFFFFFFFUUUUUUUUUUUUU
+resolved: fixed

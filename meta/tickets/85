@@ -1,0 +1,16 @@
+author: jhoare
+title: Move sb_io back into trunk.
+date: 2009-12-03T00:06:33Z
+status: closed
+
+%%
+author: jhoare
+
+resolved: fixed
+
+Changeset [fistacuffs:540]:
+
+Moved the sb_io program into the trunk, thus Resolves #84
+
+This is basically a port from the old trunk into here, no new features
+are added.

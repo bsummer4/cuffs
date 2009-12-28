@@ -1,0 +1,19 @@
+author: bsummer4
+title: Create a better renderer
+date: 2009-11-18T02:25:06Z
+status: closed
+
+Change the renderer in ticket #56 to take a sequence of images and
+draw them in order.
+
+Create another things which takes the game state and produces a
+sequence of images.
+
+%%
+author: bsummer4
+
+resolved: invalid
+
+We decided not to do this for now.  We are going to just do the simple
+thing and send it text messages.  This will probably be too slow, but
+we'll cross that bridge when we come to it.

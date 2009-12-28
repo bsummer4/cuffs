@@ -1,0 +1,30 @@
+author: jhoare
+title: Create different Main's (Game simulator)
+date: 2009-10-09T21:55:24Z
+status: closed
+
+Create different main programs that put the individual Set of Objects
+(Generator, Synchronizer, Interpreter) together.
+
+I.e. We want the simple generator go to the simple synchronizer to
+simple interpreter. and so forth.
+
+%%
+author: codeman655
+date: 2009-11-03T19:01:53Z
+
+This will be implemented in CMBclientTest and CMBsingleTest.
+
+%%
+author: codeman655
+date: 2009-11-17T15:04:28Z
+
+This ticket is a duplicate. Will be writing the "game" next.
+
+%%
+author: jhoare
+
+resolved: invalid
+
+This is working in the branch.  It would be foolish to spend any more
+time on this

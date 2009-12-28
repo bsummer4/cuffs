@@ -1,0 +1,80 @@
+author: bsummer4
+title: KeyListener
+date: 2009-11-19T02:02:01Z
+status: closed
+
+# KeyListener
+
+Write a keylistener program that opens an SDL window, and listens to
+keys.  Print the keys that were pressed to stdout.
+
+Once this is working, make an object out of it (sdl::KeyListener).
+Have the constructor take an event handler (something that implements
+handleEvent(string)), and call that with the name of the key.
+
+You will need to use templates to accept and arbitrary eventHandler,
+misc::LineReader is a good example of how to do this.
+
+## Key Names
+
+It's probably best to have simple names for keys (e.g. "a", "%", "f1",
+"esc"), but if there's a standard SDL way to name keys as strings,
+then use that.
+
+## Working with other SDL-based objects
+
+Instead of initializing and quitting SDL, take a reference to an
+sdl::SDL object.  Assume that the screen has already been created.
+
+
+%%
+author: bsummer4
+date: 2009-11-21T20:38:52Z
+
+Nice work.
+
+%%
+author: bsummer4
+date: 2009-11-21T20:41:02Z
+
+Could you make this work with the SDL object I just made, and put this
+in the new sdl namespace?
+
+%%
+author: bsummer4
+date: 2009-11-21T20:44:00Z
+
+If you plan I doing it with event handlers like I suggested, then The
+LineReader class is a good example of how I've been using threads and
+event handlers:
+
+    /// Reads lines from a stream and sends them to a signal handler.
+    /// Max line length is 1024
+    template <typename H>
+    class LineReader : public Threaded {
+    public:
+      LineReader(istream &in, H handler) : in(in), h(handler) {}
+      void run() {
+        char buffer[1024];
+        while (!stopRequested && in.getline(buffer, 1024))
+          h.handleEvent(string(buffer)); }
+    private:
+      H h;
+      istream &in; };
+
+
+%%
+author: bsummer4
+date: 2009-11-21T23:42:19Z
+
+Changed the ticket a little bit.
+
+%%
+author: dloftis
+
+resolved: fixed
+
+NOTE!!!!  The event handler can NOT be in a separate thread from the
+caller of "setVideoMode".  This is a limitation in the API: "As this
+function implicitly calls SDL_PumpEvents, you can only call this
+function in the thread that set the video mode."  Is this a problem?

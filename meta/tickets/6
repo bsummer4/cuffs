@@ -1,0 +1,82 @@
+author: codeman655
+title: Generate test cases/code
+date: 2009-09-01T14:37:05Z
+status: closed
+
+Focus more on the cases, they'll help guide our code. Test code can be
+written later.
+
+%%
+author: jhoare
+date: 2009-09-02T21:24:41Z
+
+Begun work on switchbox testing document. (OpenOffice Writer Format)
+
+%%
+author: jhoare
+date: 2009-09-03T15:11:49Z
+
+Uploaded in pdf form.
+
+%%
+author: codeman655
+date: 2009-09-03T18:15:08Z
+
+Great test cases so far. Please let us know when it's finished.
+
+%%
+author: jhoare
+date: 2009-09-19T15:06:01Z
+
+Initial checkin which begins on the functional tests. Still working on
+getting  the benchmark  and edge  cases  tested. However,  I need  the
+switchbox to  support logons  like we spoke  in those  previous emails
+before any of the tests will pass.
+
+%%
+author: jhoare
+date: 2009-09-20T01:39:50Z
+
+Added Version 0.2 of testing document.
+
+%%
+author: jhoare
+date: 2009-09-20T21:12:39Z
+
+Added initial edge_case testing code.
+
+%%
+author: jhoare
+date: 2009-09-21T02:28:39Z
+
+Updated to version 0.3 of testing document. (Should have been updated
+a while ago. The tests were ahead of the document)
+
+%%
+author: jhoare
+date: 2009-09-21T06:12:24Z
+
+Okay, all the functional and edge case tests are passing. The latency
+test is not working reliably enough for me to have it running with the
+tests.
+
+%%
+author: jhoare
+date: 2009-09-27T22:57:05Z
+
+Today I checked code into the improve-switchbox branch that enables
+the latency/scalability checks.
+
+%%
+author: jhoare
+date: 2009-09-30T03:42:08Z
+
+Added valgrind checks.
+
+%%
+author: codeman655
+
+resolved: fixed
+
+I believe this is all done, so i'm closing it. (It should have been
+closed a while ago.)

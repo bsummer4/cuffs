@@ -1,0 +1,54 @@
+author: jhoare
+title: A client not being available shouldn't kill the switchbox.
+date: 2009-11-19T04:06:58Z
+status: closed
+
+Problem Statement
+=================
+
+[John]
+While writing the playback/recoder programs I encounterd a problem
+with my Connection class. If I queue messages and kill the object fast
+enough then the system the messages may never get sent. So what I've
+done is made sure that the messages are sent out before the Class goes
+away. The problem with this is, I think the messages get sent out, and
+then the client leaves. But the switchbox dies with an assertion
+failed when it tries to relay the massage back to the now gone
+client. The send_message function fails.
+
+
+Reproducing Problem
+===================
+
+Go into trunk/tests/utils and first create an input file. Here's what I use:
+
+    -1 new_connection 0
+    0 Hello how are you
+    0 I am fine thanks.
+    0 Okay bye
+    -1 lost_connection 0
+
+And I save it in script_one
+
+Then (with the switchbox running) run playback
+
+     ./playback localhost PORT script_one
+
+I've had to run it a couple of times, but after a couple of tries it
+should take down the switchbox.
+
+%%
+author: jhoare
+date: 2009-11-20T00:24:39Z
+
+Looks like you fixed it. I ran what was killing it before a bunch of
+times and it seems to work. (how scientific of me)
+
+%%
+author: jhoare
+
+resolved: fixed
+
+I can't duplicate the problem, so I can't be sure.  However, I fixed
+some logic that would cause your problem.  Make sure everything works
+now.

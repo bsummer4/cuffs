@@ -1,0 +1,15 @@
+author: bsummer4
+title: Handle gameover messages properly
+date: 2009-12-11T02:56:27Z
+status: closed
+
+Right now the '-1 lost_connection #' message just makes all clients
+throw an exception.  This should be handled correctly.
+
+
+%%
+author: bsummer4
+
+resolved: fixed
+
+This works now!

@@ -1,0 +1,37 @@
+author: jhoare
+title: Implement Map Interface/storage
+date: 2009-10-22T13:49:02Z
+status: closed
+
+Create map class that can load a map, as well as can query with the
+following class:
+
+- Map Class
+    - loadMap(filename)
+    - pixel_type_t getPixel()
+    - void explosion(int x, int y, float radius)
+
+
+
+%%
+author: jhoare
+date: 2009-10-27T15:07:02Z
+
+I have created the base for the map class. I need to change it to use
+the new Coords class rather than int x, int y
+
+%%
+author: jhoare
+date: 2009-10-27T15:25:25Z
+
+Map now uses Coords Class as well as using int x, int y.
+
+%%
+author: jhoare
+
+resolved: fixed
+
+Map Class now functions correctly, and has tests that test it.
+
+Although it does not handle error checking well yet, that's a problem
+for Future John.

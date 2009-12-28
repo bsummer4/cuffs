@@ -1,0 +1,107 @@
+author: jhoare
+title: Synchronizer should take in a vector of proccesses to expect.
+date: 2009-11-25T21:44:39Z
+status: closed
+
+Ignore anything from users not in the list.
+
+Remove older styles of adding users. (I.e. Adding them when we get a
+message from them.)
+
+%%
+author: bsummer4
+date: 2009-12-04T21:06:30Z
+
+This needs to be reintegrated since it didn't make it through the merge.
+
+%%
+author: jhoare
+date: 2009-12-04T21:18:13Z
+
+Okay good, I was just coming in here to ask if this needs to be done.
+
+%%
+author: jhoare
+date: 2009-12-04T21:31:36Z
+
+I've put them in, but how does game/sync-cat know what to set the list
+of users to?
+
+%%
+author: bsummer4
+date: 2009-12-04T21:43:58Z
+
+'game' will know from the ref-handshake.  'sync-cat' could take a list
+of addresses on the command-line or you could include support for the
+current method.  I'll leave that decision to you.
+
+
+%%
+author: jhoare
+date: 2009-12-04T21:57:28Z
+
+I was looking at the ref handshake, and it looks like the ref just
+tells about the names of the users, not their addresses. Am I
+incorrect?
+
+%%
+author: bsummer4
+date: 2009-12-04T22:01:03Z
+
+The users /identify themselves, so we should be able to get their
+addresses from the message headers.  This is not currently being done.
+
+
+%%
+author: bsummer4
+date: 2009-12-04T22:03:45Z
+
+I was wrong.  This is is being handled now.
+
+    void ref_handshake(string username, map <int, string> &players,
+                       string &map) {
+      cout << "/identify " << username << endl;
+      LOOP {
+        char buffer[1024];
+        if (!cin.getline(buffer, 1024)) assert(false && "badness");
+        istringstream i(buffer); int from; string command;
+        i >> from >> command;
+        if (!command.compare("/identify")) {
+          string name; i >> name;
+          players[from] = name;
+          continue; }
+        if (!command.compare("/map")) { i >> map; continue; }
+        if (!command.compare("/start")) return;
+        throw runtime_error("Bad handshake message"); }}
+
+
+%%
+author: jhoare
+date: 2009-12-04T22:07:08Z
+
+Okay, once you do that I can check in my changes to the Synchronizer.
+
+EDIT: Oh I see whats happening there, players is a map and I can
+iterate through it. Doh!
+
+As an aside, I think most of my tests are obsolete now.
+
+%%
+author: bsummer4
+date: 2009-12-04T22:12:04Z
+
+Alright, is there anything important that we're not testing now?
+
+%%
+author: jhoare
+
+resolved: fixed
+
+Changeset [fistacuffs:535]:
+
+This checkin solves two things:
+
+1. Resolves #75 : Add synchronizer to take in a vector of Processes to expect
+2. Affects #83 : Adds A couple of CMB tests. Although a lot of them
+   are depricated in favor of the testing methods ben did. However,
+   perhaps we can still move the test cases into the other style.

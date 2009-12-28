@@ -1,0 +1,14 @@
+author: jhoare
+title: Create Overworld Server.
+date: 2009-10-21T20:21:22Z
+status: closed
+
+Implement the overworld server that handles the large persistant world
+and manages all the sub-battles.
+
+%%
+author: jhoare
+
+resolved: postponed
+
+We should get the battle working first.

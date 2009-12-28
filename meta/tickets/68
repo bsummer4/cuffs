@@ -1,0 +1,24 @@
+author: bsummer4
+title: Battle Client (Ref Handshake)
+date: 2009-11-20T19:37:16Z
+status: closed
+
+Write the client code that talks to the ref.  It should:
+
+- Connect to the switchbox.
+- Send '/identify $username'.
+- Wait for '/map mapfile'.
+- Load the map into the renderer, and create the gamestate.
+- Wait for '/start'.
+- Wait for '/new player-$username player x y' for all players.
+- Kick off the cmb and the interpret-physics-render pipeline.
+- Wait for the user to quit.
+- Exit
+
+
+%%
+author: bsummer4
+
+resolved: fixed
+
+This seems to be done in game.c++.  Haven't tested extensively.

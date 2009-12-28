@@ -1,0 +1,7 @@
+author: jhoare
+title: Add in shooting sounds.
+date: 2009-12-06T21:22:58Z
+status: closed
+
+Similar to how explosion sounds are created, add "shooting" sounds to
+the game.  Look in "UserInterface" class in game.cpp.

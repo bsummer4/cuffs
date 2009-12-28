@@ -1,0 +1,22 @@
+author: jhoare
+title: Move relevent tests from tag back into trunk.
+date: 2009-12-02T23:01:25Z
+status: closed
+
+Go through the old tests and put the ones that make sense to have back
+into the trunk.
+
+
+
+%%
+author: jhoare
+date: 2009-12-04T22:57:44Z
+
+My checkin resolved this ticket as well which is incorrect.
+
+%%
+author: jhoare
+
+resolved: fixed
+
+I think this is mostly done.

@@ -1,0 +1,48 @@
+author: codeman655
+title: Improve-Switchbox
+date: 2009-09-28T19:50:59Z
+status: closed
+
+Yo, Ben. Since you're updating the switchbox in the branch directory,
+would you be so kind to document any major changes made between the
+two. You aren't saying much of what's going on and it puts us all
+behind if we have to parse through the code for changes.
+
+%%
+author: bsummer4
+date: 2009-09-29T02:54:37Z
+
+The only functional changes are the ANNOUNCEMENT mechanism, which was
+discussed via email.  Everything else is just style, and small
+bugfixes.
+
+
+%%
+author: bsummer4
+date: 2009-09-29T03:33:56Z
+
+[Chris]
+> Would you [...] document any changes made. You aren't saying much of
+> what's going on.
+
+So, reading through my commit messages, they seem pretty clear and
+through.  What's the problem?  You are reading the commit messages...
+Right?
+
+
+[Chris]
+> [...] Puts us all behind if we have to parse through the code for
+  changes.
+
+You really should review everything I commit; Notice my stupid
+mistakes, make sure my design decisions are sound.  If you don't
+understand why I did something, bring it up.  I read all of youall's
+changes.
+
+
+%%
+author: codeman655
+
+resolved: fixed
+
+Should have closed this when we merged.

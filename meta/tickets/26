@@ -1,0 +1,34 @@
+author: bsummer4
+title: Check for Switchbox Memory Leaks.
+date: 2009-09-29T03:35:25Z
+status: closed
+
+Run switchbox through valgrind, and make sure It's not leaking memory.
+
+%%
+author: jhoare
+date: 2009-09-29T03:46:20Z
+
+I will try to put this as one of the tests.
+
+%%
+author: jhoare
+date: 2009-09-30T02:10:36Z
+
+I haven't set up the automated tests to do it. (My main reason is that
+valgrind doesn't work on OS X Snow Leopard. So I need to check if
+valgrind exists.) However, I did run the program through
+Instruments.app and it found a memory leak in the send_error()
+function, which I have presumably fixed.
+
+%%
+author: jhoare
+date: 2009-09-30T03:42:42Z
+
+Added the valgrind checks. It runs in quiet mode and outputs to a
+file. If the file is not empty, then the switchbox test fails.
+
+%%
+author: bsummer4
+
+resolved: fixed

@@ -1,0 +1,42 @@
+author: jhoare
+title: Implement Switchbox Control Protocol Client library
+date: 2009-09-20T01:46:19Z
+status: closed
+
+I've created a SwitchboxAdmin class which inherits from the Connection
+class that I created earlier. Implement the functions to enable
+control of the switchbox administrative functions. Documentation can
+be built by doing a make doxygen-doc, as well as reading the comments
+in the source files.
+
+I am using this library in my testing functions, so the tests are
+actually testing that these classes work as well.
+
+%%
+author: jhoare
+date: 2009-09-21T02:23:52Z
+
+Wrote addToGroup() and removeFromGroup() functions in the Switchbox
+Admin Class.
+
+%%
+author: codeman655
+date: 2009-09-24T19:02:59Z
+
+John did most on this. I'll try to enable get functions to grab
+specific groups, though it may be unnecessary later.
+
+%%
+author: codeman655
+date: 2009-09-27T16:09:53Z
+
+In retrospect, implementing get_group functions are unnecessary until
+we implement the tree data structure for our group hierarchy. So for
+now this will be on hold.
+
+%%
+author: jhoare
+
+resolved: works_for_me
+
+This works.  It should be improved, but that will go in other tickets.

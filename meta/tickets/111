@@ -1,0 +1,68 @@
+author: bsummer4
+title: Sometimes we can't open a socket again after we just closed
+date: 2009-12-11T04:33:27Z
+status: accepted
+assigned-to: codeman655
+
+Sometimes the sockets don't get closed properly, and we cannot reopen
+them for a little while.
+
+%%
+author: dloftis
+date: 2009-12-11T06:07:01Z
+
+I have not experienced this.  Any idea when this is happening?
+
+%%
+author: bsummer4
+date: 2009-12-11T06:57:32Z
+
+I'm not sure.  I think it might be that we're not closing a socket
+upon exit sometimes, but that's completely a guess.
+
+
+%%
+author: codeman655
+date: 2009-12-11T14:51:02Z
+
+I was assuming it was the exit procedure. Is there any way to force a
+safe-exit when a win-condition is satisfied?
+
+%%
+author: bsummer4
+date: 2009-12-11T14:58:21Z
+
+It should be already.  Maybe the switchbox is being 'kill'ed when
+things are still attached to it.  That might cause problems.... donno.
+
+%%
+author: jhoare
+date: 2009-12-12T01:48:42Z
+
+Perhaps a "good" way of handling this is to create a seperate program
+that just launches the server. Or we could just launch the server
+ourselves and not use the launcher's ability to do that. The server &
+switchbox could/should stay on persistantly anyway.
+
+%%
+author: dloftis
+date: 2009-12-12T16:36:24Z
+
+The problem is that the shell script says "kill" server, which isn't
+giving it a chance to close its sockets.  Couple ways to fix this:
+catch the sigterm and close the sockets in that.  Or instead of using
+kill in the script to kill the server, have it echo a message like
+"/kill" to the switchbox/server which the server then handles, closes
+all its sockets, and goes....Or at least that's my speculation
+
+%%
+author: jhoare
+date: 2009-12-12T19:02:10Z
+
+http://hea-www.harvard.edu/~fine/Tech/addrinuse.html
+
+This is a TCP thing. In reality probably the best and most correct way
+to do it is what i said in comment 5.
+
+However, I don't see it really worthwhile as this whole project is
+basically over.

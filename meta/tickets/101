@@ -1,0 +1,31 @@
+author: bsummer4
+title: Support Dropped Connections in game
+date: 2009-12-07T20:40:26Z
+status: closed
+
+This entails:
+
+- Make switchbox-connect display "-1 lost_connection 3" messages
+- Make the synchronizer understand said messages and removed them from
+  the queue.
+- Make the ref understand these messages and send "/delete player-foo"
+  messages if necessary
+
+
+%%
+author: bsummer4
+date: 2009-12-08T20:57:51Z
+
+Actually, It looks like this doesn't completely work yet, but the sync
+bombs on the lost_connection message so everything dies like it
+should.
+
+Good enough for now.
+
+%%
+author: bsummer4
+
+resolved: fixed
+
+Synronizer should support this also, but since the ref kills the game
+as soon as anyone disconnects, it doesn't matter.

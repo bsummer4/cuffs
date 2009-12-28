@@ -1,0 +1,19 @@
+author: jhoare
+title: Move from SDL_draw to SDL_gfx
+date: 2009-12-06T21:14:48Z
+status: closed
+
+SDL_gfx is a better library in every way than SDL_draw, and provides
+the exact same functions.
+
+(I've already done this but i'm creating a ticket to signify it.)
+
+%%
+author: jhoare
+
+resolved: fixed
+
+This has been done. All calls to SDL_Draw has been replace with the
+corresponding calls to SDL_gfx.
+
+The segfaults have gone away!

@@ -1,0 +1,26 @@
+author: jhoare
+title: Modify Synchronizer to accept New CMB Timestamp ##.##
+date: 2009-11-18T21:19:19Z
+status: closed
+
+Where 0 is the last message. So if you have ##.0 you have all the messages.
+
+Strip the timestamp before you send the message to the event handler.
+
+%%
+author: jhoare
+
+resolved: fixed
+
+Changeset [fistacuffs:397]:
+
+Created the CMBSynchronizer (in trunk) to allow our new style
+timestamps.  It should also handle the "old ones" as it did before,
+however it will spit errors.  Also the CMBSynchronizer does not
+forward the timestamp along to the interpreter anymore.
+
+I also renamed one of the tests to what it really should have been but
+I was too lazy to before.  Likewise, I have updated the tests to work
+with the new system.
+
+Resolve #61

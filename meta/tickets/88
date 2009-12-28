@@ -1,0 +1,51 @@
+author: bsummer4
+title: Minimal Overworld Game
+date: 2009-12-04T21:36:03Z
+status: closed
+
+Extend our overworld-server to support:
+
+# New Features
+## Chat
+Show everything that has been said in a textbox and allow text to be
+send from another text field.  This should be written to echo all
+traffic then, when that's done, only show actual messages.
+
+## Teams
+Be able to choose any team any time.  We maybe could add support for
+associating players with teams but get all this working first.
+
+## Rooms
+Basically hard code 4 rooms.  Keep game joining rules exactly how they
+are now, but make the player-list only show people in the current
+room.  Have a special room that you start in that doesn't allow you to
+start games but shows all players.
+
+# Protocol Changes
+You will need a to specify rooms and teams now.  The traffic should
+look something like this:
+
+    /identify ben:red:lobby
+    /list
+    /players ben:red:lobby peter:blue:top-left fred:green:top-left
+    /identify ben:green:top-left
+    /list
+    /players ben:green:top-left peter:red:top-left fred:green:top-left
+    /play ben,fred peter
+
+This format minimizes protocol changes.  Note that /play will need to
+accept two lists now.
+
+
+%%
+author: codeman655
+date: 2009-12-06T07:14:22Z
+
+I won't be able to start this until tomorrow. If it's mission critical
+someone please take this until then.
+
+%% author: bsummer4
+
+resolved: postponed
+
+Not gonna happen.

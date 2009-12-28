@@ -1,0 +1,48 @@
+author: jhoare
+title: Extend sb_io to allow communication on other machines.
+date: 2009-11-25T21:14:35Z
+status: closed
+
+So I have sb_io working on one machine, and so I've closed the other
+ticket. This one is for running on this machine.
+
+%%
+author: jhoare
+date: 2009-11-30T02:21:49Z
+
+If someone can look at the MonitorConnection class in my
+ConnectionManager.(c|h)pp files that would be nice. The
+handleAnnounceMessage() function isn't being called. It looks the same
+as switchboxAdmin's which does this sucessfully...
+
+%%
+author: bsummer4
+date: 2009-11-30T02:31:34Z
+
+Will do.
+
+%%
+author: bsummer4
+date: 2009-11-30T02:39:02Z
+
+Is this intentional?
+    Con*Man*.hpp:
+    MonitorConnection* forwarderConnetion;
+    MonitorConnection * forwarderConnection;
+
+
+%%
+author: bsummer4
+date: 2009-11-30T02:42:59Z
+
+It looks fine.  Are you absolutely sure the object is otherwise set up
+correctly?  I don't see where you're starting it, etc.
+
+
+%%
+author: jhoare
+
+resolved: will_not_fix
+
+Due to time constraints and lack of necessity it looks like this isn't
+getting done.

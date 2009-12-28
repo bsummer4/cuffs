@@ -1,0 +1,234 @@
+author: bsummer4
+title: Write a "switchbox recorder" utility
+date: 2009-11-17T20:28:04Z
+status: closed
+
+# Utilities
+## Recorder
+
+Write a utility (probability in python) that records all traffic it
+sees over the switchbox.  It should prefix every message that it gets
+with the id of the person sending it, and should record messages from
+the switchbox in a human-readable way.  Everything should be written
+to standard output.  Here is an example of what the output should look
+like:
+
+    -1 new_connection 0
+    -1 new_connection 1
+    -1 new_connection 2
+    1 hi
+    2 whatever
+    1 That's not very nice!
+    2 fuck off!
+    1 I'm telling the chanOp!
+    -1 new_connection 3
+    3 op:  You are an asshole: *kick*
+    -1 lost_connection 2
+    1 yay
+    3 yay
+    -1 new_connection 2
+    2 sup dog?  I like pizza.
+    -1 lost_connection 1
+    -1 lost_connection 3
+    2 whatever... assholes.
+    -1 lost_connection 2
+    -1 lost_connection 0
+
+## Playback - Localhost
+
+Then write another utility that reads something of this format, and
+recreates it by running multiple connections (All on the same
+machine).
+
+## Playback - Hydra
+
+Finally write another utility like the second one except that it
+launches a slave on a different hydra machine for each new connection.
+There should be two switchboxes, one for the master process to send
+messages to the slaves (as private messages), and another where the
+original conversation is duplicated.  The playback script should
+create the axillary switchbox but not the main one.
+
+# Rationale
+
+This lets us save and replay games and chat session, and lets us write
+tests by simply recording manual testing sessions.  This should
+significantly lessen the complexity of our testing code.  This should
+also be damn useful for testing our physics/graphics code.
+
+
+%%
+author: jhoare
+date: 2009-11-18T03:46:27Z
+
+Should all of those messages be sent to broadcast or do I need to
+handle unicast/multicast messages?
+
+%%
+author: bsummer4
+date: 2009-11-18T19:22:06Z
+
+Broadcast.  unicast/multicast is a mess because the recorder wont see
+everything.
+
+%%
+author: bsummer4
+date: 2009-11-19T23:25:25Z
+
+Playback should take it's input on stdin.  This is important because I
+want to be able to use it interactively to simulate multiple clients.
+
+
+%%
+author: bsummer4
+date: 2009-11-19T23:50:58Z
+
+Since I want to use this interactively, the input to the recorder
+should be more flexible.  Right now it dies fairly easily with invalid
+inputs.
+
+
+%%
+author: bsummer4
+date: 2009-11-20T00:12:53Z
+
+There is a problem my design for this.  If I want to record and
+playback at the same time, I can't because running them both at the
+same time causes the addresses to be different than just running one.
+
+So, in hindsight I think it would be better to combine the two.  Have
+it so that there is a single recorder/playback connection (address 0)
+that is always created; Basically there is an '-1 new_connection 0' at
+the beginning of everything.
+
+so:
+
+    $ ./prog < input > output
+    $ diff input output
+    $ echo no output from diff as long as everything worked
+
+Also, this is valid since connection 0 is always created.:
+
+    $ ./prog > /dev/null
+    0 hi
+    ^D
+
+This also would remove the special case for closing the recorder with
+enter.  Just ^D when you're done recording without sending anything
+else.  This lets you do nice stuff like:
+
+    $ /bin/sleep 1 | ./playback localhost 46223 /dev/stdin
+
+
+%%
+author: bsummer4
+date: 2009-11-20T00:18:27Z
+
+I've just read your code, and I like the way you did this.  It should
+be trivial to make the above change.
+
+
+%%
+author: jhoare
+date: 2009-11-20T19:33:25Z
+
+Sorry I just saw Comment 4, what sort of invalid inputs do you mean?
+
+%%
+author: jhoare
+date: 2009-11-20T19:34:33Z
+
+Also, I merged the two programs as per Item 5.
+
+Maybe it would be a good idea to put a "sleep" command in the -1,
+rather than needing to use the sleep program?
+
+%%
+author: bsummer4
+date: 2009-11-20T19:49:24Z
+
+[john]
+> What sort of invalid inputs do you mean?
+
+For example '100 hi'  Should just do nothing instead of segfaulting.  Also,
+IIRC 'as fas asdf' causes an assertion error.
+
+%%
+author: bsummer4
+date: 2009-11-20T19:56:06Z
+
+[John]
+> Maybe it would be a good idea to put a "sleep" command in the -1,
+> rather than needing to use the sleep program?
+
+Naw, because then the output would be different from the input.  Maybe
+I wan't clear what I was trying to do there.  If we only want to
+record, then we just want to hold the input to recorder open without
+giving it anything until we're done recording.  Then we want to send
+it EOF.  If we just want to "record all traffic for 10 seconds", then
+{sleep 10 | ./recorder > dump}, does exatly that.
+
+
+%%
+author: bsummer4
+date: 2009-11-20T20:00:16Z
+
+I like sb_io.  It better than anything I was able to think of.  It
+doesn't really describe the difference between it and switchbox-cat,
+but I can't think of anything better.
+
+
+%%
+author: jhoare
+date: 2009-11-20T20:27:30Z
+
+[Ben]
+> Naw, because then the output would be different from the
+> input. Maybe I wan't clear what I was trying to do there. If we only
+> want to record, then we just want to hold the input to recorder open
+> without giving it anything until we're done recording. Then we want
+> to send it EOF. If we just want to "record all traffic for 10
+> seconds", then {sleep 10 | ./recorder > dump}, does exatly that.
+
+Would we ever want to wait some time between sending a first message
+and another message? It's true that the output won't match the input,
+but it would if you just grep out sleep. Maybe this just isn't
+necessary.
+
+%%
+author: bsummer4
+date: 2009-11-20T21:01:54Z
+
+[John]
+> Would we ever want to wait some time between sending a first message
+> and another message? It's true that the output won't match the
+> input, but it would if you just grep out sleep. Maybe this just
+> isn't necessary.
+
+Yeah, we might want delays between messages, but I think that can be
+solved using a separate utility.  This will also be useful for the
+renderer (for animations).
+
+    $ cat > file
+    hi
+    sleep 3
+    bye
+
+    $ ./slow-cat < file # wait some ms between each line
+    hi
+    sleep 3
+    bye
+
+    $ ./pause-cat < file
+    hi
+    bye
+
+
+%%
+author: bsummer4
+
+resolved: fixed
+
+Marking this as resolved because I have gotten this working on one
+machine, the child ticket is the one that allows usage over multiple
+machines.

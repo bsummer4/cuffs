@@ -1,0 +1,42 @@
+author: bsummer4
+title: State Renderer
+date: 2009-11-20T19:46:35Z
+status: closed
+
+Write some code that takes the game State and the renderer, then
+produces a list of messages for the renderer.
+
+You will need to:
+
+- Come up with a way of associating state-object 'types' with images.
+  The simplist thing would be to have the images names be the same as
+  the type.  So "$type.pgm"
+- See what images the renderer hasn't loaded yet, and send "image
+  $type $type.pgm".
+- Create a 'draw' message for every object in the state.
+- Create a 'flip' message
+- Return a vector of these messages.
+
+
+%%
+author: bsummer4
+date: 2009-11-20T20:32:59Z
+
+Actually, make a list of all types and load their images when we make
+the renderer.
+
+
+%%
+author: bsummer4
+date: 2009-11-20T21:18:31Z
+
+There needs to be some way to determine the order in which to draw things.
+
+
+%%
+author: bsummer4
+
+resolved: works_for_me
+
+This is primitive and has bugs, but I think it's good enough for a
+prototype game.

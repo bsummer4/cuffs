@@ -1,0 +1,57 @@
+author: jhoare
+title: Design Switchbox
+date: 2009-08-27T22:22:02Z
+status: closed
+
+As per http://www.cs.utk.edu/~huangj/netgames/timebox.html
+
+%%
+author: codeman655
+date: 2009-09-03T17:36:39Z
+
+Switchbox basics:
+- Encoded message
+- Using TCP
+- Code structure
+- Start
+- Setup
+- Listen
+- Connect
+- Read()
+- Route()
+- Send
+
+%%
+author: bsummer4
+date: 2009-09-04T17:40:30Z
+
+Game Documentation includes switchbox stuff.  This file is created by
+the build using docutils.
+
+
+%%
+author: codeman655
+date: 2009-09-06T19:57:17Z
+
+Ben, John, and I designed the general concept for the message
+protocol. The details for the protocol will be discussed in the doc.
+
+EDIT: I can edit you comments :) --Ben
+
+
+%%
+author: codeman655
+date: 2009-09-07T21:35:50Z
+
+Going to resolve this ticket. The general design of the switchbox and
+message protocol have been decided. Moving the switchbox status info
+to a different ticket/message.
+
+%%
+author: jhoare
+
+resolved: fixed
+
+As the comment above states, we've finished the design of the
+switchbox and the message protocol. The switchbox's status will be on
+a different ticket.

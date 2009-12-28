@@ -1,0 +1,21 @@
+author: codeman655
+title: Generator Broadcast message
+date: 2009-10-08T21:53:17Z
+status: closed
+
+Send messages from the State Generator to the switchbox by using
+connection send
+
+%%
+author: codeman655
+date: 2009-10-14T16:22:26Z
+
+This should work. I just have built anything to test it. Still workin'
+but I gotta move on to the interpreter.
+
+%%
+author: codeman655
+
+resolved: fixed
+
+Finished.

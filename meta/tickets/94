@@ -1,0 +1,14 @@
+author: jhoare
+title: Allow players to move around along the ground.
+date: 2009-12-07T02:56:06Z
+status: closed
+
+Once you have the gravity working, the players need to move around on
+the ground.
+
+%%
+author: jhoare
+
+resolved: fixed
+
+yay

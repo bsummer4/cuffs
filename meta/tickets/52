@@ -1,0 +1,22 @@
+author: dloftis
+title: Redesign the Generator/Interpreter/State system
+date: 2009-10-31T14:13:38Z
+status: closed
+
+The way it's currently done could be so much more elegant and simpler.
+It currently makes little sense, and leaves holes such as the fact
+that the generator is going to be ahead of the state object
+(synchronizer is going to slow things down so that the state object is
+behind the generator, yet the generator changes the x position and the
+y position of a projectile--the renderer will draw based on the state
+position).  Suggestions have been to dumb down the interpreter and
+state to only house other player's objects (based on incoming
+messages), have the generator have its own list of objects and
+generate messages based on these.
+
+%%
+author: dloftis
+
+resolved: fixed
+
+This is done in the branch.

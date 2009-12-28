@@ -1,0 +1,31 @@
+author: bsummer4
+title: Flawless launching and exiting; Winning
+date: 2009-12-07T04:11:35Z
+status: closed
+
+Right now the launching is a bit flaky, and there is no support for
+exiting or winning at all.
+
+%%
+author: bsummer4
+date: 2009-12-08T20:59:15Z
+
+This is working pretty well.  We need some more testing before we can
+close this.
+
+
+%%
+author: dloftis
+date: 2009-12-08T21:37:38Z
+
+What is working well and what is not?  The launching seems to be
+fairly consistent now, but I don't know how/if we handle winning right
+now.  I think that the launcher should NOT worry about closing the
+server/switchbox as it leaves room for multiple games to be played.
+
+%%
+author: bsummer4
+
+resolved: fixed
+
+This works pretty well.  We decided not to support winning.

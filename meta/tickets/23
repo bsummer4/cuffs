@@ -1,0 +1,20 @@
+author: bsummer4
+title: The c++ Connection Lib Should Rely More on the switchbox_client Library
+date: 2009-09-29T03:00:36Z
+status: closed
+
+The Connection code should never create a socket or build (malloc) a
+message itself.  Things like defgroup and undefgroup should be in the
+switchbox_client.  Etc.
+
+
+%%
+author: jhoare
+date: 2009-09-30T03:44:22Z
+
+Is this necessary? Do we NEED a C client library?
+
+%%
+author: bsummer4
+
+resolved: fixed

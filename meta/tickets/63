@@ -1,0 +1,32 @@
+author: bsummer4
+title: Add audio rendering
+date: 2009-11-19T01:43:40Z
+status: closed
+
+# Audio
+Extend the renderer to support audio.  Rename the
+'new id imagefile' command to 'image id imagefile', then add two
+commands for audio:
+
+- 'sound id soundfile'
+- 'play id'
+
+Add the appropriate methods for handling these.  You will need another
+std::map for the sounds.
+
+It still makes sense to call this a renderer.  It is just 'rendering'
+the sounds.
+
+
+%%
+author: dloftis
+date: 2009-11-30T19:54:32Z
+
+Finished but not tested.  Will test in the meeting.
+
+%%
+author: bsummer4
+
+resolved: fixed
+
+Tested.  Works.

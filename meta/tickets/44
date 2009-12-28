@@ -1,0 +1,73 @@
+author: jhoare
+title: Create a network based test that runs the whole CMB triad.
+date: 2009-10-22T13:46:56Z
+status: closed
+
+Make test that uses all elements: Generator, Synchronizer, and
+Interpreter that runs on multiple machines over the network
+
+%%
+author: codeman655
+date: 2009-10-29T02:05:29Z
+
+Made CMBgo and CMBtest. Need to link them to multiple machines tomorrow.
+
+%%
+author: codeman655
+date: 2009-11-15T22:11:47Z
+
+CELEBRATION! Test works. Throwing it in the repo.
+
+%%
+author: jhoare
+date: 2009-11-23T05:35:17Z
+
+I just went through this and there's a couple of things:
+
+One you have the path to the script hard coded, I changed that so it
+was relative to the script location.
+
+It's not clear to me how to know if this test passes or not. The way
+the autotools tests work are if the test returns a 0 then it passes,
+if it returns non-zero it fails. It doesn't look like it ever checks
+the output, and always claims to pass, unless one of the program dies
+somehow.
+
+
+%%
+author: codeman655
+date: 2009-11-23T23:41:51Z
+
+Yeah, I realized that the test was wonky. I could thread off the send
+message and the result fails return 0, else send messages. I planned
+on rewriting it, but I'm busy with the ref. Should be done over the
+Turkey Break. Along with the ref.
+
+%%
+author: jhoare
+date: 2009-11-24T00:17:35Z
+
+Are they all supposed to output the same thing?
+Perhaps when I finish the sb_io thing it would just replace this? idk...
+
+%%
+author: bsummer4
+date: 2009-11-24T01:03:21Z
+
+[John]
+> Perhaps when I finish the sb_io thing it would just replace this?
+
+I was hoping this.
+
+%%
+author: codeman655
+date: 2009-11-25T13:58:18Z
+
+I'll rewrite the test when it's finished.
+
+%%
+author: jhoare
+
+resolved: fixed
+
+Too old. Now I'll just write more test cases.

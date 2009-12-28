@@ -1,0 +1,36 @@
+author: bsummer4
+title: Fix Polling in SwithboxAdmin::{makeGroup, removeGroup}
+date: 2009-10-02T03:08:30Z
+status: closed
+
+Fix the while loop hack in SwithboxAdmin::makeGroup,
+SwithboxAdmin::removeGroup
+
+Find a solution that times out after a while, and doesn't constantly
+check to see if things are working yet.
+
+%%
+author: bsummer4
+date: 2009-10-02T16:55:55Z
+
+Looks good.  Thanks.
+
+There is one small issue that I can think of.  If there are two
+entities creating groups (say A and B), and A creates a group and then
+B creates another group immediately afterwords.  B will get A's
+announcement message first; It will signal the condition variable.
+since B's group wont be setup yet (in 'groups').  B will see this as a
+failure and return false.
+
+However, this will never happen in our code (only one client will be
+messing with groups), so I'm going to just make a note of it in the
+code and leave it as is.
+
+
+%%
+author: bsummer4
+
+resolved: fixed
+
+Committed code that uses conditional variables to block for a given
+timeout value given in SwitchboxAdmin.hpp.

@@ -1,0 +1,14 @@
+author: codeman655
+title: Change my primer
+date: 2009-09-17T17:27:49Z
+status: closed
+
+Change the code to use generic Client* ob, objects rather than
+creating specific ones.
+
+%%
+author: codeman655
+
+resolved: fixed
+
+Changed it to include code to include inheritance and virtual objects.

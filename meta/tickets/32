@@ -1,0 +1,28 @@
+author: jhoare
+title: Implement Simple Interpreter
+date: 2009-10-09T20:09:04Z
+status: closed
+
+in src/game/battle/interpreter handle the SimpleInterpreter Class.
+
+%%
+author: codeman655
+date: 2009-10-13T03:27:25Z
+
+Version 1: listen to the synchronizer and print output to
+stdout. Version 2: Parse input properly and "execute" by writing to a
+log.
+
+%%
+author: codeman655
+date: 2009-10-17T19:19:36Z
+
+Simple one's done. Can't generate the "real" one until the interface
+has been created for the server.
+
+%%
+author: jhoare
+
+resolved: fixed
+
+CatInterpreter has been implemented.

@@ -1,0 +1,5 @@
+I've extracted the tickets from unfuddle's 'backup.xml'.  Unfuddle
+seems to have not given me messages and comments on messages, so I
+can't extract those.  Anyways, tickets 1-117 are from unfuddle, and
+the code I used to extract them is in /meta/notes/tickets-extract.lisp.
+I also made a bunch of small manual edits afterwords.

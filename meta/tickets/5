@@ -1,0 +1,49 @@
+author: jhoare
+title: Create Subversion Repository
+date: 2009-08-29T12:14:18Z
+status: closed
+
+I do not have the permissions to create the subversion repository, so
+someone else will need to do it.
+
+I don't know how unfuddle creates the structure but there should be
+three folders in the subversion after it is created:
+
+- trunk
+- branches
+- tags
+
+%%
+author: bsummer4
+date: 2009-08-29T15:06:31Z
+
+I think this means you, Chris.  Maybe you could you just make us admins?
+
+%%
+author: bsummer4
+date: 2009-08-29T15:24:53Z
+
+Everyone is an admin now.  I'm not sure how that happened.  Anyway, I
+can't figure out how to create a repository on the site.
+
+
+%%
+author: jhoare
+date: 2009-08-29T16:10:13Z
+
+As far as I can tell I think Chris needs to do it... I can't figure
+out how to create it. I'm assuming there should be a button on the
+"repositories" page
+
+%%
+author: jhoare
+date: 2009-09-01T14:58:51Z
+
+Chris created the repository. I added the folders. all set.
+
+%%
+author: jhoare
+
+resolved: fixed
+
+Done, see notes.
