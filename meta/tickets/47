@@ -1,7 +1,7 @@
 author: jhoare
 title: Write a physics function
 date: 2009-10-22T13:58:02Z
-status: closed
+status: resolved
 
 Write a function that will move an object given a windspeed, gravity,
 and object velocity, move an object.
@@ -15,7 +15,7 @@ In GameObject.cpp
 %%
 author: jhoare
 
-resolved: fixed
+status: resolved
 
 added movePhysics(int time, float gravity, float windspeed) that moves
 an object based on its initial velocity

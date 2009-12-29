@@ -1,7 +1,7 @@
 author: bsummer4
 title: Add More maps
 date: 2009-12-11T04:27:39Z
-status: closed
+status: resolved
 
 Especially ones that highlight our ability to change gravity/wind and
 to stick to things.
@@ -20,6 +20,6 @@ command line argument:
 %%
 author: bsummer4
 
-resolved: fixed
+status: resolved
 
 There are now several maps, one of which is randomly selected on startup.

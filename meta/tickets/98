@@ -1,7 +1,7 @@
 author: bsummer4
 title: Flawless launching and exiting; Winning
 date: 2009-12-07T04:11:35Z
-status: closed
+status: resolved
 
 Right now the launching is a bit flaky, and there is no support for
 exiting or winning at all.
@@ -26,6 +26,6 @@ server/switchbox as it leaves room for multiple games to be played.
 %%
 author: bsummer4
 
-resolved: fixed
+status: resolved
 
 This works pretty well.  We decided not to support winning.

@@ -1,7 +1,7 @@
 author: bsummer4
 title: Battle Client (Ref Handshake)
 date: 2009-11-20T19:37:16Z
-status: closed
+status: resolved
 
 Write the client code that talks to the ref.  It should:
 
@@ -19,6 +19,6 @@ Write the client code that talks to the ref.  It should:
 %%
 author: bsummer4
 
-resolved: fixed
+status: resolved
 
 This seems to be done in game.c++.  Haven't tested extensively.

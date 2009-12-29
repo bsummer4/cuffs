@@ -1,7 +1,7 @@
 author: jhoare
 title: Move excessive doxygen stuff (Group creation, etc) into its own file.
 date: 2009-11-19T03:05:48Z
-status: closed
+status: resolved
 
 probably stick it in doc/ somehwere.
 

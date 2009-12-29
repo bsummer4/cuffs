@@ -1,7 +1,7 @@
 author: bsummer4
 title: Support Dropped Connections in game
 date: 2009-12-07T20:40:26Z
-status: closed
+status: resolved
 
 This entails:
 
@@ -25,7 +25,7 @@ Good enough for now.
 %%
 author: bsummer4
 
-resolved: fixed
+status: resolved
 
-Synronizer should support this also, but since the ref kills the game
-as soon as anyone disconnects, it doesn't matter.
+the synchronizer should support this also, but since the ref kills the
+game as soon as anyone disconnects, it doesn't matter.

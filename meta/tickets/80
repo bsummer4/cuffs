@@ -1,7 +1,7 @@
 author: jhoare
 title: Incorrect usage of references
 date: 2009-11-26T18:13:31Z
-status: closed
+status: resolved
 
 Using References in the STL prevents building on my mac (And is
 possibly incorrect).
@@ -45,4 +45,4 @@ ticket.
 %%
 author: jhoare
 
-resolved: fixed
+status: resolved

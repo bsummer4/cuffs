@@ -1,7 +1,7 @@
 author: jhoare
 title: A client not being available shouldn't kill the switchbox.
 date: 2009-11-19T04:06:58Z
-status: closed
+status: resolved
 
 Problem Statement
 =================
@@ -47,7 +47,7 @@ times and it seems to work. (how scientific of me)
 %%
 author: jhoare
 
-resolved: fixed
+status: resolved
 
 I can't duplicate the problem, so I can't be sure.  However, I fixed
 some logic that would cause your problem.  Make sure everything works

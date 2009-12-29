@@ -1,7 +1,7 @@
 author: bsummer4
 title: Switchbox API review
 date: 2009-09-02T13:15:29Z
-status: closed
+status: invalid
 
 Discuss the switchbox stuff in design.rst and src/switchbox/*.h.
 
@@ -21,4 +21,6 @@ We met today to discuss the protocol. Ben is going to write it up.
 %%
 author: bsummer4
 
-resolved: duplicate
+status: invalid
+
+duplicate

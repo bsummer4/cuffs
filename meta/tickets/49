@@ -1,14 +1,14 @@
 author: dloftis
 title: Doesn't build on lab machines
 date: 2009-10-30T04:17:48Z
-status: closed
+status: resolved
 
 Autotools configuration not right to work on lab machines.
 
 %%
 author: dloftis
 
-resolved: fixed
+status: resolved
 
 Changeset [fistacuffs:255]:
 

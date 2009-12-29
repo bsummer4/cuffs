@@ -1,7 +1,7 @@
 author: bsummer4
 title: Write working prototype
 date: 2009-09-04T00:30:15Z
-status: closed
+status: resolved
 
 Write a working switchbox that only handles Unicast.
 
@@ -20,4 +20,4 @@ don't want to sound like a prick.
 %%
 author: bsummer4
 
-resolved: works_for_me
+status: resolved

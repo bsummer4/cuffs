@@ -1,7 +1,7 @@
 author: bsummer4
 title: Create a better renderer
 date: 2009-11-18T02:25:06Z
-status: closed
+status: invalid
 
 Change the renderer in ticket #56 to take a sequence of images and
 draw them in order.
@@ -12,7 +12,7 @@ sequence of images.
 %%
 author: bsummer4
 
-resolved: invalid
+status: invalid
 
 We decided not to do this for now.  We are going to just do the simple
 thing and send it text messages.  This will probably be too slow, but

@@ -1,7 +1,7 @@
 author: bsummer4
 title: Rock Throwing Game
 date: 2009-11-24T04:27:52Z
-status: closed
+status: resolved
 
 - Have a referee that places players along the top of the screen, and
   changes the wind every once in a while.
@@ -39,6 +39,6 @@ Shame.
 %%
 author: bsummer4
 
-resolved: fixed
+status: resolved
 
 Oh yeah

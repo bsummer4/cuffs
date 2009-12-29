@@ -1,7 +1,7 @@
 author: jhoare
 title: Design Switchbox
 date: 2009-08-27T22:22:02Z
-status: closed
+status: resolved
 
 As per http://www.cs.utk.edu/~huangj/netgames/timebox.html
 
@@ -50,7 +50,7 @@ to a different ticket/message.
 %%
 author: jhoare
 
-resolved: fixed
+status: resolved
 
 As the comment above states, we've finished the design of the
 switchbox and the message protocol. The switchbox's status will be on

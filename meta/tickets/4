@@ -1,7 +1,7 @@
 author: codeman655
 title: 2 heads 1 keyboard
 date: 2009-08-28T18:37:48Z
-status: closed
+status: invalid
 
 When do you want to hack Ben?
 
@@ -25,6 +25,6 @@ know, either in person or by email, when you're ready.
 %%
 author: codeman655
 
-resolved: invalid
+status: invalid
 
 This shouldn't really be a ticket.

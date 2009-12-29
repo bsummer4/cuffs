@@ -1,7 +1,7 @@
 author: bsummer4
 title: Write a "switchbox recorder" utility
 date: 2009-11-17T20:28:04Z
-status: closed
+status: resolved
 
 # Utilities
 ## Recorder
@@ -227,7 +227,7 @@ renderer (for animations).
 %%
 author: bsummer4
 
-resolved: fixed
+status: resolved
 
 Marking this as resolved because I have gotten this working on one
 machine, the child ticket is the one that allows usage over multiple

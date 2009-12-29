@@ -1,12 +1,12 @@
 author: jhoare
 title: Move sb_io back into trunk.
 date: 2009-12-03T00:06:33Z
-status: closed
+status: resolved
 
 %%
 author: jhoare
 
-resolved: fixed
+status: resolved
 
 Changeset [fistacuffs:540]:
 

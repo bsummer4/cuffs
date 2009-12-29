@@ -1,7 +1,7 @@
 author: codeman655
 title: Make a 3D model to be used in-game
 date: 2009-11-09T21:20:10Z
-status: closed
+status: resolved
 
 Probably for the splash page or something.
 
@@ -47,6 +47,6 @@ Looks nice!
 %%
 author: codeman655
 
-resolved: fixed
+status: resolved
 
 Finished. Use ./credits.sh when running the game

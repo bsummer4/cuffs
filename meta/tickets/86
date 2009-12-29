@@ -1,7 +1,7 @@
 author: bsummer4
 title: Documentation
 date: 2009-12-04T21:08:28Z
-status: closed
+status: resolved
 
 The architecture has stabilized enough to be documented.  Makes sure
 all documentation is up-to-date and through.
@@ -74,7 +74,7 @@ http://www.cs.utk.edu/~jhoare/cs594ng/doxygen/
 %%
 author: bsummer4
 
-resolved: fixed
+status: resolved
 
 Changeset [fistacuffs:703]:
 

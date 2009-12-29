@@ -1,7 +1,7 @@
 author: bsummer4
 title: Create a basic renderer with sdl.
 date: 2009-11-13T21:59:59Z
-status: closed
+status: resolved
 
 Write a utility the allows for simple animations.  There are three
 operations, load an image, draw an image on the screen, and update
@@ -61,7 +61,7 @@ The Graphics-util supports the described text format.
 %%
 author: bsummer4
 
-resolved: fixed
+status: resolved
 
 Resolved, any keypress event moves the pictures around.  Implemented
 in one of the branches--since not really important to the main trunk

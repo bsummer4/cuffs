@@ -1,7 +1,7 @@
 author: bsummer4
 title: Rework the Connection class to use the handleEvent protocol
 date: 2009-11-20T00:23:36Z
-status: closed
+status: resolved
 
 This should remove a lot duplicated code (between the connection class
 and the handleEvent() stuff) and make the connection object more
@@ -15,7 +15,7 @@ trunk.
 %%
 author: bsummer4
 
-resolved: fixed
+status: resolved
 
 I'm going to call this done.  It doesn't have all of the features that
 we need yet, but I think the core functionality is there.  I think

@@ -1,7 +1,7 @@
 author: jhoare
 title: Extend sb_io to allow communication on other machines.
 date: 2009-11-25T21:14:35Z
-status: closed
+status: canceled
 
 So I have sb_io working on one machine, and so I've closed the other
 ticket. This one is for running on this machine.
@@ -42,7 +42,7 @@ correctly?  I don't see where you're starting it, etc.
 %%
 author: jhoare
 
-resolved: will_not_fix
+status: canceled
 
 Due to time constraints and lack of necessity it looks like this isn't
 getting done.

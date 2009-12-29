@@ -1,7 +1,7 @@
 author: jhoare
 title: Implement GameInterpreter
 date: 2009-10-09T20:10:10Z
-status: closed
+status: resolved
 
 in src/game/battle/interpreter handle the GameInterpreter Class.
 
@@ -16,6 +16,6 @@ map and player location and other standards.
 %%
 author: jhoare
 
-resolved: fixed
+status: resolved
 
 GameInterpreter written based on current design

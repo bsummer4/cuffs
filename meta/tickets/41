@@ -1,7 +1,7 @@
 author: jhoare
 title: Generator_Test.cpp Does not build
 date: 2009-10-20T15:37:17Z
-status: closed
+status: resolved
 
 Generator_Test.cpp: In function ‘int main(int, char**)’:
 Generator_Test.cpp:9: error: ‘class Generator’ has no member named ‘debug’
@@ -17,6 +17,6 @@ the Generator.hpp file.
 %%
 author: jhoare
 
-resolved: fixed
+status: resolved
 
 Fixed!!! :)

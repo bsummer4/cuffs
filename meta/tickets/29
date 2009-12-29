@@ -1,7 +1,7 @@
 author: bsummer4
 title: Fix Polling in SwithboxAdmin::{makeGroup, removeGroup}
 date: 2009-10-02T03:08:30Z
-status: closed
+status: resolved
 
 Fix the while loop hack in SwithboxAdmin::makeGroup,
 SwithboxAdmin::removeGroup
@@ -30,7 +30,7 @@ code and leave it as is.
 %%
 author: bsummer4
 
-resolved: fixed
+status: resolved
 
 Committed code that uses conditional variables to block for a given
 timeout value given in SwitchboxAdmin.hpp.

@@ -1,7 +1,7 @@
 author: jhoare
 title: Implement Switchbox Control Protocol
 date: 2009-09-19T23:54:01Z
-status: closed
+status: resolved
 
 For the multicast functionality to work, the switchbox control
 protocol needs to be written. There's a writeup in the doc.rst file
@@ -17,6 +17,6 @@ users from multicast groups.
 %%
 author: jhoare
 
-resolved: works_for_me
+status: resolved
 
 Not perfect, but done.  Further work be associated with different tickets.

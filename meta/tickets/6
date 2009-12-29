@@ -1,7 +1,7 @@
 author: codeman655
 title: Generate test cases/code
 date: 2009-09-01T14:37:05Z
-status: closed
+status: resolved
 
 Focus more on the cases, they'll help guide our code. Test code can be
 written later.
@@ -76,7 +76,7 @@ Added valgrind checks.
 %%
 author: codeman655
 
-resolved: fixed
+status: resolved
 
 I believe this is all done, so i'm closing it. (It should have been
 closed a while ago.)

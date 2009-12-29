@@ -1,7 +1,7 @@
 author: jhoare
 title: Implement Switchbox Control Protocol Client library
 date: 2009-09-20T01:46:19Z
-status: closed
+status: resolved
 
 I've created a SwitchboxAdmin class which inherits from the Connection
 class that I created earlier. Implement the functions to enable
@@ -37,6 +37,6 @@ now this will be on hold.
 %%
 author: jhoare
 
-resolved: works_for_me
+status: resolved
 
 This works.  It should be improved, but that will go in other tickets.

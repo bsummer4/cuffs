@@ -1,14 +1,14 @@
 author: jhoare
 title: Physics Tests Fail
 date: 2009-11-05T03:22:07Z
-status: closed
+status: resolved
 
 When I run "make check" the physics tests are failing to pass.
 
 %%
 author: jhoare
 
-resolved: fixed
+status: resolved
 
 Changeset [fistacuffs:318]:
 

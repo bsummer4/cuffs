@@ -1,7 +1,7 @@
 author: bsummer4
 title: Repair Tests
 date: 2009-12-11T03:44:37Z
-status: closed
+status: resolved
 
 Due to the recent change rate, a lot of tests no longer pass.  Fix this.
 
@@ -15,7 +15,7 @@ This ticket is associated with the oh-so-diabolical commit #666
 %%
 author: bsummer4
 
-resolved: fixed
+status: resolved
 
 I think this is done.  I can't be sure until physics is fixed so the
 physics test can pass.

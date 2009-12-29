@@ -1,7 +1,7 @@
 author: jhoare
 title: Enable Use of sounds in the game
 date: 2009-12-05T22:03:37Z
-status: closed
+status: resolved
 
 Put in Dan's changes to the renderer to allow for sounds to be created.
 
@@ -15,7 +15,7 @@ could add shoot sounds in the same way easily.
 %%
 author: jhoare
 
-resolved: fixed
+status: resolved
 
 I've added all the sound infrastructure, creating the shoot sounds is
 a job for #91.

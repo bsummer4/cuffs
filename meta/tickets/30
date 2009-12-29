@@ -1,7 +1,7 @@
 author: codeman655
 title: Build the State Generator
 date: 2009-10-04T23:22:10Z
-status: closed
+status: resolved
 
 Builds the state generator defined by our notes. I'll include a
 finished/defined version of them later.
@@ -19,6 +19,6 @@ today. 3:30.
 %%
 author: codeman655
 
-resolved: fixed
+status: resolved
 
 Thought I resolved this earlier...

@@ -1,7 +1,7 @@
 author: jhoare
 title: Implement Simple Interpreter
 date: 2009-10-09T20:09:04Z
-status: closed
+status: resolved
 
 in src/game/battle/interpreter handle the SimpleInterpreter Class.
 
@@ -23,6 +23,6 @@ has been created for the server.
 %%
 author: jhoare
 
-resolved: fixed
+status: resolved
 
 CatInterpreter has been implemented.

@@ -1,7 +1,7 @@
 author: bsummer4
 title: Left-Right Wrapping
 date: 2009-12-07T04:09:01Z
-status: closed
+status: resolved
 
 Let very-high projectiles survive longer than very-low ones.
 
@@ -30,6 +30,6 @@ I think I can fix 2, but I'm not sure how to fix 1.
 %%
 author: bsummer4
 
-resolved: fixed
+status: resolved
 
 Fixed!

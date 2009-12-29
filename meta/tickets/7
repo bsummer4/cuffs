@@ -1,7 +1,7 @@
 author: jhoare
 title: Autotools / Doxygen
 date: 2009-09-01T15:54:36Z
-status: closed
+status: resolved
 
 Put into the source code repository the beginnings to use autotools
 and doxygen.
@@ -9,7 +9,7 @@ and doxygen.
 %%
 author: jhoare
 
-resolved: fixed
+status: resolved
 
 Added autotools to the subversion. Autotools has the ability to build
 doxygen documentation when you do a "make doxygen-doc" after configure

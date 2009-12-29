@@ -1,7 +1,7 @@
 author: codeman655
 title: Improve-Switchbox
 date: 2009-09-28T19:50:59Z
-status: closed
+status: resolved
 
 Yo, Ben. Since you're updating the switchbox in the branch directory,
 would you be so kind to document any major changes made between the
@@ -43,6 +43,6 @@ changes.
 %%
 author: codeman655
 
-resolved: fixed
+status: resolved
 
 Should have closed this when we merged.

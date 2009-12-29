@@ -1,7 +1,7 @@
 author: bsummer4
 title: Installation
 date: 2009-12-07T04:12:35Z
-status: closed
+status: open
 
 Get Make install to work, and make sure everything works installed.
 
@@ -15,6 +15,13 @@ Makefile.am and the majority of our source code.
 %%
 author: bsummer4
 
-resolved: postponed
+status: postponed
 
 Too much work for now.
+
+%%
+author: bsummer4
+
+status: open
+
+This is even more important now that it's on github.

@@ -1,7 +1,7 @@
 author: codeman655
 title: Ya broke it! Coord::Coord() Undefined!
 date: 2009-10-29T22:52:47Z
-status: closed
+status: resolved
 
 Please fix this error. Can't make.
 <code>
@@ -14,7 +14,7 @@ Please fix this error. Can't make.
 %%
 author: codeman655
 
-resolved: fixed
+status: resolved
 
 Changeset [fistacuffs:247]:
 

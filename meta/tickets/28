@@ -1,13 +1,20 @@
 author: codeman655
 title: Make Group and User infrastructure
 date: 2009-10-01T15:19:39Z
-status: closed
+status: canceled
 
 Define and implement the User Class and the Group-tree which we discussed.
 
 %%
 author: codeman655
 
-resolved: postponed
+status: postponed
 
 Not important right now
+
+%%
+author: ben
+
+status: canceled
+
+This is not how we ended up doing this.

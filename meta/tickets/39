@@ -1,7 +1,7 @@
 author: dloftis
 title: Create State Object
 date: 2009-10-18T16:49:54Z
-status: closed
+status: resolved
 
 Create a state object that contains functions to access and change
 game state information, such as the map, where players are located,
@@ -16,6 +16,6 @@ Implemented to the best of ability until states are more formalized and set.
 %%
 author: dloftis
 
-resolved: fixed
+status: resolved
 
 State object created based on current design

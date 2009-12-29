@@ -1,7 +1,7 @@
 author: jhoare
 title: Support "Log On" Of Clients
 date: 2009-09-19T15:11:59Z
-status: closed
+status: resolved
 
 When the user logs into the switchbox, have the switchox send him a
 message informing him of his address. (Ie to == from in the header)
@@ -9,7 +9,7 @@ message informing him of his address. (Ie to == from in the header)
 %%
 author: jhoare
 
-resolved: fixed
+status: resolved
 
 Added functionality. In handle_client() the first thing done is
 sending a "hello" message to the client to inform him of his

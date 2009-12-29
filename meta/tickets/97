@@ -1,14 +1,14 @@
 author: bsummer4
 title: Health; exposions throw
 date: 2009-12-07T04:10:55Z
-status: closed
+status: resolved
 
 and explosions throw players.
 
 %%
 author: bsummer4
 
-resolved: fixed
+status: resolved
 
 This needs play testing to come up with good numbers, but the code for
 this is in place.

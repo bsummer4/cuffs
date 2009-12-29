@@ -1,7 +1,7 @@
 author: bsummer4
 title: CMB in branch should use handleEvent instead of Connection
 date: 2009-11-20T23:32:53Z
-status: closed
+status: open
 
 The CMB Code shouldn't need to know about the Connection class at all.
 It can simply send and receive messages.
@@ -23,6 +23,13 @@ I've finished writing this, but I haven't got it working yet.
 %%
 author: bsummer4
 
-resolved: postponed
+status: postponed
 
 I'm gonna put this off until we're done messing with it in other ways.
+
+%%
+author: ben
+
+status: open
+
+The needs to be done now since the Connection object is going bye-bye.

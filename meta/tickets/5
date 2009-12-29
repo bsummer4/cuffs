@@ -1,7 +1,7 @@
 author: jhoare
 title: Create Subversion Repository
 date: 2009-08-29T12:14:18Z
-status: closed
+status: resolved
 
 I do not have the permissions to create the subversion repository, so
 someone else will need to do it.
@@ -44,6 +44,6 @@ Chris created the repository. I added the folders. all set.
 %%
 author: jhoare
 
-resolved: fixed
+status: resolved
 
 Done, see notes.

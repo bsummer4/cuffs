@@ -1,7 +1,7 @@
 author: bsummer4
 title: State Renderer
 date: 2009-11-20T19:46:35Z
-status: closed
+status: resolved
 
 Write some code that takes the game State and the renderer, then
 produces a list of messages for the renderer.
@@ -36,7 +36,7 @@ There needs to be some way to determine the order in which to draw things.
 %%
 author: bsummer4
 
-resolved: works_for_me
+status: resolved
 
 This is primitive and has bugs, but I think it's good enough for a
 prototype game.

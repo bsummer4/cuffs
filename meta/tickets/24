@@ -1,7 +1,7 @@
 author: bsummer4
 title: Make SwitchboxAdmin keep track of all groups
 date: 2009-09-29T03:07:35Z
-status: closed
+status: resolved
 
 It should hold a data structure of all the groups it has defined.  It
 should also implement a more abstract view of the group changing
@@ -27,6 +27,6 @@ portion of the code. So putting it off for now.
 %%
 author: bsummer4
 
-resolved: fixed
+status: resolved
 
 Works

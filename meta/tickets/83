@@ -1,7 +1,7 @@
 author: dloftis
 title: Client Launcher
 date: 2009-12-02T21:34:58Z
-status: closed
+status: resolved
 
 Build launcher for overworld client.  This should accept a username
 and a server hostname, and then launch the overworld-client connected
@@ -11,7 +11,7 @@ to given server through switchbox-connect.
 %%
 author: dloftis
 
-resolved: fixed
+status: resolved
 
 Room for improvement, but it works.  Would like to improve upon, but
 time permitting...

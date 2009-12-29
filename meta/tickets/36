@@ -1,7 +1,7 @@
 author: jhoare
 title: Create different Main's (Game simulator)
 date: 2009-10-09T21:55:24Z
-status: closed
+status: invalid
 
 Create different main programs that put the individual Set of Objects
 (Generator, Synchronizer, Interpreter) together.
@@ -24,7 +24,7 @@ This ticket is a duplicate. Will be writing the "game" next.
 %%
 author: jhoare
 
-resolved: invalid
+status: invalid
 
 This is working in the branch.  It would be foolish to spend any more
 time on this

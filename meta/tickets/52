@@ -1,7 +1,7 @@
 author: dloftis
 title: Redesign the Generator/Interpreter/State system
 date: 2009-10-31T14:13:38Z
-status: closed
+status: resolved
 
 The way it's currently done could be so much more elegant and simpler.
 It currently makes little sense, and leaves holes such as the fact
@@ -17,6 +17,6 @@ generate messages based on these.
 %%
 author: dloftis
 
-resolved: fixed
+status: resolved
 
 This is done in the branch.

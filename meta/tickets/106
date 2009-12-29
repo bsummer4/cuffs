@@ -1,7 +1,7 @@
 author: bsummer4
 title: oveworld-client produces an unresponsive window sometimes.
 date: 2009-12-11T00:54:09Z
-status: closed
+status: resolved
 
 It seems to be random.  I will launch it twice in a row and it will
 work the second time but not the first.
@@ -37,7 +37,7 @@ So *everything* works.  It has to be an issue with the GUI code.
 %%
 author: bsummer4
 
-resolved: fixed
+status: resolved
 
 Changeset [fistacuffs:705]:
 

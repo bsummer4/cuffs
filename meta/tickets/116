@@ -1,7 +1,7 @@
 author: bsummer4
 title: Weird collison detection
 date: 2009-12-11T13:51:57Z
-status: closed
+status: resolved
 
 Some times the game detects collisons in weird places and you get
 stuck with significant space between you and the wall.

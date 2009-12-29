@@ -1,7 +1,7 @@
 author: bsummer4
 title: Check for Switchbox Memory Leaks.
 date: 2009-09-29T03:35:25Z
-status: closed
+status: resolved
 
 Run switchbox through valgrind, and make sure It's not leaking memory.
 
@@ -31,4 +31,4 @@ file. If the file is not empty, then the switchbox test fails.
 %%
 author: bsummer4
 
-resolved: fixed
+status: resolved

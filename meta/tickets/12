@@ -1,7 +1,7 @@
 author: codeman655
 title: Polish and Test switchbox
 date: 2009-09-07T21:42:25Z
-status: closed
+status: resolved
 
 Need to refine the code we have so far and test our working prototype.
 
@@ -23,7 +23,7 @@ goal-focused tickets.
 %%
 author: codeman655
 
-resolved: fixed
+status: resolved
 
 Kind of a generic ticket. Closing and breaking it into smaller,
 goal-focused tickets.

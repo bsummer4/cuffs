@@ -1,7 +1,7 @@
 author: jhoare
 title: Implement CMBSynchronizer
 date: 2009-10-09T20:30:48Z
-status: closed
+status: resolved
 
 in src/battle/synchronizer Implement the CMBSynhronizer Class.
 
@@ -16,7 +16,7 @@ rudimentary tests for it as well.
 %%
 author: jhoare
 
-resolved: fixed
+status: resolved
 
 CMBSynchronizer is functioning and passes its tests, and its internals
 pass their unit tests.

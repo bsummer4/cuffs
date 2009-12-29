@@ -1,7 +1,7 @@
 author: bsummer4
 title: Add audio rendering
 date: 2009-11-19T01:43:40Z
-status: closed
+status: resolved
 
 # Audio
 Extend the renderer to support audio.  Rename the
@@ -27,6 +27,6 @@ Finished but not tested.  Will test in the meeting.
 %%
 author: bsummer4
 
-resolved: fixed
+status: resolved
 
 Tested.  Works.

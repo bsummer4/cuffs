@@ -1,7 +1,7 @@
 author: jhoare
 title: CMB Does not Advance time as far as it should
 date: 2009-12-01T01:06:34Z
-status: closed
+status: resolved
 
 It does not go as far as it should, it just advances once.
 
@@ -21,7 +21,7 @@ Like it should
 %%
 author: jhoare
 
-resolved: fixed
+status: resolved
 
 Changeset [fistacuffs:465]:
 

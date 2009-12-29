@@ -1,7 +1,7 @@
 author: jhoare
 title: Modify Synchronizer to accept New CMB Timestamp ##.##
 date: 2009-11-18T21:19:19Z
-status: closed
+status: resolved
 
 Where 0 is the last message. So if you have ##.0 you have all the messages.
 
@@ -10,7 +10,7 @@ Strip the timestamp before you send the message to the event handler.
 %%
 author: jhoare
 
-resolved: fixed
+status: resolved
 
 Changeset [fistacuffs:397]:
 

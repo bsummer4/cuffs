@@ -1,7 +1,7 @@
 author: jhoare
 title: Implement SimpleSynchronizer
 date: 2009-10-09T20:26:43Z
-status: closed
+status: resolved
 
 in src/battle/synchronizer  Implement the SimpleSynchronizer Class.
 
@@ -15,6 +15,6 @@ on it as of yet.
 %%
 author: jhoare
 
-resolved: fixed
+status: resolved
 
 SimpleSynchronizer works and passes its tests.

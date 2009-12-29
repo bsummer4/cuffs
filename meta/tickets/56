@@ -1,11 +1,11 @@
 author: jhoare
 title: Create Locking Queue
 date: 2009-11-11T22:05:58Z
-status: closed
+status: resolved
 
 %%
 author: jhoare
 
-resolved: fixed
+status: resolved
 
 misc::Queue in branch/simpler-gamestate/src/misc.h++

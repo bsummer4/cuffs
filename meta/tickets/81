@@ -1,7 +1,7 @@
 author: jhoare
 title: Troubles building in branch (on my mac) - main not found
 date: 2009-11-26T18:46:08Z
-status: closed
+status: resolved
 
 If I fix the problems in #79 by changing references to pointers, I get
 the following error when trying to build:

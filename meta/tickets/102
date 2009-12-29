@@ -1,7 +1,7 @@
 author: bsummer4
 title: Better UI
 date: 2009-12-07T21:40:03Z
-status: closed
+status: resolved
 
 Wind and Gravity should have indicators.  They should use the same
 graphics primitives that aiming uses.  (triangles)
@@ -9,7 +9,7 @@ graphics primitives that aiming uses.  (triangles)
 %%
 author: bsummer4
 
-resolved: fixed
+status: resolved
 
 Changeset [fistacuffs:629]:
 

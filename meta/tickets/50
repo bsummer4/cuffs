@@ -1,7 +1,7 @@
 author: codeman655
 title: Chris's Dead Weight
 date: 2009-10-30T06:03:09Z
-status: closed
+status: invalid
 
 Before you are a list of the tasks I was assigned to finish. I'll try
 to work as much as possible Friday. Here's my crap:
@@ -18,6 +18,6 @@ to work as much as possible Friday. Here's my crap:
 %%
 author: codeman655
 
-resolved: invalid
+status: invalid
 
 This should not be a ticket.  I added a message to replace this.

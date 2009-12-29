@@ -1,7 +1,7 @@
 author: bsummer4
 title: Minimal Overworld Game
 date: 2009-12-04T21:36:03Z
-status: closed
+status: canceled
 
 Extend our overworld-server to support:
 
@@ -46,6 +46,6 @@ someone please take this until then.
 
 %% author: bsummer4
 
-resolved: postponed
+status: canceled
 
 Not gonna happen.

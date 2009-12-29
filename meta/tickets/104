@@ -1,7 +1,7 @@
 author: bsummer4
 title: make KeyListen keep an array of bools (one per key) where true=down
 date: 2009-12-11T00:50:06Z
-status: closed
+status: resolved
 
 Improve KeyListen to keep an array of bools for the various keys that
 we care about.  This way we can hold down two keys at once.

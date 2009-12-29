@@ -1,7 +1,7 @@
 author: bsummer4
 title: Aiming
 date: 2009-12-04T21:24:24Z
-status: closed
+status: resolved
 
 Add a system for aiming with the mouse.  This should control both
 power and direction.
@@ -9,6 +9,6 @@ power and direction.
 %%
 author: bsummer4
 
-resolved: fixed
+status: resolved
 
 yay

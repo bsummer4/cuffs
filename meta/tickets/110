@@ -1,7 +1,7 @@
 author: bsummer4
 title: Ref should change gravity/wind
 date: 2009-12-11T04:28:08Z
-status: closed
+status: resolved
 
 Make the ref responsible for changing the wind/gravity, and make it
 change things up from time to time.
@@ -15,6 +15,6 @@ This works, but a more flexible change-wind would be better.
 %%
 author: bsummer4
 
-resolved: fixed
+status: resolved
 
 Works.  Not heavily tested but all the code is there.

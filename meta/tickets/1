@@ -1,7 +1,7 @@
 author: codeman655
 title: Discuss the game concept
 date: 2009-08-27T13:58:03Z
-status: closed
+status: resolved
 assigned-to: codeman655
 
 Have to work on coming up with a single model for our game. Long
@@ -63,6 +63,6 @@ refinements should be contained to new tickets.
 %%
 author: codeman655
 
-resolved: works_for_me
+status: resolved
 
 Talked to Huang. Got an idea.

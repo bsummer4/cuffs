@@ -1,7 +1,7 @@
 author: codeman655
 title: Test State Generator
 date: 2009-10-16T18:24:31Z
-status: closed
+status: resolved
 
 It's not incredibly intensive but there we are.
 
@@ -20,7 +20,7 @@ I'll update them after I build my tests.
 %%
 author: codeman655
 
-resolved: fixed
+status: resolved
 
 Test is up and running. Traverse into the
 /trunk/src/test/game/battle/generator and run "make check".

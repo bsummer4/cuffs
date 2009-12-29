@@ -1,7 +1,7 @@
 author: dloftis
 title: Create(or find) audio files to be used in game.
 date: 2009-11-23T19:52:42Z
-status: closed
+status: resolved
 
 - Music, if any?
 - Explosion sound
@@ -18,6 +18,6 @@ music.
 %%
 author: dloftis
 
-resolved: fixed
+status: resolved
 
 Added Chris's sound files extracted into the data folder of the branch.

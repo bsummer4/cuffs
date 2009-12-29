@@ -1,12 +1,25 @@
 author: bsummer4
 title: Gravity beetween objects based on weight.
 date: 2009-12-11T00:52:29Z
-status: closed
+status: open
+
+Objects should attract each other, and all objects should have a
+weight field.
 
 %%
 author: bsummer4
 
-resolved: postponed
+status: postponed
 
 This will be too much work before it is actually cool looking/fun.  We
 will need multiple projectile types.
+
+%%
+author: ben
+
+status: open
+
+I would like to see this feature implemented.
+
+We can have the ref generate some static heavy objects to releive
+the need for multiple projectile types.

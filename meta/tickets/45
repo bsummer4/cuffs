@@ -1,7 +1,7 @@
 author: jhoare
 title: Implement Map Interface/storage
 date: 2009-10-22T13:49:02Z
-status: closed
+status: resolved
 
 Create map class that can load a map, as well as can query with the
 following class:
@@ -29,7 +29,7 @@ Map now uses Coords Class as well as using int x, int y.
 %%
 author: jhoare
 
-resolved: fixed
+status: resolved
 
 Map Class now functions correctly, and has tests that test it.
 

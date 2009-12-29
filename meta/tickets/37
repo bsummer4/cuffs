@@ -1,7 +1,7 @@
 author: jhoare
-title: Create Documentation to build Into Doxygen
+title: Switchbox: Create Documentation to build Into Doxygen
 date: 2009-10-10T11:51:23Z
-status: closed
+status: invalid
 
 Document all the "C" library stuff (and possibly the switchbox itself)
 so that it all builds into doxygen. It should probably go Under the
@@ -11,7 +11,7 @@ file.
 %%
 author: jhoare
 
-resolved: invalid
+status: invalid
 
 Not unless you find a better way to do this.  The Doxygen comments in
 Connection.hpp are hideously verbose.  I feel the comments for the

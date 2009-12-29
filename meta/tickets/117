@@ -1,7 +1,7 @@
 author: codeman655
 title: svn propset issues
 date: 2009-12-11T17:57:11Z
-status: closed
+status: resolved
 
 It doesn't work, and it needs to.
 
@@ -14,4 +14,4 @@ Fixed for now. *Magic solutions FTW*
 %%
 author: codeman655
 
-resolved: fixed
+status: resolved

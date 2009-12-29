@@ -1,7 +1,7 @@
 author: jhoare
 title: Implement a referee client.
 date: 2009-10-22T13:52:25Z
-status: closed
+status: resolved
 
 # Referee
 - Take two lists of player id's on command line:  for example:
@@ -41,6 +41,6 @@ I made this use stdout and stdin.  We will have to double-pipe it to sb-cat
 %%
 author: jhoare
 
-resolved: fixed
+status: resolved
 
 Done.

@@ -1,7 +1,7 @@
 author: codeman655
 title: Update Doc for gamestate information
 date: 2009-09-17T14:53:48Z
-status: closed
+status: resolved
 
 Include gamestates:
 We probably need to meet for that... as soon as we finish testing and logging.
@@ -15,7 +15,7 @@ Note: Game Design Meeting, Monday at 3:00.
 %%
 author: codeman655
 
-resolved: fixed
+status: resolved
 
 They're basically done. I'll update them if anything changes but for
 now, I'm resolving.

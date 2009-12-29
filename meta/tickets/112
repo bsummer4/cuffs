@@ -1,7 +1,7 @@
 author: bsummer4
 title: Write an Interactive Paint program
 date: 2009-12-11T07:03:33Z
-status: closed
+status: resolved
 
 Given the current architecture of our code this should be as simple as
 tying the renderer, keylister, and switchbox-cat together.  It would

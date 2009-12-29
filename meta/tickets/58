@@ -1,7 +1,7 @@
 author: bsummer4
 title: Get the physics stuff working in the branch
 date: 2009-11-13T22:12:01Z
-status: closed
+status: resolved
 
 This involves:
 
@@ -18,7 +18,7 @@ non-trivial.
 %%
 author: bsummer4
 
-resolved: fixed
+status: resolved
 
 Not everything is implemented, and some things are implemented
 completely.  However, I think it's good enough for now.

@@ -1,7 +1,7 @@
 author: codeman655
 title: Generator Broadcast message
 date: 2009-10-08T21:53:17Z
-status: closed
+status: resolved
 
 Send messages from the State Generator to the switchbox by using
 connection send
@@ -16,6 +16,6 @@ but I gotta move on to the interpreter.
 %%
 author: codeman655
 
-resolved: fixed
+status: resolved
 
 Finished.

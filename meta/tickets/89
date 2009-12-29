@@ -1,7 +1,7 @@
 author: bsummer4
 title: Drawing primitives on SDL Surfaces.
 date: 2009-12-05T02:08:32Z
-status: closed
+status: resolved
 
 We need to be able to draw a line with a width and draw a solid circle
 with radius.  Drawing should wrap around the sides but shouldn't wrap
@@ -25,6 +25,6 @@ papers and finals this coming week, so can't promise I can get to it.
 %%
 author: bsummer4
 
-resolved: fixed
+status: resolved
 
 Resolved the segfaults with SDL_gfx. See #90.

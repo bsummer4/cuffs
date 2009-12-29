@@ -1,7 +1,7 @@
 author: bsummer4
 title: Resolve Multicast Issue in SwitchboxAdmin
 date: 2009-09-29T02:52:26Z
-status: closed
+status: resolved
 
 SwitchboxAdmin needs to override Connection's announcement handling
 mechanism.  It needs to have a way of indicating when an operation
@@ -17,4 +17,4 @@ improve-switchbox branch.
 %%
 author: bsummer4
 
-resolved: works_for_me
+status: resolved

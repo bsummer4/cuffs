@@ -1,7 +1,7 @@
 author: codeman655
 title: Todo switchbox.c: remove_client
 date: 2009-09-17T16:56:49Z
-status: closed
+status: resolved
 
 TODO: if the socket or thread are bad or the client is null, then
 return false.
@@ -9,4 +9,4 @@ return false.
 %%
 author: codeman655
 
-resolved: fixed
+status: resolved
