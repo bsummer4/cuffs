@@ -42,7 +42,7 @@ void init();
 void announce(SBMessage * admin_message);
 bool locking_send(SBMessage * m);
 void print_message(SBMessage * m);
-void handler(int SIGNUM);
+void handler();
 
 // Implementation
 // ==============
@@ -451,7 +451,7 @@ void print_message(SBMessage * m) {
 
 
 /// Signal handler to cleanly shutdown.
-void handler(int SIGNUM) {
+void handler() {
   // Close main socket
   close(s);
   // Close all the connections

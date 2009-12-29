@@ -53,7 +53,8 @@ void test_send(Socket s) {
 void test_recieve(Socket s) {
   Message *m = receive_message(s);
   char *string = m->data;
-  iter(ii, 0, m->size - sizeof(int)) assert(string[ii] == TEST_STRING[ii]);
+  iter(ii, 0, (int) (m->size - sizeof(int)))
+    assert(string[ii] == TEST_STRING[ii]);
   free(m);
 }
 

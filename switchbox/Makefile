@@ -1,8 +1,11 @@
 DESTDIR = /usr/local
+CC = gcc
 CFLAGS = -O3 -W -Wall
 VERSION = 1.0
 
-CFLAGS += -std=gnu99
+# Without '-fno-strict-aliasing' gcc bitches about our recasting of
+# SBMessage.data to various things.
+CFLAGS += -std=gnu99 -fno-strict-aliasing
 LDFLAGS += -lpthread
 HEADERS = message.h switchbox_client.h
 SRC = message.c switchbox.c switchbox_client.c
