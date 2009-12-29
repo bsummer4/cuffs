@@ -1,0 +1,6 @@
+author: bsummer4
+title: Include Swithbox-Related Utillities
+
+sixty-nine, switchbox-cat, switchbox-connect, and sbio should be a
+part of this directory-tree/build.  They will need to be modified to
+use pure c99 and no pthreads.
