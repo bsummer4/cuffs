@@ -2,3 +2,8 @@ author: bsummer4
 title: Clean up Build
 
 Eliminate warnings and add an 'uninstall' rule to Makefile.
+
+%%
+author: bsummer4
+
+commit 7eb1a7d90e227a3c2bcc87daa245dc472635d3f6 cleans up warnings
