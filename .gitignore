@@ -1,0 +1,26 @@
+.current
+switchbox/switchbox
+
+# autotools junk
+Makefile
+!switchbox/Makefile
+aclocal.m4
+configure
+*.in
+*.o
+m4/ltoptions.m4
+m4/ltsugar.m4
+m4/ltversion.m4
+m4/lt~obsolete.m4
+m4/libtool.m4
+missing
+ltmain.sh
+libtool
+.deps
+install-sh
+autom4te.cache
+config.guess
+config.log
+config.status
+config.sub
+depcomp
