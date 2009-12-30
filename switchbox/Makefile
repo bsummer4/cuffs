@@ -9,13 +9,15 @@ VERSION = 1.0
 CFLAGS += -std=gnu99 -fno-strict-aliasing
 LDFLAGS += -lpthread
 HEADERS = message.h switchbox_client.h
-SRC = message.c switchbox.c switchbox_client.c
+SRC = message.c switchbox.c switchbox_client.c sixty-nine.c
 OBJ = $(SRC:.c=.o)
 DISTNAME = switchbox-$(VERSION)
+PROGS = sixty-nine switchbox
 
-all: switchbox
-clean:; rm -f $(OBJ) switchbox
-switchbox: $(OBJ); $(CC) $(LDFLAGS) $^ -o $@
+all: $(PROGS)
+clean:; rm -f $(OBJ) $(PROGS)
+switchbox: message.o switchbox.o switchbox_client.o; $(CC) $(LDFLAGS) $^ -o $@
+sixty-nine: sixty-nine.o; $(CC) $^ -o $@
 
 dist: clean
 	mkdir -p $(DISTNAME)

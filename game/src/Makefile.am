@@ -5,9 +5,8 @@ AM_CXXFLAGS = -Wall -O0 -g -I../object -I../../switchbox/src @SDL_CFLAGS@
 AM_CFLAGS = $(AM_CXXFLAGS)
 
 bin_PROGRAMS = sync-cat delayed-cat interpret cat render switchbox-cat \
-               game keylisten sleep-cat map-pgm sixty-nine \
-               switchbox-connect physics dispatcher2 dispatcher repeater \
-               sb_io keystate paint_window
+               game keylisten sleep-cat map-pgm switchbox-connect physics
+               dispatcher2 dispatcher repeater sb_io keystate paint_window
 
 cat_SOURCES = cat.cpp
 paint_window_SOURCES = paint_window.cpp

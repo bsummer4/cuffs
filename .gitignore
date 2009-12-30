@@ -1,5 +1,6 @@
 .current
 switchbox/switchbox
+switchbox/sixty-nine
 
 # autotools junk
 Makefile

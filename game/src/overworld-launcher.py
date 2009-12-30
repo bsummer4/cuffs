@@ -27,7 +27,7 @@ def launch(run_server, username, hostname):
       raise Exception("Unable to start overworld-server")
   kill_window()
   print_(1)
-  os.system("./sixty-nine '%s' '%s'" % (connect, client))
+  os.system("sixty-nine '%s' '%s'" % (connect, client))
   if run_server:
     os.system("./switchbox.sh stop %d" % overworld_port)
     os.system("./server.sh stop")
