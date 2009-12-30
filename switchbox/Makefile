@@ -25,9 +25,10 @@ dist: clean
 	tar cfz $(DISTNAME).tgz $(DISTNAME)
 	rm -rf $(DISTNAME)
 
-install: switchbox
+install: switchbox sixty-nine
 	mkdir -p $(DESTDIR)/bin
 	mkdir -p $(DESTDIR)/share/doc/switchbox
 	install -d $(DESTDIR)/bin $(DESTDIR)/share/doc/switchbox
 	install -m 775 switchbox $(DESTDIR)/bin
+	install -m 775 sixty-nine $(DESTDIR)/bin
 	install -m 644 README $(DESTDIR)/share/doc/switchbox
