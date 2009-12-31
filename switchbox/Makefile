@@ -34,3 +34,7 @@ install: $(PROGS)
 	install -d $(DESTDIR)/bin $(DESTDIR)/share/doc/switchbox
 	install -m 644 README $(DESTDIR)/share/doc/switchbox
 	install -m 775 -t $(DESTDIR)/bin $(PROGS) $(SCRIPTS)
+
+uninstall:
+	cd $(DESTDIR)/bin; rm -f $(PROGS) $(SCRIPTS)
+	rm -f $(DESTDIR)/share/doc/switchbox/README
