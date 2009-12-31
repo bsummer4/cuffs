@@ -13,6 +13,7 @@ SRC = message.c switchbox.c switchbox_client.c sixty-nine.c
 OBJ = $(SRC:.c=.o)
 DISTNAME = switchbox-$(VERSION)
 PROGS = sixty-nine switchbox
+SCRIPTS = switchbox.sh
 
 all: $(PROGS)
 clean:; rm -f $(OBJ) $(PROGS)
@@ -25,10 +26,9 @@ dist: clean
 	tar cfz $(DISTNAME).tgz $(DISTNAME)
 	rm -rf $(DISTNAME)
 
-install: switchbox sixty-nine
+install: $(PROGS)
 	mkdir -p $(DESTDIR)/bin
 	mkdir -p $(DESTDIR)/share/doc/switchbox
 	install -d $(DESTDIR)/bin $(DESTDIR)/share/doc/switchbox
-	install -m 775 switchbox $(DESTDIR)/bin
-	install -m 775 sixty-nine $(DESTDIR)/bin
 	install -m 644 README $(DESTDIR)/share/doc/switchbox
+	install -m 775 -t $(DESTDIR)/bin $(PROGS) $(SCRIPTS)

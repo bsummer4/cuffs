@@ -4,14 +4,13 @@
 #
 
 usage="Usage: $0 {start|stop|restart|status} port"
-SWITCHBOX_BIN=../../switchbox/src/switchbox
 [ $# -ne 2 ] && echo $usage && exit 1
 port=$2
 
 case "$1" in
   start)
         if [ ! -e .switchboxpid_$port ]; then
-            $SWITCHBOX_BIN $2 2>&1 > /dev/null &
+            switchbox $2 2>&1 > /dev/null &
             echo $! > .switchboxpid_$port
         else
             echo "Can not start switchbox. Already running. (Or stale switchboxpid file)"
