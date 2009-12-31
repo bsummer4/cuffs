@@ -175,7 +175,7 @@ bool valid_listener(Listener listener) {
   return listener != -1;
 }
 
-/** Returns an invalid socket on error.  */
+/** Returns an invalid socket (valid_socket()) on error.  */
 Socket open_connection(const char *hostname, const int port) {
   struct hostent *host = gethostbyname(hostname);
   if (!host) {
@@ -203,11 +203,11 @@ Socket open_connection(const char *hostname, const int port) {
   }
   return descriptor;
 
-open_connection_error:return -1;
+ open_connection_error: return -1;
 }
 
 
-// Returns an invalid listener on error
+// Returns an invalid listener (valid_socket()) on error
 Listener make_listener(int port) {
   Listener result;
   if ((result = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
@@ -246,7 +246,7 @@ int listener_port(Listener l) {
   return ntohs(addr.sin_port);
 }
 
-// Returns an invalid Socket on error
+// Returns an invalid Socket (valid_socket()) on error
 Socket accept_connection(Listener l) {
   struct sockaddr address;
   socklen_t addrlen = sizeof(address);
