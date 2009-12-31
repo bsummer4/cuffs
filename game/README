@@ -140,9 +140,9 @@ stdin and stdout to send messages.  Then we tie these programs to
 and stdout of two programs together we use 'sixty-nine'.  For example:
 
 @verbatim
-    ./switchbox.sh start 5555
-    sixty-nine './keylistener' './switchbox-cat localhost 5555'
-    ./switchbox.sh stop 5555
+    switchbox.sh start 5555
+    sixty-nine './keylistener' 'switchbox-cat localhost 5555'
+    switchbox.sh stop 5555
 @endverbatim
 
 @section Maps

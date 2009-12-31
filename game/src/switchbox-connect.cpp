@@ -42,7 +42,7 @@ string translate(string s) {
   return ""; }
 
 int main (int num_args, char **args) {
-  assert(num_args == 3 && "usage: switchbox-cat hostname port");
+  assert(num_args == 3 && "usage: switchbox-connect hostname port");
   string hostname (args[1]);
   int port = atoi(args[2]);
 

@@ -4,9 +4,9 @@ AM_LDFLAGS = @SDL_LIBS@  -lSDL_image -lSDL_gfx -lSDL_mixer \
 AM_CXXFLAGS = -Wall -O0 -g -I../object -I../../switchbox/src @SDL_CFLAGS@
 AM_CFLAGS = $(AM_CXXFLAGS)
 
-bin_PROGRAMS = sync-cat delayed-cat interpret cat render switchbox-cat \
-               game keylisten sleep-cat map-pgm switchbox-connect physics
-               dispatcher2 dispatcher repeater sb_io keystate paint_window
+bin_PROGRAMS = sync-cat delayed-cat interpret cat render game keylisten
+               sleep-cat map-pgm switchbox-connect physics dispatcher2
+               dispatcher repeater sb_io keystate paint_window
 
 cat_SOURCES = cat.cpp
 paint_window_SOURCES = paint_window.cpp
@@ -23,7 +23,6 @@ map_pgm_SOURCES = map-pgm.cpp
 physics_SOURCES = physics.cpp
 render_SOURCES = render.cpp
 sleep_cat_SOURCES = sleep-cat.cpp
-switchbox_cat_SOURCES = switchbox-cat.cpp
 switchbox_cat_LDADD = ../../switchbox/src/libmessaging.la
 switchbox_connect_SOURCES = switchbox-connect.cpp
 switchbox_connect_LDADD = ../../switchbox/src/libmessaging.la
