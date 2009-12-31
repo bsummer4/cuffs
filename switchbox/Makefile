@@ -12,13 +12,15 @@ HEADERS = message.h switchbox_client.h
 SRC = message.c switchbox.c switchbox_client.c sixty-nine.c
 OBJ = $(SRC:.c=.o)
 DISTNAME = switchbox-$(VERSION)
-PROGS = sixty-nine switchbox
+PROGS = sixty-nine switchbox switchbox-cat
 SCRIPTS = switchbox.sh
 
 all: $(PROGS)
 clean:; rm -f $(OBJ) $(PROGS)
 switchbox: message.o switchbox.o switchbox_client.o; $(CC) $(LDFLAGS) $^ -o $@
 sixty-nine: sixty-nine.o; $(CC) $^ -o $@
+switchbox-cat: message.o switchbox_client.o switchbox-cat.o
+	$(CC) $(LDFLAGS) $^ -o $@
 
 dist: clean
 	mkdir -p $(DISTNAME)
