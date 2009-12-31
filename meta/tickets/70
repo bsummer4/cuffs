@@ -1,5 +1,5 @@
 author: bsummer4
-title: CMB in branch should use handleEvent instead of Connection
+title: Replace Connection with handleEvent in CMB
 date: 2009-11-20T23:32:53Z
 status: open
 

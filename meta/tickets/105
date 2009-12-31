@@ -1,10 +1,10 @@
 author: bsummer4
-title: Gravity beetween objects based on weight.
+title: Gravity Between Objects
 date: 2009-12-11T00:52:29Z
 status: open
 
 Objects should attract each other, and all objects should have a
-weight field.
+weight field that determines the attraction between objects.
 
 %%
 author: bsummer4
