@@ -9,7 +9,7 @@ VERSION = 1.0
 CFLAGS += -std=gnu99 -fno-strict-aliasing
 LDFLAGS += -lpthread
 HEADERS = message.h switchbox_client.h
-SRC = message.c switchbox.c switchbox_client.c sixty-nine.c
+SRC = message.c switchbox.c switchbox_client.c sixty-nine.c switchbox-cat.c
 OBJ = $(SRC:.c=.o)
 DISTNAME = switchbox-$(VERSION)
 PROGS = sixty-nine switchbox switchbox-cat
@@ -24,7 +24,7 @@ switchbox-cat: message.o switchbox_client.o switchbox-cat.o
 
 dist: clean
 	mkdir -p $(DISTNAME)
-	cp Makefile README $(SRC) $(HEADERS) $(DISTNAME)
+	cp Makefile README $(SRC) $(HEADERS) $(SCRIPTS) $(DISTNAME)
 	tar cfz $(DISTNAME).tgz $(DISTNAME)
 	rm -rf $(DISTNAME)
 
