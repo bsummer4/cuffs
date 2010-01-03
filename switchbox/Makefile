@@ -9,17 +9,22 @@ VERSION = 1.0
 CFLAGS += -std=gnu99 -fno-strict-aliasing
 LDFLAGS += -lpthread
 HEADERS = message.h switchbox_client.h
-SRC = message.c switchbox.c switchbox_client.c sixty-nine.c switchbox-cat.c
+SRC = message.c switchbox.c switchbox_client.c sixty-nine.c switchbox-cat.c \
+      switchbox-client-framework.c
 OBJ = $(SRC:.c=.o)
 DISTNAME = switchbox-$(VERSION)
-PROGS = sixty-nine switchbox switchbox-cat
+PROGS = sixty-nine switchbox switchbox-cat switchbox-connect
 SCRIPTS = switchbox.sh
 
 all: $(PROGS)
 clean:; rm -f $(OBJ) $(PROGS)
 switchbox: message.o switchbox.o switchbox_client.o; $(CC) $(LDFLAGS) $^ -o $@
 sixty-nine: sixty-nine.o; $(CC) $^ -o $@
-switchbox-cat: message.o switchbox_client.o switchbox-cat.o
+switchbox-cat: switchbox-client-framework.o message.o switchbox_client.o \
+               switchbox-cat.o
+	$(CC) $(LDFLAGS) $^ -o $@
+switchbox-connect: switchbox-client-framework.o message.o switchbox_client.o \
+                   switchbox-connect.o
 	$(CC) $(LDFLAGS) $^ -o $@
 
 dist: clean
@@ -38,3 +43,7 @@ install: $(PROGS)
 uninstall:
 	cd $(DESTDIR)/bin; rm -f $(PROGS) $(SCRIPTS)
 	rm -f $(DESTDIR)/share/doc/switchbox/README
+
+# IDE Junk that shouldn't need to be included here
+check-syntax:
+	$(CC) $(CFLAGS) -o /dev/null -S $(CHK_SOURCES)
