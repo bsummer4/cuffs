@@ -254,6 +254,7 @@ void ref_handshake(string username, PlayerMap &players, string &map,
         ("handshake ended prematurly.  Maybe no connection?  ");
     istringstream i(buffer); int from; string command;
     i >> from >> command;
+    if (from == -1) continue;
     if (!command.compare("/identify")) continue;
     if (!command.compare("/map")) { i >> map; continue; }
     if (!command.compare("/start")) {

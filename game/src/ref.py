@@ -57,6 +57,7 @@ def wait_for_players(players):
         line_text = sys.stdin.readline()
         line = line_text.split()
         if len(line) <= 1: continue
+        if line[0] == '-1': continue
         if len(line) != 3 or line[1] != '/identify':
             raise Exception("bad /identify line")
         address, command, player = line
