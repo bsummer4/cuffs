@@ -26,7 +26,7 @@ const static int game_interval = 40;
 
 Vector2_d throw_velocity(Vector2_d player, Vector2_d cursor) {
   Vector2_d vel(cursor - player);
-  vel = vel/10;
+  vel = vel / 10;
   if (vel.norm() > max_throw_speed) {
     vel = Vector2_d(vel.normalized() * max_throw_speed);
     return vel; }
