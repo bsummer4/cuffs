@@ -1,6 +1,0 @@
-project Switchbox
-to understand do { $PAGER < README }
-to build do {make}
-to clean do {make clean}
-to install do {make install}
-locate tickets "tickets"

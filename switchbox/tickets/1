@@ -1,9 +1,0 @@
-author: bsummer4
-title: Clean up the switchbox Code and Separate it from the Game.
-status: resolved
-
-Remove all the stuff we're not using and replace the build with a simple
-Makefile.  Makefile should have rules: 'all switchbox install dist clean'.
-
-All code should be pure c99.  Remove the python and c++ bindings since they
-are not being used.
