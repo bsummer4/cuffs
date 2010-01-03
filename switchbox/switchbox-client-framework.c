@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include <pthread.h>
 #include <assert.h>
-#include "switchbox_client.h"
+#include "switchbox-client.h"
 
 extern SBMessage *make_message (char *line);
 extern void print_message (SBMessage *m);
@@ -52,7 +52,7 @@ void *switchbox_to_stdout (void *socket_v) {
   pthread_exit (NULL); }
 
 int main (int num_args, char **args) {
-  assert ("usage: switchbox-connect hostname port"
+  assert ("usage: this_program hostname port"
          && num_args == 3);
   const char *hostname = args [1];
   const int port = atoi (args [2]);

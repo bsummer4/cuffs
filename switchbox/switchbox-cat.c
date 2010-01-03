@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <pthread.h>
-#include "switchbox_client.h"
+#include "switchbox-client.h"
 
 bool admin_junk(SBMessage *m) {
   int t = m->routing_type;

@@ -44,7 +44,7 @@ switchbox does different routing based on the information in the
 header.  There are special "routing types" for actually controlling
 the switchbox.  These let you create and remove groups, etc.
 
-The library headers file 'src/switchbox_client.h' and 'src/message.h'
+The library headers file 'src/switchbox-client.h' and 'src/message.h'
 are designed to be human readable.  See them for more specific
 information.
 

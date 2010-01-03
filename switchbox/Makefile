@@ -8,9 +8,9 @@ CFLAGS = -O3 -W -Wall
 VERSION = 1.0
 CFLAGS += -std=gnu99 -fno-strict-aliasing
 LDFLAGS += -lpthread
-HEADERS = message.h switchbox_client.h
-SRC = message.c switchbox.c switchbox_client.c sixty-nine.c switchbox-cat.c \
-      switchbox-client-framework.c
+HEADERS = message.h switchbox-client.h
+SRC = message.c switchbox.c switchbox-client.c sixty-nine.c switchbox-cat.c \
+      switchbox-client-framework.c switchbox-connect.c
 OBJ = $(SRC:.c=.o)
 DISTNAME = switchbox-$(VERSION)
 PROGS = sixty-nine switchbox switchbox-cat switchbox-connect
@@ -18,12 +18,12 @@ SCRIPTS = switchbox.sh
 
 all: $(PROGS)
 clean:; rm -f $(OBJ) $(PROGS)
-switchbox: message.o switchbox.o switchbox_client.o; $(CC) $(LDFLAGS) $^ -o $@
+switchbox: message.o switchbox.o switchbox-client.o; $(CC) $(LDFLAGS) $^ -o $@
 sixty-nine: sixty-nine.o; $(CC) $^ -o $@
-switchbox-cat: switchbox-client-framework.o message.o switchbox_client.o \
+switchbox-cat: switchbox-client-framework.o message.o switchbox-client.o \
                switchbox-cat.o
 	$(CC) $(LDFLAGS) $^ -o $@
-switchbox-connect: switchbox-client-framework.o message.o switchbox_client.o \
+switchbox-connect: switchbox-client-framework.o message.o switchbox-client.o \
                    switchbox-connect.o
 	$(CC) $(LDFLAGS) $^ -o $@
 

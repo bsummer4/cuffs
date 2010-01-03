@@ -10,7 +10,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <assert.h>
-#include "switchbox_client.h"
+#include "switchbox-client.h"
 
 bool admin_junk(SBMessage *m) {
   int t = m->routing_type;

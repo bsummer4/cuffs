@@ -1,7 +1,7 @@
 /**
 @addtogroup Switchbox
 @section Some pointers for reading this:
-  - We use the switchbox_client, and message libraries, read those
+  - We use the switchbox-client, and message libraries, read those
     first.
   - Each client has its own thread: This is somewhat inefficient, but
     it's simple, and it's good enough for what we're doing.
@@ -26,7 +26,7 @@
     good solution.
 */
 
-#include "switchbox_client.h"
+#include "switchbox-client.h"
 #include <pthread.h>
 #include <assert.h>
 #include <unistd.h>
@@ -440,7 +440,7 @@ void run(int port) {
 
 /// This prints everything about a message to standard output.  It is
 /// for debugging.
-/// @TODO Move this to switchbox_client.c
+/// @TODO Move this to switchbox-client.c
 void print_message(SBMessage * m) {
   printf("  Message: {type: %s, size: %d, from: %d, to: %d, data: [",
          routing_type_to_string(m->routing_type), m->size, m->from, m->to);
