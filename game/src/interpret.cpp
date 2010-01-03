@@ -9,7 +9,6 @@
 #include <unistd.h>
 #include <stdexcept>
 #include "cmb.hpp"
-#include "Connection.hpp"
 #include "Interpreter.hpp"
 #include "misc.hpp"
 #include "lib.h"

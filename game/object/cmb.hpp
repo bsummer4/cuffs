@@ -4,19 +4,18 @@
 #include <queue>
 #include <sstream>
 #include <stdexcept>
-#include "Connection.hpp"
 #include "Interpreter.hpp"
 #include "Threaded.hpp"
 #include "lib.h"
 #include "misc.hpp"
 
-/// @brief Contains everything for the "Synchronizer" element of the 
-/// CMB algorithm. 
+/// @brief Contains everything for the "Synchronizer" element of the
+/// CMB algorithm.
 ///
 /// This is a bunch of classes for syncronizing output from various
 /// simulations.  The classes you should care about are
 /// cmb::Synchronizer, and cmb::TimestampAdder Everything else
-/// function as more of helper classes. 
+/// function as more of helper classes.
 namespace cmb {
   using namespace std;
   class Event;

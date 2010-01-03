@@ -33,7 +33,6 @@ printed on output.  Example usage:
 #include <stdexcept>
 #include "cmb.hpp"
 #include "misc.hpp"
-#include "Connection.hpp"
 #include "Interpreter.hpp"
 #include "lib.h"
 #include "macro.h"
