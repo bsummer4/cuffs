@@ -1,7 +1,10 @@
 AM_LDFLAGS = @SDL_LIBS@ -lSDL_image -lSDL_gfx -lSDL_mixer -lboost_thread
-AM_CXXFLAGS = -Wall -O0 -g -I../object @SDL_CFLAGS@
+gamedatadir=\"$(datadir)/@PACKAGE@\"
+AM_CXXFLAGS = -Wall -O0 -g -I../object @SDL_CFLAGS@  -DDATADIRR=$(gamedatadir)
 AM_CFLAGS = $(AM_CXXFLAGS)
 
+bin_SCRIPTS = ref.py overworld-client.py overworld-server.py \
+              overworld-launcher.py server.sh map_parse.py
 bin_PROGRAMS = sync-cat delayed-cat interpret cat render game keylisten \
                sleep-cat map-pgm physics dispatcher2 dispatcher keystate \
                paint_window physics

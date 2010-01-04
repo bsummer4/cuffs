@@ -5,7 +5,7 @@ maps.  The maps list should be in data/maps.
 # Example Usage
 
     import map_parse, pprint, os
-    os.chdir("../data")
+    os.chdir(DATADIRR)
     maps = map_parse.Maps("maps")
     print maps
 """

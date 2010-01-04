@@ -2,7 +2,7 @@
 /// @ingroup Game
 /// @section Description
 /// Reads messages from stdin and creates appropriate physics messages which
-/// are sent to stdout. 
+/// are sent to stdout.
 
 
 #include "state.hpp"
@@ -29,7 +29,7 @@ struct Hack {
         p.handleEvent(*it); }}}};
 
 int main (int num_args, char **args) {
-  assert(!chdir("../data"));
+  assert(!chdir(DATADIRR));
   assert(num_args == 4 && "usage physics mapname x y");
   string map_filename = args[1];
   map_filename = map_filename + ".map";

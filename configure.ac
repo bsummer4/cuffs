@@ -51,6 +51,7 @@ DX_INIT_DOXYGEN([$PACKAGE_NAME],[doxygen.cfg],[doc/doxygen])
 AC_CONFIG_FILES([Makefile
                  src/Makefile
                  object/Makefile
+                 data/Makefile
                  object/test/Makefile
                  utils/Makefile])
 AC_OUTPUT

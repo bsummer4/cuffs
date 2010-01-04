@@ -13,24 +13,24 @@ def print_(x):
   return x
 
 def launch(run_server, username, hostname):
-  connect = './switchbox-connect %s %s'%(hostname, overworld_port)
+  connect = 'switchbox-connect %s %s'%(hostname, overworld_port)
   print_(1)
-  client = './overworld-client.py %s %s'%(username, hostname)
+  client = 'overworld-client.py %s %s'%(username, hostname)
   print_(1)
   if run_server:
     print_(1)
-    if os.system("./switchbox.sh start %d" % overworld_port):
+    if os.system("switchbox.sh start %d" % overworld_port):
       raise Exception("Unable to start switchbox")
     print_(1)
-    if os.system("./server.sh start"):
-      os.system("./switchbox.sh stop %d" % overworld_port)
+    if os.system("server.sh start"):
+      os.system("switchbox.sh stop %d" % overworld_port)
       raise Exception("Unable to start overworld-server")
   kill_window()
   print_(1)
   os.system("sixty-nine '%s' '%s'" % (connect, client))
   if run_server:
-    os.system("./switchbox.sh stop %d" % overworld_port)
-    os.system("./server.sh stop")
+    os.system("switchbox.sh stop %d" % overworld_port)
+    os.system("server.sh stop")
 
 # Launcher GUI Frame
 class LauncherFrame(wx.Frame):

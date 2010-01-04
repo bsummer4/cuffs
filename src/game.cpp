@@ -204,9 +204,9 @@ public:
     : gameInQ(gameInQ), userInQ(userInQ), r(r), i(i), state(state), sim(sim_),
       simInt(sim, state), iteration(0), output(output), ta(0), game_time(0),
       ui(ui) {}
-  /// The overloaded () operator is where the pipeline occurs, and where 
-  /// each event in the pipeline gets called in order. 
-  /// 
+  /// The overloaded () operator is where the pipeline occurs, and where
+  /// each event in the pipeline gets called in order.
+  ///
   /// The order call list is as follows:
   void operator()(SDL_Event& e) {
     int new_game_time = (SDL_GetTicks() - start_time) / game_interval;
@@ -236,7 +236,7 @@ public:
     vector <string> render_messages;
     /// - From the current global state generate all the draw messages
     render_state(state, render_messages);
-    /// - Send the draw messages on to the renderer, which draw them on 
+    /// - Send the draw messages on to the renderer, which draw them on
     /// the screen
     ui.render(state, render_messages, sim);
     r.white();
@@ -278,7 +278,7 @@ int main(int num_args, char **args) {
   string username(args[1]);
 
   // SDL
-  assert(0 == chdir("../data"));
+  assert(0 == chdir(DATADIRR));
   sdl::SDL sdl(true, true);
   sdl.hide_cursor();
   sdl.initVideo(800, 600, 32, "Rock-Throwing Game");

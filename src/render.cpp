@@ -12,7 +12,7 @@ using namespace misc;
 using namespace std;
 
 int main(int argc, char *argv[]) {
-  assert(0 == chdir("../data"));
+  assert(0 == chdir(DATADIRR));
   sdl::SDL s(true, true);
   s.initVideo(800, 600, 32, "Rendering Utillity");
   s.initAudio();

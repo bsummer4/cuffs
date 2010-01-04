@@ -133,8 +133,8 @@ def listen(OverFrame):
       print '/logout ' + app.username
       if app.username in args:
         time.sleep(0.5)
-        os.execlp("sixty-nine", "sixty-nine", './game %s'%(app.username),
-                  './switchbox-connect %s %d'%(app.hostname, underworld_port))
+        os.execlp("sixty-nine", "sixty-nine", 'game %s'%(app.username),
+                  'switchbox-connect %s %d'%(app.hostname, underworld_port))
 
 if __name__ == "__main__":
   program, username, hostname = sys.argv

@@ -15,7 +15,7 @@
 using namespace std;
 
 int main (int argc, char **argv) {
-  assert(!chdir("../data"));
+  assert(!chdir(DATADIRR));
   sdl::SDL sdl(true);
   game::State state("example.map", "username", sdl);
   game::Interpreter i(state);

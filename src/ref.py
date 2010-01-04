@@ -96,13 +96,15 @@ if __name__ == '__main__':
     if len(sys.argv) == 1: raise Exception("No logfile given.  ")
     players, annotation_filename = sys.argv[1:-1], sys.argv[-1]
 
-    os.chdir("../data")
+    # TODO want os.chdir(DATADIR) except no nice way to pas that in.
+    #      I guess we could use a ref.py.in or some shit, but that's a
+    #      dirty hack.
+    annotation_file = open(annotation_filename, "w+")
+    os.chdir("/usr/local/share/fistacuffs/")
     maps = map_parse.Maps("maps")
     if not len(maps.maps): raise Exception("No map files!  ")
     gamemap = random.choice(maps.maps.values())
-
     go(wait_for_players(players), gamemap)
-    annotation_file = open(annotation_filename, "w+")
 
     # TODO: We will need to send messages to keep the syncronizer
     # running.  This large number hack works fine for now.

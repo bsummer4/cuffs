@@ -1,4 +1,4 @@
-/// @addtogroup keystate 
+/// @addtogroup keystate
 /// @ingroup Game
 /// @section Description
 /// Every time a key is pressed or released, print a line which is a
@@ -15,7 +15,7 @@ using namespace std;
 void print_keystate(KeyState &state) { state.pprint(cout); }
 
 int main(int argc, char *argv[]) {
-  assert(!chdir("../data"));
+  assert(!chdir(DATADIRR));
   SDL sdl(true);
   sdl.initVideo(100, 100, 32, "KeyListener");
   string important[] = {"w", "a", "s", "d", "left", "right", "up", "down",

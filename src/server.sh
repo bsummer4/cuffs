@@ -16,8 +16,8 @@ case "$1" in
   start)
         if [ ! -e .serverpid_$hostname ];
         then
-            sixty-nine ./overworld-server.py \
-                "./switchbox-connect $hostname $port" &
+            sixty-nine overworld-server.py \
+                "switchbox-connect $hostname $port" &
             echo $! > .serverpid_$hostname
         else could_not_then_die start "Already running or stale pid file"
         fi

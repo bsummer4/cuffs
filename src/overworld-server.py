@@ -26,12 +26,12 @@ def playerUpdate():
         elif command == '/list':
             sys.stdout.write("/players " + " ".join(playerlist) + "\n")
         elif command == '/play':
-            os.system("./switchbox.sh start %d > /dev/stderr" % game_port)
+            os.system("switchbox.sh start %d > /dev/stderr" % game_port)
             time.sleep(0.05) # just in case
             os.system (
-                "sixty-nine './ref.py %s annoations.txt' './switchbox-connect localhost %d'" \
+                "sixty-nine 'ref.py %s annoations.txt' 'switchbox-connect localhost %d'" \
                     % (' '.join(args), game_port))
-            os.system("./switchbox.sh stop %d > /dev/stderr" % game_port)
+            os.system("switchbox.sh stop %d > /dev/stderr" % game_port)
         sys.stdout.flush()
 
 if __name__ == '__main__':

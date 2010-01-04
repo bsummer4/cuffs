@@ -1,7 +1,7 @@
 author: bsummer4
 title: make install
 date: 2009-12-07T04:12:35Z
-status: open
+status: resolved
 
 Get Make install to work, and make sure everything works installed.
 
@@ -25,3 +25,11 @@ author: bsummer4
 status: open
 
 This is even more important now that it's on github.
+
+%%
+author: bsummer4
+
+status: resolved
+
+This sort-of works.  It's really hacky and needs to be redone, but
+that's work for another ticket.

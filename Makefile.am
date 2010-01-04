@@ -1,4 +1,4 @@
-SUBDIRS=object src utils
+SUBDIRS=object src utils data
 
 # Doxygen
 include $(top_srcdir)/aminclude.am

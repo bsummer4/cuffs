@@ -13,7 +13,7 @@ using namespace sdl;
 using namespace std;
 
 int main(int argc, char *argv[]) {
-  assert(0 == chdir("../data"));
+  assert(0 == chdir(DATADIRR));
   SDL sdl(true);
   sdl.initVideo(800, 600, 32, "KeyListener");
   misc::Printer p;
