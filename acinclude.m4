@@ -1,3 +1,5 @@
+# This is for doxygen
+
 # This file is part of Autoconf.                       -*- Autoconf -*-
 
 # Copyright (C) 2004 Oren Ben-Kiki
@@ -8,7 +10,7 @@
 # * DX_ARG_ABLE : new variable 'DX_FLAG_DX_CURRENT_FEATURE'
 # * DX_CLEAR_DEPEND : use of explicit variable 'DX_FLAG_DX_CURRENT_FEATURE'
 #   in AC_SUBST instead of 'DX_FLAG[]DX_CURRENT_FEATURE' which is rejected by
-#   newer autotools  
+#   newer autotools
 
 # Generate automatic documentation using Doxygen. Works in concert with the
 # aminclude.m4 file and a compatible doxygen configuration file. Defines the

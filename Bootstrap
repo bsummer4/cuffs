@@ -20,6 +20,6 @@ then
 
 else
     echo "Generating autotools stuff:"
-    echo "$PROMPT" autoreconf -I m4 --install
-    autoreconf -I m4 --install
+    echo "$PROMPT" autoreconf --install
+    autoreconf --install
 fi
