@@ -1,4 +1,4 @@
-SUBDIRS=game
+SUBDIRS=object src utils
 
 # Doxygen
 include $(top_srcdir)/aminclude.am

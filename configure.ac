@@ -5,7 +5,6 @@ AC_INIT([Fistacuffs],[0.3],[])
 AC_CONFIG_MACRO_DIR([m4])
 
 # Compilers and build tools
-AC_PROG_CC_C99
 AC_PROG_CXXCPP
 AC_PROG_CXX
 AC_PROG_LIBTOOL
@@ -30,12 +29,6 @@ AC_SUBST([AM_CXXFLAGS])
 AC_SUBST([AM_LDFLAGS])
 
 # Check for Libraries
-## pthread
-AC_CHECK_HEADER(pthread.h, FOUND_PTHREAD=1, FOUND_PTHREAD=0)
-if test $FOUND_PTHREAD != 1; then
-    AC_MSG_ERROR([pthread.h Not found but is needed.])
-fi
-
 ## boost
 AC_CHECK_HEADER(boost/thread.hpp, FOUND_BOOSTTHREAD=1, FOUND_BOOSTTHREAD=0)
 if test $FOUND_BOOSTTHREAD != 1; then
@@ -61,13 +54,6 @@ if test $FOUND_SDL_GFX != 1; then
     AC_MSG_ERROR([SDL_gfx Not found but is needed. Please make sure it is installed.])
 fi
 
-## Check for Programs
-# Check for SWIG
-AM_PATH_PYTHON(2.6)
-AX_PKG_SWIG(1.3.17, [], [ AC_MSG_ERROR([SWIG is required to build..]) ])
-AX_SWIG_ENABLE_C
-AX_SWIG_ENABLE_PYTHON
-
 ## Doxygen
 DX_HTML_FEATURE(ON)
 DX_CHM_FEATURE(OFF)
@@ -81,9 +67,8 @@ DX_INIT_DOXYGEN([$PACKAGE_NAME],[doxygen.cfg],[doc/doxygen])
 
 # Files to generate from .am or .in files
 AC_CONFIG_FILES([Makefile
-                 game/Makefile
-                 game/src/Makefile
-                 game/object/Makefile
-                 game/object/test/Makefile
-                 game/utils/Makefile])
+                 src/Makefile
+                 object/Makefile
+                 object/test/Makefile
+                 utils/Makefile])
 AC_OUTPUT

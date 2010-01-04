@@ -1,1 +1,0 @@
-SUBDIRS=object src utils
