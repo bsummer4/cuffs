@@ -1,7 +1,7 @@
 author: bsummer4
 title: Replace Connection with handleEvent in CMB
 date: 2009-11-20T23:32:53Z
-status: open
+status: resolved
 
 The CMB Code shouldn't need to know about the Connection class at all.
 It can simply send and receive messages.
@@ -33,3 +33,10 @@ author: ben
 status: open
 
 The needs to be done now since the Connection object is going bye-bye.
+
+%%
+author: ben
+
+status: resolved
+
+This is done.  The Connection class doesn't even exist anymore.

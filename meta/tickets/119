@@ -1,5 +1,6 @@
 author: ben
 title: Make Install
+status: duplicate
 
 Get "make install" to work.
 
@@ -19,3 +20,10 @@ Here is another comment.  For example:
 > hihihi
 
     $ sudo rm -rf /; echo FFFFFFFFFUUUUUUUUUUUUU
+
+%%
+author: ben
+
+status: duplicate
+
+This is a duplicate of ticket #99

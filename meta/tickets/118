@@ -1,5 +1,6 @@
 author: ben
 title: Ticket Management System
+status: resolved
 
 Write a ticket-manipulation suite similar to the "mh" email system.
 In fact, it might be possible to just hack mh itself to work with my
@@ -34,3 +35,16 @@ project utils stuff.  I've got this working so far:
       111+ MONTH accepted bsummer4 Sometimes<<Sometimes the sockets don't ge>>
       118  MONTH open ben <<Write a ticket-manipulation suite similar to the>>
       119  MONTH open ben <<Get "make install" to work.>>
+
+%%
+author: ben
+
+status: resolved
+
+This is available at:
+
+    github.com/bsummer4/project-utilities.git
+
+It has all the features I care about except maybe easy ticket
+creation/closing.  Anyhow, I think it's good enough to close this
+ticket.
