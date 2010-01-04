@@ -1,0 +1,6 @@
+author: ben
+title: Allow joining and exiting from games
+
+This will need to change in the synchronizer.  the referee will need
+to delete all the objects for a dropped player and add an agent object
+for joining players.
