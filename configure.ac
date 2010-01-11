@@ -14,7 +14,7 @@ AC_SUBST([AM_LDFLAGS])
 # libboost
 AC_CHECK_HEADER(boost/thread.hpp, FOUND_BOOSTTHREAD=1, FOUND_BOOSTTHREAD=0)
 if test $FOUND_BOOSTTHREAD != 1; then
-    AC_MSG_ERROR([boost/thread.hpp Not found. Please make sure you have it installed.])
+    AC_MSG_ERROR([boost/thread.hpp Not found but is needed.])
 fi
 
 PKG_CHECK_MODULES(SDL, sdl >= 1.2)
