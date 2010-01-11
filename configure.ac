@@ -37,16 +37,10 @@ if test $FOUND_SDL_GFX != 1; then
 fi
 
 # Doxygen
-# TODO Do we actually have to specify ALL of these?
-DX_HTML_FEATURE(ON)
-DX_CHM_FEATURE(OFF)
-DX_CHI_FEATURE(OFF)
-DX_MAN_FEATURE(OFF)
-DX_RTF_FEATURE(OFF)
-DX_XML_FEATURE(OFF)
+# We only want HTML output, defaults are PDF, PS, and HTML.
 DX_PDF_FEATURE(OFF)
 DX_PS_FEATURE(OFF)
-DX_INIT_DOXYGEN([$PACKAGE_NAME],[doxygen.cfg],[doc/doxygen])
+DX_INIT_DOXYGEN([$PACKAGE_NAME],[doxygen.cfg],[doxygen])
 
 AC_CONFIG_FILES([Makefile
                  src/Makefile
