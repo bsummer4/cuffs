@@ -43,9 +43,9 @@ or above this directory.
 To run the game do:
 
 @verbatim
-   xterm1> ./overworld-launcher.py $username1
-   xterm2> ./overworld-launcher.py $username2 localhost
-   xterm3> ./overworld-launcher.py $username3 localhost
+   xterm1> ./overworld-launcher.tcl $username1
+   xterm2> ./overworld-launcher.tcl $username2 localhost
+   xterm3> ./overworld-launcher.tcl $username3 localhost
 @endverbatim
 
 Then, in one of the windows, select all three players and push the
