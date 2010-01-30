@@ -35,12 +35,25 @@ proc and {forms} {
     return 1 }
 
 # Misc
+proc cons {item list} { concat [list $item] $list }
 proc identity {x} { return $x }
 proc this {x} { identity $x }
 proc equal {x y} {string equal $x $y}
 proc empty? {string} {zero? [string length $string]}
 proc lempty? {list} {zero? [llength $list]}
 proc lexists? {list item} {+ 1 [lsearch -exact $list $item]}
+
+# proc partial {fn args} {
+    # set initial $args
+    # return [list args [list apply* $fn "\[concat $initial \$args\]"]] }
+
+proc puts* {args} { puts $args }
+
+proc lwithout {list item} {
+    loop {
+        set index [lsearch $list $item]
+        if {$index == -1} { return $list }
+        set list [lreplace $list $index $index] }}
 
 proc eval_file {filename} {
     set file [open $filename r]
@@ -111,6 +124,7 @@ proc loop {code} { uplevel [list while {1} $code] }
 
 # Redefinitions
 rename apply apply-lambda
-proc apply {fn arguments} {
-    if {[llength $fn] == 1} { eval [concat $fn $arguments] } \
-    else { apply-lambda $fn $arguments }}
+proc apply {fn args} { apply* $fn $args }
+proc apply* {fn arguments} {
+    if {[llength $fn] == 1} { eval [cons $fn $arguments] } \
+    else { eval [cons apply-lambda [cons $fn $arguments]] }}

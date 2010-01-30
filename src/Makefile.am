@@ -3,7 +3,7 @@ gamedatadir=\"$(datadir)/@PACKAGE@\"
 AM_CXXFLAGS = -Wall -O0 -g -I../object @SDL_CFLAGS@  -DDATADIRR=$(gamedatadir)
 AM_CFLAGS = $(AM_CXXFLAGS)
 
-bin_SCRIPTS = ref.tcl overworld-client.py overworld-server.py \
+bin_SCRIPTS = ref.tcl overworld-client.py overworld-server.tcl \
               overworld-launcher.tcl server.sh map_parse.xotcl lib.tcl
 
 bin_PROGRAMS = game
