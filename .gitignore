@@ -3,6 +3,7 @@ switchbox/switchbox
 switchbox/sixty-nine
 
 # autotools junk
+game
 Makefile
 !switchbox/Makefile
 aclocal.m4
