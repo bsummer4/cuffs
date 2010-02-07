@@ -8,7 +8,7 @@ proc with_result {code} {
     uplevel {this $result}}
 
 # Arithmetic
-set operators [list + - * / < > <= >= ==]
+set operators [list + - * / < > <= >= == !=]
 foreach operator $operators {
     proc $operator {x y} "expr \$x $operator \$y" }
 proc zero? {x} {== $x 0}
@@ -42,6 +42,10 @@ proc equal {x y} {string equal $x $y}
 proc empty? {string} {zero? [string length $string]}
 proc lempty? {list} {zero? [llength $list]}
 proc lexists? {list item} {+ 1 [lsearch -exact $list $item]}
+
+proc shellproc {command {procname {}}} {
+    if {[string equal {} $procname]} { set procname $command }
+    proc $procname args " eval \[concat exec $command \$args\] "}
 
 # proc partial {fn args} {
     # set initial $args
@@ -93,6 +97,10 @@ proc noop {} { return 0 }
 proc set* {varlist value} {
     foreach var $varlist {
         uplevel "set $var $value" }}
+
+proc choice code {
+    # Randomly run one of the statements in the body of $code
+    uplevel [random_choice [split $code ";\n"]] }
 
 # TODO setf
 # set group {0 1 2 3 4 {5 6 7 8}}
