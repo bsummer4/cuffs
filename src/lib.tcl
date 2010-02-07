@@ -100,7 +100,7 @@ proc set* {varlist value} {
 
 proc choice code {
     # Randomly run one of the statements in the body of $code
-    uplevel [random_choice [split $code ";\n"]] }
+    uplevel [random_choice [split [string trim $code] ";\n"]] }
 
 # TODO setf
 # set group {0 1 2 3 4 {5 6 7 8}}
