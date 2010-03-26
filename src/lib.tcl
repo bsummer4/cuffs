@@ -72,10 +72,9 @@ proc do {shell_string} {
     return $results }
 
 proc range {bound} {
-    set result [list]
-    for {set i 0} {$i < $bound} {incr i} {
-        lappend result $i }
-    return $result }
+    with_result {
+        for {set i 0} {$i < $bound} {incr i} {
+            lappend result $i }}}
 
 proc map {fn list} {
     # map {x {+ 1 $x}} { 3  4  5 } -> {4 5 6}
