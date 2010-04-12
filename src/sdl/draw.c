@@ -5,18 +5,12 @@
 #include <SDL/SDL_mixer.h>
 #include <SDL/SDL_gfxPrimitives.h>
 #include <assert.h>
+#include "draw.h"
 #include "macro.h"
 #include "vectors.hpp"
 using namespace vectors;
 
 #define error(str) exit(1);
-#define MAX_SURFACES 100
-#define MAX_SOUNDS 100
-#define INVALID 0
-typedef SDL_Surface *surface;
-typedef Mix_Chunk *chunk;
-typedef unsigned ImageId;
-typedef unsigned SoundId;
 
 static surface surfaces[MAX_SURFACES];
 static chunk sounds[MAX_SOUNDS];
@@ -127,16 +121,9 @@ void draw_arrow(int red, int green, int blue,
 	                 base_minus.x, base_minus.y,
 	                 red, green, blue, 128); }
 
-int main(void) {
+int sdl_init(void) {
 	SDL_Init(SDL_INIT_TIMER | SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 	surface s = SDL_SetVideoMode(800, 600, 32, SDL_HWSURFACE|SDL_DOUBLEBUF);
 	SDL_WM_SetCaption("hai", NULL);
 	draw_init(s);
-	int ii = 1;
-	int jj = 1;
-	while (ii++) {
-		if (!(ii%10)) jj++;
-		draw_circle((ii*4)%11-(ii*3)%9, jj%255, ii%255, ii%64+ii%60,
-		            ii%800 + (jj % 9), (jj+ii)%600);
-		flip(); }
 	return 0; }
