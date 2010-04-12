@@ -128,4 +128,15 @@ void draw_arrow(int red, int green, int blue,
 	                 red, green, blue, 128); }
 
 int main(void) {
+	SDL_Init(SDL_INIT_TIMER | SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+	surface s = SDL_SetVideoMode(800, 600, 32, SDL_HWSURFACE|SDL_DOUBLEBUF);
+	SDL_WM_SetCaption("hai", NULL);
+	draw_init(s);
+	int ii = 1;
+	int jj = 1;
+	while (ii++) {
+		if (!(ii%10)) jj++;
+		draw_circle((ii*4)%11-(ii*3)%9, jj%255, ii%255, ii%64+ii%60,
+		            ii%800 + (jj % 9), (jj+ii)%600);
+		flip(); }
 	return 0; }
