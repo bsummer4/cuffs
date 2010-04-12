@@ -24,7 +24,7 @@ static inline void event_loop () {
 
 int main (int argc, char **argv) {
 	SDL_Init(SDL_INIT_TIMER | SDL_INIT_VIDEO | SDL_INIT_AUDIO);
-	SDL_SetVideoMode(800, 600, 32, SDL_HWSURFACE|SDL_DOUBLEBUF);
+	SDL_SetVideoMode(40, 40, 32, SDL_HWSURFACE|SDL_DOUBLEBUF);
 	SDL_WM_SetCaption("hai", NULL);
 	keys_init(print_state);
 	event_loop();
