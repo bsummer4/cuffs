@@ -1,9 +1,6 @@
 // # SDL Input Listener
 // A simple library for listening to SDL input events.
 //
-// TODO This has a bug where sometimes a key will get added twice.
-//      I'm not sure how this can happen, but it usually happens when
-//      there are modifier keys involved.
 // TODO Don't {} quote things that don't need to be {} quoted.
 
 #include <stdlib.h>
@@ -19,7 +16,7 @@ static struct sdl_input_state s;
 
 template <typename T>
 static inline int lsearch(T v, T *base, int max) {
-	FORII (max) { if (v == *base) return ii; }
+	FORII (max) { if (v == base[ii]) return ii; }
 	return -1; }
 
 template <typename T>
