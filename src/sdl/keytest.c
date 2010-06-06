@@ -1,5 +1,8 @@
-// # Temporary Testing Scaffolding
-// g++ -Wall -Werror -lSDL keys.c keytest.c
+// # Keys Test
+
+// This file just tests the keyevent detection in keys.c.  Run it and
+// it will bring up a window.  Whenever a key is pressed or released,
+// a list of depresed keys is printed to stdout.
 
 #include <stdio.h>
 #include <SDL/SDL.h>
@@ -10,10 +13,11 @@ static inline char *keyname (SDLKey k) { return SDL_GetKeyName(k); }
 
 static void print_state (sdl_input_state *s) {
 	printf("keys {");
-	FORII (s->downkeys)
-		printf("{%s == %d}%s",
-		       keyname(s->keys[ii]), s->keys[ii],
-		       ii==s->downkeys-1 ? "" : " ");
+	FORII (s->downkeys) {
+		char *name = keyname(s->keys[ii]);
+		bool last = ii==s->downkeys-1;
+		bool quote = strchr(name, ' ');
+		printf("%s%s%s%s", (quote?"{":""), name, (quote?"}":""), (last?"":" ")); }
 	puts("}"); }
 
 static inline void event_loop () {

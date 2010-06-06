@@ -1,7 +1,8 @@
 // # SDL Input Listener
 // A simple library for listening to SDL input events.
 //
-// TODO Don't {} quote things that don't need to be {} quoted.
+// Currently, we keep track of the mouse position, the depressed mouse
+// buttons, and the depressed keyboard buttons
 
 #include <stdlib.h>
 #include <strings.h>
