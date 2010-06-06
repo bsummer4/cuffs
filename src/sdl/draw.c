@@ -121,7 +121,8 @@ void draw_arrow(int red, int green, int blue,
 
 int sdl_init(void) {
 	SDL_Init(SDL_INIT_TIMER | SDL_INIT_VIDEO | SDL_INIT_AUDIO);
-	surface s = SDL_SetVideoMode(800, 600, 32, SDL_HWSURFACE|SDL_DOUBLEBUF);
+	surface s = SDL_SetVideoMode(800, 600, 32,
+	                             SDL_HWSURFACE|SDL_DOUBLEBUF);
 	SDL_WM_SetCaption("hai", NULL);
 	draw_init(s);
 	return 0; }
