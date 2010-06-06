@@ -1,0 +1,14 @@
+* TODO Finish Input Sending
+  The input monitoring code is complete, however, in the test code,
+  it's not setup to actually print everything (mouse position changes,
+  and mouse button changes are not printed).
+
+* TODO Add all the old 'prims'
+  Add all the drawing shapes that we were using in the previous
+  implementation.
+
+* TODO Finish work with 'ents'
+  The loop is in place, but the commands need to be implemented.
+
+* TODO Implement 'Event Hooks'
+  As it says in README

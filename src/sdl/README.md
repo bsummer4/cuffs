@@ -1,8 +1,8 @@
 # SDL Tool
 This is a wrapper around SDL and Tcl.  Basically this is a unix-style
-program that maintains an image, changes the image based on input from
-stdin, and displays all information regarding keyboard and mouse movement
-to stdout.
+program that maintains an image on the screen, changes the image based
+on input from stdin, and displays all information regarding keyboard
+and mouse movement to stdout.
 
 ## Basic Design
 ### Primitive Drawing Objects (prims)
@@ -22,10 +22,12 @@ If you'd like, you can deal only with primitives like this:
     flip
     white
 
-However, this is a lot of IO, and forces another tool to deal with the
-complexities of clearing the screen, etc.  So there is a mechanism for
-managing a set of objects, and leaving the actually drawing, clearing,
-and refreshing to the tool.  These are called ents.
+However, this is a lot of IO (send a message every time the mouse
+moves a pixel; sending a ton of messages every frame to maintain a
+GUI, etc), and forces another tool to deal with the complexities of
+clearing the screen, etc.  So there is a mechanism for managing a set
+of objects, and leaving the actually drawing, clearing, and refreshing
+to this tool.  We call these objects ents.
 
 ### Entities (ents)
 Ents are basically just a named, mutable hunk of drawing code.  This
@@ -61,19 +63,19 @@ movement, key press, key release, etc., a message is printed:
     mouse 4 4
 
 ### Event Hooks: Dealing with UIs and Animations
-    Doing any serious work with this system requires an obscene amount
-    of IO and moves a lot of complexity to the tools we're talking to.
-    To deal with this we allow you to define TCL Procedures, bind
-    hunks of code to various events, and suppress certain types of
-    output:
+Doing any serious work with this system requires an obscene amount
+of IO and moves a lot of complexity to the tools we're talking to.
+To deal with this we allow you to define TCL Procedures, bind
+hunks of code to various events, and suppress certain types of
+output:
 
-        suppress mouse  ;# Don't send mouse events
-        ent cursor {circle {0 0} 5 {0 0 0 0}}
-        bind mouse mcursor {x y} { cursor -pos [list $x $y] }
+    suppress mouse  ;# Don't send mouse events
+    ent cursor {circle {0 0} 5 {0 0 0 0}}
+    bind mouse mcursor {x y} { cursor -pos [list $x $y] }
 
-        suppress keys   ;# Don't send keyboard events
-        bind keys quitkey args {
-            if {[memberof $args escape]} { puts done; exit }}
+    suppress keys   ;# Don't send keyboard events
+    bind keys quitkey args {
+        if {[memberof $args escape]} { puts done; exit }}
 
 #### TODO MOAR
-     Work out how to do animations with time-based events.
+Work out how to do animations with time-based events.
