@@ -10,7 +10,7 @@
 #include "keys.h"
 #include "macro.h"
 
-// Initialized int keys_init(callback).
+// Initialized at keys_init(callback).
 static sdl_input_state_handler callback;
 static struct sdl_input_state s;
 
@@ -24,10 +24,10 @@ static inline void add (T t, T *ts, int *used, int max) {
 	int ii = lsearch (t, ts, *used);
 	if (-1 == ii && *used < max) ts[(*used)++] = t; }
 
+// Delete an element from an array
 template <typename T>
-static inline void del (T t, T *ts, int *used, int max) {
+static inline void del (T t, T *ts, int *used) {
 	int ii = lsearch (t, ts, *used);
-	// printf(" --found: %d --", ii);
 	if (-1 == ii) return;
 	const int last = *used - 1;
 	if (ii != last) ts[ii] = ts[last];
@@ -38,17 +38,15 @@ static inline void add_key (SDLKey k) {
 static inline void add_mbutton (Uint8 b) {
 	add(b, s.mousebuttons, &s.downbuttons, 5); }
 static inline void del_key(SDLKey k) {
-	del(k, s.keys, &s.downkeys, MAX_PRESSED_KEYS); }
+	del(k, s.keys, &s.downkeys); }
 static inline void del_mbutton (Uint8 b) {
-	del(b, s.mousebuttons, &s.downbuttons, 5); }
+	del(b, s.mousebuttons, &s.downbuttons); }
 
 static inline char *keyname (SDLKey k) { return SDL_GetKeyName(k); }
 
 static inline void handle_keyevent (SDL_KeyboardEvent *e) {
 	SDLKey k = e->keysym.sym;
 	if (k == SDLK_ESCAPE) exit(0);
-	// printf("  -- %s(%d) is now %s --", keyname(k), k,
-	// (e->type == SDL_KEYDOWN) ? "down" : "up");
 	if (e->type == SDL_KEYDOWN) add_key(k);
 	else del_key(k);
 	s.mod = e->keysym.mod; }

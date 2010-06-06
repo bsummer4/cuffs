@@ -1,8 +1,8 @@
 # SDL Tool
-This is a language wrapper around SDL and Tcl.  Basically this is a
-unix filter that maintains an image, changes the image based on input
-from stdin, and displays all information regarding keyboard and mouse
-movement to stdout.
+This is a wrapper around SDL and Tcl.  Basically this is a unix-style
+program that maintains an image, changes the image based on input from
+stdin, and displays all information regarding keyboard and mouse movement
+to stdout.
 
 ## Basic Design
 ### Primitive Drawing Objects (prims)
