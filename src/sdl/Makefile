@@ -7,7 +7,7 @@ all: tcl tests
 tcl: sdl.so
 tests: drawtest keytest tcl
 test: tests; ./keytest && ./sdltest.tcl && ./drawtest
-clean:; rm -f sdl_wrap.c *~ sdl.so drawtest keytest
+clean:; rm -f sdl_wrap.c *~ sdl.so drawtest keytest *.o
 
 drawtest: draw.c drawtest.c; g++ $^ $(SDL) -o $@
 keytest: keys.c keytest.c; g++ $^ $(SDL) -o $@
