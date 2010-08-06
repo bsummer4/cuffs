@@ -1,7 +1,0 @@
-project Fistacuffs
-to understand do { $PAGER < README }
-to setup do { ./Bootstrap && ./configure }
-to build do { make }
-to clean do { make distclean; ./Bootstrap clean }
-locate tickets {meta/tickets}
-locate authors {meta/authors}
