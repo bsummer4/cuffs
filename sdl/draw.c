@@ -18,45 +18,44 @@ static surface screen;
 static unsigned next_surface = 1; // 0 is INVALID_ID
 static unsigned next_sound = 1; // 0 is INVALID_ID
 
-static inline void hide_cursor() { SDL_ShowCursor(SDL_DISABLE); }
-static inline void make_white_undrawn(surface surface) {
+static void make_white_undrawn(surface surface) {
 	const Uint32 white = SDL_MapRGB(surface->format, 255, 255, 255);
 	SDL_SetColorKey(surface, SDL_SRCCOLORKEY, white); }
 
 // Frees the old surface and replaces it with an optimized version
-static inline void optimize(surface *s) {
+static void optimize(surface *s) {
 	surface old = *s;
 	surface result = SDL_DisplayFormat(old);
 	if (!result) errx(1, "Couldn't optimize image.  ");
 	SDL_FreeSurface(old);
 	*s = result; }
 
-static inline surface load_image(const char *filename) {
+static surface load_image(const char *filename) {
 	surface result = IMG_Load(filename);
 	if (!result) errx(1, "Couldn't load image.  ");
 	optimize(&result);
 	return result; }
 
-static inline chunk load_sound(const char *filename) {
+static chunk load_sound(const char *filename) {
 	chunk result = Mix_LoadWAV(filename);
 	if (!result) errx(1, "Couldn't load sound.  ");
 	return result; }
 
-static inline void apply (int x, int y, surface from, surface dest) {
+static void apply (int x, int y, surface from, surface dest) {
 	SDL_Rect offset = {x, y};
 	assert(!SDL_BlitSurface(from, NULL, dest, &offset)); }
 
-static inline surface get_surface(ImageId id) {
+static surface get_surface(ImageId id) {
 	if (!(id < 1 || id >= next_surface)) errx(1, "Invalid Image Id");
 	return surfaces[id]; }
 
-static inline chunk get_chunk (SoundId id) {
+static chunk get_chunk (SoundId id) {
 	if (!(id < 1 || id >= next_sound)) errx(1, "Invalid Sound Id");
 	return sounds[id]; }
 
 // Public Interface
 void flip() { SDL_Flip(screen); }
-void draw_init (surface screen_) { screen = screen_; }
+
 ImageId image (const char *filename) {
 	if (next_surface > MAX_SURFACES) return INVALID_ID;
 	surfaces[next_surface] = load_image(filename);
@@ -120,10 +119,14 @@ void draw_arrow(int red, int green, int blue,
 	                 base_minus.x, base_minus.y,
 	                 red, green, blue, 128); }
 
-int sdl_init(void) {
-	SDL_Init(SDL_INIT_TIMER | SDL_INIT_VIDEO | SDL_INIT_AUDIO);
-	surface s = SDL_SetVideoMode(800, 600, 32,
-	                             SDL_HWSURFACE|SDL_DOUBLEBUF);
-	SDL_WM_SetCaption("hai", NULL);
-	draw_init(s);
+int sdl_init (int h, int w, int bpp, char *caption) {
+	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+	SDL_EnableKeyRepeat(60, 60);
+	surface s = SDL_SetVideoMode(h, w, bpp, SDL_HWSURFACE|SDL_DOUBLEBUF);
+	SDL_ShowCursor(SDL_DISABLE);
+	SDL_WM_SetCaption(caption, NULL);
+	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 1, 256);
+	screen = s;
 	return 0; }
+
+int sdl_die () { Mix_CloseAudio(); }

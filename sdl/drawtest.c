@@ -12,7 +12,7 @@
 
 int main (void) {
 	unsigned ii = 1, jj = 1;
-	sdl_init();
+	sdl_init(800, 600, 32, "drawtest");
 	while ((ii++ < 12000)) {
 		if (!(ii%10)) jj++;
 		draw_circle((ii*4)%11-(ii*3)%9, jj%255, ii%255, ii%64+ii%60,

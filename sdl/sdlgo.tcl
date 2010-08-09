@@ -10,7 +10,7 @@ proc appendl args {
     return $result }
 
 proc circle {radius pos color} {
-    eval [appendl draw_circle $radius $color $pos] }
+    eval [appendl circ $radius $color $pos] }
 
 proc every {ms command} {
     uplevel #0 $command
