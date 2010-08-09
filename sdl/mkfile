@@ -13,27 +13,28 @@ o.sdltcl: vector2.o draw.o keys.o
 
 <$PLAN9/src/mkmany
 
-tcltest:V: all
-	(	for cmd in white \
-		           'circle 40 {50 50} {255 0 0}' \
-		           'line 5 255 128 0 5 5 555 555' \
-		           'circle 30 {50 50} {0 255 0}' \
-		           'rect 20 20 420 420 0 0 0 128' \
-		           'circle 20 {50 50} {0 0 255}' \
-                 'arrow 255 0 64 400 200 90 90' \
-		           'set r [image rock.pgm]' \
-		           'set rs [sprite rock.pgm]' \
-		           'set s [sound shot.wav]' \
-		           'play $s' \
-                 'draw-center $r 430 540; draw-center $r 490 540' \
-		           'play $s' \
-		           'draw $rs 460 400'
-		do echo $cmd; echo flip; sleep 0.333
-		done
-		sleep .667
-	) | ./o.sdltcl
+primtest:V: all
+	{	{	sed 's/$/; flip; exec sleep 0.1/'; echo exec sleep 2; } |
+		./o.sdltcl
+	} <<'EOF'
+		white
+		circle 40 {50 50} {255 0 0}
+		line 5 255 128 0 5 5 555 555
+		circle 30 {50 50} {0 255 0}
+		rect 20 20 420 420 0 0 0 128
+		circle 20 {50 50} {0 0 255}
+		arrow 255 0 64 400 200 90 90
+		set r [image rock.pgm]
+		set rs [sprite rock.pgm]
+		set s [sound shot.wav]
+		play $s
+		draw-center $r 430 540; draw-center $r 490 540
+		play $s
+		draw $rs 460 400
+	EOF
+	sleep .667
 
-test:V: all tcltest
+test:V: all primtest
 	./o.drawtest
 	echo "Press keys into the SDL window.  Press ESC when done."
 	./o.keytest
