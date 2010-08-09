@@ -1,8 +1,0 @@
-The Generator Test function is designed to follow most, but not all, of the
-specifications in the State_Generator_Test.pdf file. In order to execute the
-file all, one must simply enter "make check" into the terminal. Then it will
-print 10 state messages and exit. These state messages follow our message protocol
-and contain random data generated within the file. This test works except it 
-does not read the time from the global virtual time. That will be taken care of in
-CMBclientTest and CMBgo.sh. These tests are the proof-of-concept and display a
-fully-functioning CMB state manager.

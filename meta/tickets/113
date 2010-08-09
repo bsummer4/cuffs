@@ -1,9 +1,0 @@
-author: bsummer4
-title: Add chat to overworld-client.py
-date: 2009-12-11T08:36:40Z
-status: resolved
-
-Make a textbox and a text field and show all traffic happening on the
-overworld switchbox.
-
-Maybe add a checkbox to hide /commands.

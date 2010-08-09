@@ -1,9 +1,0 @@
-delayed-cat
-map-pgm example
-sync-cat 0 1
-interpret
-physics example 1 1
-cat
-render
-game ben
-sleep-cat

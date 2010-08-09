@@ -1,8 +1,0 @@
-author: bsummer4@eecs.utk.edu
-title: Replace all Python scripts with Tcl scripts.
-date: Sun Feb  7 13:43:13 EST 2010
-
-It would probably best not to require both Python and Tcl, and, since
-the plan is to use Tcl to glue modules together in the game itself, Tcl
-seems like the logical choice.  Also, it's a much nicer language than Python
-in many ways.

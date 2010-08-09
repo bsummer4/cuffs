@@ -1,9 +1,0 @@
-author: ben
-title: TCL Interpreters
-
-Replace all the handleEvent methods that are big switches with TCL
-Interpreters.  You can build an interpreter in the constructor for an
-object, and then make a method handleEvent that passes strings to it's
-eval function.
-
-cpptcl works nice for this.

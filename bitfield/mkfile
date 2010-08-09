@@ -1,0 +1,23 @@
+CFLAGS = --std=c99 -Wall -pedantic -I/usr/include/tcl8.5
+LDFLAGS = -lm -ltcl8.5
+CC = 9c
+LD = 9l
+
+all:V: bitfield.so
+clean:V:
+	rm -f bitfield_test bitfield_wrap.c bitfield.so *.o
+
+test:V: bitfield_test
+	./bitfield_test
+
+%.o: %.c
+	$CC $CFLAGS -c $stem.c
+
+bitfield_test: bitfield.o bitfield_test.o
+	$LD $CFLAGS $prereq -o $target
+
+bitfield_wrap.c: bitfield.i bitfield.c bitfield.h
+	swig -tcl bitfield.i
+
+bitfield.so: bitfield.o bitfield_wrap.o
+	$LD $prereq -shared $TCL $CFLAGS -o $target
