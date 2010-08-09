@@ -14,7 +14,7 @@ o.sdltcl: vector2.o draw.o keys.o
 <$PLAN9/src/mkmany
 
 primtest:V: all
-	{	{	sed 's/$/; flip; exec sleep 0.1/'; echo exec sleep 2; } |
+	{	{	sed 's/$/; flip; exec sleep 0.25/'; echo exec sleep .5; } |
 		./o.sdltcl
 	} <<'EOF'
 		white
@@ -32,7 +32,6 @@ primtest:V: all
 		play $s
 		draw $rs 460 400
 	EOF
-	sleep .667
 
 test:V: all primtest
 	./o.drawtest
