@@ -1,5 +1,6 @@
 // Implementation of tclloop.h
 
+#include <stdbool.h>
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_mixer.h>
 #include "draw.h"
@@ -22,7 +23,7 @@ void entloop_ () {
 
 static inline char *keyname (SDLKey k) { return SDL_GetKeyName(k); }
 
-static void print_stat (sdl_input_state *s) {
+static void print_stat (struct sdl_input_state *s) {
 	printf("keys {");
 	FORII (s->downkeys) {
 		char *name = keyname(s->keys[ii]);

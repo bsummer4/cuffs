@@ -11,13 +11,14 @@
 */
 
 #include <SDL/SDL.h>
+#include <stdbool.h>
 #include "keys.h"
 #include <stdio.h>
 #include "macro.h"
 
 static inline char *keyname (SDLKey k) { return SDL_GetKeyName(k); }
 
-static void print_state (sdl_input_state *s) {
+static void print_state (struct sdl_input_state *s) {
 	printf("keys {");
 	FORII (s->downkeys) {
 		char *name = keyname(s->keys[ii]);

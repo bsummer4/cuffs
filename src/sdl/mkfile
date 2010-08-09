@@ -2,14 +2,12 @@
 
 SDL = `{pkg-config --cflags sdl} -lSDL_image -lSDL_gfx -lSDL_mixer
 LDFLAGS = -ltcl8.5 -lm $SDL
-CC = g++ -c
-LD = g++
 CFLAGS = --std=c99 -Wall -pedantic
 CLEANFILES = sdl_wrap.c sdl.so
 TARG = drawtest keytest
 
 all:V: sdl.so
-o.drawtest: draw.o
+o.drawtest: draw.o vector2.o
 o.keytest: keys.o
 
 <$PLAN9/src/mkmany
@@ -20,5 +18,5 @@ test:V: all
 sdl_wrap.c: sdl.i draw.c draw.h
 	swig -tcl sdl.i
 
-sdl.so: tclloop.c keys.c draw.c sdl_wrap.c
-	g++ $prereq -shared $LDFLAGS $CFLAGS -o $target
+sdl.so: tclloop.c keys.c draw.c sdl_wrap.c vector2.c
+	gcc $prereq -shared $LDFLAGS $CFLAGS -o $target

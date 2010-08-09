@@ -1,14 +1,15 @@
 // Implementation for draw.h
 
+#include <math.h>
+#include <stdbool.h>
+#include "vector2.h"
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_mixer.h>
 #include <SDL/SDL_gfxPrimitives.h>
 #include "draw.h"
 #include <assert.h>
-#include "vectors.hpp"
 #include "macro.h"
-using namespace vectors;
 
 #define error(str) exit(1);
 
@@ -107,14 +108,13 @@ void draw_rect(int x0, int y0, int x1, int y1, int red, int green,
 
 void draw_arrow(int red, int green, int blue,
                 int x0, int y0, int x1, int y1) {
-	typedef Vector2 <double> V2;
-	V2 from(x0, y0);
-	V2 to(x1, y1);
-	V2 translation(from - to);
-	double length = translation.norm();
-	V2 perp_trans = translation.perp().normalized() *  (length / 6);
-	V2 base_minus = from - perp_trans;
-	V2 base_plus = from + perp_trans;
+	V2 from = {x0, y0};
+	V2 to = {x1, y1};
+	V2 translation = v2sub(from, to);
+	double length = v2norm(translation);
+	V2 perp_trans = v2mul(v2normalized(v2perp(translation)), length/6);
+	V2 base_minus = v2sub(from, perp_trans);
+	V2 base_plus = v2add(from, perp_trans);
 	filledTrigonRGBA(screen,
 	                 to.x, to.y,
 	                 base_plus.x, base_plus.y,
