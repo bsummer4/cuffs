@@ -22,13 +22,15 @@ static void print_stat (struct sdl_input_state *s) {
 		printf("%s%s%s%s", (quote?"{":""), name, (quote?"}":""), (last?"":" ")); }
 	puts("}"); }
 
-#define NCMDS 12
+// # Tcl setup
+
+#define NCMDS 13
 enum { FLIP=0, WHITE, LINE, RECT, CIRCLE, ARROW, DRAW_CENTER, DRAW, PLAY,
-       IMAGE, SOUND, ENTLOOP };
+       SPRITE, IMAGE, SOUND, ENTLOOP };
 
 static char *cmds[NCMDS] = {"flip", "white", "line", "rect", "circ",
                             "arrow", "draw-center", "draw", "play",
-                            "image", "sound", "entloop"};
+                            "sprite", "image", "sound", "entloop"};
 
 static int Draw (ClientData d, Tcl_Interp *i, int objc, Tcl_Obj *CONST objv[]) {
 	switch ((int)d) {
@@ -57,6 +59,41 @@ static int Draw (ClientData d, Tcl_Interp *i, int objc, Tcl_Obj *CONST objv[]) {
 		for (int ii=0; ii < 7; ii++)
 			Tcl_GetIntFromObj(i, objv[ii+1], p+ii);
 		draw_arrow(p[0], p[1], p[2], p[3], p[4], p[5], p[6]);
+		break; }
+	case DRAW_CENTER: {
+		int p[3];
+		for (int ii=0; ii < 3; ii++)
+			Tcl_GetIntFromObj(i, objv[ii+1], p+ii);
+		draw_center(p[0], p[1], p[2]);
+		break; }
+	case DRAW: {
+		int p[3];
+		for (int ii=0; ii < 3; ii++)
+			Tcl_GetIntFromObj(i, objv[ii+1], p+ii);
+		draw(p[0], p[1], p[2]);
+		break; }
+	case PLAY: {
+		int id;
+		Tcl_GetIntFromObj(i, objv[1], &id);
+		play(id);
+		break; }
+	case SOUND: {
+		char *x = Tcl_GetStringFromObj(objv[1], NULL);
+		int id = sound(x);
+		if (!id) { warn("Couldn't load sound '%s'", x); return TCL_ERROR; }
+		Tcl_SetObjResult(i, Tcl_NewIntObj(id));
+		break; }
+	case SPRITE: {
+		char *x = Tcl_GetStringFromObj(objv[1], NULL);
+		int id = sprite(x);
+		if (!id) { warn("Couldn't load image '%s'", x); return TCL_ERROR; }
+		Tcl_SetObjResult(i, Tcl_NewIntObj(id));
+		break; }
+	case IMAGE: {
+		char *x = Tcl_GetStringFromObj(objv[1], NULL);
+		int id = image(x);
+		if (!id) { warn("Couldn't load image '%s'", x); return TCL_ERROR; }
+		Tcl_SetObjResult(i, Tcl_NewIntObj(id));
 		break; }
 	case ENTLOOP:
 		for (;;) Sdl_DoOneEvent(), Tcl_DoOneEvent(TCL_DONT_WAIT); }

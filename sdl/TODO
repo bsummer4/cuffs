@@ -12,3 +12,7 @@
 
 * TODO Implement 'Event Hooks'
   As it says in README
+
+* TODO Cleanup Tcl proc definitions in Draw()
+  There's lot of repitition.  Write some functions or macros to clean it
+  up.

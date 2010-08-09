@@ -21,7 +21,7 @@ set buf {}
 proc interpret line {
 	append ::buf $line "\n"
 	if {[info complete $::buf]} {
-		puts [string trim $::buf]
+		puts [regsub -all "\n" "\n[string trim $::buf]" "\n  -- "]
 		catch "uplevel #0 {$::buf}"
 		set ::buf {}}}
 
