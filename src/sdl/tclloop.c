@@ -18,10 +18,9 @@ void do_one_event () {
 	Sdl_DoOneEvent();
 	Tcl_DoOneEvent(TCL_DONT_WAIT); }
 
-void entloop_ () {
-	while (1) do_one_event(); }
+void entloop_ () { for (;;) do_one_event(); }
 
-static inline char *keyname (SDLKey k) { return SDL_GetKeyName(k); }
+static char *keyname (SDLKey k) { return SDL_GetKeyName(k); }
 
 static void print_stat (struct sdl_input_state *s) {
 	printf("keys {");

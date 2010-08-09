@@ -10,8 +10,7 @@
 #include "draw.h"
 #include <assert.h>
 #include "macro.h"
-
-#define error(str) exit(1);
+#include <err.h>
 
 static surface surfaces[MAX_SURFACES];
 static chunk sounds[MAX_SOUNDS];
@@ -28,19 +27,19 @@ static inline void make_white_undrawn(surface surface) {
 static inline void optimize(surface *s) {
 	surface old = *s;
 	surface result = SDL_DisplayFormat(old);
-	if (!result) error("Couldn't optimize image.  ");
+	if (!result) errx(1, "Couldn't optimize image.  ");
 	SDL_FreeSurface(old);
 	*s = result; }
 
 static inline surface load_image(const char *filename) {
 	surface result = IMG_Load(filename);
-	if (!result) error("Couldn't load image.  ");
+	if (!result) errx(1, "Couldn't load image.  ");
 	optimize(&result);
 	return result; }
 
 static inline chunk load_sound(const char *filename) {
 	chunk result = Mix_LoadWAV(filename);
-	if (!result) error("Couldn't load sound.  ");
+	if (!result) errx(1, "Couldn't load sound.  ");
 	return result; }
 
 static inline void apply (int x, int y, surface from, surface dest) {
@@ -48,11 +47,11 @@ static inline void apply (int x, int y, surface from, surface dest) {
 	assert(!SDL_BlitSurface(from, NULL, dest, &offset)); }
 
 static inline surface get_surface(ImageId id) {
-	if (!(id < 1 || id >= next_surface)) error("Invalid Image Id");
+	if (!(id < 1 || id >= next_surface)) errx(1, "Invalid Image Id");
 	return surfaces[id]; }
 
 static inline chunk get_chunk (SoundId id) {
-	if (!(id < 1 || id >= next_sound)) error("Invalid Sound Id");
+	if (!(id < 1 || id >= next_sound)) errx(1, "Invalid Sound Id");
 	return sounds[id]; }
 
 // Public Interface
@@ -78,7 +77,7 @@ void draw_center(ImageId id, int x, int y) {
 
 void draw(ImageId id, int x, int y) {
 	surface s = get_surface(id);
-	if (!s) error("No such image");
+	if (!s) errx(1, "No such image");
 	apply(x, y, s, screen); }
 
 void play(int id) {

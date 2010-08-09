@@ -7,21 +7,18 @@ proc every {ms command} {
     after $ms [list every $ms $command] }
 
 set buf {}
+
+# Interprets a line that might be an incomplete input.
 proc interpret line {
-    # Interprets a line that might be an incomplete input.
-    global buf
-    # TODO Why doesn't this work:
-    # append buf "$line\n"
-    set buf [concat $buf $line "\n"]
-    if {[info complete $buf]} {
-        puts $buf
-        catch "uplevel #0 {$buf}"
-        set buf {}}}
+	append ::buf $line "\n"
+	if {[info complete $::buf]} {
+		puts [string trim $::buf]
+		catch "uplevel #0 {$::buf}"
+		set ::buf {}}}
 
 proc go {} {
     if {[eof stdin]} exit
     set line [gets stdin]
-    puts "-- $line"
     interpret $line }
 
 proc entloop {} {
