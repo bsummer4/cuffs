@@ -1,14 +1,23 @@
-#!/usr/bin/env tclsh8.5
+proc list_with list {
+    for {set i 0} {$i < [llength $list]} {incr i} {
+        uplevel "set $i [lindex $list $i]" }}
 
-source sdl.tcl
+proc appendl args {
+    set result [list]
+    foreach arg $args {
+        foreach elt $arg {
+            lappend result $elt }}
+    return $result }
+
+proc circle {radius pos color} {
+    eval [appendl draw_circle $radius $color $pos] }
 
 proc every {ms command} {
     uplevel #0 $command
     after $ms [list every $ms $command] }
 
-set buf {}
-
 # Interprets a line that might be an incomplete input.
+set buf {}
 proc interpret line {
 	append ::buf $line "\n"
 	if {[info complete $::buf]} {
@@ -21,9 +30,5 @@ proc go {} {
     set line [gets stdin]
     interpret $line }
 
-proc entloop {} {
-    fileevent stdin readable go
-    hai_init
-    entloop_ }
-
+fileevent stdin readable go
 entloop

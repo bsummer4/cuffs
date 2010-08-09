@@ -12,6 +12,3 @@
 
 * TODO Implement 'Event Hooks'
   As it says in README
-
-* TODO Build my own interpreter
-  staticly link an interpreter instead of making a shared lib
