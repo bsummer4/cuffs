@@ -1,12 +1,18 @@
-// # Keys Test
+/*
+	# Keys Test
 
-// This file just tests the keyevent detection in keys.c.  Run it and
-// it will bring up a window.  Whenever a key is pressed or released,
-// a list of depresed keys is printed to stdout.
+	This program just tests the keyevent detection in keys.c.  Run it
+	and it will bring up a window.	Whenever a key is pressed or
+	released, a list of depresed keys is printed to stdout.
 
-#include <stdio.h>
+	## TODO Mouse Supoort
+
+   Add supoprt for optional mouse position and button state output.
+*/
+
 #include <SDL/SDL.h>
 #include "keys.h"
+#include <stdio.h>
 #include "macro.h"
 
 static inline char *keyname (SDLKey k) { return SDL_GetKeyName(k); }

@@ -1,3 +1,9 @@
+/*
+	Implementation of a crappy vector library for C++;
+
+	TODO No more C++!
+*/
+
 #pragma once
 #include <cmath>
 

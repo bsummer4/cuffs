@@ -1,25 +1,23 @@
-TCLINC='-I/usr/include/tcl8.5'
-TCLLD='-L/usr/lib/tcl8.5 -ltcl'
-CFLAGS='--std=c99 -Wall -pedantic' $TCLINC
-LDFLAGS='-lm' $TCLLD
-CC=9c
-LD=9l
+CFLAGS = --std=c99 -Wall -pedantic -I/usr/include/tcl8.5
+LDFLAGS = -lm -ltcl8.5
+CC = 9c
+LD = 9l
 
 all:V: bitfield.so
 clean:V:
- rm -f bitfield_test bitfield_wrap.c bitfield.so
+	rm -f bitfield_test bitfield_wrap.c bitfield.so *.o
 
 test:V: bitfield_test
- ./bitfield_test
+	./bitfield_test
 
 %.o: %.c
- $CC $CFLAGS -c $stem.c
+	$CC $CFLAGS -c $stem.c
 
 bitfield_test: bitfield.o bitfield_test.o
- $LD $CFLAGS $prereq -o $target
+	$LD $CFLAGS $prereq -o $target
 
 bitfield_wrap.c: bitfield.i bitfield.c bitfield.h
- swig -tcl bitfield.i
+	swig -tcl bitfield.i
 
 bitfield.so: bitfield.o bitfield_wrap.o
- $LD $prereq -shared $TCL $CFLAGS -o $target
+	$LD $prereq -shared $TCL $CFLAGS -o $target

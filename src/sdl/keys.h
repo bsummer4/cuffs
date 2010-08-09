@@ -1,4 +1,14 @@
-#include <SDL/SDL.h>
+/*
+	# SDL Input Listener
+
+	A simple library for listening to SDL input events.
+
+	Currently, we keep track of the mouse position, the depressed mouse
+	buttons, and the depressed keyboard buttons.
+
+   Depends on <SDL/SDL.h>
+*/
+
 #define MAX_PRESSED_KEYS 100
 
 struct sdl_input_state {

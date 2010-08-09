@@ -1,14 +1,8 @@
-// # SDL Input Listener
-// A simple library for listening to SDL input events.
-//
-// Currently, we keep track of the mouse position, the depressed mouse
-// buttons, and the depressed keyboard buttons
-
+#include <SDL/SDL.h>
+#include "keys.h"
 #include <stdlib.h>
 #include <strings.h>
 #include <stdbool.h>
-#include <SDL/SDL.h>
-#include "keys.h"
 #include "macro.h"
 
 // Initialized at keys_init(callback).

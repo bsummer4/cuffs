@@ -1,11 +1,13 @@
+// Implementation for draw.h
+
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_mixer.h>
 #include <SDL/SDL_gfxPrimitives.h>
-#include <assert.h>
 #include "draw.h"
-#include "macro.h"
+#include <assert.h>
 #include "vectors.hpp"
+#include "macro.h"
 using namespace vectors;
 
 #define error(str) exit(1);
@@ -13,8 +15,8 @@ using namespace vectors;
 static surface surfaces[MAX_SURFACES];
 static chunk sounds[MAX_SOUNDS];
 static surface screen;
-static unsigned next_surface = 1; // 0 is INVALID
-static unsigned next_sound = 1; // 0 is INVALID
+static unsigned next_surface = 1; // 0 is INVALID_ID
+static unsigned next_sound = 1; // 0 is INVALID_ID
 
 static inline void hide_cursor() { SDL_ShowCursor(SDL_DISABLE); }
 static inline void make_white_undrawn(surface surface) {
@@ -56,15 +58,15 @@ static inline chunk get_chunk (SoundId id) {
 void flip() { SDL_Flip(screen); }
 void draw_init (surface screen_) { screen = screen_; }
 ImageId image (const char *filename) {
-	if (next_surface > MAX_SURFACES) return INVALID;
+	if (next_surface > MAX_SURFACES) return INVALID_ID;
 	surfaces[next_surface] = load_image(filename);
-	if (!surfaces[next_surface]) return INVALID;
+	if (!surfaces[next_surface]) return INVALID_ID;
 	return next_surface++; }
 
 SoundId sound (const char *filename) {
-	if (next_sound > MAX_SOUNDS) return INVALID;
+	if (next_sound > MAX_SOUNDS) return INVALID_ID;
 	sounds[next_sound] = load_sound(filename);
-	if (!sounds[next_sound]) return INVALID;
+	if (!sounds[next_sound]) return INVALID_ID;
 	return next_sound++; }
 
 void draw_center(ImageId id, int x, int y) {
