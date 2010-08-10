@@ -6,7 +6,7 @@ CFLAGS = -Os --std=c99 -Wall -pedantic
 TARG = sdlsh
 
 all:V:
-o.sdlsh: vector2.o draw.o keys.o
+o.sdlsh: draw.o keys.o
 
 <$PLAN9/src/mkmany
 

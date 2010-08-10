@@ -2,7 +2,6 @@
 
 #include <math.h>
 #include <stdbool.h>
-#include "vector2.h"
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_mixer.h>
@@ -11,6 +10,22 @@
 #include <assert.h>
 #include "macro.h"
 #include <err.h>
+
+// A quick, one-off vector library
+typedef struct { double x, y; } V2;
+typedef struct { int x, y; } V2i_t;
+#define ST static inline
+ST bool v2eq (V2 a, V2 b) { return a.x==b.x && a.y==b.y; }
+ST V2 v2neg (V2 v) { return (V2){-v.x, -v.y}; }
+ST V2 v2sub (V2 a, V2 b) { return (V2){a.x-b.x, a.y-b.y}; }
+ST V2 v2add (V2 a, V2 b) { return (V2){a.x+b.x, a.y+b.y}; }
+ST V2 v2mul (V2 v, double d) { return (V2){v.x*d, v.y*d}; }
+ST V2 v2div (V2 v, double d) { return v2mul(v, 1/d); }
+ST V2 v2floor (V2 v) { return (V2){floor(v.x), floor(v.y)}; }
+ST double v2norm (V2 v) { return hypot(v.x, v.y); }
+ST V2 v2normalized (V2 v) { return v2div(v, v2norm(v)); }
+ST V2 v2perp (V2 v) { return (V2){-v.y, v.x}; }
+ST V2i_t v2lround (V2 v) { return (V2i_t){lround(v.x), lround(v.y)}; }
 
 static surface surfaces[MAX_SURFACES];
 static chunk sounds[MAX_SOUNDS];

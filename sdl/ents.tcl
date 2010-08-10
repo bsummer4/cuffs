@@ -39,16 +39,11 @@ proc t args { puts [list "trace:" {*}$args] }
 proc shift {ent offset} {
 	puts "shifting $ent by $offset"
 	set p [$ent pos]
-	t
 	set p0 [lindex $p 0]
-	t
 	set p1 [lindex $p 1]
-	t
 	set p0 [expr ( $p0 + $offset ) % 800]
 	set p1 [expr ( $p1 + $offset ) % 600]
-	t
 	$ent pos [list $p0 $p1]
-	t
 	puts [list $ent pos [list $p0 $p1]] }
 
 every 31 { shift ::c1 10; entdone }

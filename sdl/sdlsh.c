@@ -45,6 +45,7 @@ static char *cmds[NCMDS] = {"flip", "white", "line", "rect", "circ",
                             "arrow", "draw-center", "draw", "play",
                             "sprite", "image", "sound", "entloop", "hai"};
 
+// TODO This is a mess.  Find ways to clean it up!
 static int Draw (ClientData d, Tcl_Interp *i, int objc, Tcl_Obj *CONST objv[]) {
 	switch ((int)d) {
 	case FLIP: flip(); break;
