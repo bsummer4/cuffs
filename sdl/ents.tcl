@@ -46,23 +46,21 @@ proc explode {r x y} {
 	set e [ent %AUTO% [list circle $r [list $x $y] {255 0 0}]]
 	Explode $e $r }
 
-proc shift {ent offset} {
-	set p [$ent pos]
-	set p0 [lindex $p 0]
-	set p1 [lindex $p 1]
-	set p0 [expr ( $p0 + $offset ) % 800]
-	set p1 [expr ( $p1 + $offset ) % 600]
+proc shift {ent x y} {
+	lassign [$ent pos] p0 p1
+	set p0 [expr ( $p0 + $x ) % 800]
+	set p1 [expr ( $p1 + $y ) % 600]
 	$ent pos [list $p0 $p1] }
 
 proc random i { expr int ( rand ( ) * $i ) }
 
-proc every_flake {ms command} {
+proc every_flakey {ms command} {
 	uplevel #0 $command
-	after [random [expr 2 * $ms]] [list every_flake $ms $command] }
+	after [random [expr 2 * $ms]] [list every_flakey $ms $command] }
 
-every_flake 500 { explode 40 [random 800] [random 600] }
+every_flakey 500 { explode 40 [random 800] [random 600] }
 
-ent cursor {circle 50 {-100 -100} {0 0 0}}
+ent cursor {circle 50 {0 0} {0 0 0}}
 set keys {}
 proc oninput d {
 	set keys [dict get $d keys]
@@ -71,5 +69,5 @@ proc oninput d {
 	set ::keys $keys
 	cursor pos [list $x $y] }
 
-every 31 { shift ::c1 10 }
-every 700 { shift ::c2 30 }
+every 31 { shift ::c1 10 10 }
+every 700 { shift ::c2 30 -10 }

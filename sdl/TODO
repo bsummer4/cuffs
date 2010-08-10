@@ -1,9 +1,29 @@
-* TODO Finish work with 'ents'
-  The loop is in place; commands are almost done.
+* TODO Finish prims
+  - Arguments to most prims aren't right (should be grouped into lists)
+  - Making and image or sound should create a new prim instead of using an
+    id number.
+  - Support alpha for all drawing.  Right now some objects have and alpha
+    and some don't.
+
+* TODO Finish work with ents
+  - Right now, it's assumed that all ents are circles.
+  - Probably need one-class-per-ent or something similar.
+  - What's a good general protocol for ents?
 
 * TODO Implement 'Event Hooks'
-  As it says in README
+  Make it more similar it says in README.  On the other hand, It sort-of
+  works the way it now; Maybe just leave it?
 
 * TODO Cleanup Tcl C Code
-  There's lot of repitition.  Write some functions or macros to clean it
-  up.  Also we don't support list arguments for e.g. circle yet.
+  - There's lot of repitition.  Write some functions or macros to clean it
+    up.
+  - Acutually do error handling!
+
+* TODO Update README.md
+  When the implementation stabilalizes, rewrite the README to reflect the
+  actual API.
+
+* TODO Use a safe interp
+  Use a sandboxed interpreter for stdin messages.  Take, as a command-line
+  argument, a script to run un-sandboxed.  Then, everything after that runs
+  in the sandbox.
