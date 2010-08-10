@@ -18,25 +18,39 @@ snit::type ent {
 	variable cmd
 	constructor val { set cmd $val; lappend ::ents $self }
 	destructor { lset ::ents [lsearch -exact $::ents $self] HACK }
+	method apply {} { eval $cmd }
 	method GetSet {i n argz} {
 		switch [llength $argz] {
 			0 { lindex $cmd $i }
 			1 { lset cmd $i [lindex $argz 0] }
-			default { throw "Too many arguements to '$self $n'" }}}
-	method apply {} { eval $cmd }
-	method radius args { $self GetSet 1 radius $args }
-	method pos args { $self GetSet 2 pos $args }
-	method color args { $self GetSet 3 color $args }}
+			default { error "Too many arguements to '$self $n'" }}}}
 
-set granularity 15
+snit::type rect_ent {
+	variable int
+	constructor args { set int [::ent $self.ent [list rect {*}$args]] }
+	destructor { $int destroy }
+	method point1 args { $int GetSet 1 point1 $args }
+	method point2 args { $int GetSet 2 point2 $args }
+	method color args { $int GetSet 3 color $args }}
 
-ent .r {rect {20 20} {780 580} {0 0 0 64}}
+snit::type circle_ent {
+	variable int
+	constructor args { set int [ent $self.ent [list circle {*}$args]] }
+	destructor { $int destroy }
+	method radius args { $int GetSet 1 radius $args }
+	method pos args { $int GetSet 2 pos $args }
+	method color args { $int GetSet 3 color $args }}
+
+sound boom shot.wav
+image bg map.pgm
+set granularity 20 ;# 50 fps
 every $granularity entapply
 
 eval {
-	ent c1 {circle 10 {0 0} {128 32 64 200}}
-	ent c2 {circle 100 {100 100} {0 255 0 200}}
-	ent c3 {circle 40 {300 200} {0 0 255 200}}}
+	ent .bg {bg 0 0}
+	circle_ent .c1 10 {0 0} {128 32 64 200}
+	circle_ent .c2 100 {100 100} {0 255 0 200}
+	circle_ent .c3 40 {300 200} {0 0 255 200}}
 
 set rd [expr $granularity / 10.0 ]
 proc Explode {e r} {
@@ -46,10 +60,9 @@ proc Explode {e r} {
 	set r [expr $r - $::rd]
 	after $::granularity [list Explode $e $r] }
 
-sound .boom shot.wav
 proc explode {r x y} {
-	.boom
-	set e [ent %AUTO% [list circle $r [list $x $y] {255 0 0 200}]]
+	boom
+	set e [circle_ent %AUTO% $r [list $x $y] {255 0 0 200}]
 	Explode $e $r }
 
 proc shift {ent x y} {
@@ -64,16 +77,16 @@ proc every_flakey {ms command} {
 	uplevel #0 $command
 	after [random [expr 2 * $ms]] [list every_flakey $ms $command] }
 
-every_flakey 500 { explode [random 80] [random 800] [random 600] }
+every_flakey 500 { explode 40 [random 800] [random 600] }
 
-ent cursor {circle 50 {0 0} {0 0 0 200}}
+circle_ent .cursor 50 {0 0} {0 0 0 200}
 set keys {}
 proc oninput d {
 	set keys [dict get $d keys]
 	lassign [dict get $d mouse] x y
 	if {[llength $keys] > [llength $::keys]} { explode 40 $x $y }
 	set ::keys $keys
-	cursor pos [list $x $y] }
+	.cursor pos [list $x $y] }
 
-every 6 { shift ::c1 2 2 }
-every 70 { shift ::c2 3 -1 }
+every 6 { shift ::.c1 2 2 }
+every 70 { shift ::.c2 3 -1 }
