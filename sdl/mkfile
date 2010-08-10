@@ -3,37 +3,31 @@
 SDL = -lSDL_image -lSDL_gfx -lSDL_mixer
 LDFLAGS = -ltcl8.5 -lm $SDL
 CFLAGS = -Os --std=c99 -Wall -pedantic
-CLEANFILES = sdl_wrap.c
-TARG = drawtest keytest sdltcl
+TARG = sdlsh
 
 all:V:
-o.drawtest: draw.o vector2.o
-o.keytest: keys.o
-o.sdltcl: vector2.o draw.o keys.o
+o.sdlsh: vector2.o draw.o keys.o
 
 <$PLAN9/src/mkmany
 
-primtest:V: all
-	{	{	sed 's/$/; flip; exec sleep 0.25/'; echo exec sleep .5; } |
-		./o.sdltcl
-	} <<'EOF'
-		white
-		circle 40 {50 50} {255 0 0}
-		line 5 255 128 0 5 5 555 555
-		circle 30 {50 50} {0 255 0}
-		rect 20 20 420 420 0 0 0 128
-		circle 20 {50 50} {0 0 255}
-		arrow 255 0 64 400 200 90 90
-		set r [image rock.pgm]
-		set rs [sprite rock.pgm]
-		set s [sound shot.wav]
-		play $s
-		draw-center $r 430 540; draw-center $r 490 540
-		play $s
-		draw $rs 460 400
-	EOF
-
-test:V: all primtest
-	./o.drawtest
+test:V: all
 	echo "Press keys into the SDL window.  Press ESC when done."
-	./o.keytest
+	{	{	while read x; do echo $x; echo flip; sleep 0.25; done
+			while true; do sleep .1; echo "puts {Hey you!  Press ESC!}"; done
+		} | ./o.sdlsh; } <<'EOF'
+			white
+			hai
+			circle 40 {50 50} {255 0 0}
+			line 5 255 128 0 5 5 555 555
+			circle 30 {50 50} {0 255 0}
+			rect 20 20 420 420 0 0 0 128
+			circle 20 {50 50} {0 0 255}
+			arrow 255 0 64 400 200 90 90
+			set r [image rock.pgm]
+			set rs [sprite rock.pgm]
+			set s [sound shot.wav]
+			play $s
+			draw-center $r 430 540; draw-center $r 490 540
+			play $s
+			draw $rs 460 400
+	EOF

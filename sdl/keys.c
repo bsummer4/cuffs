@@ -71,6 +71,7 @@ void on_input_event(SDL_Event *event) {
 		handle_mousebuttonevent(&event->button);
 		break;
 	case SDL_MOUSEMOTION:
+		changed = true;
 		handle_mousemotionevent(&event->motion);
 		break;
 	default: break; }

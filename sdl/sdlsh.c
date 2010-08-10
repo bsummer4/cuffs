@@ -13,24 +13,37 @@ static void Sdl_DoOneEvent () {
 	if (SDL_PollEvent(&e))
 		on_input_event(&e); }
 
-static void print_stat (struct sdl_input_state *s) {
-	printf("keys {");
-	FORII (s->downkeys) {
-		char *name = SDL_GetKeyName(s->keys[ii]);
-		bool last = ii==s->downkeys-1;
-		bool quote = strchr(name, ' ');
-		printf("%s%s%s%s", (quote?"{":""), name, (quote?"}":""), (last?"":" ")); }
-	puts("}"); }
+static char *buttonname (uint8_t b) {
+   static char *bs[] = {"mouse-left", "mouse-middle", "mouse-right", "mouse-4"};
+   return (b<5)?bs[b-1]:"mouse-?"; }
+
+static void print_state (struct sdl_input_state *s) {
+   bool q, last;
+   char *n;
+   printf("input {");
+   printf("keys {");
+   FORII (s->downkeys) {
+      n = SDL_GetKeyName(s->keys[ii]);
+      last = (ii==s->downkeys-1 && !s->downbuttons);
+      q = strchr(n, ' ');
+      printf("%s%s%s%s", (q?"{":""), n, (q?"}":""), (last?"":" ")); }
+   FORII (s->downbuttons) {
+      n = buttonname(s->mousebuttons[ii]);
+      last = (ii==s->downbuttons-1);
+      printf("%s%s", n, (last?"":" ")); }
+   printf("}");
+   printf(" mouse {%d %d}", s->mouse[0], s->mouse[1]);
+   puts("}"); }
 
 // # Tcl setup
 
-#define NCMDS 13
+#define NCMDS 14
 enum { FLIP=0, WHITE, LINE, RECT, CIRCLE, ARROW, DRAW_CENTER, DRAW, PLAY,
-       SPRITE, IMAGE, SOUND, ENTLOOP };
+       SPRITE, IMAGE, SOUND, ENTLOOP, HAI };
 
 static char *cmds[NCMDS] = {"flip", "white", "line", "rect", "circ",
                             "arrow", "draw-center", "draw", "play",
-                            "sprite", "image", "sound", "entloop"};
+                            "sprite", "image", "sound", "entloop", "hai"};
 
 static int Draw (ClientData d, Tcl_Interp *i, int objc, Tcl_Obj *CONST objv[]) {
 	switch ((int)d) {
@@ -96,16 +109,24 @@ static int Draw (ClientData d, Tcl_Interp *i, int objc, Tcl_Obj *CONST objv[]) {
 		Tcl_SetObjResult(i, Tcl_NewIntObj(id));
 		break; }
 	case ENTLOOP:
-		for (;;) Sdl_DoOneEvent(), Tcl_DoOneEvent(TCL_DONT_WAIT); }
+		for (;;) Sdl_DoOneEvent(), Tcl_DoOneEvent(TCL_DONT_WAIT);
+	case HAI: {
+		unsigned ii = 1, jj = 1;
+		while ((ii++ < 12000)) {
+			if (!(ii%10)) jj++;
+			draw_circle((ii*4)%11-(ii*3)%9, jj%255, ii%255, ii%64+ii%60,
+			            ii%800 + (jj % 9), (jj+ii)%600);
+			if (ii%32 == 1) flip(); }
+		break; }}
 	return TCL_OK; }
 
 int AppInit (Tcl_Interp *interp) {
 	if (Tcl_Init(interp) == TCL_ERROR) return TCL_ERROR;
-	keys_init(print_stat);
+	keys_init(print_state);
 	sdl_init(800, 600, 32, "TODO Make this an option");
 	for (int ii=0; ii<NCMDS; ii++)
 		Tcl_CreateObjCommand(interp, cmds[ii], Draw, (ClientData)ii, NULL);
-	Tcl_SetVar(interp, "tcl_rcFileName", "sdlgo.tcl", TCL_GLOBAL_ONLY);
+	Tcl_SetVar(interp, "tcl_rcFileName", "sdlsh.init", TCL_GLOBAL_ONLY);
 	return TCL_OK; }
 
 int main (int argc, char *argv[]) {
