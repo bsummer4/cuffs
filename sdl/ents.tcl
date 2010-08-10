@@ -7,10 +7,10 @@
 package require snit 2
 
 proc t args { puts [list "trace:" {*}$args] }
-proc HACK args {}
 set ents [list]
 proc entapply {} {
 	white
+	set ::ents [lsearch -all -inline -not -exact $::ents HACK]
 	foreach ent $::ents { $ent apply }
 	flip }
 
@@ -30,9 +30,19 @@ snit::type ent {
 
 every 10 entapply
 eval {
-	ent c1 {circle 10 {0 0} {255 0 0}}
+	ent c1 {circle 10 {0 0} {128 32 64}}
 	ent c2 {circle 100 {100 100} {0 255 0}}
 	ent c3 {circle 40 {300 200} {0 0 255}}}
+
+proc Explode {e r} {
+	if {$r <= 0} { $e destroy; return }
+	$e radius $r
+	incr r -1
+	after 10 [list Explode $e $r] }
+
+proc explode {r x y} {
+	set e [ent %AUTO% [list circle $r [list $x $y] {255 0 0}]]
+	Explode $e $r }
 
 proc shift {ent offset} {
 	set p [$ent pos]
@@ -42,10 +52,14 @@ proc shift {ent offset} {
 	set p1 [expr ( $p1 + $offset ) % 600]
 	$ent pos [list $p0 $p1] }
 
+proc random i { expr int ( rand ( ) * $i ) }
+
+proc every_flake {ms command} {
+	uplevel #0 $command
+	after [random [expr 2 * $ms]] [list every_flake $ms $command] }
+
+every_flake 200 { explode 40 [random 800] [random 600] }
+
+
 every 31 { shift ::c1 10 }
 every 700 { shift ::c2 30 }
-after 3000 {
-	foreach c {c1 c2 c3} { $c destroy }
-	ent c1 {circle 15 {30 30} {200 50 5}}
-	ent c2 {circle 80 {130 130} {10 255 10}}
-	ent c3 {circle 45 {630 520} {45 80 255}}}
