@@ -1,9 +1,7 @@
 * TODO Finish prims
   - Arguments to most prims aren't right (should be grouped into lists)
-  - Making and image or sound should create a new prim instead of using an
+  - Making an image or sound should create a new prim instead of using an
     id number.
-  - Support alpha for all drawing.  Right now some objects have and alpha
-    and some don't.
 
 * TODO Finish work with ents
   - Right now, it's assumed that all ents are circles.
@@ -15,15 +13,15 @@
   works the way it now; Maybe just leave it?
 
 * TODO Cleanup Tcl C Code
-  - There's lot of repitition.  Write some functions or macros to clean it
+  - There's lot of repetition.  Write some functions or macros to clean it
     up.
   - Acutually do error handling!
 
 * TODO Update README.md
-  When the implementation stabilalizes, rewrite the README to reflect the
-  actual API.
+  When the implementation becomes more stable, rewrite the README to
+  reflect the actual API.
 
-* TODO Use a safe interp
+* TODO Use a 'safe interp'
   Use a sandboxed interpreter for stdin messages.  Take, as a command-line
-  argument, a script to run un-sandboxed.  Then, everything after that runs
+  argument, a script to run unsandboxed.  Then, everything after that runs
   in the sandbox.

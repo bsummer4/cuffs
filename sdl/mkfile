@@ -7,6 +7,9 @@ TARG = sdlsh
 
 all:V:
 o.sdlsh: draw.o keys.o
+sdlsh.o: draw.h keys.h macro.h
+draw.o: draw.h macro.h
+keys.o: keys.h macro.h
 
 <$PLAN9/src/mkmany
 

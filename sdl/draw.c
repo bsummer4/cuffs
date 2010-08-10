@@ -107,23 +107,23 @@ void white () {
 	boxRGBA(screen, 0, 0, screen->w, screen->h,
 	        255, 255, 255, 255); }
 
-void draw_line (int width, int red, int green, int blue,
+void draw_line (int width, int red, int green, int blue, int alpha,
                 int x0, int y0, int x1, int y1) {
 	ITER (offset, -width, width + 1)
 		lineRGBA (screen, MAX(0, x0 + offset), y0,
 		          MAX(0, x1 + offset), y1,
-		          red, green, blue, 255); }
+		          red, green, blue, alpha); }
 
-void draw_circle (int radius, int red, int green, int blue,
-                 int x, int y){
+void draw_circle (int radius, int red, int green, int blue, int alpha,
+                  int x, int y){
 	filledCircleRGBA(screen, x, y, radius,
-	                 red, green, blue, 255); }
+	                 red, green, blue, alpha); }
 
 void draw_rect (int x0, int y0, int x1, int y1, int red, int green,
                 int blue, int alpha){
 	boxRGBA(screen, x0, y0, x1, y1, red, green, blue, alpha); }
 
-void draw_arrow (int red, int green, int blue,
+void draw_arrow (int red, int green, int blue, int alpha,
                  int x0, int y0, int x1, int y1) {
 	V2 from = {x0, y0};
 	V2 to = {x1, y1};
@@ -136,7 +136,7 @@ void draw_arrow (int red, int green, int blue,
 	                 to.x, to.y,
 	                 base_plus.x, base_plus.y,
 	                 base_minus.x, base_minus.y,
-	                 red, green, blue, 128); }
+	                 red, green, blue, alpha); }
 
 int sdl_init (int h, int w, int bpp, char *caption) {
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);

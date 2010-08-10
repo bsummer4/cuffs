@@ -4,14 +4,17 @@
 #include <SDL/SDL_mixer.h>
 #include <tcl.h>
 #include <err.h>
+#include <unistd.h>
 #include "keys.h"
 #include "draw.h"
 #include "macro.h"
 
-static void Sdl_DoOneEvent () {
+static int Sdl_DoOneEvent () {
 	SDL_Event e;
-	if (SDL_PollEvent(&e))
-		on_input_event(&e); }
+	int r;
+	if ((r = SDL_PollEvent(&e)))
+		on_input_event(&e);
+	return r; }
 
 static char *buttonname (uint8_t b) {
    static char *bs[] = {"mouse-left", "mouse-middle", "mouse-right", "mouse-4"};
@@ -33,10 +36,10 @@ static int Draw (ClientData d, Tcl_Interp *i, int objc, Tcl_Obj *CONST objv[]) {
 	case FLIP: flip(); break;
 	case WHITE: white(); break;
 	case LINE: {
-		int p[8];
-		for (int ii=0; ii < 8; ii++)
+		int p[9];
+		for (int ii=0; ii < 9; ii++)
 			Tcl_GetIntFromObj(i, objv[ii+1], p+ii);
-		draw_line(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7]); }
+		draw_line(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8]); }
 		break;
 	case RECT: {
 		int p[8];
@@ -45,16 +48,16 @@ static int Draw (ClientData d, Tcl_Interp *i, int objc, Tcl_Obj *CONST objv[]) {
 		draw_rect(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7]); }
 		break;
 	case CIRCLE: {
-		int p[6];
-		for (int ii=0; ii < 6; ii++)
-			Tcl_GetIntFromObj(i, objv[ii+1], p+ii);
-		draw_circle(p[0], p[1], p[2], p[3], p[4], p[5]);
-		break; }
-	case ARROW: {
 		int p[7];
 		for (int ii=0; ii < 7; ii++)
 			Tcl_GetIntFromObj(i, objv[ii+1], p+ii);
-		draw_arrow(p[0], p[1], p[2], p[3], p[4], p[5], p[6]);
+		draw_circle(p[0], p[1], p[2], p[3], p[4], p[5], p[6]);
+		break; }
+	case ARROW: {
+		int p[8];
+		for (int ii=0; ii < 8; ii++)
+			Tcl_GetIntFromObj(i, objv[ii+1], p+ii);
+		draw_arrow(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7]);
 		break; }
 	case DRAW_CENTER: {
 		int p[3];
@@ -92,12 +95,15 @@ static int Draw (ClientData d, Tcl_Interp *i, int objc, Tcl_Obj *CONST objv[]) {
 		Tcl_SetObjResult(i, Tcl_NewIntObj(id));
 		break; }
 	case ENTLOOP:
-		for (;;) Sdl_DoOneEvent(), Tcl_DoOneEvent(TCL_DONT_WAIT);
+		for (;;)
+			if (!Sdl_DoOneEvent() && !Tcl_DoOneEvent(TCL_DONT_WAIT))
+				// Try not to poll too much; this seems to help.
+				usleep(333);
 	case HAI: {
 		unsigned ii = 1, jj = 1;
 		while ((ii++ < 12000)) {
 			if (!(ii%10)) jj++;
-			draw_circle((ii*4)%11-(ii*3)%9, jj%255, ii%255, ii%64+ii%60,
+			draw_circle((ii*4)%11-(ii*3)%9, jj%255, ii%255, ii%64+ii%60, 200,
 			            ii%800 + (jj % 9), (jj+ii)%600);
 			if (ii%32 == 1) flip(); }
 		break; }}

@@ -28,22 +28,26 @@ snit::type ent {
 	method pos args { $self GetSet 2 pos $args }
 	method color args { $self GetSet 3 color $args }}
 
-every 10 entapply
-eval {
-	ent c1 {circle 10 {0 0} {128 32 64}}
-	ent c2 {circle 100 {100 100} {0 255 0}}
-	ent c3 {circle 40 {300 200} {0 0 255}}}
+set granularity 15
 
+every $granularity entapply
+eval {
+	ent c1 {circle 10 {0 0} {128 32 64 200}}
+	ent c2 {circle 100 {100 100} {0 255 0 200}}
+	ent c3 {circle 40 {300 200} {0 0 255 200}}}
+
+set rd [expr $granularity / 10.0 ]
 proc Explode {e r} {
-	if {$r <= 0} { $e destroy; return }
-	$e radius $r
-	incr r -1
-	after 10 [list Explode $e $r] }
+	set ri [expr int ( $r )]
+	if {$ri <= 0} { $e destroy; return }
+	$e radius $ri
+	set r [expr $r - $::rd]
+	after $::granularity [list Explode $e $r] }
 
 set shot [sound shot.wav]
 proc explode {r x y} {
 	play $::shot
-	set e [ent %AUTO% [list circle $r [list $x $y] {255 0 0}]]
+	set e [ent %AUTO% [list circle $r [list $x $y] {255 0 0 200}]]
 	Explode $e $r }
 
 proc shift {ent x y} {
@@ -58,9 +62,9 @@ proc every_flakey {ms command} {
 	uplevel #0 $command
 	after [random [expr 2 * $ms]] [list every_flakey $ms $command] }
 
-every_flakey 500 { explode 40 [random 800] [random 600] }
+every_flakey 500 { explode [random 80] [random 800] [random 600] }
 
-ent cursor {circle 50 {0 0} {0 0 0}}
+ent cursor {circle 50 {0 0} {0 0 0 200}}
 set keys {}
 proc oninput d {
 	set keys [dict get $d keys]
@@ -69,5 +73,5 @@ proc oninput d {
 	set ::keys $keys
 	cursor pos [list $x $y] }
 
-every 31 { shift ::c1 10 10 }
-every 700 { shift ::c2 30 -10 }
+every 6 { shift ::c1 2 2 }
+every 70 { shift ::c2 3 -1 }
