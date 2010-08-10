@@ -11,9 +11,12 @@ o.sdlsh: draw.o keys.o
 <$PLAN9/src/mkmany
 
 test:V: all
-	echo "Press keys into the SDL window.  Press ESC when done."
+	foo () {
+		while true
+		do sleep .1; echo "puts {Hey you!  Press ESC when done!}"
+		done; }
 	{	{	while read x; do echo $x; echo flip; sleep 0.25; done
-			while true; do sleep .1; echo "puts {Hey you!  Press ESC!}"; done
+			foo
 		} | ./o.sdlsh; } <<'EOF'
 			white
 			hai
@@ -31,3 +34,4 @@ test:V: all
 			play $s
 			draw $rs 460 400
 	EOF
+	{ cat ents.tcl; foo; } | ./o.sdlsh

@@ -40,7 +40,9 @@ proc Explode {e r} {
 	incr r -1
 	after 10 [list Explode $e $r] }
 
+set shot [sound shot.wav]
 proc explode {r x y} {
+	play $::shot
 	set e [ent %AUTO% [list circle $r [list $x $y] {255 0 0}]]
 	Explode $e $r }
 
@@ -58,8 +60,16 @@ proc every_flake {ms command} {
 	uplevel #0 $command
 	after [random [expr 2 * $ms]] [list every_flake $ms $command] }
 
-every_flake 200 { explode 40 [random 800] [random 600] }
+every_flake 500 { explode 40 [random 800] [random 600] }
 
+ent cursor {circle 50 {-100 -100} {0 0 0}}
+set keys {}
+proc oninput d {
+	set keys [dict get $d keys]
+	lassign [dict get $d mouse] x y
+	if {[llength $keys] > [llength $::keys]} { explode 40 $x $y }
+	set ::keys $keys
+	cursor pos [list $x $y] }
 
 every 31 { shift ::c1 10 }
 every 700 { shift ::c2 30 }

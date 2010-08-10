@@ -4,6 +4,6 @@
 * TODO Implement 'Event Hooks'
   As it says in README
 
-* TODO Cleanup Tcl proc definitions in Draw()
+* TODO Cleanup Tcl C Code
   There's lot of repitition.  Write some functions or macros to clean it
   up.  Also we don't support list arguments for e.g. circle yet.
