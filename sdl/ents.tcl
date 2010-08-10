@@ -44,9 +44,9 @@ proc Explode {e r} {
 	set r [expr $r - $::rd]
 	after $::granularity [list Explode $e $r] }
 
-set shot [sound shot.wav]
+sound .boom shot.wav
 proc explode {r x y} {
-	play $::shot
+	.boom
 	set e [ent %AUTO% [list circle $r [list $x $y] {255 0 0 200}]]
 	Explode $e $r }
 

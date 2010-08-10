@@ -23,18 +23,18 @@ test:V: all
 		} | ./o.sdlsh; } <<'EOF'
 			white
 			hai
-			circle 40 {50 50} {255 0 0}
-			line 5 255 128 0 5 5 555 555
-			circle 30 {50 50} {0 255 0}
+			circle 40 {50 50} {255 0 0 200}
+			line 5 255 128 0 200 5 5 555 555
+			circle 30 {50 50} {0 255 0 200}
 			rect 20 20 420 420 0 0 0 128
-			circle 20 {50 50} {0 0 255}
-			arrow 255 0 64 400 200 90 90
-			set r [image rock.pgm]
-			set rs [sprite rock.pgm]
-			set s [sound shot.wav]
-			play $s
-			draw-center $r 430 540; draw-center $r 490 540
-			play $s
-			draw $rs 460 400
+			circle 20 {50 50} {0 0 255 200}
+			arrow 255 0 64 200 400 200 90 90
+			image .rock rock.pgm
+			sprite .rock_s rock.pgm
+			sound .shot shot.wav
+			.shot
+			.rock_s -c 430 540; .rock_s -c 490 540
+			.shot
+			.rock 460 400
 	EOF
 	{ cat ents.tcl; foo; } | ./o.sdlsh

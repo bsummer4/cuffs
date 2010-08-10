@@ -1,7 +1,5 @@
 * TODO Finish prims
   - Arguments to most prims aren't right (should be grouped into lists)
-  - Making an image or sound should create a new prim instead of using an
-    id number.
 
 * TODO Finish work with ents
   - Right now, it's assumed that all ents are circles.
