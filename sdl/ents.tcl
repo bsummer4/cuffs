@@ -6,13 +6,12 @@
 
 package require snit 2
 
+proc t args { puts [list "trace:" {*}$args] }
 proc HACK args {}
 set ents [list]
-set realents $ents
-proc entdone {} { set ::realents $::ents }
 proc entapply {} {
 	white
-	foreach ent $::realents { $ent apply }
+	foreach ent $::ents { $ent apply }
 	flip }
 
 snit::type ent {
@@ -30,27 +29,23 @@ snit::type ent {
 	method color args { $self GetSet 3 color $args }}
 
 every 10 entapply
-ent c1 {circle 10 {0 0} {255 0 0}}
-ent c2 {circle 100 {100 100} {0 255 0}}
-ent c3 {circle 40 {300 200} {0 0 255}}
-entdone
-proc t args { puts [list "trace:" {*}$args] }
+eval {
+	ent c1 {circle 10 {0 0} {255 0 0}}
+	ent c2 {circle 100 {100 100} {0 255 0}}
+	ent c3 {circle 40 {300 200} {0 0 255}}}
 
 proc shift {ent offset} {
-	puts "shifting $ent by $offset"
 	set p [$ent pos]
 	set p0 [lindex $p 0]
 	set p1 [lindex $p 1]
 	set p0 [expr ( $p0 + $offset ) % 800]
 	set p1 [expr ( $p1 + $offset ) % 600]
-	$ent pos [list $p0 $p1]
-	puts [list $ent pos [list $p0 $p1]] }
+	$ent pos [list $p0 $p1] }
 
-every 31 { shift ::c1 10; entdone }
-every 700 { shift ::c2 30; entdone }
+every 31 { shift ::c1 10 }
+every 700 { shift ::c2 30 }
 after 3000 {
 	foreach c {c1 c2 c3} { $c destroy }
 	ent c1 {circle 15 {30 30} {200 50 5}}
 	ent c2 {circle 80 {130 130} {10 255 10}}
-	ent c3 {circle 45 {630 520} {45 80 255}}
-	entdone }
+	ent c3 {circle 45 {630 520} {45 80 255}}}
