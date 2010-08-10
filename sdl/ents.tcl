@@ -30,7 +30,9 @@ snit::type ent {
 
 set granularity 15
 
+ent .r {rect {20 20} {780 580} {0 0 0 64}}
 every $granularity entapply
+
 eval {
 	ent c1 {circle 10 {0 0} {128 32 64 200}}
 	ent c2 {circle 100 {100 100} {0 255 0 200}}

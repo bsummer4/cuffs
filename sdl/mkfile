@@ -24,11 +24,11 @@ test:V: all
 			white
 			hai
 			circle 40 {50 50} {255 0 0 200}
-			line 5 255 128 0 200 5 5 555 555
+			line 5 {255 128 0 200} {5 5} {555 555}
 			circle 30 {50 50} {0 255 0 200}
-			rect 20 20 420 420 0 0 0 128
+			rect {20 20} {420 420} {0 0 0 128}
 			circle 20 {50 50} {0 0 255 200}
-			arrow 255 0 64 200 400 200 90 90
+			arrow {255 0 64 200} {400 200} {90 90}
 			image .rock rock.pgm
 			sprite .rock_s rock.pgm
 			sound .shot shot.wav

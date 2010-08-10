@@ -18,7 +18,7 @@ int sdl_init (int height, int width, int bitsperpixel, char *caption);
 void sdl_die();
 void flip ();
 void white ();
-void draw_circle (int radius, int r, int g, int b, int a, int x, int y);
+void draw_circle (int radius, int x, int y, int r, int g, int b, int a);
 void draw_line (int width, int r, int g, int b, int a, int x0, int y0, int x1, int y1);
 void draw_rect (int x0, int y0, int x1, int y1, int r, int g, int b, int a);
 void draw_arrow (int r, int g, int b, int a, int x0, int y0, int x1, int y1);

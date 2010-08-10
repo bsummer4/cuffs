@@ -114,10 +114,9 @@ void draw_line (int width, int red, int green, int blue, int alpha,
 		          MAX(0, x1 + offset), y1,
 		          red, green, blue, alpha); }
 
-void draw_circle (int radius, int red, int green, int blue, int alpha,
-                  int x, int y){
-	filledCircleRGBA(screen, x, y, radius,
-	                 red, green, blue, alpha); }
+void draw_circle (int radius, int x, int y,
+                  int red, int green, int blue, int alpha) {
+	filledCircleRGBA(screen, x, y, radius, red, green, blue, alpha); }
 
 void draw_rect (int x0, int y0, int x1, int y1, int red, int green,
                 int blue, int alpha){

@@ -1,19 +1,16 @@
-* TODO Finish prims
-  - Arguments to most prims aren't right (should be grouped into lists)
-
 * TODO Finish work with ents
   - Right now, it's assumed that all ents are circles.
   - Probably need one-class-per-ent or something similar.
   - What's a good general protocol for ents?
 
 * TODO Implement 'Event Hooks'
-  Make it more similar it says in README.  On the other hand, It sort-of
-  works the way it now; Maybe just leave it?
+  Make it more similar to the way it's described in README.md.  On the
+  other hand, It sort-of works the way it is now; Maybe just leave it?
 
 * TODO Cleanup Tcl C Code
   - There's lot of repetition.  Write some functions or macros to clean it
     up.
-  - Acutually do error handling!
+  - Actually do error handling!
 
 * TODO Update README.md
   When the implementation becomes more stable, rewrite the README to

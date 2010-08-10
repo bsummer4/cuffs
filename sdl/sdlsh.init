@@ -11,9 +11,6 @@ proc appendl args {
 
 proc oninput dict { puts [list input $dict] }
 
-proc circle {radius pos color} {
-    eval [appendl circ $radius $color $pos] }
-
 proc every {ms command} {
     uplevel #0 $command
     after $ms [list every $ms $command] }

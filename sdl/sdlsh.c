@@ -5,6 +5,7 @@
 #include <tcl.h>
 #include <err.h>
 #include <unistd.h>
+#include <stdarg.h>
 #include "keys.h"
 #include "draw.h"
 #include "macro.h"
@@ -26,7 +27,7 @@ static char *buttonname (uint8_t b) {
 enum { FLIP=0, WHITE, LINE, RECT, CIRCLE, ARROW, SPRITE, IMAGE, SOUND, ENTLOOP,
        HAI };
 
-static char *cmds[NCMDS] = {"flip", "white", "line", "rect", "circ",
+static char *cmds[NCMDS] = {"flip", "white", "line", "rect", "circle",
                             "arrow", "sprite", "image", "sound", "entloop",
                             "hai"};
 
@@ -54,34 +55,47 @@ static int DrawImg (ClientData d, Tcl_Interp *i, int objc, Tcl_Obj *CONST objv[]
 	else draw(id, x, y);
 	return TCL_OK; }
 
+#define EF(X) if (TCL_OK != X) errx(1, "fail fail fail")
+static bool get_ints (Tcl_Interp *i, int *out, Tcl_Obj *CONST os[], int n, ...) {
+	va_list argp;
+	va_start(argp, n);
+	for (; n>0; n--) {
+		int count = va_arg(argp, int);
+		if (count < 1) errx(1, "Bad arguments to get_ints");
+		if (count == 1) EF(Tcl_GetIntFromObj(i, *os, out++));
+		if (count > 1) {
+			int len;
+			Tcl_Obj **list;
+			EF(Tcl_ListObjGetElements(i, *os, &len, &list));
+			if (len != count) errx(1, "fail args");
+			for (int ii=0; ii < len; ii++)
+				EF(Tcl_GetIntFromObj(i, list[ii], out++)); }
+		os++; }
+	va_end(argp);
+	return true; }
+
 // TODO This is a mess.  Find ways to clean it up!
+#define GRAB(n, ...) get_ints(i, p, objv+1, n, __VA_ARGS__)
 static int Draw (ClientData d, Tcl_Interp *i, int objc, Tcl_Obj *CONST objv[]) {
 	bool spritep=false;
+	int p[9];
 	switch ((int)d) {
 	case FLIP: flip(); break;
 	case WHITE: white(); break;
-	case LINE: {
-		int p[9];
-		for (int ii=0; ii < 9; ii++)
-			Tcl_GetIntFromObj(i, objv[ii+1], p+ii);
-		draw_line(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8]); }
+	case LINE:
+		GRAB(4,  1, 4, 2, 2);
+		draw_line(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8]);
 		break;
-	case RECT: {
-		int p[8];
-		for (int ii=0; ii < 8; ii++)
-			Tcl_GetIntFromObj(i, objv[ii+1], p+ii);
-		draw_rect(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7]); }
+	case RECT:
+		GRAB(3,  2, 2, 4);
+		draw_rect(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7]);
 		break;
-	case CIRCLE: {
-		int p[7];
-		for (int ii=0; ii < 7; ii++)
-			Tcl_GetIntFromObj(i, objv[ii+1], p+ii);
+	case CIRCLE:
+		GRAB(3,  1, 2, 4);
 		draw_circle(p[0], p[1], p[2], p[3], p[4], p[5], p[6]);
-		break; }
+		break;
 	case ARROW: {
-		int p[8];
-		for (int ii=0; ii < 8; ii++)
-			Tcl_GetIntFromObj(i, objv[ii+1], p+ii);
+		GRAB(3,  4, 2, 2);
 		draw_arrow(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7]);
 		break; }
 	case SOUND: {
@@ -110,8 +124,8 @@ static int Draw (ClientData d, Tcl_Interp *i, int objc, Tcl_Obj *CONST objv[]) {
 		unsigned ii = 1, jj = 1;
 		while ((ii++ < 12000)) {
 			if (!(ii%10)) jj++;
-			draw_circle((ii*4)%11-(ii*3)%9, jj%255, ii%255, ii%64+ii%60, 200,
-			            ii%800 + (jj % 9), (jj+ii)%600);
+			draw_circle((ii*4)%11-(ii*3)%9, (ii%800 + (jj % 9)), ((jj+ii)%600),
+                     jj%255, ii%255, ii%64+ii%60, 200);
 			if (ii%32 == 1) flip(); }
 		break; }}
 	return TCL_OK; }
