@@ -9,6 +9,8 @@ proc appendl args {
             lappend result $elt }}
     return $result }
 
+proc oninput dict { puts [list input $dict] }
+
 proc circle {radius pos color} {
     eval [appendl circ $radius $color $pos] }
 

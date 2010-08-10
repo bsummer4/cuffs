@@ -17,24 +17,6 @@ static char *buttonname (uint8_t b) {
    static char *bs[] = {"mouse-left", "mouse-middle", "mouse-right", "mouse-4"};
    return (b<5)?bs[b-1]:"mouse-?"; }
 
-static void print_state (struct sdl_input_state *s) {
-   bool q, last;
-   char *n;
-   printf("input {");
-   printf("keys {");
-   FORII (s->downkeys) {
-      n = SDL_GetKeyName(s->keys[ii]);
-      last = (ii==s->downkeys-1 && !s->downbuttons);
-      q = strchr(n, ' ');
-      printf("%s%s%s%s", (q?"{":""), n, (q?"}":""), (last?"":" ")); }
-   FORII (s->downbuttons) {
-      n = buttonname(s->mousebuttons[ii]);
-      last = (ii==s->downbuttons-1);
-      printf("%s%s", n, (last?"":" ")); }
-   printf("}");
-   printf(" mouse {%d %d}", s->mouse[0], s->mouse[1]);
-   puts("}"); }
-
 // # Tcl setup
 
 #define NCMDS 14
@@ -121,9 +103,31 @@ static int Draw (ClientData d, Tcl_Interp *i, int objc, Tcl_Obj *CONST objv[]) {
 		break; }}
 	return TCL_OK; }
 
+static Tcl_Interp *main_interp;
+
+// TODO: yuck!
+static void handle_state (struct sdl_input_state *s) {
+	int nkeys = s->downkeys + s->downbuttons;
+	Tcl_Obj *keys[nkeys];
+	for (int ii=0; ii<nkeys; ii++) {
+		if (ii < s->downkeys)
+			keys[ii] = Tcl_NewStringObj(SDL_GetKeyName(s->keys[ii]), -1);
+		else
+			keys[ii] = Tcl_NewStringObj(buttonname(ii-(s->downkeys)), -1); }
+	Tcl_Obj *mouse[2] = {Tcl_NewIntObj(s->mouse[0]),
+	                     Tcl_NewIntObj(s->mouse[1])};
+	Tcl_Obj *keys_mouse[4] = {Tcl_NewStringObj("keys", -1),
+	                          Tcl_NewListObj(nkeys, keys),
+	                          Tcl_NewStringObj("mouse", -1),
+	                          Tcl_NewListObj(2, mouse)};
+	Tcl_Obj *r = Tcl_NewListObj(4, keys_mouse);
+	Tcl_Obj *fuckthis[2] = {Tcl_NewStringObj("oninput", -1), r};
+	Tcl_EvalObjEx(main_interp, Tcl_NewListObj(2, fuckthis), TCL_EVAL_GLOBAL); }
+
 int AppInit (Tcl_Interp *interp) {
+	main_interp = interp;
 	if (Tcl_Init(interp) == TCL_ERROR) return TCL_ERROR;
-	keys_init(print_state);
+	keys_init(handle_state);
 	sdl_init(800, 600, 32, "TODO Make this an option");
 	for (int ii=0; ii<NCMDS; ii++)
 		Tcl_CreateObjCommand(interp, cmds[ii], Draw, (ClientData)ii, NULL);
@@ -132,4 +136,3 @@ int AppInit (Tcl_Interp *interp) {
 
 int main (int argc, char *argv[]) {
 	Tcl_Main(argc, argv, AppInit); return 0; }
-
