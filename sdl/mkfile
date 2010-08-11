@@ -1,5 +1,6 @@
 <$PLAN9/src/mkhdr
 
+MKSHELL = /bin/bash
 SDL = -lSDL_image -lSDL_gfx -lSDL_mixer
 LDFLAGS = -ltcl8.5 -lm $SDL
 CFLAGS = -Os --std=c99 -Wall -pedantic
@@ -16,11 +17,12 @@ keys.o: keys.h macro.h
 test:V: all
 	foo () {
 		while true
-		do sleep .1; echo "puts {Hey you!  Press ESC when done!}"
+		do sleep .5; echo "puts {Hey you!  Press ESC when done!}"
 		done; }
 	{	{	while read x; do echo $x; echo flip; sleep 0.25; done
 			foo
 		} | ./o.sdlsh; } <<'EOF'
+			entloop
 			white
 			hai
 			circle 40 {50 50} {255 0 0 200}

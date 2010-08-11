@@ -29,4 +29,3 @@ proc go {} {
     interpret $line }
 
 fileevent stdin readable go
-entloop

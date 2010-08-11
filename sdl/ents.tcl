@@ -93,3 +93,5 @@ proc oninput d {
 
 every 6 { shift ::.c1 2 2 }
 every 70 { shift ::.c2 3 -1 }
+
+entloop
