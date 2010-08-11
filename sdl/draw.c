@@ -137,6 +137,14 @@ void draw_arrow (int red, int green, int blue, int alpha,
 	                 base_minus.x, base_minus.y,
 	                 red, green, blue, alpha); }
 
+static void draw_on (surface s) {
+	static surface save = NULL;
+	if (s) save = screen, screen = s;
+	else screen = save; }
+
+void draw_on_begin (ImageId id) { draw_on(get_surface(id)); }
+void draw_on_end () { draw_on NULL; }
+
 int sdl_init (int h, int w, int bpp, char *caption) {
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 	SDL_EnableKeyRepeat(60, 60);

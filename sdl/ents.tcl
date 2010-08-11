@@ -62,6 +62,9 @@ proc Explode {e r} {
 
 proc explode {r x y} {
 	boom
+	draw-on bg
+	circle $r [list $x $y] {255 255 255 255}
+	draw-on
 	set e [circle_ent %AUTO% $r [list $x $y] {255 0 0 200}]
 	Explode $e $r }
 

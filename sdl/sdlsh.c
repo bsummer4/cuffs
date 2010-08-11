@@ -31,20 +31,34 @@ static char *cmds[NCMDS] = {"flip", "white", "line", "rect", "circle",
                             "arrow", "sprite", "image", "sound", "entloop",
                             "hai"};
 
+static int DrawOn (ClientData d, Tcl_Interp *i, int objc, Tcl_Obj *CONST objv[]) {
+	Tcl_CmdInfo info;
+	switch (objc) {
+	case 2: {
+		int len;
+		char *cmd = Tcl_GetStringFromObj(objv[1], &len);
+		Tcl_GetCommandInfo(i, cmd, &info);
+		draw_on_begin((int)info.objClientData);
+		break; }
+	case 1: draw_on_end(); break;
+	default: return TCL_ERROR; }
+	return TCL_OK; }
+
 static int Play (ClientData d, Tcl_Interp *i, int objc, Tcl_Obj *CONST objv[]) {
 	int id=(int)d;
 	play(id);
 	return TCL_OK; }
 
 static int DrawImg (ClientData d, Tcl_Interp *i, int objc, Tcl_Obj *CONST objv[]) {
-	int x, y, id=(int)d, centered=0;
+	int x, y, id=(int)d;
+	bool centered=false;
 	switch (objc) {
 	case 4: {
 		int len;
 		char *s = Tcl_GetStringFromObj(objv[1], &len);
-		if (strcmp(s, "-centered") && strcmp(s, "-c")) { return TCL_ERROR; }
-		objv++;
-		centered=1; }
+		if (strcmp(s, "-centered") && strcmp(s, "-c")) return TCL_ERROR;
+ 		objv++;
+		centered=true; }
 	case 3:
 		Tcl_GetIntFromObj(i, objv[1], &x);
 		Tcl_GetIntFromObj(i, objv[2], &y);
@@ -99,6 +113,7 @@ static int Draw (ClientData d, Tcl_Interp *i, int objc, Tcl_Obj *CONST objv[]) {
 		draw_arrow(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7]);
 		break; }
 	case SOUND: {
+		if (objc != 3) return TCL_ERROR;
 		char *proc = Tcl_GetStringFromObj(objv[1], NULL);
 		char *file = Tcl_GetStringFromObj(objv[2], NULL);
 		int id = sound(file);
@@ -108,6 +123,7 @@ static int Draw (ClientData d, Tcl_Interp *i, int objc, Tcl_Obj *CONST objv[]) {
 		break; }
 	case SPRITE: spritep = true;
 	case IMAGE: {
+		if (objc != 3) return TCL_ERROR;
 		char *proc = Tcl_GetStringFromObj(objv[1], NULL);
 		char *file = Tcl_GetStringFromObj(objv[2], NULL);
 		int id = (spritep)?sprite(file):image(file);
@@ -132,7 +148,6 @@ static int Draw (ClientData d, Tcl_Interp *i, int objc, Tcl_Obj *CONST objv[]) {
 
 static Tcl_Interp *main_interp;
 
-// TODO: yuck!
 static void handle_state (struct sdl_input_state *s) {
 	int nkeys = s->downkeys + s->downbuttons;
 	Tcl_Obj *keys[nkeys];
@@ -158,6 +173,7 @@ int AppInit (Tcl_Interp *i) {
 	sdl_init(800, 600, 32, "TODO Make this an option");
 	for (int ii=0; ii<NCMDS; ii++)
 		Tcl_CreateObjCommand(i, cmds[ii], Draw, (ClientData)ii, NULL);
+	Tcl_CreateObjCommand(i, "draw-on", DrawOn, NULL, NULL);
 	Tcl_SetVar(i, "tcl_rcFileName", "sdlsh.init", TCL_GLOBAL_ONLY);
 	return TCL_OK; }
 

@@ -28,3 +28,8 @@ void draw_center (ImageId, int x, int y);
 ImageId sprite (const char *filename);
 ImageId image (const char *filename);
 SoundId sound (const char *filename);
+
+// Between these two calls, drawing happens on another image instead of on
+// the screen.
+void draw_on_begin (ImageId);
+void draw_on_end ();
