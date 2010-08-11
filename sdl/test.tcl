@@ -44,12 +44,22 @@ set keys {}
 proc oninput d {
 	set keys [dict get $d keys]
 	lassign [dict get $d mouse] x y
-	if {[llength $keys] > [llength $::keys]} { explode 40 $x $y }
+	dict for {key offset} {left {-10 0}
+	                       right {10 0}
+	                       up {0 -10}
+	                       down {0 10}} {
+		if {-1 == [lsearch $keys $key]} continue
+		set keys [lsearch -all -inline -not -exact $keys $key]
+		shift .c3 {*}$offset
+		puts $key  }
+	if {[llength $keys] > [llength $::keys]} {
+		puts shoot
+		explode 40 $x $y }
 	set ::keys $keys
 	.cursor pos [list $x $y] }
 
 every_flakey 500 { explode 40 [random 800] [random 600] }
-every 6 { shift ::.c1 2 2 }
-every 70 { shift ::.c2 3 -1 }
+every 6 { shift .c1 2 2 }
+every 70 { shift .c2 3 -1 }
 every $granularity entapply
 entloop

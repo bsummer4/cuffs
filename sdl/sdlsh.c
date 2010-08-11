@@ -18,8 +18,9 @@ static int Sdl_DoOneEvent () {
 	return r; }
 
 static char *buttonname (uint8_t b) {
-   static char *bs[] = {"mouse-left", "mouse-middle", "mouse-right", "mouse-4"};
-   return (b<5)?bs[b-1]:"mouse-?"; }
+   static char *bs[] = {"?", "mouse-left", "mouse-middle", "mouse-right",
+	                     "mouse-4", "mouse-5", "mouse-6"};
+   return (b<4)?bs[b]:"mouse-?"; }
 
 // # Tcl setup
 
@@ -155,7 +156,9 @@ static void handle_state (struct sdl_input_state *s) {
 		if (ii < s->downkeys)
 			keys[ii] = Tcl_NewStringObj(SDL_GetKeyName(s->keys[ii]), -1);
 		else
-			keys[ii] = Tcl_NewStringObj(buttonname(ii-(s->downkeys)), -1); }
+			keys[ii] = Tcl_NewStringObj(
+			             buttonname(s->mousebuttons[ii-(s->downkeys)]),
+			             -1); }
 	Tcl_Obj *mouse[2] = {Tcl_NewIntObj(s->mouse[0]),
 	                     Tcl_NewIntObj(s->mouse[1])};
 	Tcl_Obj *keys_mouse[4] = {Tcl_NewStringObj("keys", -1),
