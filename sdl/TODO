@@ -6,3 +6,7 @@
 * TODO Update README.md
   When the implementation becomes more stable, rewrite the README to
   reflect the actual API.
+
+* TODO Cleanup ents code
+  It's a bit redundant.  Find ways to clean it up.  Mostly, I'm just no
+  that familar with snit yet.

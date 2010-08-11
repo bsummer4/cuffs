@@ -48,10 +48,7 @@ snit::type Cursor {
 	variable base
 
 	# base_ is another ent from which an arrow points to the cursor
-	destructor {
-		$box destroy
-		#$arrow destroy
-	}
+	destructor { $box destroy; $arrow destroy }
 	constructor base_ {
 		set base $base_
 		set box [Rect $self.box {0 0} {40 40} {0 0 0 200}]
@@ -76,10 +73,8 @@ proc oninput d {
 		puts $key }
 	if {[llength $keys] > [llength $::keys]} { puts "shoot $x $y"}
 	set ::keys $keys
-	t 2 [list .cursor pos $x $y]
 	.cursor pos $x $y }
 
-t 1 [.cursor pos]
 every_flakey 500 { explode 40 [random 800] [random 600] }
 every 6 { safeeval [list shift .c1 2 2] }
 every 70 { safeeval [list shift .c2 3 -1] }

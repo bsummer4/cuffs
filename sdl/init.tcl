@@ -87,11 +87,8 @@ snit::type Rect {
 		if {[string equal $r _]} { return [$ent get 3] }
 		$ent set 3 $r $g $b $a }
 	method pos {{x _} {y _}} {
-		t $self pos $x $y
 		if {[string equal $x _]} { return [$self center] }
-		t {!!} $self pos $x $y --
 		lassign [$self center] oldx oldy
-		t {!!} $self pos $x $y -- $oldx $oldy
 		$self shift [expr $x - $oldx] [expr $y - $oldy] }
 
 	method height {} {
@@ -103,14 +100,11 @@ snit::type Rect {
 		lassign [$self point2] right _
 		expr $right - $left }
 	method center {} {
-		t $self center
 		lassign [$self point1] left top
-		t [$self point1] [$self width] [$self height]
 		set xadd [expr [$self width] / 2]
 		set yadd [expr [$self height] / 2]
 		list [expr $left + $xadd] [expr $top + $yadd] }
 	method shift {x y} {
-		t $self shift $x $y
 		lassign [$self point1] left top
 		lassign [$self point2] right bottom
 		incr left $x; incr right $x
