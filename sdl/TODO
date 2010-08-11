@@ -1,7 +1,3 @@
-* TODO Implement 'Event Hooks'
-  Make it more similar to the way it's described in README.md.  On the
-  other hand, It sort-of works the way it is now; Maybe just leave it?
-
 * TODO Cleanup Tcl C Code
   - There's lot of repetition.  Write some functions or macros to clean it
     up.

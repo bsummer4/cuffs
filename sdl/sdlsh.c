@@ -177,7 +177,7 @@ int AppInit (Tcl_Interp *i) {
 	for (int ii=0; ii<NCMDS; ii++)
 		Tcl_CreateObjCommand(i, cmds[ii], Draw, (ClientData)ii, NULL);
 	Tcl_CreateObjCommand(i, "draw-on", DrawOn, NULL, NULL);
-	Tcl_EvalFile(i, "./sdlsh.init");
+	Tcl_EvalFile(i, "./init.tcl");
 	return TCL_OK; }
 
 int main (int argc, char *argv[]) {
