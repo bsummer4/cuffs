@@ -39,4 +39,4 @@ test:V: all
 			.shot
 			.rock 460 400
 	EOF
-	{ cat ents.tcl; foo; } | ./o.sdlsh
+	foo | ./o.sdlsh test.tcl
