@@ -17,7 +17,7 @@ keys.o: keys.h macro.h
 test:V: all
 	foo () {
 		while true
-		do sleep .5; echo "puts {Hey you!  Press ESC when done!}"
+		do sleep .5; echo "set x x"
 		done; }
 	{	{	while read x; do echo $x; echo flip; sleep 0.25; done
 			foo

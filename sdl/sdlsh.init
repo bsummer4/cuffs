@@ -18,6 +18,14 @@ proc every {ms command} {
     after $ms [list every $ms $command] }
 
 
+# Slave Interpeter
+
+interp create -safe safe
+foreach proc {circle_ent rect_ent} { safe alias $proc $proc }
+
+proc safeeval str { safe eval [list eval $str] }
+
+
 # Ents
 
 set ents [list]
@@ -40,7 +48,9 @@ snit::type ent {
 
 snit::type rect_ent {
 	variable int
-	constructor args { set int [::ent $self.ent [list rect {*}$args]] }
+	constructor args {
+		set int [::ent $self.ent [list rect {*}$args]]
+		safe alias $self $self }
 	destructor { $int destroy }
 	method point1 args { $int GetSet 1 point1 $args }
 	method point2 args { $int GetSet 2 point2 $args }
@@ -48,7 +58,9 @@ snit::type rect_ent {
 
 snit::type circle_ent {
 	variable int
-	constructor args { set int [ent $self.ent [list circle {*}$args]] }
+	constructor args {
+		set int [ent $self.ent [list circle {*}$args]]
+		safe alias $self $self }
 	destructor { $int destroy }
 	method radius args { $int GetSet 1 radius $args }
 	method pos args { $int GetSet 2 pos $args }
@@ -61,7 +73,8 @@ set buf {}
 proc interpret line {
 	append ::buf $line "\n"
 	if {[info complete $::buf]} {
-		catch "uplevel #0 {$::buf}"
+		if {[catch [list safeeval $::buf] msg]} {
+			puts stderr "Error: $msg" }
 		set ::buf {}}}
 
 proc go {} {

@@ -10,8 +10,3 @@
 * TODO Update README.md
   When the implementation becomes more stable, rewrite the README to
   reflect the actual API.
-
-* TODO Use a 'safe interp'
-  Use a sandboxed interpreter for stdin messages.  Take, as a command-line
-  argument, a script to run unsandboxed.  Then, everything after that runs
-  in the sandbox.
