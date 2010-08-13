@@ -52,9 +52,7 @@ static int DrawOn (ClientData d, Tcl_Interp *i, int objc, Tcl_Obj *CONST objv[])
 	return TCL_OK; }
 
 static int Play (ClientData d, Tcl_Interp *i, int objc, Tcl_Obj *CONST objv[]) {
-	int id=(int)d;
-	play(id);
-	return TCL_OK; }
+	return play((int)d), TCL_OK; }
 
 static int DrawImg (ClientData d, Tcl_Interp *i, int objc, Tcl_Obj *CONST objv[]) {
 	int x, y, id=(int)d;

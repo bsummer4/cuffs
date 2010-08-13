@@ -5,4 +5,5 @@ C++ code is just too much for one person to maintain.
 
 ## Layout
 
-Just look at the sdl/ directory.  Everything worth looking at it there.
+Just look at the sdl/ directory.  Everything currently worth looking at
+is in there.

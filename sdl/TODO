@@ -1,12 +1,10 @@
 * TODO Cleanup Tcl C Code
-  - There's lot of repetition.  Write some functions or macros to clean it
-    up.
-  - Actually do error handling!
+  Actually do error handling!
 
 * TODO Update README.md
-  When the implementation becomes more stable, rewrite the README to
-  reflect the actual API.
+  Everythings pretty stable now, so README.md should be updated to
+  document the way things are.
 
 * TODO Cleanup ents code
-  It's a bit redundant.  Find ways to clean it up.  Mostly, I'm just no
-  that familar with snit yet.
+  It's a bit redundant.  Find ways to clean it up.  Mostly, I'm just
+  not that familar with snit yet.
