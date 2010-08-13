@@ -10,6 +10,12 @@
 #include "draw.h"
 #include "macro.h"
 
+typedef struct point P;
+
+static inline uint32_t C(uint32_t r, uint32_t b, uint32_t g, uint32_t a) {
+	return r<<24 | b<<16 | g<<8 | a;
+	return r | b<<8 | g<<16 | a<<24; }
+
 static int Sdl_DoOneEvent () {
 	SDL_Event e;
 	int r;
@@ -39,9 +45,9 @@ static int DrawOn (ClientData d, Tcl_Interp *i, int objc, Tcl_Obj *CONST objv[])
 		int len;
 		char *cmd = Tcl_GetStringFromObj(objv[1], &len);
 		Tcl_GetCommandInfo(i, cmd, &info);
-		draw_on_begin((int)info.objClientData);
+		drawon_begin((int)info.objClientData);
 		break; }
-	case 1: draw_on_end(); break;
+	case 1: drawon_end(); break;
 	default: return TCL_ERROR; }
 	return TCL_OK; }
 
@@ -66,8 +72,8 @@ static int DrawImg (ClientData d, Tcl_Interp *i, int objc, Tcl_Obj *CONST objv[]
 		break;
 	default:
 		return TCL_ERROR; }
-	if (centered) draw_center(id, x, y);
-	else draw(id, x, y);
+	if (centered) draw_centered(id, (P){x, y});
+	else draw(id, (P){x, y});
 	return TCL_OK; }
 
 #define EF(X) if (TCL_OK != X) errx(1, "fail fail fail")
@@ -98,20 +104,20 @@ static int Draw (ClientData d, Tcl_Interp *i, int objc, Tcl_Obj *CONST objv[]) {
 	case FLIP: flip(); break;
 	case WHITE: white(); break;
 	case LINE:
-		GRAB(4,  1, 4, 2, 2);
-		draw_line(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8]);
+		GRAB(4,  2, 2, 1, 4);
+		drawline((P){p[0], p[1]}, (P){p[2], p[3]}, p[4], C(p[5], p[6], p[7], p[8]));
 		break;
 	case RECT:
 		GRAB(3,  2, 2, 4);
-		draw_rect(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7]);
+		drawrect((P){p[0], p[1]}, (P){p[2], p[3]}, C(p[4], p[5], p[6], p[7]));
 		break;
 	case CIRCLE:
 		GRAB(3,  1, 2, 4);
-		draw_circle(p[0], p[1], p[2], p[3], p[4], p[5], p[6]);
+		drawcircle(p[0], (P){p[1], p[2]}, C(p[3], p[4], p[5], p[6]));
 		break;
 	case ARROW: {
-		GRAB(3,  4, 2, 2);
-		draw_arrow(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7]);
+		GRAB(3,  2, 2, 4);
+		drawarrow((P){p[0], p[1]}, (P){p[2], p[3]}, C(p[4], p[5], p[6], p[7]));
 		break; }
 	case SOUND: {
 		if (objc != 3) return TCL_ERROR;
@@ -141,8 +147,9 @@ static int Draw (ClientData d, Tcl_Interp *i, int objc, Tcl_Obj *CONST objv[]) {
 		unsigned ii = 1, jj = 1;
 		while ((ii++ < 12000)) {
 			if (!(ii%10)) jj++;
-			draw_circle((ii*4)%11-(ii*3)%9, (ii%800 + (jj % 9)), ((jj+ii)%600),
-                     jj%255, ii%255, ii%64+ii%60, 200);
+			drawcircle((ii*4)%11-(ii*3)%9,
+			            (P){(ii%800 + (jj % 9)), ((jj+ii)%600)},
+                     C(jj%255, ii%255, ii%64+ii%60, 200));
 			if (ii%32 == 1) flip(); }
 		break; }}
 	return TCL_OK; }
@@ -173,7 +180,7 @@ int AppInit (Tcl_Interp *i) {
 	main_interp = i;
 	if (Tcl_Init(i) == TCL_ERROR) return TCL_ERROR;
 	keys_init(handle_state);
-	sdl_init(800, 600, 32, "TODO Make this an option");
+	sdlinit(800, 600, 32, "TODO Make this an option");
 	for (int ii=0; ii<NCMDS; ii++)
 		Tcl_CreateObjCommand(i, cmds[ii], Draw, (ClientData)ii, NULL);
 	Tcl_CreateObjCommand(i, "draw-on", DrawOn, NULL, NULL);

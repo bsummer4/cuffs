@@ -54,8 +54,8 @@ snit::type ent {
 snit::type Circle {
 	variable ent
 
-	constructor args {
-		set ent [ent $self.ent [list circle {*}$args]]
+	constructor {r center color} {
+		set ent [ent $self.ent [list circle $r $center $color]]
 		safe alias $self $self }
 	destructor { $ent destroy }
 
@@ -117,18 +117,18 @@ snit::type Arrow {
 
 	destructor { $ent destroy }
 	constructor {p1 p2 color} {
-		set ent [::ent $self.ent [list arrow $color $p1 $p2]]
+		set ent [::ent $self.ent [list arrow $p1 $p2 $color]]
 		safe alias $self $self }
 
-	method color {{r _} {g _} {b _} {a _}} {
-		if {[string equal $r _]} { return [$ent get 1] }
-		$ent set 1 $r $g $b $a }
 	method base {{x _} {y _}} {
+		if {[string equal $x _]} { return [$ent get 1] }
+		$ent set 1 $x $y }
+	method tip {{x _} {y _}} {
 		if {[string equal $x _]} { return [$ent get 2] }
 		$ent set 2 $x $y }
-	method tip {{x _} {y _}} {
-		if {[string equal $x _]} { return [$ent get 3] }
-		$ent set 3 $x $y }
+	method color {{r _} {g _} {b _} {a _}} {
+		if {[string equal $r _]} { return [$ent get 3] }
+		$ent set 3 $r $g $b $a }
 	method pos {{x _} {y _}} { $self base $x $y }}
 
 

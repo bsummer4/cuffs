@@ -3,7 +3,7 @@
 MKSHELL = /bin/bash
 SDL = -lSDL_image -lSDL_gfx -lSDL_mixer
 LDFLAGS = -ltcl8.5 -lm $SDL
-CFLAGS = -Os --std=c99 -Wall -pedantic
+CFLAGS = -Os --std=gnu99 -Wall -Werror -pedantic
 TARG = sdlsh
 
 all:V:
