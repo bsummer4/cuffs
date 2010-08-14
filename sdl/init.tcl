@@ -21,28 +21,35 @@ proc every {ms command} {
 # Slave Interpeter
 
 interp create -safe safe
-foreach proc {Circle Rect Arrow} { safe alias $proc $proc }
+foreach proc {Circle Rect Arrow t} { safe alias $proc $proc }
 proc safeeval str { safe eval [list eval $str] }
 
-
 # Ents
-
+set freeents [list]
 set ents [list]
+proc mkent args {
+	global freeents ents
+	if {[llength $freeents]} {
+		set i [lindex $freeents 0]
+		set freeents [lrange $freeents 1 end]
+		lset ents $i $args
+		return $i }
+	set i [llength $ents]
+	lappend ents $args
+	return $i }
+
+proc killent id { lappend ::freeents $id }
+
 proc entapply {} {
+	global freeents ents
 	white
-	set ::ents [lsearch -all -inline -not -exact $::ents HACK]
-	foreach ent $::ents { $ent apply }
+	for {set i 0} {$i < [llength $ents]} {incr i} {
+		if {-1 != [lsearch $freeents $i]} continue
+		eval [lindex $ents $i] }
 	flip }
 
-# This maintains a command specifying how to draw something, and manages a
-# reference to itself in ::ents.
-snit::type ent {
-	variable cmd
-	constructor val { set cmd $val; lappend ::ents $self }
-	destructor { lset ::ents [lsearch -exact $::ents $self] HACK }
-	method apply {} { eval $cmd }
-	method get i { lindex $cmd $i }
-	method set {i args} { lset cmd $i $args }}
+proc entget {id index} { lindex $::ents $id $index }
+proc entset {id index args} { lset ::ents $id $index $args }
 
 # The general protocol for ents is:
 #
@@ -54,36 +61,36 @@ snit::type ent {
 snit::type Circle {
 	variable ent
 	constructor {r center color} {
-		set ent [ent $self.ent [list circle $r $center $color]]
+		set ent [mkent circle $r $center $color]
 		safe alias $self $self }
-	destructor { $ent destroy }
+	destructor { killent $ent }
 	method radius {{r _}} {
-		if {[string equal $r _]} { return [$ent get 1] }
-		$ent set 1 $r }
+		if {[string equal $r _]} { return [entget $ent 1] }
+		entset $ent 1 $r }
 	method pos {{x _} {y _}} {
-		if {[string equal $x _]} { return [$ent get 2] }
-		$ent set 2 $x $y }
+		if {[string equal $x _]} { return [entget $ent 2] }
+		entset $ent 2 $x $y }
 	method color {{r _} {g _} {b _} {a _}} {
-		if {[string equal $r _]} { return [$ent get 3] }
-		$ent set 3 $r $g $b $a }}
+		if {[string equal $r _]} { return [entget $ent 3] }
+		entset $ent 3 $r $g $b $a }}
 
 snit::type Rect {
 	variable ent
 
-	destructor { $ent destroy }
+	destructor { killent $ent }
 	constructor {p1 p2 color} {
-		set ent [::ent $self.ent [list rect $p1 $p2 $color]]
+		set ent [mkent rect $p1 $p2 $color]
 		safe alias $self $self }
 
 	method point1 {{x _} {y _}} {
-		if {[string equal $x _]} { return [$ent get 1] }
-		$ent set 1 $x $y }
+		if {[string equal $x _]} { return [entget $ent 1] }
+		entset $ent 1 $x $y }
 	method point2 {{x _} {y _}} {
-		if {[string equal $x _]} { return [$ent get 2] }
-		$ent set 2 $x $y }
+		if {[string equal $x _]} { return [entget $ent 2] }
+		entset $ent 2 $x $y }
 	method color {{r _} {g _} {b _} {a _}} {
-		if {[string equal $r _]} { return [$ent get 3] }
-		$ent set 3 $r $g $b $a }
+		if {[string equal $r _]} { return [entget $ent 3] }
+		entset $ent 3 $r $g $b $a }
 	method pos {{x _} {y _}} {
 		if {[string equal $x _]} { return [$self center] }
 		lassign [$self center] oldx oldy
@@ -113,20 +120,20 @@ snit::type Rect {
 snit::type Arrow {
 	variable ent
 
-	destructor { $ent destroy }
+	destructor { killent $ent }
 	constructor {p1 p2 color} {
-		set ent [::ent $self.ent [list arrow $p1 $p2 $color]]
+		set ent [mkent arrow $p1 $p2 $color]
 		safe alias $self $self }
 
 	method base {{x _} {y _}} {
-		if {[string equal $x _]} { return [$ent get 1] }
-		$ent set 1 $x $y }
+		if {[string equal $x _]} { return [entget $ent 1] }
+		entset $ent 1 $x $y }
 	method tip {{x _} {y _}} {
-		if {[string equal $x _]} { return [$ent get 2] }
-		$ent set 2 $x $y }
+		if {[string equal $x _]} { return [entget $ent 2] }
+		entset $ent 2 $x $y }
 	method color {{r _} {g _} {b _} {a _}} {
-		if {[string equal $r _]} { return [$ent get 3] }
-		$ent set 3 $r $g $b $a }
+		if {[string equal $r _]} { return [entget $ent 3] }
+		entset $ent 3 $r $g $b $a }
 	method pos {{x _} {y _}} { $self base $x $y }}
 
 

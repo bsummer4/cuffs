@@ -8,7 +8,7 @@ set granularity 20 ;# 50 fps
 sound boom shot.wav
 image bg map.pgm
 
-ent .bg {bg 0 0}
+mkent bg 0 0
 Circle .c1 10 {0 0} {128 32 64 200}
 Circle .c2 100 {100 100} {0 255 0 200}
 Circle .c3 40 {300 200} {0 0 255 200}
@@ -60,7 +60,7 @@ snit::type Cursor {
 
 	method update {} { $arrow tip {*}[$box pos]; $arrow base {*}[$base pos] }
 	method pos {{x _} {y _}} { set r [$box pos $x $y]; $self update; return $r }
-	method color {{r _} {g _} {b _} {a _}} { $arrow $r $g $b $a }}
+	method color {{r _} {g _} {b _} {a _}} { $arrow color $r $g $b $a }}
 
 Cursor .cursor .c3
 set keys {}
