@@ -8,14 +8,43 @@ set granularity 20 ;# 50 fps
 sound boom shot.wav
 image bg map.pgm
 
+set meters [list]
+proc wut args {}
+proc mkmeter {var color} {
+	set r [Rect %AUTO% {0 0} {100 100} $color]
+	set id [llength $::meters]
+	lappend ::meters $r
+	trace add variable $var write "setmeter $id \[set $var\];wut"
+	set percent [set $var]
+	set $var $percent
+	return $id }
+
+proc setmeter {id percent} {
+	set x [expr "800-10*($id+2)"]
+	set y 580
+	set X [expr $x + 10]
+	set Y [expr "int(580 - 560*$percent)"]
+	set m [lindex $::meters $id]
+	$m point1 $x $y
+	$m point2 $X $Y }
+
+proc killmeter id { error "TODO: proc 'killmeter' is not implemented" }
+
+set energy 1.00
+set health 1.00
 mkent bg 0 0
+mkmeter ::energy {255 0 0 128}
+mkmeter ::health {0 0 255 128}
+# TODO expose variables health and energy to safe interp
+
 Circle .c1 10 {0 0} {128 32 64 200}
 Circle .c2 100 {100 100} {0 255 0 200}
 Circle .c3 15 {300 200} {0 0 255 200}
 safeeval {
 	set playerpos [.c3 pos]
-	proc Wtf {args} { .c3 pos {*}$::playerpos; .cursor update }
-	trace add variable playerpos write Wtf }
+	proc wut args {}
+	set script {.c3 pos {*}$::playerpos; .cursor update; wut}
+	trace add variable playerpos write $script }
 
 set rd [expr $granularity / 10.0 ]
 proc Explode {e r} {
