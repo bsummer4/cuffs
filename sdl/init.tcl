@@ -119,12 +119,10 @@ snit::type Rect {
 
 snit::type Arrow {
 	variable ent
-
 	destructor { killent $ent }
 	constructor {p1 p2 color} {
 		set ent [mkent arrow $p1 $p2 $color]
 		safe alias $self $self }
-
 	method base {{x _} {y _}} {
 		if {[string equal $x _]} { return [entget $ent 1] }
 		entset $ent 1 $x $y }
@@ -134,6 +132,29 @@ snit::type Arrow {
 	method color {{r _} {g _} {b _} {a _}} {
 		if {[string equal $r _]} { return [entget $ent 3] }
 		entset $ent 3 $r $g $b $a }
+	method pos {{x _} {y _}} { $self base $x $y }}
+
+snit::type Arrow2 {
+	variable ent
+	destructor { killent $ent }
+	constructor {p1 p2 offset length color} {
+		set ent [mkent arrow2 $p1 $p2 $offset $length $color]
+		safe alias $self $self }
+	method base {{x _} {y _}} {
+		if {[string equal $x _]} { return [entget $ent 1] }
+		entset $ent 1 $x $y }
+	method tip {{x _} {y _}} {
+		if {[string equal $x _]} { return [entget $ent 2] }
+		entset $ent 2 $x $y }
+	method offset {{o _}} {
+		if {[string equal $o _]} { return [entget $ent 3] }
+		entset $ent 3 $o }
+	method length {{l _}} {
+		if {[string equal $l _]} { return [entget $ent 4] }
+		entset $ent 4 $l }
+	method color {{r _} {g _} {b _} {a _}} {
+		if {[string equal $r _]} { return [entget $ent 5] }
+		entset $ent 5 $r $g $b $a }
 	method pos {{x _} {y _}} { $self base $x $y }}
 
 

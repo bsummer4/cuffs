@@ -30,13 +30,13 @@ static char *buttonname (uint8_t b) {
 
 // # Tcl setup
 
-#define NCMDS 11
-enum { FLIP=0, WHITE, LINE, RECT, CIRCLE, ARROW, SPRITE, IMAGE, SOUND, ENTLOOP,
-       HAI };
+#define NCMDS 12
+enum { FLIP=0, WHITE, LINE, RECT, CIRCLE, ARROW, ARROW2, SPRITE, IMAGE, SOUND,
+       ENTLOOP, HAI };
 
 static char *cmds[NCMDS] = {"flip", "white", "line", "rect", "circle",
-                            "arrow", "sprite", "image", "sound", "entloop",
-                            "hai"};
+                            "arrow", "arrow2", "sprite", "image", "sound",
+                            "entloop", "hai"};
 
 static int DrawOn (ClientData d, Tcl_Interp *i, int objc, Tcl_Obj *CONST objv[]) {
 	Tcl_CmdInfo info;
@@ -97,7 +97,7 @@ static bool get_ints (Tcl_Interp *i, int *out, Tcl_Obj *CONST os[], int n, ...) 
 #define GRAB(n, ...) get_ints(i, p, objv+1, n, __VA_ARGS__)
 static int Draw (ClientData d, Tcl_Interp *i, int objc, Tcl_Obj *CONST objv[]) {
 	bool spritep=false;
-	int p[9];
+	int p[10];
 	switch ((int)d) {
 	case FLIP: flip(); break;
 	case WHITE: white(); break;
@@ -116,6 +116,10 @@ static int Draw (ClientData d, Tcl_Interp *i, int objc, Tcl_Obj *CONST objv[]) {
 	case ARROW: {
 		GRAB(3,  2, 2, 4);
 		drawarrow((P){p[0], p[1]}, (P){p[2], p[3]}, C(p[4], p[5], p[6], p[7]));
+		break; }
+	case ARROW2: {
+		GRAB(5,  2, 2, 1, 1, 4);
+		drawarrow2((P){p[0], p[1]}, (P){p[2], p[3]}, p[4], p[5], C(p[6], p[7], p[8], p[9]));
 		break; }
 	case SOUND: {
 		if (objc != 3) return TCL_ERROR;

@@ -16,6 +16,8 @@ void drawcircle (int radius, struct point center, uint32_t color);
 void drawline (struct point p1, struct point p2, int width, uint32_t color);
 void drawrect (struct point p1, struct point p2, uint32_t color);
 void drawarrow (struct point base, struct point tip, uint32_t color);
+void drawarrow2 (struct point base, struct point tip, int offset, int length,
+                 uint32_t color);
 void play (unsigned id);
 void draw (unsigned id, struct point topleft);
 void draw_centered (unsigned id, struct point center);

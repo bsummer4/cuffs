@@ -11,7 +11,7 @@ image bg map.pgm
 mkent bg 0 0
 Circle .c1 10 {0 0} {128 32 64 200}
 Circle .c2 100 {100 100} {0 255 0 200}
-Circle .c3 40 {300 200} {0 0 255 200}
+Circle .c3 15 {300 200} {0 0 255 200}
 safeeval {
 	set playerpos [.c3 pos]
 	proc Wtf {args} { .c3 pos {*}$::playerpos; .cursor update }
@@ -54,12 +54,17 @@ snit::type Cursor {
 	destructor { $box destroy; $arrow destroy }
 	constructor base_ {
 		set base $base_
-		set box [Rect $self.box {0 0} {40 40} {0 0 0 200}]
-		set arrow [Arrow $self.arrow [$base pos] [$box pos] {0 255 0 128}]
+		set box [Rect $self.box {0 0} {10 10} {0 0 0 96}]
+		set arrow [Arrow2 $self.arrow [$base pos] [$box pos] 15 120 {0 255 0 128}]
 		safe alias $self $self }
 
-	method update {} { $arrow tip {*}[$box pos]; $arrow base {*}[$base pos] }
-	method pos {{x _} {y _}} { set r [$box pos $x $y]; $self update; return $r }
+	method update {} {
+		lassign [$base pos] bx by
+		lassign [$box pos] tx ty
+		$arrow base $bx $by; $arrow tip $tx $ty
+		set len [expr "5*int(sqrt(hypot($tx-$bx, $ty-$by)))" ]
+		$arrow length $len }
+	method pos {{x _} {y _}} { $box pos $x $y; $self update; $box pos }
 	method color {{r _} {g _} {b _} {a _}} { $arrow color $r $g $b $a }}
 
 Cursor .cursor .c3

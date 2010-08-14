@@ -17,7 +17,6 @@ typedef struct point point;
 
 // A quick, one-off vector library
 typedef struct { double x, y; } V2;
-typedef struct { int x, y; } V2i_t;
 #define ST static inline
 ST bool v2eq (V2 a, V2 b) { return a.x==b.x && a.y==b.y; }
 ST V2 v2neg (V2 v) { return (V2){-v.x, -v.y}; }
@@ -27,9 +26,9 @@ ST V2 v2mul (V2 v, double d) { return (V2){v.x*d, v.y*d}; }
 ST V2 v2div (V2 v, double d) { return v2mul(v, 1/d); }
 ST V2 v2floor (V2 v) { return (V2){floor(v.x), floor(v.y)}; }
 ST double v2norm (V2 v) { return hypot(v.x, v.y); }
-ST V2 v2normalized (V2 v) { return v2div(v, v2norm(v)); }
+ST V2 v2normed (V2 v) { return v2div(v, v2norm(v)); }
 ST V2 v2perp (V2 v) { return (V2){-v.y, v.x}; }
-ST V2i_t v2lround (V2 v) { return (V2i_t){lround(v.x), lround(v.y)}; }
+ST point v2lround (V2 v) { return (point){lround(v.x), lround(v.y)}; }
 
 // Surface and sound ids start at 1 because 0 is reserved as an error
 // code.
@@ -125,13 +124,23 @@ void drawarrow (point p1, point p2, uint32_t color) {
 	V2 from={p1.x, p1.y}, to={p2.x, p2.y};
 	V2 translation = v2sub(from, to);
 	double length = v2norm(translation);
-	V2 perp_trans = v2mul(v2normalized(v2perp(translation)), length/6);
+	V2 perp_trans = v2mul(v2normed(v2perp(translation)), length/6);
 	V2 base_minus = v2sub(from, perp_trans);
 	V2 base_plus = v2add(from, perp_trans);
 	filledTrigonColor(screen, to.x, to.y,
 	                  base_plus.x, base_plus.y,
 	                  base_minus.x, base_minus.y,
 	                  color); }
+
+void drawarrow2 (point p1, point p2, int offset, int len, uint32_t color) {
+	V2 from={p1.x, p1.y}, to={p2.x, p2.y};
+	V2 t = v2sub(from, to);
+	V2 tnorm = v2normed(t);
+	V2 bump = v2mul(tnorm, offset);
+	from = v2sub(from, bump);
+	drawarrow (v2lround(from),
+	           v2lround(v2sub(from, v2mul(tnorm, len))),
+	           color); }
 
 static void drawon (Surface s) {
 	static Surface save = NULL;
