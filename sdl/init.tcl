@@ -53,12 +53,10 @@ snit::type ent {
 
 snit::type Circle {
 	variable ent
-
 	constructor {r center color} {
 		set ent [ent $self.ent [list circle $r $center $color]]
 		safe alias $self $self }
 	destructor { $ent destroy }
-
 	method radius {{r _}} {
 		if {[string equal $r _]} { return [$ent get 1] }
 		$ent set 1 $r }

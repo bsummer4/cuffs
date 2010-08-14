@@ -12,6 +12,10 @@ ent .bg {bg 0 0}
 Circle .c1 10 {0 0} {128 32 64 200}
 Circle .c2 100 {100 100} {0 255 0 200}
 Circle .c3 40 {300 200} {0 0 255 200}
+safeeval {
+	set playerpos [.c3 pos]
+	proc Wtf {args} { .c3 pos {*}$::playerpos; .cursor update }
+	trace add variable playerpos write Wtf }
 
 set rd [expr $granularity / 10.0 ]
 proc Explode {e r} {
@@ -31,12 +35,11 @@ proc explode {r x y} {
 
 safe alias explode explode
 
-safeeval {
-	proc shift {ent x y} {
-		lassign [$ent pos] p0 p1
-		set p0 [expr ( $p0 + $x ) % 800]
-		set p1 [expr ( $p1 + $y ) % 600]
-		$ent pos $p0 $p1 }}
+proc shift {ent x y} {
+	lassign [$ent pos] p0 p1
+	set p0 [expr ( $p0 + $x ) % 800]
+	set p1 [expr ( $p1 + $y ) % 600]
+	$ent pos $p0 $p1 }
 
 proc every_flakey {ms command} {
 	uplevel #0 $command
@@ -76,7 +79,7 @@ proc oninput d {
 	.cursor pos $x $y }
 
 every_flakey 500 { explode 40 [random 800] [random 600] }
-every 6 { safeeval [list shift .c1 2 2] }
-every 70 { safeeval [list shift .c2 3 -1] }
+every 6 { shift .c1 2 2 }
+every 70 { shift .c2 3 -1 }
 every $granularity entapply
 entloop
