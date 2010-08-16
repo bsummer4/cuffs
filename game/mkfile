@@ -1,0 +1,4 @@
+test:V:
+	export CUFFS_ROOT=..
+	export SDLSH_ROOT=../sdl
+	sixty-nine '../sdl/o.sdlsh client.tcl' ./fakeserver

@@ -5,5 +5,8 @@ C++ code is just too much for one person to maintain.
 
 ## Layout
 
-Just look at the sdl/ directory.  Everything currently worth looking at
-is in there.
+The directories that actually have stuff in them are:
+
+- game/
+- sdl/
+- data/

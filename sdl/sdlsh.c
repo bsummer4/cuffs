@@ -4,6 +4,7 @@
 #include <SDL/SDL_mixer.h>
 #include <tcl.h>
 #include <err.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <stdarg.h>
 #include "keys.h"
@@ -186,7 +187,12 @@ int AppInit (Tcl_Interp *i) {
 	for (int ii=0; ii<NCMDS; ii++)
 		Tcl_CreateObjCommand(i, cmds[ii], Draw, (ClientData)ii, NULL);
 	Tcl_CreateObjCommand(i, "draw-on", DrawOn, NULL, NULL);
-	Tcl_EvalFile(i, "./init.tcl");
+	char *d = getenv("SDLSH_ROOT");
+	if (!d) errx(1, "Environment variable SDLSH_ROOT must be set");
+	char init[strlen(d)+10];
+	init[0]='\0';
+	strcat(init, d); strcat(init, "/init.tcl");
+	Tcl_EvalFile(i, init);
 	return TCL_OK; }
 
 int main (int argc, char *argv[]) {

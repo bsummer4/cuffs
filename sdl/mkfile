@@ -15,4 +15,5 @@ keys.o: keys.h macro.h
 <$PLAN9/src/mkmany
 
 test:V: all
+	export SDLSH_ROOT=.
 	sixty-nine './o.sdlsh test.tcl' ./comm-test

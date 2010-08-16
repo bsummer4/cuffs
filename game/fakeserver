@@ -1,0 +1,15 @@
+#!/bin/awk -f
+
+BEGIN {
+	print "\
+proc shift {x y} {\n\
+	lassign $::pos X Y\n\
+	set X [expr ( $X + $x ) % 800]\n\
+	set Y [expr ( $Y + $y ) % 600]\n\
+	set ::pos [list $X $Y] }" }
+/^up$/ { print "shift 0 -10" }
+/^down$/ { print "shift 0 10" }
+/^left$/ { print "shift -10 0" }
+/^right$/ { print "shift 10 0" }
+/^shoot [0-9]* [0-9]*$/ { print "explode 40 " $2 " " $3 }
+{ print $0 > "/dev/stderr"; fflush() }
