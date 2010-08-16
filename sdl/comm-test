@@ -3,10 +3,10 @@
 BEGIN {
 	print "\
 proc shift {x y} {\n\
-	lassign $::playerpos X Y\n\
+	lassign $::pos X Y\n\
 	set X [expr ( $X + $x ) % 800]\n\
 	set Y [expr ( $Y + $y ) % 600]\n\
-	set ::playerpos [list $X $Y] }" }
+	set ::pos [list $X $Y] }" }
 /^up$/ { print "shift 0 -10" }
 /^down$/ { print "shift 0 10" }
 /^left$/ { print "shift -10 0" }

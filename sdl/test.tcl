@@ -11,12 +11,10 @@ image bg map.pgm
 set meters [list]
 proc wut args {}
 proc mkmeter {var color} {
-	set r [Rect %AUTO% {0 0} {100 100} $color]
+	set r [Rect %AUTO% {0 0} {0 0} $color]
 	set id [llength $::meters]
 	lappend ::meters $r
 	trace add variable $var write "setmeter $id \[set $var\];wut"
-	set percent [set $var]
-	set $var $percent
 	return $id }
 
 proc setmeter {id percent} {
@@ -28,23 +26,59 @@ proc setmeter {id percent} {
 	$m point1 $x $y
 	$m point2 $X $Y }
 
-proc killmeter id { error "TODO: proc 'killmeter' is not implemented" }
+foreach proc {setmeter mkmeter wut} {
+	safe alias $proc $proc }
 
-set energy 1.00
-set health 1.00
+snit::type Cursor {
+	variable box
+	variable arrow
+	variable base
+
+	# base_ is another ent from which an arrow points to the cursor
+	destructor { $box destroy; $arrow destroy }
+	constructor base_ {
+		set base $base_
+		set box [Rect $self.box {0 0} {10 10} {0 0 0 96}]
+		set arrow [Arrow2 $self.arrow [$base pos] [$box pos] 15 120 {0 255 0 128}]
+		safe alias $self $self }
+
+	method update {} {
+		lassign [$base pos] bx by
+		lassign [$box pos] tx ty
+		$arrow base $bx $by; $arrow tip $tx $ty
+		set len [expr "5*int(sqrt(hypot($tx-$bx, $ty-$by)))" ]
+		$arrow length $len }
+	method pos {{x _} {y _}} { $box pos $x $y; $self update; $box pos }
+	method color {{r _} {g _} {b _} {a _}} { $arrow color $r $g $b $a }}
+
 mkent bg 0 0
-mkmeter ::energy {255 0 0 128}
-mkmeter ::health {0 0 255 128}
-# TODO expose variables health and energy to safe interp
-
+Arrow .accel {400 50} {0 0} {0 0 255 128}
 Circle .c1 10 {0 0} {128 32 64 200}
 Circle .c2 100 {100 100} {0 255 0 200}
-Circle .c3 15 {300 200} {0 0 255 200}
+Circle .c3 15 {0 0} {0 0 255 200}
+Cursor .cursor .c3
+
 safeeval {
-	set playerpos [.c3 pos]
 	proc wut args {}
-	set script {.c3 pos {*}$::playerpos; .cursor update; wut}
-	trace add variable playerpos write $script }
+	proc accelupdate {dx dy} {
+		.accel tip [expr "int(400+$dx*400)"] [expr "int(50+$dy*400)"] }
+	proc mkmeter_ {v c} {
+		set id [mkmeter $v $c]
+		trace add variable $v write "setmeter $id \[set $v\];wut"
+		return $id }
+	mkmeter_ ::energy {255 0 0 128}
+	mkmeter_ ::health {0 0 255 128}
+	trace add variable ::accel write {accelupdate {*}$::accel; wut}
+	trace add variable ::pos write {
+		.c3 pos {*}$::pos; .cursor update; wut}
+
+	set energy 1.00
+	set health 1.00
+	set accel {0.06 0.07}
+	set pos {300 200}}
+
+# set energy 1.00
+# set health 1.00
 
 set rd [expr $granularity / 10.0 ]
 proc Explode {e r} {
@@ -74,29 +108,6 @@ proc every_flakey {ms command} {
 	uplevel #0 $command
 	after [random [expr 2 * $ms]] [list every_flakey $ms $command] }
 
-snit::type Cursor {
-	variable box
-	variable arrow
-	variable base
-
-	# base_ is another ent from which an arrow points to the cursor
-	destructor { $box destroy; $arrow destroy }
-	constructor base_ {
-		set base $base_
-		set box [Rect $self.box {0 0} {10 10} {0 0 0 96}]
-		set arrow [Arrow2 $self.arrow [$base pos] [$box pos] 15 120 {0 255 0 128}]
-		safe alias $self $self }
-
-	method update {} {
-		lassign [$base pos] bx by
-		lassign [$box pos] tx ty
-		$arrow base $bx $by; $arrow tip $tx $ty
-		set len [expr "5*int(sqrt(hypot($tx-$bx, $ty-$by)))" ]
-		$arrow length $len }
-	method pos {{x _} {y _}} { $box pos $x $y; $self update; $box pos }
-	method color {{r _} {g _} {b _} {a _}} { $arrow color $r $g $b $a }}
-
-Cursor .cursor .c3
 set keys {}
 proc oninput d {
 	set keys [dict get $d keys]
