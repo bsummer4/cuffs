@@ -74,10 +74,7 @@ safeeval {
 	trace add variable ::pos write {
 		.c3 pos {*}$::pos; .cursor update; wut}
 
-	set energy 1.00
-	set health 1.00
-	set accel {0.06 0.07}
-	set pos {300 200}}
+	lassign {1 1 {.06 .07} {300 200}} energy health accel pos}
 
 # set energy 1.00
 # set health 1.00
@@ -106,10 +103,6 @@ proc shift {ent x y} {
 	set p1 [expr ( $p1 + $y ) % 600]
 	$ent pos $p0 $p1 }
 
-proc every_flakey {ms command} {
-	uplevel #0 $command
-	after [random [expr 2 * $ms]] [list every_flakey $ms $command] }
-
 set keys {}
 proc oninput d {
 	set keys [dict get $d keys]
@@ -125,8 +118,5 @@ proc oninput d {
 	set ::keys $keys
 	.cursor pos $x $y }
 
-every_flakey 500 { explode 40 [random 800] [random 600] }
-every 6 { shift .c1 2 2 }
-every 70 { shift .c2 3 -1 }
 every $granularity entapply
 entloop
