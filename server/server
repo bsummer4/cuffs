@@ -1,0 +1,38 @@
+#!/usr/bin/tclsh8.5
+
+# # Physics handler
+# ## Connection
+# - stdout goes to physics handler
+# - stdin comes from physics handler
+#
+# ## Protocol for Messages to Physics Handler
+# - {$player move $requested-movement*} | {$player shoot $x $y} | {over}
+#
+# ### Example
+# ben move left
+# ben shoot 0 0 
+# john move down up
+# ben shoot down
+# over
+# ...
+#
+# ## Protocoal for Messages Received from Physics Handler
+# {move obj x y} | {explode radius x y} | {set prop num}
+#
+# ### TODO This is pretty ugly!
+# Why do we need this distinction between set and move, for example.
+#
+# ### Example
+# move player-ben 30 30
+# explode 30 30 90
+# set health-ben .50
+#
+# # Connection to clients
+# - Open a listener socket
+# - Upon every new socket, allocate a buffer, and build a handler script.
+# - The buffer is sent to the script whenever it's [info complete _].
+# - Script changes some global state
+# - Every x milliseconds, we send all events for that time period to
+#   the physics  handler, and wait for a response.
+# - Physics handler responds with all state changes for the given
+#   requests;  We format these and broadcast them to all clients.
