@@ -23,7 +23,7 @@ proc setmeter {id percent} {
 	set x [expr "800-10*($id+2)"]
 	set y 580
 	set X [expr $x + 10]
-	set Y [expr "int(580 - 560*$percent)"]
+	set Y [expr "int(580 - 5.60*$percent)"]
 	set m [lindex $::meters $id]
 	$m point1 $x $y
 	$m point2 $X $Y }
@@ -63,7 +63,7 @@ Cursor .cursor .c3
 safeeval {
 	proc wut args {}
 	proc accelupdate {dx dy} {
-		.accel tip [expr "int(400+$dx*400)"] [expr "int(50+$dy*400)"] }
+		.accel tip [expr "int(400+$dx*4.0)"] [expr "int(50+$dy*4.0)"] }
 	proc mkmeter_ {v c} {
 		set id [mkmeter $v $c]
 		trace add variable $v write "setmeter $id \[set $v\];wut"
@@ -74,10 +74,7 @@ safeeval {
 	trace add variable ::pos write {
 		.c3 pos {*}$::pos; .cursor update; wut}
 
-	lassign {1 1 {.06 .07} {300 200}} energy health accel pos}
-
-# set energy 1.00
-# set health 1.00
+	lassign {100 95 {6 7} {300 200}} energy health accel pos}
 
 set rd [expr $granularity / 10.0 ]
 proc Explode {e r} {
