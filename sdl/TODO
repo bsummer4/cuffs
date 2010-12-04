@@ -1,10 +1,10 @@
-* TODO Cleanup Tcl C Code
+:TODO: Cleanup Tcl C Code
   Actually do error handling!
-
-* TODO Update README.md
+:TODO: Replace SDL with libdraw
+:TODO: Replace Tcl with some C code
+:TODO: Update README.md
   Everythings pretty stable now, so README.md should be updated to
   document the way things are.
-
-* TODO Cleanup ents code
+:TODO: Cleanup ents code
   It's a bit redundant.  Find ways to clean it up.  Mostly, I'm just
   not that familar with snit yet.
